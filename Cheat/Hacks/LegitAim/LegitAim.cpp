@@ -413,6 +413,8 @@ void CLegitAim::CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd*
 
 	StandeloneRCS(pCmd);
 
+	LegitResolver();
+
 	Vector StartAng = pCmd->viewangles;
 
 	AimPunchAngle = pLocalPlayer->GetPunchAngles();
@@ -647,41 +649,6 @@ void CLegitAim::CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd*
 
 	if (pBestTarget)
 		pOldBestTarget = pBestTarget;
-}
-
-void CLegitAim::DesyncResolver()
-{
-	if (Resolver)
-	{
-		for (int i = 1; i < I::Engine()->GetMaxClients(); i++)
-		{
-			CBaseEntity* pEntity = I::ClientEntityList()->GetClientEntity(i);
-
-			if (!pEntity)
-				continue;
-
-			if (pEntity->IsDead())
-				continue;
-
-			if (pEntity == pLocalPlayer)
-				continue;
-
-			if (pLocalPlayer->GetBasePlayerAnimState())
-			{
-				Vector vVelocity = pLocalPlayer->GetVelocity();
-				float flSpeed = vVelocity.Length2D();
-
-				if (flSpeed == 0.0f)
-				{
-					Vector vEyeAngles = pLocalPlayer->GetEyeAngles();
-					float flLowerBody = remainderf(pLocalPlayer->GetLowerBodyYawTarget(), 360.f);
-
-					if (flLowerBody - remainderf(vEyeAngles.y, 360.f) >= 60.f)
-						pLocalPlayer->GetBasePlayerAnimState()->m_flGoalFeetYaw = NormalizeYaw(remainderf(pLocalPlayer->GetLowerBodyYawTarget() + 180.f, 360.f));
-				}
-			}
-		}
-	}
 }
 
 void CLegitAim::SetMainParams()
@@ -1579,6 +1546,41 @@ void CLegitAim::StandeloneRCS(CUserCmd* pCmd)
 	}
 	else
 		OldStandRCS = (AimPunchAngle*(Vector(RCS_X, RCS_Y, 0) / 100.f)) * 2.f;
+}
+
+void CLegitAim::LegitResolver()
+{
+	if (Resolver)
+	{
+		for (int i = 1; i < I::Engine()->GetMaxClients(); i++)
+		{
+			CBaseEntity* pEntity = I::ClientEntityList()->GetClientEntity(i);
+
+			if (!pEntity)
+				continue;
+
+			if (pEntity->IsDead())
+				continue;
+
+			if (pEntity == pLocalPlayer)
+				continue;
+
+			if (pLocalPlayer->GetBasePlayerAnimState())
+			{
+				Vector vVelocity = pLocalPlayer->GetVelocity();
+				float flSpeed = vVelocity.Length2D();
+
+				if (flSpeed == 0.0f)
+				{
+					Vector vEyeAngles = pLocalPlayer->GetEyeAngles();
+					float flLowerBody = remainderf(pLocalPlayer->GetLowerBodyYawTarget(), 360.f);
+
+					if (flLowerBody - remainderf(vEyeAngles.y, 360.f) >= 60.f)
+						pLocalPlayer->GetBasePlayerAnimState()->m_flGoalFeetYaw = NormalizeYaw(remainderf(pLocalPlayer->GetLowerBodyYawTarget() + 180.f, 360.f));
+				}
+			}
+		}
+	}
 }
 
 Vector CLegitAim::CalculateAngle(const Vector& in, Vector out)

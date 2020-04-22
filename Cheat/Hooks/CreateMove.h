@@ -60,9 +60,6 @@ bool __stdcall CreateMove(float flInputSampleTime, CUserCmd* pCmd)
 			if (GP_LegitAim->Enable)
 				GP_LegitAim->CreateMove(bSendPacket, flInputSampleTime, pCmd);
 
-			if (GP_LegitAim->Enable)
-				GP_LegitAim->DesyncResolver();
-
 			if (GP_LegitAim->TriggerEnable)
 				GP_LegitAim->TriggerCreateMove(pCmd);
 		}

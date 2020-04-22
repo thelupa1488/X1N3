@@ -116,7 +116,7 @@ protected:
 	virtual void Draw() = 0;
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd) = 0;
 	virtual void SetSelectedWeapon(bool MenuCheck = true) = 0;
-	virtual void DesyncResolver() = 0;
+	virtual void LegitResolver() = 0;
 	virtual void TriggerRCS(int X, int Y, CUserCmd* pCmd, bool Enable) = 0;
 	virtual bool __declspec(noinline) CanFire(Vector mAngle, CUserCmd* pCmd, CBaseEntity* BaseEnt, int BestInd, CBaseEntity* Local, bool AllHitGroup) = 0;
 	virtual float CalcFOV(Vector& viewangles, const Vector& vSrc, const Vector& vEnd) = 0;
@@ -142,7 +142,7 @@ public:
 	virtual void Draw();
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd);
 	virtual void SetSelectedWeapon(bool MenuCheck = true);
-	virtual void DesyncResolver();
+	virtual void LegitResolver();
 	virtual void SaveWeapons(nlohmann::json &j);
 	virtual void LoadWeapons(nlohmann::json &j);
 

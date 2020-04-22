@@ -8,7 +8,7 @@
 
 #define PRESENT_ENABLE
 
-#define ENABLE_CONSOLE_LOG
+//#define ENABLE_CONSOLE_LOG
 //#define ENABLE_DEBUG_FILE
 
 #define MAX_FONT_SIZE 30
