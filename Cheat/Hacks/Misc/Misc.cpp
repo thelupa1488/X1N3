@@ -922,7 +922,6 @@ void CMisc::AutoAcceptEmit()
 			HWND window = FastCall::G().t_FindWindowA("Valve001", 0);
 			FLASHWINFO flash{ sizeof(FLASHWINFO), window, FLASHW_TRAY | FLASHW_TIMERNOFG, 0, 0 };
 			FlashWindowEx(&flash);
-			ShowWindow(window, SW_RESTORE);
 		}
 
 		//typedef void(__cdecl* accept_t)(void);
