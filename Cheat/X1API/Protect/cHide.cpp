@@ -1,5 +1,5 @@
 #include "cHide.h"
-#include <Protect/VMP/VMProtectSDK.h>
+
 cHideClass pHideMe;
 
 int cHideClass::_atoi(const char *s)

@@ -200,6 +200,7 @@
     </ClCompile>
     <ClCompile Include="Engine\SDK\Math.cpp" />
     <ClCompile Include="Engine\SDK\checksum_md5.cpp" />
+    <ClCompile Include="X1API\Protect\cHide.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
@@ -672,6 +673,7 @@
     <ClInclude Include="Engine\SDK\IPredition.hpp" />
     <ClInclude Include="Engine\SDK\IMoveHelper.hpp" />
     <ClInclude Include="Engine\SDK\checksum_md5.hpp" />
+    <ClInclude Include="X1API\Protect\cHide.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="3DMenu">

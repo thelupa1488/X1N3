@@ -64,6 +64,7 @@
     <ClCompile Include="X1API\MinHook\src\HDE\hde64.c" />
     <ClCompile Include="X1API\MinHook\src\hook.c" />
     <ClCompile Include="X1API\MinHook\src\trampoline.c" />
+    <ClCompile Include="X1API\Protect\cHide.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\CSX\CSX.h" />
@@ -225,6 +226,7 @@
     <ClInclude Include="X1API\MinHook\src\HDE\table64.h" />
     <ClInclude Include="X1API\MinHook\src\trampoline.h" />
     <ClInclude Include="X1API\ProtectDLL.h" />
+    <ClInclude Include="X1API\Protect\cHide.h" />
     <ClInclude Include="X1API\Protect\Mutant.h" />
     <ClInclude Include="X1API\Protect\VMP\VMProtectSDK.h" />
     <ClInclude Include="X1API\X1FastCall.h" />

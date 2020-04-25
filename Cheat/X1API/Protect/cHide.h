@@ -3,25 +3,9 @@
 #include <d3dx9.h>
 #include <vector>
 #include <string>
+#include "../../Include/Def.h"
 #pragma comment(lib, "d3d9.lib")
 #pragma comment(lib, "d3dx9.lib")
-#include "../../Engine/XorStr.h"
-
-#define ENABLE_VMP 
-
-#ifdef ENABLE_VMP
-#define VMP_VIRTUAL(e) VMProtectBeginVirtualization(e);
-#define VMP_MUTATION(e) VMProtectBeginMutation(e);
-#define VMP_ULTRA(e) VMProtectBeginUltra(e);
-#define VMP_BEGIN(e) VMProtectBegin(e);
-#define VMP_END VMProtectEnd();
-#else
-#define VMP_VIRTUAL(e)
-#define VMP_MUTATION(e)
-#define VMP_ULTRA(e)
-#define VMP_BEGIN(e)
-#define VMP_END 
-#endif
 
 using namespace std;
 
@@ -129,7 +113,8 @@ using nExitProcess = void(WINAPI*)(UINT);
 static std::vector<std::string>ModName = { XorStr("D3DX9_43.dll"), XorStr("USER32.dll"), XorStr("ntdll.dll") };
 enum ModName_text { D3DX9_43, USER32, ntdll };
 
-static std::vector<std::string>Funcname = {
+static std::vector<std::string>Funcname = 
+{
 	XorStr("D3DXCreateFontA"),//0
 	XorStr("D3DXCreateLine"),//1
 	XorStr("SetRect"),//2

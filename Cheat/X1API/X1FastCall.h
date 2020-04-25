@@ -1,7 +1,6 @@
 #pragma once
 #include <Windows.h>
 #include <map>
-//#include <winhttp.h>
 #include "../Include/Def.h"
 
 #define DEREF( name )*(UINT_PTR *)(name)
@@ -24,7 +23,6 @@ protected:
 	SSanina& operator=(SSanina&&) = delete;
 
 public:
-
 	static T& G()
 	{
 		static T inst{};
@@ -35,9 +33,6 @@ public:
 class FastCall : public SSanina<FastCall>
 {
 private:
-
-	
-
 	std::wstring AnsiToWstring(const std::string& input, DWORD locale /*= CP_ACP*/)
 	{
 		wchar_t buf[8192] = { 0 };
@@ -333,7 +328,6 @@ private:
 		{ "D3DXCreateTextureFromFileInMemoryEx", GetProcAddressR(_GetModuleHandle(UTF8ToWstring("d3dx9_43.dll").c_str()), "D3DXCreateTextureFromFileInMemoryEx") },
 		{ "D3DXCreateTextureFromFileExA", GetProcAddressR(_GetModuleHandle(UTF8ToWstring("d3dx9_43.dll").c_str()), "D3DXCreateTextureFromFileExA") },
 		{ "CreateDXGIFactory1", GetProcAddressR(_GetModuleHandle(UTF8ToWstring("dxgi.dll").c_str()), "CreateDXGIFactory1") },
-
 	};
 public:
 
