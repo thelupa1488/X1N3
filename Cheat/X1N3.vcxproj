@@ -281,16 +281,16 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)Cheat\X1API\Protect\VMP;$(SolutionDir)Cheat\Json;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\My paste\[Src in git] X1N3 &amp; Injector\X1N3\Cheat\X1API;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(DXSDK_DIR)Include;$(SolutionDir)Cheat\X1API\Protect\VMP;$(SolutionDir)Cheat\Json;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;D:\My paste\[Src in git] X1N3 &amp; Injector\X1N3\Cheat\X1API;$(LibraryPath)</LibraryPath>
     <TargetName>test</TargetName>
     <OutDir>$(SolutionDir)build\debug</OutDir>
     <IntDir>$(SolutionDir)Cheat\output\debug</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)Cheat\X1API\Protect\VMP;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(SolutionDir)Cheat\X1API;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(SolutionDir)Cheat\X1API;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(DXSDK_DIR)Include;$(SolutionDir)Cheat\X1API\Protect\VMP;$(SolutionDir)Cheat\X1API;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(SolutionDir)Cheat\X1API;$(LibraryPath)</LibraryPath>
     <TargetName>test</TargetName>
     <OutDir>$(SolutionDir)build\release</OutDir>
     <IntDir>$(SolutionDir)Cheat\output\release</IntDir>
