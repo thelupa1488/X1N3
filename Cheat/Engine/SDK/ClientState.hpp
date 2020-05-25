@@ -80,7 +80,7 @@ namespace SDK
 		int command_ack;                //0x4CB8
 		int m_nSoundSequence;           //0x4CBC
 		char pad_4CC0[80];              //0x4CC0
-	//	QAngle viewangles;              //0x4D10
+		QAngle viewangles;              //0x4D10
 		char pad_4D1C[208];             //0x4D1C
 	}; //Size: 0x4D1C
 

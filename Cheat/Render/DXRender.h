@@ -210,6 +210,5 @@ public:
 		virtual void DrawTriangle(int16_t x1, int16_t y1, int16_t x2, int16_t y2, int16_t x3, int16_t y3, color_t color1 = 0xFF, float thickness = 1.0f);
 		virtual void DrawTriangleFilled(int16_t x1, int16_t y1, int16_t x2, int16_t y2, int16_t x3, int16_t y3, color_t color1 = 0xFF);
 		virtual void DrawImage(LPDIRECT3DTEXTURE9 _texture, Vec2 _a, Vec2 _b);
-	
 	};
 };

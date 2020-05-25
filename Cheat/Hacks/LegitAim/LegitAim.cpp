@@ -1656,8 +1656,6 @@ void CLegitAim::TriggerCreateMove(CUserCmd* pCmd)
 	bool CanFireDelay = I::GlobalVars()->curtime <= FireDelay;
 	bool delay = false;
 
-	VMP_ULTRA("CLegitAim::TriggerCreateMove");
-
 	if (CanFire(MyAngle, pCmd, pTriggerBestTarget, TriggerBestIdx, pLocalPlayer, Weapons[GetWeap(SelectedWeapon)].TriggerAllHitboxes))
 	{
 		CanFireChanse = (1 + (rand() % 101)) <= Weapons[GetWeap(SelectedWeapon)].TriggerChanse;
@@ -1691,8 +1689,6 @@ void CLegitAim::TriggerCreateMove(CUserCmd* pCmd)
 	}	
 
 	TriggerRCS(Weapons[GetWeap(SelectedWeapon)].TriggerRcsX, Weapons[GetWeap(SelectedWeapon)].TriggerRcsY, pCmd, EnableRcs);
-
-	VMP_END;
 }
 
 bool __declspec(noinline) CLegitAim::CanFire(Vector mAngle, CUserCmd* pCmd, CBaseEntity* BaseEnt, int BestInd, CBaseEntity* Local, bool AllHitGroup)

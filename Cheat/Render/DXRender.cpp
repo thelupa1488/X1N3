@@ -3,7 +3,6 @@
 #include "Fonts/Arial.h"
 #include "Fonts/WeaponIcons.h"
 
-
 IDirect3DDevice9* g_pDevice = NULL;
 
 void CRender::IRender::BeginDraw()

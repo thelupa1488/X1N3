@@ -3,6 +3,7 @@
 #include <algorithm>
 #include "../../X1API/MinHook/hook.h"
 
+unordered_map<int, const char*> g_ViewModelCfg;
 class CCStrike15ItemSchema;
 class CCStrike15ItemSystem;
 
@@ -110,25 +111,26 @@ static auto random_sequence(const int low, const int high) -> int
 //	if (!pOwner)
 //		return;
 //
-//	const auto pViewModel = I::EntityList()->GetClientEntityFromHandle((PVOID)entity->GetWeapon());
+//	const auto pViewModel = (CBaseEntity*)I::EntityList()->GetClientEntityFromHandle((PVOID)entity->GetWeapon());
+//
 //	if (!pViewModel)
 //		return;
 //
 //	auto& sequence = data->m_Value.m_Int;
 //
-//	int original_activity = entity->GetSequenceActivity(sequence);
+//	int original_activity = pViewModel->GetSequenceActivity(sequence);
 //
 //	int new_activity = 1;
 //	int num = 0;
 //
 //	for (size_t i = 0; i < 20; i++)
 //	{
-//		int temp_actitivity = entity->GetSequenceActivity(i);
+//		int temp_actitivity = pViewModel->GetSequenceActivity(i);
 //		if (original_activity != -1 && original_activity == temp_actitivity || original_activity == -1 && temp_actitivity == 213)
 //		{
 //			new_activity = i;
 //			for (size_t t = 0; t < 4; t++)
-//				if (entity->GetSequenceActivity(i + t) == temp_actitivity)
+//				if (pViewModel->GetSequenceActivity(i + t) == temp_actitivity)
 //					num++;
 //			break;
 //		}

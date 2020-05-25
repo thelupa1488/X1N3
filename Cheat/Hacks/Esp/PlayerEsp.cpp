@@ -947,52 +947,98 @@ void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMod
 	}
 }
 
-void CEsp::DrawGlow()
+void CEsp::DrawGlow(CEntityPlayer* Entity, CEntityPlayer* Local)
 {
-	if (Enable && Glow && BindEnable.Check())
+	//if (Enable && Glow && BindEnable.Check())
+	//{
+	//	if (!Local->IsLocal)
+	//		return;
+
+	//	if (!Team && Entity->Team == Local->Team)
+	//		return;
+
+	//	if (!Enemy && Entity->Team != Local->Team)
+	//		return;
+
+	//	if (!Local->IsDead && !Entity->IsVisble)
+	//		return;
+
+	//	for (auto i = 0; i < I::GlowObjManager()->GetSize(); i++)
+	//	{
+	//		auto& glow_object = I::GlowObjManager()->m_GlowObjectDefinitions[i];
+	//		auto ent = reinterpret_cast<CEntityPlayer*>(glow_object.m_pEntity);
+
+	//		Color InvisColor = (ent->Team == PLAYER_TEAM::TEAM_CT) ? GlowCT : GlowTT;
+	//		Color VisibleColor = (ent->Team == PLAYER_TEAM::TEAM_CT) ? GlowVisibleCT : GlowVisibleTT;
+
+	//		if (ent->BaseEntity->GetClientClass()->m_ClassID == CLIENT_CLASS_ID::CCSPlayer)
+	//		{
+	//			if (glow_object.IsUnused() || !ent)
+	//				continue;
+
+	//			if (!ent->IsPlayer || ent->IsDormant)
+	//				continue;
+
+	//			glow_object.m_nGlowStyle = GlowStyle;
+
+	//			if (!GlowVisibleOnly)
+	//			{
+	//				float ArrInvisColor[3] = { InvisColor.G1R(), InvisColor.G1G(), InvisColor.G1B() };
+	//				glow_object.m_bRenderWhenOccluded = true;
+	//				glow_object.m_bRenderWhenUnoccluded = false;
+	//				glow_object.m_vGlowColor = ArrInvisColor;
+	//				glow_object.m_flAlpha = InvisColor.G1A();
+	//				glow_object.m_bFullBloomRender = true;
+	//			}
+	//			else
+	//			{
+	//				float ArrVisibleColor[3] = { VisibleColor.G1R(), VisibleColor.G1G(), VisibleColor.G1B() };
+	//				glow_object.m_bRenderWhenOccluded = true;
+	//				glow_object.m_bRenderWhenUnoccluded = false;
+	//				glow_object.m_vGlowColor = ArrVisibleColor;
+	//				glow_object.m_flAlpha = VisibleColor.G1A();
+	//				glow_object.m_bFullBloomRender = false;
+	//			}
+	//		}
+	//	}
+	//}
+}
+
+void CEsp::DrawAngles(CEntityPlayer* Local)
+{
+	auto DrawAngleLines = [&](const Vector& origin, const Vector& w2sOrigin, const float& angle, const char* text, Color clr)
 	{
-		/*CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
+		Vector forward;
+		AngleVectors(QAngle(0.0f, angle, 0.0f), forward);
+		float AngleLinesLength = 30.0f;
 
-		if (plocal)
+		Vector w2sReal;
+		if (CGlobal::WorldToScreen(origin + forward * AngleLinesLength, w2sReal)) 
 		{
-			for (auto i = 0; i < I::GlowObjManager()->GetSize(); i++)
-			{
-				auto& glow_object = I::GlowObjManager()->m_GlowObjectDefinitions[i];
-				auto ent = reinterpret_cast<CEntityPlayer*>(glow_object.m_pEntity);
+			GP_Render->DrawLine(w2sOrigin.x, w2sOrigin.y, w2sReal.x, w2sReal.y, Color::White(), 1.0f);
+			GP_Render->DrawString(w2sReal.x, w2sReal.y /* - 5.0f, 14.f*/, clr, true, true, text);
 
-				Color InvisColor = (ent->Team == PLAYER_TEAM::TEAM_CT) ? GlowCT : GlowTT;
-				Color VisibleColor = (ent->Team == PLAYER_TEAM::TEAM_CT) ? GlowVisibleCT : GlowVisibleTT;
+		}
+	};
 
-				if (ent->BaseEntity->GetClientClass()->m_ClassID == CLIENT_CLASS_ID::CCSPlayer)
-				{
-					if (glow_object.IsUnused() || !ent)
-						continue;
+	if (!Local->IsLocal || !Local->BaseEntity->GetBasePlayerAnimState())
+		return;
 
-					if (!ent->IsPlayer || ent->IsDormant)
-						continue;
+	if (Local->IsDead)
+		return;
 
-					glow_object.m_nGlowStyle = GlowStyle;
-
-					if (!GlowVisibleOnly)
-					{
-						float ArrInvisColor[3] = { InvisColor.G1R(), InvisColor.G1G(), InvisColor.G1B() };
-						glow_object.m_bRenderWhenOccluded = true;
-						glow_object.m_bRenderWhenUnoccluded = false;
-						glow_object.m_vGlowColor = ArrInvisColor;
-						glow_object.m_flAlpha = InvisColor.G1A();
-						glow_object.m_bFullBloomRender = true;
-					}
-					else
-					{
-						float ArrVisibleColor[3] = { VisibleColor.G1R(), VisibleColor.G1G(), VisibleColor.G1B() };
-						glow_object.m_bRenderWhenOccluded = true;
-						glow_object.m_bRenderWhenUnoccluded = false;
-						glow_object.m_vGlowColor = ArrVisibleColor;
-						glow_object.m_flAlpha = VisibleColor.G1A();
-						glow_object.m_bFullBloomRender = false;
-					}
-				}
-			}
-		}*/
+	if (AngleLines) 
+	{
+		Vector w2sOrigin;
+		if (CGlobal::WorldToScreen(Local->RenderOrigin, w2sOrigin)) 
+		{
+			static float view;
+			if (CGlobal::bSendPacket)
+				view = CGlobal::pCmd->viewangles.y;
+			DrawAngleLines(Local->RenderOrigin, w2sOrigin, Local->BaseEntity->GetBasePlayerAnimState()->m_flGoalFeetYaw, "fake", Color(0.937f, 0.713f, 0.094f, 1.0f));
+			DrawAngleLines(Local->RenderOrigin, w2sOrigin, Local->BaseEntity->GetLowerBodyYawTarget(), "lby", Color(0.0f, 0.0f, 1.0f, 1.0f));
+			DrawAngleLines(Local->RenderOrigin, w2sOrigin, CGlobal::anglereal, "real", Color(0.0f, 1.0f, 0.0f, 1.0f));
+			DrawAngleLines(Local->RenderOrigin, w2sOrigin, view, "view", Color(1.0f, 0.0f, 0.0f, 1.0f));
+		}
 	}
 }

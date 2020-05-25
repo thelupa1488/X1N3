@@ -1,45 +1,44 @@
 #include "SDK.h"
-#pragma once
 
-namespace SDK
+namespace SDK 
 {
-	class bf_Read
+	class bf_read
 	{
 	public:
 		uintptr_t base_address;
 		uintptr_t cur_offset;
 
-		bf_Read::bf_Read(uintptr_t addr)
+		bf_read::bf_read(uintptr_t addr)
 		{
 			base_address = addr;
 			cur_offset = 0;
 		}
 
-		void bf_Read::SetOffset(uintptr_t offset)
+		void bf_read::SetOffset(uintptr_t offset)
 		{
 			cur_offset = offset;
 		}
 
-		void bf_Read::Skip(uintptr_t length)
+		void bf_read::Skip(uintptr_t length)
 		{
 			cur_offset += length;
 		}
 
-		int bf_Read::ReadByte()
+		int bf_read::ReadByte()
 		{
 			auto val = *reinterpret_cast<char*>(base_address + cur_offset);
 			++cur_offset;
 			return val;
 		}
 
-		bool bf_Read::ReadBool()
+		bool bf_read::ReadBool()
 		{
 			auto val = *reinterpret_cast<bool*>(base_address + cur_offset);
 			++cur_offset;
 			return val;
 		}
 
-		std::string bf_Read::ReadString()
+		std::string bf_read::ReadString()
 		{
 			char buffer[1024];
 			auto str_length = *reinterpret_cast<char*>(base_address + cur_offset);

@@ -34,20 +34,20 @@ void CMisc::Menu()
 	X1Gui().Separator();
 	X1Gui().Spacing();
 	DCheckBox("Infinite duck", InfiniteDuck);
-	//X1Gui().Spacing();
-	//X1Gui().Separator();
-	//X1Gui().Spacing();
-	//DCheckBox("Third Person", ThirdPerson);
-	//if (ThirdPerson)
-	//{
-	//	X1Gui().SameLine(SAME_LINE_1);
-	//	X1Gui().PushItemWidth(PUSH_1);
-	//	SliderInts("Distance##ThirdPerson", ThirdPersonDistance, 150, 500);
-	//	X1Gui().PushItemWidth(PUSH_1);
-	//	HotsKey("Button##thirdperson", ThirdPersonBind.Button);
-	//	X1Gui().SameLine();
-	//	DCheckBox("Hold##thirdperson", ThirdPersonBind.Hold);
-	//}
+	X1Gui().Spacing();
+	X1Gui().Separator();
+	X1Gui().Spacing();
+	DCheckBox("ThirdPerson", ThirdPerson);
+	if (ThirdPerson)
+	{
+		X1Gui().SameLine(SAME_LINE_1);
+		X1Gui().PushItemWidth(PUSH_1);
+		SliderFloats("Distance##ThirdPerson", ThirdPersonDistance, 50.f, 500.f);
+		X1Gui().PushItemWidth(PUSH_1);
+		HotsKey("Button##thirdperson", ThirdPersonBind.Button);
+		X1Gui().SameLine();
+		DCheckBox("Hold##thirdperson", ThirdPersonBind.Hold);
+	}
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
@@ -55,20 +55,22 @@ void CMisc::Menu()
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
-	//DCheckBox("Legit AA", LegitAA);
-	//if (LegitAA)
-	//{
-	//	X1Gui().SameLine(SAME_LINE_1);
-	//	X1Gui().PushItemWidth(PUSH_1);
-	//	VectorEx<const char* >itemsCSS = { lolc("Off") , lolc("Static"), lolc("Balance") };
-	//	DComboBox("Type##LegitAAType", LegitAAType, itemsCSS);
-	//	HotsKey("Button##LegitAA", LegitAABind.Button);
-	//	X1Gui().SameLine();
-	//	DCheckBox("Hold##LegitAA", LegitAABind.Hold);
-	//}
-	//X1Gui().Spacing();
-	//X1Gui().Separator();
-	//X1Gui().Spacing();
+	DCheckBox("Legit AA", LegitAA);
+	if (LegitAA)
+	{
+		X1Gui().SameLine(SAME_LINE_1);
+		X1Gui().PushItemWidth(PUSH_1);
+		VectorEx<const char* >itemsCSS = { lolc("Off") , lolc("Static"), lolc("Balance") };
+		DComboBox("Type##LegitAA", LegitAA_type, itemsCSS);
+		DCheckBox("Autodirection", LegitAA_ad);
+		X1Gui().SameLine(SAME_LINE_1);
+		HotsKey("Button##LegitAA", LegitAABind.Button);
+		X1Gui().SameLine();
+		DCheckBox("Hold##LegitAA", LegitAABind.Hold);
+	}
+	X1Gui().Spacing();
+	X1Gui().Separator();
+	X1Gui().Spacing();
 	DCheckBox("Show Competitive Rank", ShowCompetitiveRank);
 	X1Gui().Spacing();
 	X1Gui().Separator();

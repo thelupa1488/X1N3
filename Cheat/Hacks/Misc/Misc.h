@@ -65,14 +65,14 @@ protected:
 	virtual void Reset() = 0;
 	virtual void UpdateSoundList() = 0;
 	virtual void CustomWalls() = 0;
-	virtual void FrameStageNotify(ClientFrameStage_t Stage) = 0;
+	virtual void FrameStageNotify() = 0;
 	virtual void Menu() = 0;
 	virtual void Draw() = 0;
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd) = 0;
-	virtual void Thirdperson() = 0;
 	virtual void Anti_Kick(int type, unsigned int a3, unsigned int length, const void* msg_data) = 0;
-	virtual void Desync(CUserCmd* pCmd, bool& bSendPacket) = 0;
 	virtual void OverrideView(CViewSetup* pSetup) = 0;
+	virtual void Desync(bool& bSendPacket, CUserCmd* pCmd) = 0;
+	virtual void updatelby(CCSGOPlayerAnimState* animstate) = 0;
 };
 
 class CMisc : public IMisc
@@ -88,12 +88,13 @@ public:
 		float Alpha;
 	};
 
+	float Next_Lby;
+	float Side;
+
 	virtual void Menu();
 	virtual void Draw();
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd);
-	virtual void Thirdperson();
 	virtual void Anti_Kick(int type, unsigned int a3, unsigned int length, const void* msg_data);
-	virtual void Desync(CUserCmd* pCmd, bool& bSendPacket);
 	virtual void OverrideView(CViewSetup* pSetup);
 	virtual void GetViewModelFOV(float &Fov);
 //	virtual void PlaySound(const char* pszSoundName);
@@ -106,28 +107,27 @@ public:
 	virtual void Reset();
 	virtual void UpdateSoundList();
 	virtual void CustomWalls();
-	virtual void FrameStageNotify(ClientFrameStage_t Stage);
-
-	float side = 1.0f;
-	float next_lby = 0.0f;
-	bool broke_lby = false;
+	virtual void FrameStageNotify();
+	virtual void Desync(bool& bSendPacket, CUserCmd* pCmd);
+	virtual void updatelby(CCSGOPlayerAnimState* animstate);
 
 	bool Enable = true;
 	bool BHop = false;
 	//bool EdgeJump = false;
-	//CBind EdgeJumpBind = CBind(VK_LCONTROL);
+	//CBind EdgeJumpBind = CBind(0, true);
 	bool AutoStrafe = false;
 	bool LeftHandKnife = false;
 	bool InfiniteDuck = false;
 	bool ThirdPerson = false;
-	int ThirdPersonDistance = 150;
-	CBind ThirdPersonBind = CBind(0x45, true);
+	float ThirdPersonDistance = 50.f;
+	CBind ThirdPersonBind = CBind(0, true);
 	bool AntiKick = false;
 	int AntiKickMethod = 0;
 
 	bool LegitAA = false;
-	int  LegitAAType = 0;
-	CBind LegitAABind = CBind(0x86, true);
+	int  LegitAA_type = 0;
+	bool LegitAA_ad = false;
+	CBind LegitAABind = CBind(0, true);
 
 	bool FovChanger = false;
 	int FovView = 100;
@@ -205,7 +205,7 @@ public:
 
 	bool FakeLag = false;
 	int FakeLagFactor = 7;
-	CBind FakeLagBind = CBind(VK_LCONTROL);
+	CBind FakeLagBind = CBind(0, true);
 
 	int TextDamageInfo = 38;
 
@@ -216,7 +216,7 @@ public:
 	int KnifeBotDistance = 81;
 	int KnifeBotFilter = 0;
 	int KnifeBotMode = 0;
-	CBind KnifeBotBind = CBind(0x42);
+	CBind KnifeBotBind = CBind(0);
 	bool BulletTrace = false;
 
 
@@ -274,7 +274,6 @@ public:
 		RV(AntiFlash, "AntiFlash");
 		RV(AntiFlashAlpha, "AntiFlashAlpha");
 		RV(NoSmoke, "NoSmoke");
-	//	RV(TypeNoSmoke, "TypeNoSmoke");
 		RV(ClanTagChanger, "ClanTagChanger");
 		RV(ClanTagChangerStyle, "ClanTagChangerStyle");
 		RV(ClanTagChangerText, "ClanTagChangerText");

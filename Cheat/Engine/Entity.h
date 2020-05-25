@@ -92,7 +92,7 @@ namespace Engine
 	{
 	public:
 		//[swap_lines]
-
+		int     GetSequenceActivity(int sequence);
 		char*	GetPlayerName();
 		bool    m_bIsDefusing();
 
@@ -117,6 +117,7 @@ namespace Engine
 		AnimationLayer* GetAnimOverlay(int i);
 		CUserCmd*&      GetCurrentCommand();
 		float           GetMaxDesyncAngle();
+		float           MaxRotation(CCSGOPlayerAnimState* AnimState);
 		float           GetSpawnTime();
 
 

@@ -1,12 +1,13 @@
 #pragma once
 #include "Tables.h"
+#include "../Engine/EnginePrediction.h"
 
 void RankReveal()
 {
 	using ServerRankRevealAll = bool(__cdecl*)(int*);
 
 	static auto fnServerRankRevealAll = reinterpret_cast<int(__thiscall*)(ServerRankRevealAll*, DWORD, void*)>
-		(CSX::Memory::FindSignature(XorStr("client_panorama.dll"),
+		(CSX::Memory::NewPatternScan(GetModuleHandleW(L"client_panorama.dll"),
 		XorStr("55 8B EC 8B 0D ? ? ? ? 85 C9 75 28 A1 ? ? ? ? 68 ? ? ? ? 8B 08 8B 01 FF 50 04 85 C0 74 0B 8B C8 E8 ? ? ? ? 8B C8 EB 02 33 C9 89 0D ? ? ? ? 8B 45 08")));
 
 	int v[3] = { 0,0,0 };
@@ -41,10 +42,10 @@ bool __stdcall CreateMove(float flInputSampleTime, CUserCmd* pCmd)
 			if (GP_Esp->GranadePrediction)
 				grenade_prediction::Get().Tick(pCmd->buttons);
 
-		DWORD* FirstP;
-		__asm mov FirstP, ebp;
+		uintptr_t* FPointer; __asm { MOV FPointer, EBP }
+		byte* SendPacket = (byte*)(*FPointer - 0x1C);
 
-		bool bSendPacket = true;
+		bool bSendPacket = *SendPacket;
 
 		if (CGlobal::IsGuiVisble)
 			pCmd->buttons &= ~IN_ATTACK;
@@ -70,13 +71,48 @@ bool __stdcall CreateMove(float flInputSampleTime, CUserCmd* pCmd)
 		if (GP_Misc)
 			GP_Misc->CreateMove(bSendPacket, flInputSampleTime, pCmd);
 
-		if (GP_Misc)
-			GP_Misc->Desync(pCmd, bSendPacket);
+		//EnginePrediction::Begin(pCmd);
+		//{
+			CBaseEntity* local = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
+			static CCSGOPlayerAnimState AnimState;
+
+			QAngle vangle = QAngle();
+			QAngle angleold = pCmd->viewangles;
+
+			if (GP_Misc && std::fabsf(local->GetSpawnTime() - I::GlobalVars()->curtime) > 1.0f)
+				GP_Misc->Desync(bSendPacket, pCmd);
+
+			CGlobal::CorrectMouse(pCmd);
+
+			auto anim_state = local->GetBasePlayerAnimState();
+			if (anim_state) 
+			{
+				CCSGOPlayerAnimState anim_state_backup = *anim_state;
+				*anim_state = AnimState;
+				local->GetVAngles() = pCmd->viewangles;
+				local->UpdateClientSideAnimation();
+
+				GP_Misc->updatelby(anim_state);
+
+				AnimState = *anim_state;
+				*anim_state = anim_state_backup;
+			}
+			if (bSendPacket)
+			{
+				CGlobal::anglereal = AnimState.m_flGoalFeetYaw;
+				if (anim_state)
+					CGlobal::anglefake = anim_state->m_flGoalFeetYaw;
+				vangle = pCmd->viewangles;
+			}
+
+			FixMovement(pCmd, angleold);
+		//}
+		//EnginePrediction::End();
 
 		CGlobal::ClampAngles(pCmd->viewangles);
 		CGlobal::AngleNormalize(pCmd->viewangles);
-
-		*(bool*)(*FirstP - 0x1C) = bSendPacket;
+		CGlobal::bSendPacket = bSendPacket;
+		*SendPacket = bSendPacket;
 
 		if (!bSendPacket)
 			return false;

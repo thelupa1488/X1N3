@@ -2,6 +2,12 @@
 
 #include "SDK.h"	
 
+namespace Engine
+{
+	class CBaseEntity;
+}
+using namespace Engine;
+
 namespace SDK
 {
 	class IMoveHelper
@@ -9,7 +15,7 @@ namespace SDK
 	private:
 		virtual void unknown() = 0;
 	public:
-		virtual void SetHost(IClientEntity* host) = 0;
+		virtual void SetHost(CBaseEntity* host) = 0;
 	private:
 		virtual void unknown1() = 0;
 		virtual void unknown2() = 0;

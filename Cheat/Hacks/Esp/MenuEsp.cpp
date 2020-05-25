@@ -299,6 +299,7 @@ void CEsp::Menu()
 
 				}
 			}
+			DCheckBox("Angle Lines", AngleLines);
 		}
 	};
 	LMenu();

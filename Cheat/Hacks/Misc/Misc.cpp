@@ -2,7 +2,6 @@
 #include  "../Setup.h"
 #include "../../GUI/Gui.h"
 #include "../../Engine/SDK/protomessages.h"
-#include "../../Engine/SDK/bfReader.hpp"
 
 #define KEY_DOWN(VK_NNM) ((FastCall::G().t_GetAsyncKeyState(VK_NNM) & 0x8000) ? 1:0)
 
@@ -171,16 +170,6 @@ void CMisc::Draw()
 					}
 				}
 
-				//if (LegitAA)
-				//{
-				//	int w_b = 5;
-				//	int h_b = 40;
-
-				//	float desync = side - (plocal->GetTickBase() * I::GlobalVars()->interval_per_tick);
-
-				//	GP_Render->DrawString(25, Vec2(w_b + 4, CGlobal::iScreenHeight / 2 + h_b / 2 + 40), Color::Green(), true, false, XorStr("Desync: "), desync);
-				//}
-
 				Night();
 				CustomWalls();
 			}
@@ -192,7 +181,7 @@ void CMisc::Draw()
 
 void CMisc::SetNewClan(string New, string Name)
 {
-	static auto pSetClanTag = reinterpret_cast<void(__fastcall*)(const char*, const char*)>(((DWORD)CSX::Memory::FindPatternV2(XorStr("engine.dll"), XorStr("53 56 57 8B DA 8B F9 FF 15"))));
+	static auto pSetClanTag = reinterpret_cast<void(__fastcall*)(const char*, const char*)>(((DWORD)CSX::Memory::NewPatternScan(GetModuleHandleW(L"engine.dll"), XorStr("53 56 57 8B DA 8B F9 FF 15"))));
 
 	if (pSetClanTag)
 		pSetClanTag(New.c_str(), Name.c_str());
@@ -313,7 +302,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 			}
 
 			static bool NoFlashReset = false;
-
 			if (AntiFlash)
 			{
 				float* maxAlpha = plocal->GetFlashMaxAlpha();
@@ -337,8 +325,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				"particle/vistasmokev1/vistasmokev1_emods_impactdust",
 				"particle/vistasmokev1/vistasmokev1_fire",
 			};
-
-			static auto smoke_count = *reinterpret_cast<uint32_t**>(CSX::Memory::FindSignature(XorStr("client_panorama.dll"), XorStr("A3 ? ? ? ? 57 8B CB")) + 1);
+			static auto smoke_count = *reinterpret_cast<uint32_t**>(CSX::Memory::NewPatternScan(GetModuleHandleW(L"client_panorama.dll"), XorStr("A3 ? ? ? ? 57 8B CB")) + 1);
 			static bool NoSmokeReset = false;
 			if (NoSmoke)
 			{
@@ -598,9 +585,149 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 	}
 }
 
-void CMisc::Thirdperson()
+static int GetBestHeadAngle(float yaw)
 {
+	CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
 
+	float Back, Right, Left;
+
+	Vector src3D, dst3D, forward, right, up, src, dst;
+	trace_t tr;
+	Ray_t ray, ray2, ray3, ray4, ray5;
+	CTraceFilter filter;
+
+	QAngle engineViewAngles;
+
+
+	engineViewAngles.x = 0;
+	engineViewAngles.y = yaw;
+
+	AngleVectors(engineViewAngles, forward, right, up);
+
+	filter.pSkip = plocal;
+	src3D = plocal->GetEyePosition();
+	dst3D = src3D + (forward * 384);
+
+	ray.Init(src3D, dst3D);
+
+	I::EngineTrace()->TraceRay(ray, MASK_SHOT, &filter, &tr);
+
+	Back = (tr.endpos - tr.startpos).Length();
+
+	ray2.Init(src3D + right * 35, dst3D + right * 35);
+
+	I::EngineTrace()->TraceRay(ray2, MASK_SHOT, &filter, &tr);
+
+	Right = (tr.endpos - tr.startpos).Length();
+
+	ray3.Init(src3D - right * 35, dst3D - right * 35);
+
+	I::EngineTrace()->TraceRay(ray3, MASK_SHOT, &filter, &tr);
+
+	Left = (tr.endpos - tr.startpos).Length();
+
+	static int result = 0;
+
+	if (Left > Right)
+	{
+		result = -1;
+	}
+	else if (Right > Left)
+	{
+		result = 1;
+	}
+
+	return result;
+}
+
+void CMisc::Desync(bool& bSendPacket, CUserCmd* pCmd)
+{
+	CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
+	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
+	{
+		if (plocal)
+		{
+			if (LegitAA)
+			{
+				if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
+					plocal->GetMoveType() == MOVETYPE_LADDER || plocal->GetMoveType() == MOVETYPE_NOCLIP || plocal->IsDead())
+					return;
+
+				if (I::GameRules() && I::GameRules()->IsFreezePeriod())
+					return;
+
+				auto weapon = plocal->GetBaseWeapon();
+
+				if (!weapon)
+					return;
+
+				if ((CGlobal::GWeaponID == WEAPON_ID::WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_ID::WEAPON_FAMAS) && weapon->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
+					return;
+
+				if (CGlobal::GWeaponType == WEAPON_TYPE::WEAPON_TYPE_GRENADE) {
+					if (!weapon->GetPinPulled()) {
+						float throwTime = weapon->GetThrowTime();
+						if (throwTime > 0.f)
+							return;
+					}
+
+					if ((pCmd->buttons & IN_ATTACK) || (pCmd->buttons & IN_ATTACK2)) {
+						if (weapon->GetThrowTime() > 0.f)
+							return;
+					}
+				}
+
+				static bool broke_lby = false;
+				QAngle vangle;
+				auto sideauto = GetBestHeadAngle(vangle.y);
+
+				if (!LegitAA_ad) {
+					if (LegitAABind.Check()) {
+						Side = -Side;
+					}
+				}
+				else
+					Next_Lby = sideauto;
+
+				if (LegitAA_type == 1) {
+					float minimal_move = plocal->GetFlags() & IN_DUCK ? 3.0f : 1.0f;
+
+					if (!bSendPacket) {
+						pCmd->viewangles.y += 120.f * Side;
+					}
+
+					static bool flip = 1;
+					flip = !flip;
+
+					pCmd->sidemove += flip ? minimal_move : -minimal_move;
+				}
+				else if (LegitAA_type == 2) {
+					if (Next_Lby >= I::GlobalVars()->curtime) {
+						if (!broke_lby && bSendPacket)
+							return;
+
+						broke_lby = false;
+						bSendPacket = false;
+						pCmd->viewangles.y += 120.0f * Side;
+					}
+					else {
+						broke_lby = true;
+						bSendPacket = false;
+						pCmd->viewangles.y += 120.0f * -Side;
+					}
+				}
+				else if (LegitAA_type == 3)
+				{
+					static bool switchaa = false;
+					switchaa = !switchaa;
+
+					if (!bSendPacket)
+						pCmd->viewangles.y += switchaa ? 180.f : 0.f;
+				}
+				FixAngles(pCmd->viewangles);
+			}
+		}
+	}
 }
 
 void CMisc::Anti_Kick(int type, unsigned int a3, unsigned int length, const void* msg_data)
@@ -612,7 +739,7 @@ void CMisc::Anti_Kick(int type, unsigned int a3, unsigned int length, const void
 			if (!AntiKick) 
 				return;
 
-			bf_Read read = bf_Read(reinterpret_cast<uintptr_t>(msg_data));
+			bf_read read = bf_read(reinterpret_cast<uintptr_t>(msg_data));
 			read.SetOffset(6);
 			read.Skip(29); //30 ?
 			std::string message = read.ReadString();
@@ -642,93 +769,6 @@ void CMisc::Anti_Kick(int type, unsigned int a3, unsigned int length, const void
 				}
 			}
 		}
-	}
-}
-
-void CMisc::Desync(CUserCmd* pCmd, bool& bSendPacket)
-{
-	CBaseEntity* pLocalPlayer = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-	QAngle OldAngles = pCmd->viewangles;
-
-	if (LegitAA)
-	{
-		if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
-			pLocalPlayer->GetMoveType() == MOVETYPE_LADDER || pLocalPlayer->GetMoveType() == MOVETYPE_NOCLIP
-			|| pLocalPlayer->IsDead())
-			return;
-
-		auto weapon = pLocalPlayer->GetBaseWeapon();
-		if (!weapon)
-			return;
-
-		auto weapon_index = weapon->GetModelIndex();
-		if ((weapon_index == WEAPON_GLOCK || weapon_index == WEAPON_FAMAS) && weapon->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
-			return;
-
-		auto weapon_data = weapon->GetWeaponInfo();
-
-		if (weapon_data->m_WeaponType == WEAPON_TYPE_GRENADE) {
-			if (!weapon->GetPinPulled()) {
-				float throwTime = weapon->GetThrowTime();
-				if (throwTime > 0.f)
-					return;
-			}
-
-			if ((pCmd->buttons & IN_ATTACK) || (pCmd->buttons & IN_ATTACK2)) {
-				if (weapon->GetThrowTime() > 0.f)
-					return;
-			}
-		}
-
-		static bool broke_lby = false;
-
-		if (LegitAABind.Check()) 
-		{
-			side = -side;
-		}
-		if (LegitAAType == 1) 
-		{
-			float minimal_move = 2.0f;
-			if (pLocalPlayer->GetFlags() & FL_DUCKING)
-				minimal_move *= 3.f;
-
-			if (pCmd->buttons & IN_WALK)
-				minimal_move *= 3.f;
-
-			bool should_move = pLocalPlayer->GetVelocity().Length2D() <= 0.0f
-				|| std::fabsf(pLocalPlayer->GetVelocity().z) <= 100.0f;
-
-			if ((pCmd->command_number % 2) == 1) {
-				pCmd->viewangles.y += 120.0f * side;
-				if (should_move)
-					pCmd->sidemove -= minimal_move;
-				bSendPacket = false;
-			}
-			else if (should_move) {
-				pCmd->sidemove += minimal_move;
-			}
-		}
-		else 
-		{
-			if (next_lby >= I::GlobalVars()->curtime) 
-			{
-				if (!broke_lby && bSendPacket && I::ClientState()->chokedcommands > 0)
-					return;
-
-				broke_lby = false;
-				bSendPacket = false;
-				pCmd->viewangles.y += 120.0f * side;
-			}
-			else 
-			{
-				broke_lby = true;
-				bSendPacket = false;
-				pCmd->viewangles.y += 120.0f * -side;
-			}
-		}
-
-		FixAngles(pCmd->viewangles);
-		MovementFix(pCmd, OldAngles, pCmd->viewangles);
 	}
 }
 
@@ -817,6 +857,67 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 					pSetup->origin = newOrigin;
 				}
 			}
+
+			if (ThirdPerson)
+			{
+				static size_t lastTime = 0;
+				static bool enable = false;
+
+				if (ThirdPersonBind.Check())
+				{
+					if (GetTickCount64() > lastTime) 
+					{
+						enable = !enable;
+
+						lastTime = GetTickCount64() + 650;
+					}
+				}
+
+				if (enable && plocal->IsDead())
+				{
+					if (!I::Input()->m_fCameraInThirdPerson)
+						I::Input()->m_fCameraInThirdPerson = true;
+				}
+				else
+					I::Input()->m_fCameraInThirdPerson = false;
+
+				auto GetCorrectDistance = [](float ideal_distance) -> float
+				{
+					CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
+					/* vector for the inverse angles */
+					QAngle inverseAngles;
+					I::Engine()->GetViewAngles(inverseAngles);
+
+					/* inverse angles by 180 */
+					inverseAngles.x *= -1.f, inverseAngles.y += 180.f;
+
+					/* vector for direction */
+					Vector direction;
+					AngleVectors(inverseAngles, direction);
+
+					/* ray, trace & filters */
+					Ray_t ray;
+					trace_t trace;
+					CTraceFilter filter;
+
+					/* dont trace local player */
+					filter.pSkip = plocal;
+
+					/* create ray */
+					ray.Init(plocal->GetEyePosition(), plocal->GetEyePosition() + (direction * ideal_distance));
+
+					/* trace ray */
+					I::EngineTrace()->TraceRay(ray, MASK_SHOT, &filter, &trace);
+
+					/* return the ideal distance */
+					return (ideal_distance * trace.fraction) - 10.f;
+				};
+
+				QAngle angles;
+				I::Engine()->GetViewAngles(angles);
+				angles.z = GetCorrectDistance(ThirdPersonDistance); // 150 is better distance
+				I::Input()->m_vecCameraOffset = Vector(angles.x, angles.y, angles.z);
+			}
 		}
 	}
 
@@ -825,11 +926,13 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 	if (plocal && !CGlobal::FullUpdateCheck)
 	{
 		if (GP_LegitAim)
+		{
 			if (GP_LegitAim->CanRCSStandelone && GP_LegitAim->CanRCS)
 			{
 				pSetup->angles.x -= ((plocal->GetViewPunchAngle().x * 2.f) * 0.2f);
 				pSetup->angles.y -= ((plocal->GetViewPunchAngle().y * 2.f) * 0.2f);
 			}
+		}
 	}
 	
 	CGlobal::GFovView = pSetup->fov;
@@ -837,7 +940,6 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 
 void CMisc::GetViewModelFOV(float &Fov)
 {
-
 	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
 	{
 		CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
@@ -913,7 +1015,7 @@ void CMisc::AutoAcceptEmit()
 	if (AutoAccept && !CGlobal::FullUpdateCheck)
 	{
 		static auto fnAccept = reinterpret_cast<bool(__stdcall*)(const char*)>
-			(CSX::Memory::FindPatternV2(XorStr("client_panorama.dll"),
+			(CSX::Memory::NewPatternScan(GetModuleHandleW(L"client_panorama.dll"),
 				XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12")));
 
 		if (fnAccept)
@@ -1018,7 +1120,6 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 		}
 	}
 }
-
 void CMisc::ShowSpectatorList()
 {
 	if (CGlobal::FullUpdateCheck)
@@ -1273,8 +1374,17 @@ void CMisc::Night()
 	}
 }
 
-void CMisc::FrameStageNotify(ClientFrameStage_t Stage)
+void CMisc::FrameStageNotify()
 {
+	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
+	{
+		CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
+
+		if (plocal)
+		{
+
+		}
+	}
 }
 
 void CMisc::CustomWalls()
@@ -1377,6 +1487,18 @@ void CMisc::UpdateSoundList()
 	SoundList.clear();
 	string SoundsDir = CGlobal::SystemDisk + XorStr("X1N3\\Resources\\Sounds\\*.wav");
 	CGlobal::SearchFiles(SoundsDir.c_str(), ReadSounds, FALSE);
+}
+
+void CMisc::updatelby(CCSGOPlayerAnimState* animstate)
+{
+	if (animstate->speed_2d > 0.1f || std::fabsf(animstate->flUpVelocity)) {
+		Next_Lby = I::GlobalVars()->curtime + 0.22f;
+	}
+	else if (I::GlobalVars()->curtime > Next_Lby) {
+		if (std::fabsf(CGlobal::AngleDiff(animstate->m_flGoalFeetYaw, animstate->m_flEyeYaw)) > 35.0f) {
+			Next_Lby = I::GlobalVars()->curtime + 1.1f;
+		}
+	}
 }
 
 void CHitListener::RegListener()

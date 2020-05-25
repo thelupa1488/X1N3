@@ -6,7 +6,6 @@
 
 DWORD WINAPI SetupThread(LPVOID lpThreadParameter)
 {
-	VMP_ULTRA("SetupThread");
 	auto LSetupThread = [&]() -> DWORD
 	{
 		ADD_LOG("2-1-0\n");
@@ -21,7 +20,6 @@ DWORD WINAPI SetupThread(LPVOID lpThreadParameter)
 	};
 
 	return LSetupThread();
-	VMP_END;
 }
 
 void Start()
@@ -41,7 +39,6 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
 	if (fdwReason == DLL_PROCESS_ATTACH)
 	{
 		VMP_ULTRA("DllMain");
-
 		auto LDllMain = [&]() -> void
 		{
 #ifdef ENABLE_CONSOLE_LOG

@@ -130,6 +130,10 @@ public:
 	static bool FullUpdateCheck;
 	static Vector GViewAngle;
 	static vector<string> ConfigList;
+	static CUserCmd* pCmd;
+	static bool bSendPacket;
+	static float anglereal;
+	static float anglefake;
 
 	static string WeaponNames[34];
 
@@ -295,6 +299,86 @@ public:
 		return vForward;
 	}
 
+	static void CorrectMouse(CUserCmd* cmd)
+	{
+		static ConVar* m_yaw = m_yaw = I::GetConVar()->FindVar("m_yaw");
+		static ConVar* m_pitch = m_pitch = I::GetConVar()->FindVar("m_pitch");
+		static ConVar* sensitivity = sensitivity = I::GetConVar()->FindVar("sensitivity");
+
+		static QAngle m_angOldViewangles = I::ClientState()->viewangles;
+
+		float delta_x = std::remainderf(cmd->viewangles.x - m_angOldViewangles.x, 360.0f);
+		float delta_y = std::remainderf(cmd->viewangles.y - m_angOldViewangles.y, 360.0f);
+
+		if (delta_x != 0.0f) {
+			float mouse_y = -((delta_x / m_pitch->GetFloat()) / sensitivity->GetFloat());
+			short mousedy;
+			if (mouse_y <= 32767.0f) {
+				if (mouse_y >= -32768.0f) {
+					if (mouse_y >= 1.0f || mouse_y < 0.0f) {
+						if (mouse_y <= -1.0f || mouse_y > 0.0f)
+							mousedy = static_cast<short>(mouse_y);
+						else
+							mousedy = -1;
+					}
+					else {
+						mousedy = 1;
+					}
+				}
+				else {
+					mousedy = 0x8000u;
+				}
+			}
+			else {
+				mousedy = 0x7FFF;
+			}
+
+			cmd->mousedy = mousedy;
+		}
+
+		if (delta_y != 0.0f) {
+			float mouse_x = -((delta_y / m_yaw->GetFloat()) / sensitivity->GetFloat());
+			short mousedx;
+			if (mouse_x <= 32767.0f) {
+				if (mouse_x >= -32768.0f) {
+					if (mouse_x >= 1.0f || mouse_x < 0.0f) {
+						if (mouse_x <= -1.0f || mouse_x > 0.0f)
+							mousedx = static_cast<short>(mouse_x);
+						else
+							mousedx = -1;
+					}
+					else {
+						mousedx = 1;
+					}
+				}
+				else {
+					mousedx = 0x8000u;
+				}
+			}
+			else {
+				mousedx = 0x7FFF;
+			}
+
+			cmd->mousedx = mousedx;
+		}
+	}
+
+	static float AngleDiff(float destAngle, float srcAngle) 
+	{
+		float delta;
+
+		delta = fmodf(destAngle - srcAngle, 360.0f);
+		if (destAngle > srcAngle) {
+			if (delta >= 180)
+				delta -= 360;
+		}
+		else {
+			if (delta <= -180)
+				delta += 360;
+		}
+		return delta;
+	}
+
 	static bool WorldToScreen(const Vector& origin, Vector& screen)
 	{
 		auto LWorldToScreen = [&]()->bool
@@ -307,7 +391,7 @@ public:
 				static std::uintptr_t pViewMatrix;
 				if (!pViewMatrix)
 				{
-					pViewMatrix = static_cast<std::uintptr_t>(CSX::Memory::FindPatternV2(XorStr("client_panorama.dll"), XorStr("0F 10 05 ? ? ? ? 8D 85 ? ? ? ? B9")));
+					pViewMatrix = reinterpret_cast<std::uintptr_t>(CSX::Memory::NewPatternScan(GetModuleHandleW(L"client_panorama.dll"), XorStr("0F 10 05 ? ? ? ? 8D 85 ? ? ? ? B9")));
 					pViewMatrix += 3;
 					pViewMatrix = *reinterpret_cast<std::uintptr_t*>(pViewMatrix);
 					pViewMatrix += 176;
@@ -548,3 +632,4 @@ public:
 		}
 	}
 };
+

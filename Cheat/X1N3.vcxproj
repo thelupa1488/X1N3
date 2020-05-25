@@ -73,12 +73,13 @@
     <ClInclude Include="Engine\CSX\CSX_Memory.h" />
     <ClInclude Include="Engine\CSX\CSX_Utils.h" />
     <ClInclude Include="Engine\Engine.h" />
+    <ClInclude Include="Engine\EnginePrediction.h" />
     <ClInclude Include="Engine\Entity.h" />
     <ClInclude Include="Engine\EntityMem.h" />
     <ClInclude Include="Engine\GrenadePrediction.h" />
     <ClInclude Include="Engine\NetVar.h" />
     <ClInclude Include="Engine\SDK\BaseTypes.h" />
-    <ClInclude Include="Engine\SDK\bfReader.hpp" />
+    <ClInclude Include="Engine\SDK\BfRead.h" />
     <ClInclude Include="Engine\SDK\ButtonCode.h" />
     <ClInclude Include="Engine\SDK\CGlobalVarsBase.hpp" />
     <ClInclude Include="Engine\SDK\CGlowObjectManager.h" />
@@ -91,6 +92,7 @@
     <ClInclude Include="Engine\SDK\Color.hpp" />
     <ClInclude Include="Engine\SDK\Const.h" />
     <ClInclude Include="Engine\SDK\CRC.hpp" />
+    <ClInclude Include="Engine\SDK\CUserCmd.hpp" />
     <ClInclude Include="Engine\SDK\CVar.h" />
     <ClInclude Include="Engine\SDK\Definitions.hpp" />
     <ClInclude Include="Engine\SDK\IAppSystem.hpp" />
@@ -107,8 +109,10 @@
     <ClInclude Include="Engine\SDK\IEngineSound.h" />
     <ClInclude Include="Engine\SDK\IEngineTrace.hpp" />
     <ClInclude Include="Engine\SDK\IGameEvent.h" />
+    <ClInclude Include="Engine\SDK\IGameRules.h" />
     <ClInclude Include="Engine\SDK\IGameTypes.h" />
     <ClInclude Include="Engine\SDK\IHandleEntity.hpp" />
+    <ClInclude Include="Engine\SDK\IInputSystem.hpp" />
     <ClInclude Include="Engine\SDK\ILocalize.hpp" />
     <ClInclude Include="Engine\SDK\IMaterial.h" />
     <ClInclude Include="Engine\SDK\IMaterialSystem.h" />

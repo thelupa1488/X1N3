@@ -12,19 +12,6 @@ namespace SDK
 		return *(int*)((DWORD)this + offsets["m_nModelIndex"]);
 	}
 
-	int IClientEntity::GetSequenceActivity(int sequence)
-	{
-		studiohdr_t* hdr = I::ModelInfo()->GetStudioModel(this->GetModel());
-
-		if (!hdr)
-			return -1;
-
-		static auto GetSequenceActivity = reinterpret_cast<int(__fastcall*)(void*, studiohdr_t*, int)>(
-			CSX::Memory::FindPatternV2(XorStr("client_panorama.dll"), XorStr("55 8B EC 53 8B 5D 08 56 8B F1 83")));
-
-		return GetSequenceActivity(this, hdr, sequence);
-	}
-
 	CBaseEntity* IClientEntityList::GetClientEntityFromHandleknife(HANDLE hEnt)
 	{
 		typedef CBaseEntity* (__thiscall * OriginalFn)(PVOID, HANDLE);
@@ -34,6 +21,18 @@ namespace SDK
 
 namespace Engine
 {
+	int CBaseEntity::GetSequenceActivity(int sequence)
+	{
+		studiohdr_t* hdr = I::ModelInfo()->GetStudioModel(this->GetModel());
+
+		if (!hdr)
+			return -1;
+
+		static auto GetSequenceActivity = reinterpret_cast<int(__fastcall*)(void*, studiohdr_t*, int)>(
+			CSX::Memory::NewPatternScan(GetModuleHandleW(L"client_panorama.dll"), XorStr("55 8B EC 53 8B 5D 08 56 8B F1 83")));
+
+		return GetSequenceActivity(this, hdr, sequence);
+	}
 	char* CBaseEntity::GetPlayerName()
 	{
 		if (IsPlayer())
@@ -209,8 +208,25 @@ namespace Engine
 
 	CUserCmd*& CBaseEntity::GetCurrentCommand() 
 	{
-		static auto currentCommand = *(uint32_t*)(CSX::Memory::FindPatternV2(XorStr("client_panorama.dll"), XorStr("89 BE ? ? ? ? E8 ? ? ? ? 85 FF")) + 2);
+		static auto currentCommand = *(uint32_t*)(CSX::Memory::NewPatternScan(GetModuleHandleW(L"client_panorama.dll"), XorStr("89 BE ? ? ? ? E8 ? ? ? ? 85 FF")) + 2);
 		return *(CUserCmd**)((uintptr_t)this + currentCommand);
+	}
+
+	float CBaseEntity::MaxRotation(CCSGOPlayerAnimState* AnimState)
+	{
+		auto animstate = uintptr_t(AnimState);
+		float duckamount = *(float*)(animstate + 0xA4);
+		float speedfraction = Maximum<float>(0.f, Minimum<float>(*reinterpret_cast<float*>(animstate + 0xF8), 1.f));
+
+		float unk1 = ((*reinterpret_cast<float*>(animstate + 0x11C) * -0.3f) - 0.2f)* speedfraction;
+		float unk2 = unk1 + 1.f;
+
+		if (duckamount > 0.f)
+		{
+			float speedfactor = Maximum<float>(0.f, Minimum<float>(1.f, *reinterpret_cast<float*>(animstate + 0xFC)));
+			unk2 += ((duckamount * speedfactor) * (0.5f - unk2));
+		}
+		return *(float*)(animstate + 0x334) * unk2;
 	}
 
 	float CBaseEntity::GetMaxDesyncAngle()
@@ -246,14 +262,7 @@ namespace Engine
 
 	int CBaseEntity::GetMoveType()
 	{
-		if (this != NULL && this != nullptr && (DWORD)this != 0xE)
-		{
-			return ptr(int, this, 0x25C);
-		}
-		else
-		{
-			return 0;
-		}
+		return *(int*)((uintptr_t)this + 0x25C);
 	}
 
 	bool CBaseEntity::IsBombDefused()

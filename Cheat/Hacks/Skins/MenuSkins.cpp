@@ -539,6 +539,41 @@ void CSkins::Preview()
 
 	static IDirect3DTexture9* skinImg = nullptr;
 
+	//std::string validFname = "";
+
+	//std::string full_path;
+
+	//if (validFname == "") {
+	//	full_path = "resource/flash/econ/weapons/base_weapons/";
+	//	//	if (!is_gloves)
+	//	full_path += "weapon_";
+	//	full_path += SkinPreview + ".png";
+	//}
+	//else {
+	//	full_path = ("resource/flash/econ/default_generated/");
+	//	//	if (!is_gloves)
+	//	full_path += "weapon_";
+	//	full_path += SkinPreview + "_" + validFname + "_light_large.png";
+	//}
+
+	//const auto handle = g_FileSys->open(full_path.c_str(), "r", "GAME");
+	//if (handle) {
+	//	int file_len = g_FileSys->size(handle);
+	//	char* image = new char[file_len];
+
+	//	g_FileSys->read(image, file_len, handle);
+	//	g_FileSys->close(handle);
+
+	//	D3DXCreateTextureFromFileInMemory(g_pDevice, image, file_len, &skinImg);
+
+	//	delete[] image;
+	//}
+	//else
+	//	skinImg = nullptr;
+	//if (skinImg) {
+	//	X1Gui().DrawImage(skinImg, BackMin, BackMin + Vec2(ImageSzX, ImageSzY));
+	//}
+
 	static string OldKit = SkinPreview;
 	string link = "";
 

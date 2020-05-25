@@ -31,6 +31,5 @@ namespace SDK
 			get_vfunc<void(__thiscall*)(IClientEntity*, int)>(this, 75)(this, index);
 		}
 		int& GetModelIndex();
-		int GetSequenceActivity(int sequence);
 	};
 }

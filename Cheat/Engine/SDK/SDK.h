@@ -51,6 +51,12 @@
 #include "IPredition.hpp"
 #include "IMoveHelper.hpp"
 #include "checksum_md5.hpp"
+#include "IGameRules.h"
+#include "IPredition.hpp"
+#include "IMoveHelper.hpp"
+#include "BfRead.h"
+#include "CUserCmd.hpp"
+#include "IInputSystem.hpp"
 //#include "memalloc.h"
 
 #include <Windows.h>
@@ -77,7 +83,8 @@
 #define INPUTSYSTEM_INTERFACE_VERSION XorStr("InputSystemVersion001")
 #define VENGINE_GAMETYPES_VERSION002 XorStr("VENGINE_GAMETYPES_VERSION002")
 #define VPHYSICS_SURFACE_PROPS_001 XorStr("VPhysicsSurfaceProps001")
-#define VCLIENT_PREDICTION_VERSION001 XorStr("VClientPrediction001")
+#define VCLIENT_PREDICTION001 XorStr("VClientPrediction001")
+#define GAME_MOVEMENT001 XorStr("GameMovement001")
 
 #define ENGINE_DLL XorStr("engine.dll")
 #define CLIENT_DLL XorStr("client_panorama.dll")
@@ -132,6 +139,7 @@ namespace SDK
 		static IPrediction*         Prediction();
 		static IMoveHelper*         MoveHelper();
 		static CGameMovement*       GameMovement();
+		static IGameRules*          GameRules();
 	private:
 		static IVEngineClient*		g_pEngine;
 		static IBaseClientDLL*		g_pClient;
@@ -160,6 +168,7 @@ namespace SDK
 		static IPrediction*         g_pPrediction;
 		static IMoveHelper*         g_pMoveHelper;
 		static CGameMovement*       g_pGameMovement;
+		static IGameRules*          g_pGameRules;
 	};
 
 	template <typename T>
@@ -183,4 +192,4 @@ template<typename T>
 inline T GetMethod( const void* instance , size_t index )
 {
 	return reinterpret_cast<T> ( GetVTable( instance )[index] );
-}                
+}        
