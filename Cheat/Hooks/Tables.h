@@ -10,7 +10,6 @@ using namespace SDK;
 namespace HookTables
 {
 	using CreateMoveFn = bool(__stdcall*)(float, CUserCmd*);
-	using DispatchUserMessageFn = bool(__thiscall*)(void*, int, unsigned int, unsigned int, const void*);
 	using OverrideViewFn = bool(__stdcall*)(CViewSetup*);
 	using GetViewModelFOVFn = float(__stdcall*)();
 	using FrameStageNotifyFn = void(__thiscall*)(void*, int);
@@ -26,10 +25,8 @@ namespace HookTables
 	using EmitSoundFn = void(__fastcall*)(void*, void*, void*, int, int, const char*, unsigned int, const char*, float,
 		float, int, int, int, const Vector*, const Vector*, Vector*, bool, float,
 		int, StartSoundParams_t&);
-	using SendNetMsgFn = bool(__fastcall*)(NetChannel*, INetMessage&, bool, bool);
 
 	cDetour<CreateMoveFn>* pCreateMove;
-	cDetour<DispatchUserMessageFn>* pDispatchUserMessage;
 	cDetour<OverrideViewFn>* pOverrideView;
 	cDetour<GetViewModelFOVFn>* pGetViewModelFOV;
 	cDetour<FrameStageNotifyFn>* pFrameStageNotify;
@@ -42,5 +39,4 @@ namespace HookTables
 	cDetour<SendMessageFn>* pSendMessage;
 	cDetour<PostDataUpdateFn>* pPostDataUpdate;
 	cDetour<EmitSoundFn>* pEmitSound;
-	cDetour<SendNetMsgFn>* pSendNetMsg;
 }

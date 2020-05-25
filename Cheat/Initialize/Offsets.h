@@ -32,6 +32,7 @@ namespace Offsets
 	extern DWORD m_flC4Blow;
 	extern DWORD m_hBombDefuser;
 	extern DWORD m_bBombDefused;
+	extern DWORD m_nBombSite;
 
 	extern DWORD m_bIsScoped;
 

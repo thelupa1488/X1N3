@@ -1,7 +1,6 @@
 #pragma once
 
 #include "SDK.h"
-#include "IMoveHelper.hpp"
 
 namespace Engine
 {
@@ -12,6 +11,19 @@ using namespace Engine;
 
 namespace SDK 
 {
+    class IMoveHelper
+    {
+    private:
+        virtual void unknown() = 0;
+    public:
+        virtual void SetHost(IClientEntity* host) = 0;
+    private:
+        virtual void unknown1() = 0;
+        virtual void unknown2() = 0;
+    public:
+        virtual bool unknown_func() = 0;
+    };
+
     class CMoveData
     {
     public:

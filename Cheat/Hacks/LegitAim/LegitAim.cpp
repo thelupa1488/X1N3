@@ -672,7 +672,7 @@ void CLegitAim::SetMainParams()
 
 	AutoPistol = Weapons[GetWeap(SelectedWeapon)].AutoPistol;
 	FastZoom = Weapons[GetWeap(SelectedWeapon)].FastZoom;
-	InScope = Weapons[GetWeap(SelectedWeapon)].InScope;
+	OnlyZoom = Weapons[GetWeap(SelectedWeapon)].OnlyZoom;
 
 	/*========================================== All =============================================================*/
 	CanSilent = IsEnableSilent();
@@ -747,7 +747,7 @@ bool CLegitAim::CheckOpportWork(CUserCmd* pCmd)
 	if (!(pLocalPlayer->GetFlags() & FL_ONGROUND) && JumpCheck)
 		return false;
 
-	if (pLocalWeapon->GetZoomLevel() == 0 && InScope && SelectedWeapon >= 30)
+	if ((CGlobal::GWeaponID == WEAPON_AWP || CGlobal::GWeaponID == WEAPON_SSG08) && OnlyZoom && !pLocalPlayer->GetIsScoped())
 		return false;
 
 	if (pLocalPlayer->IsFlashed() && FlashCheck)
@@ -1637,7 +1637,7 @@ void CLegitAim::TriggerCreateMove(CUserCmd* pCmd)
 	if (pLocalWeapon->GetWeaponReload())
 		return;
 
-	if (pLocalWeapon->GetZoomLevel() == 0 && InScope && SelectedWeapon >= 30)
+	if (pLocalWeapon->GetZoomLevel() == 0 && OnlyZoom && SelectedWeapon >= 30)
 		return;
 
 	if (pLocalPlayer->IsFlashed() && TriggerFlashCheck)
@@ -2020,7 +2020,7 @@ void CLegitAim::SaveWeapons(nlohmann::json &j)
 		SV("RcsStandelone", v.RcsStandelone);
 		SV("AutoPistol", v.AutoPistol);
 		SV("FastZoom", v.FastZoom);
-		SV("InScope", v.InScope);
+		SV("OnlyZoom", v.OnlyZoom);
 		SV("TRIG_HITGROUP_HEAD", v.TRIG_HITGROUP_HEAD);
 		SV("TRIG_HITGROUP_CHEST", v.TRIG_HITGROUP_CHEST);
 		SV("TRIG_HITGROUP_STOMACH", v.TRIG_HITGROUP_STOMACH);
@@ -2148,7 +2148,7 @@ void CLegitAim::LoadWeapons(nlohmann::json &j)
 				LV("NearestRcs", v.NearestRcs);
 				LV("RcsStandelone", v.RcsStandelone);
 				LV("AutoPistol", v.AutoPistol);
-				LV("InScope", v.InScope);
+				LV("OnlyZoom", v.OnlyZoom);
 				LV("TRIG_HITGROUP_HEAD", v.TRIG_HITGROUP_HEAD);
 				LV("TRIG_HITGROUP_CHEST", v.TRIG_HITGROUP_CHEST);
 				LV("TRIG_HITGROUP_STOMACH", v.TRIG_HITGROUP_STOMACH);

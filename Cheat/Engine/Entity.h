@@ -122,6 +122,7 @@ namespace Engine
 
 
 		int     GetBombDefuser();
+		int     GetBombSite();
 		int     GetMoveType();
 		bool    IsBombDefused();
 		bool    GetGunGameImmunity();

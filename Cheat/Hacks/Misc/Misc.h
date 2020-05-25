@@ -69,7 +69,6 @@ protected:
 	virtual void Menu() = 0;
 	virtual void Draw() = 0;
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd) = 0;
-	virtual void Anti_Kick(int type, unsigned int a3, unsigned int length, const void* msg_data) = 0;
 	virtual void OverrideView(CViewSetup* pSetup) = 0;
 	virtual void Desync(bool& bSendPacket, CUserCmd* pCmd) = 0;
 	virtual void updatelby(CCSGOPlayerAnimState* animstate) = 0;
@@ -94,7 +93,6 @@ public:
 	virtual void Menu();
 	virtual void Draw();
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd);
-	virtual void Anti_Kick(int type, unsigned int a3, unsigned int length, const void* msg_data);
 	virtual void OverrideView(CViewSetup* pSetup);
 	virtual void GetViewModelFOV(float &Fov);
 //	virtual void PlaySound(const char* pszSoundName);
@@ -121,8 +119,6 @@ public:
 	bool ThirdPerson = false;
 	float ThirdPersonDistance = 50.f;
 	CBind ThirdPersonBind = CBind(0, true);
-	bool AntiKick = false;
-	int AntiKickMethod = 0;
 
 	bool LegitAA = false;
 	int  LegitAA_type = 0;
@@ -246,7 +242,6 @@ public:
 		RV(AutoStrafe, "AutoStrafe");
 		RV(LeftHandKnife, "LeftHandKnife");
 		RV(InfiniteDuck, "InfiniteDuck");
-		RV(AntiKick, "AntiKick");
 		RV(FovChanger, "FovChanger");
 		RV(FovView, "FovView");
 		RV(FovModelChanger, "FovModelChanger");

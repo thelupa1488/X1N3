@@ -260,6 +260,11 @@ namespace Engine
 		return *(int*)((uintptr_t)this + offsets["m_hBombDefuser"]);
 	}
 
+	int CBaseEntity::GetBombSite()
+	{
+		return *(int*)((uintptr_t)this + offsets["m_nBombSite"]);
+	}
+
 	int CBaseEntity::GetMoveType()
 	{
 		return *(int*)((uintptr_t)this + 0x25C);

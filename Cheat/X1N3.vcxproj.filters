@@ -663,19 +663,13 @@
     <ClInclude Include="Engine\SDK\ClientState.hpp" />
     <ClInclude Include="Engine\XorStr.h" />
     <ClInclude Include="X1API\Protect\Mutant.h" />
-    <ClInclude Include="Engine\SDK\protomessages.h" />
-    <ClInclude Include="Engine\SDK\protoparse.h" />
-    <ClInclude Include="Hooks\DispatchUserMessage.h" />
     <ClInclude Include="Engine\SDK\IPhysics.hpp" />
     <ClInclude Include="Engine\SDK\Math.hpp" />
     <ClInclude Include="Engine\SDK\Match.h" />
     <ClInclude Include="Engine\SDK\IPredition.hpp" />
-    <ClInclude Include="Engine\SDK\IMoveHelper.hpp" />
     <ClInclude Include="Engine\SDK\checksum_md5.hpp" />
     <ClInclude Include="X1API\Protect\cHide.h" />
     <ClInclude Include="Engine\SDK\IGameRules.h" />
-    <ClInclude Include="Engine\EnginePrediction.h" />
-    <ClInclude Include="Engine\SDK\BfRead.h" />
     <ClInclude Include="Engine\SDK\IInputSystem.hpp" />
     <ClInclude Include="Engine\SDK\CUserCmd.hpp" />
   </ItemGroup>

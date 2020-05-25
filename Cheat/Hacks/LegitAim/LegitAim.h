@@ -279,7 +279,7 @@ public:
 
 		bool AutoPistol = false;
 		bool FastZoom = false;
-		bool InScope = false;
+		bool OnlyZoom = false;
 
 		bool TRIG_HITGROUP_HEAD = false;
 		bool TRIG_HITGROUP_CHEST = false;
@@ -341,7 +341,7 @@ public:
 			CHECK_VAR(RcsStandelone);
 			CHECK_VAR(AutoPistol);
 			CHECK_VAR(FastZoom);
-			CHECK_VAR(InScope);
+			CHECK_VAR(OnlyZoom);
 			CHECK_VAR(TRIG_HITGROUP_HEAD);
 			CHECK_VAR(TRIG_HITGROUP_CHEST);
 			CHECK_VAR(TRIG_HITGROUP_STOMACH);
@@ -550,7 +550,7 @@ private:
 	bool SetSmoothStart = false;
 	bool FaceItMode = false;
 	bool FastZoom = false;
-	bool InScope = false;
+	bool OnlyZoom = false;
 	bool IsZoomed = false;
 	bool IsSniperClass = false;
 

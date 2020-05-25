@@ -155,7 +155,7 @@ public:
 	virtual void Draw3DBox(CEntityPlayer* Entity, Color color);
 	virtual void DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t &state, const ModelRenderInfo_t &pInfo, matrix3x4_t *pCustomBoneToWorld);
 	virtual void DrawGlow(CEntityPlayer* Entity, CEntityPlayer* Local);
-	virtual void DrawAngles(CEntityPlayer* Local);
+	//virtual void DrawAngles(CEntityPlayer* Local);
 
 	void PlaySound(Vector _Pos, int EntityIdx);
 	void Reset();

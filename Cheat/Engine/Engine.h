@@ -130,10 +130,6 @@ public:
 	static bool FullUpdateCheck;
 	static Vector GViewAngle;
 	static vector<string> ConfigList;
-	static CUserCmd* pCmd;
-	static bool bSendPacket;
-	static float anglereal;
-	static float anglefake;
 
 	static string WeaponNames[34];
 

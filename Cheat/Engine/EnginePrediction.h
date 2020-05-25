@@ -21,6 +21,10 @@ namespace EnginePrediction
 	void Begin(CUserCmd* cmd)
 	{
 		CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
+
+		if (!plocal)
+			return;
+
 		_curtime_backup = I::GlobalVars()->curtime;
 		_frametime_backup = I::GlobalVars()->frametime;
 

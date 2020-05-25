@@ -1004,41 +1004,41 @@ void CEsp::DrawGlow(CEntityPlayer* Entity, CEntityPlayer* Local)
 	//}
 }
 
-void CEsp::DrawAngles(CEntityPlayer* Local)
-{
-	auto DrawAngleLines = [&](const Vector& origin, const Vector& w2sOrigin, const float& angle, const char* text, Color clr)
-	{
-		Vector forward;
-		AngleVectors(QAngle(0.0f, angle, 0.0f), forward);
-		float AngleLinesLength = 30.0f;
-
-		Vector w2sReal;
-		if (CGlobal::WorldToScreen(origin + forward * AngleLinesLength, w2sReal)) 
-		{
-			GP_Render->DrawLine(w2sOrigin.x, w2sOrigin.y, w2sReal.x, w2sReal.y, Color::White(), 1.0f);
-			GP_Render->DrawString(w2sReal.x, w2sReal.y /* - 5.0f, 14.f*/, clr, true, true, text);
-
-		}
-	};
-
-	if (!Local->IsLocal || !Local->BaseEntity->GetBasePlayerAnimState())
-		return;
-
-	if (Local->IsDead)
-		return;
-
-	if (AngleLines) 
-	{
-		Vector w2sOrigin;
-		if (CGlobal::WorldToScreen(Local->RenderOrigin, w2sOrigin)) 
-		{
-			static float view;
-			if (CGlobal::bSendPacket)
-				view = CGlobal::pCmd->viewangles.y;
-			DrawAngleLines(Local->RenderOrigin, w2sOrigin, Local->BaseEntity->GetBasePlayerAnimState()->m_flGoalFeetYaw, "fake", Color(0.937f, 0.713f, 0.094f, 1.0f));
-			DrawAngleLines(Local->RenderOrigin, w2sOrigin, Local->BaseEntity->GetLowerBodyYawTarget(), "lby", Color(0.0f, 0.0f, 1.0f, 1.0f));
-			DrawAngleLines(Local->RenderOrigin, w2sOrigin, CGlobal::anglereal, "real", Color(0.0f, 1.0f, 0.0f, 1.0f));
-			DrawAngleLines(Local->RenderOrigin, w2sOrigin, view, "view", Color(1.0f, 0.0f, 0.0f, 1.0f));
-		}
-	}
-}
+//void CEsp::DrawAngles(CEntityPlayer* Local)
+//{
+//	auto DrawAngleLines = [&](const Vector& origin, const Vector& w2sOrigin, const float& angle, const char* text, Color clr)
+//	{
+//		Vector forward;
+//		AngleVectors(QAngle(0.0f, angle, 0.0f), forward);
+//		float AngleLinesLength = 30.0f;
+//
+//		Vector w2sReal;
+//		if (CGlobal::WorldToScreen(origin + forward * AngleLinesLength, w2sReal)) 
+//		{
+//			GP_Render->DrawLine(w2sOrigin.x, w2sOrigin.y, w2sReal.x, w2sReal.y, Color::White(), 1.0f);
+//			GP_Render->DrawString(w2sReal.x, w2sReal.y /* - 5.0f, 14.f*/, clr, true, true, text);
+//
+//		}
+//	};
+//
+//	if (!Local->IsLocal || !Local->BaseEntity->GetBasePlayerAnimState())
+//		return;
+//
+//	if (Local->IsDead)
+//		return;
+//
+//	if (AngleLines) 
+//	{
+//		Vector w2sOrigin;
+//		if (CGlobal::WorldToScreen(Local->RenderOrigin, w2sOrigin)) 
+//		{
+//			static float view;
+//			if (CGlobal::bSendPacket)
+//				view = CGlobal::pCmd->viewangles.y;
+//			DrawAngleLines(Local->RenderOrigin, w2sOrigin, Local->BaseEntity->GetBasePlayerAnimState()->m_flGoalFeetYaw, "fake", Color(0.937f, 0.713f, 0.094f, 1.0f));
+//			DrawAngleLines(Local->RenderOrigin, w2sOrigin, Local->BaseEntity->GetLowerBodyYawTarget(), "lby", Color(0.0f, 0.0f, 1.0f, 1.0f));
+//			DrawAngleLines(Local->RenderOrigin, w2sOrigin, CGlobal::anglereal, "real", Color(0.0f, 1.0f, 0.0f, 1.0f));
+//			DrawAngleLines(Local->RenderOrigin, w2sOrigin, view, "view", Color(1.0f, 0.0f, 0.0f, 1.0f));
+//		}
+//	}
+//}

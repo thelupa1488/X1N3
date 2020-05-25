@@ -15,18 +15,6 @@ void RankReveal()
 	reinterpret_cast<ServerRankRevealAll>(fnServerRankRevealAll)(v);
 }
 
-bool __fastcall SendNetMsg(NetChannel* pNetChan, void* edx, INetMessage& msg, bool bForceReliable, bool bVoice)
-{
-/*	
-    if (msg.getType() == 14) // Return and don't send messsage if its FileCRCCheck
-		return false;
-
-	if (msg.GetGroup() == 9) // Fix lag when transmitting voice and fakelagging
-		bVoice = true;
-*/
-	return HookTables::pSendNetMsg->GetTrampoline()(pNetChan, msg, bForceReliable, bVoice);
-}
-
 bool __stdcall CreateMove(float flInputSampleTime, CUserCmd* pCmd)
 {
 	bool bReturn = HookTables::pCreateMove->GetTrampoline()(flInputSampleTime, pCmd);
@@ -73,45 +61,36 @@ bool __stdcall CreateMove(float flInputSampleTime, CUserCmd* pCmd)
 
 		//EnginePrediction::Begin(pCmd);
 		//{
-			CBaseEntity* local = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-			static CCSGOPlayerAnimState AnimState;
+		//	CBaseEntity* local = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
+		//	static CCSGOPlayerAnimState AnimState;
 
-			QAngle vangle = QAngle();
-			QAngle angleold = pCmd->viewangles;
+		//	QAngle vangle = QAngle();
+		//	QAngle angleold = pCmd->viewangles;
 
-			if (GP_Misc && std::fabsf(local->GetSpawnTime() - I::GlobalVars()->curtime) > 1.0f)
-				GP_Misc->Desync(bSendPacket, pCmd);
+		//	if (GP_Misc && std::fabsf(local->GetSpawnTime() - I::GlobalVars()->curtime) > 1.0f)
+		//		GP_Misc->Desync(bSendPacket, pCmd);
 
-			CGlobal::CorrectMouse(pCmd);
+		//	CGlobal::CorrectMouse(pCmd);
 
-			auto anim_state = local->GetBasePlayerAnimState();
-			if (anim_state) 
-			{
-				CCSGOPlayerAnimState anim_state_backup = *anim_state;
-				*anim_state = AnimState;
-				local->GetVAngles() = pCmd->viewangles;
-				local->UpdateClientSideAnimation();
+		//	auto anim_state = local->GetBasePlayerAnimState();
+		//	if (anim_state) 
+		//	{
+		//		CCSGOPlayerAnimState anim_state_backup = *anim_state;
+		//		*anim_state = AnimState;
+		//		local->GetVAngles() = pCmd->viewangles;
+		//		local->UpdateClientSideAnimation();
 
-				GP_Misc->updatelby(anim_state);
+		//		GP_Misc->updatelby(anim_state);
 
-				AnimState = *anim_state;
-				*anim_state = anim_state_backup;
-			}
-			if (bSendPacket)
-			{
-				CGlobal::anglereal = AnimState.m_flGoalFeetYaw;
-				if (anim_state)
-					CGlobal::anglefake = anim_state->m_flGoalFeetYaw;
-				vangle = pCmd->viewangles;
-			}
-
-			FixMovement(pCmd, angleold);
+		//		AnimState = *anim_state;
+		//		*anim_state = anim_state_backup;
+		//	}
+		//	FixMovement(pCmd, angleold);
 		//}
 		//EnginePrediction::End();
 
 		CGlobal::ClampAngles(pCmd->viewangles);
 		CGlobal::AngleNormalize(pCmd->viewangles);
-		CGlobal::bSendPacket = bSendPacket;
 		*SendPacket = bSendPacket;
 
 		if (!bSendPacket)

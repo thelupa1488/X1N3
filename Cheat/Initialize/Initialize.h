@@ -6,7 +6,6 @@
 #include "../Engine/SDK/SDK.h"
 #include "../Engine/NetVar.h"
 #include "../Hooks/CreateMove.h"
-#include "../Hooks/DispatchUserMessage.h"
 #include "../Hooks/Views.h"
 #include  "../Hooks/Sound.h"
 #include "../Hooks/FrameStageNotify.h"
@@ -26,8 +25,6 @@ public:
 		virtual void InitHooks() = 0;
 		virtual void InitOffsets() = 0;
 		virtual bool Init() = 0;
-		virtual void SendSteamId32() = 0;
-		int ii = 0;
 	};
 };
 
@@ -41,18 +38,15 @@ inline int decod(const char *s)
 	return (z ? -n : n);
 }
 
-//#define ResetIdx XorStr("16")
-//#define SSendMessageIdx XorStr("0")
 //#define RetrieveMessageIdx XorStr("2")
 //#define FireEventClientSideThinkIdx XorStr("9")
 #define EmitSoundIdx XorStr("5")
-#define ResetIdx XorStr("16")
+//#define ResetIdx XorStr("16")
 #define OverrideViewIdx XorStr("18")
 #define DrawModelExecuteIdx XorStr("21")
 #define CreateMoveIdx XorStr("24")
 #define GetViewModelFOVIdx XorStr("35")
 #define FrameStageNotifyIdx XorStr("37")
-#define DispatchUserMessageIdx XorStr("38")
 #define DoPostScreenEffectsIdx XorStr("44")
 #define LockCursorIdx XorStr("67")
 #define PlaySoundIdx XorStr("82")
@@ -142,12 +136,6 @@ public:
 						(FrameStageNotify),
 						&pFrameStageNotify);
 					ADD_LOG("Hook: StageNotify\n");
-
-					pContext.ApplyDetour<DispatchUserMessageFn>(static_cast<DispatchUserMessageFn>(ClientTable[decod(DispatchUserMessageIdx)]),
-						reinterpret_cast<DispatchUserMessageFn>
-						(DispatchUserMessage),
-						&pDispatchUserMessage);
-					ADD_LOG("Hook: DispatchUserMessage\n");
 				}
 				ADD_LOG("2-1-11-7\n");
 				if (ClientStateTable)
@@ -199,6 +187,7 @@ public:
 				offsets["m_flDefuseCountDown"] = mGetOffset("DT_PlantedC4", "m_flDefuseCountDown");
 				offsets["m_hBombDefuser"] = mGetOffset("DT_PlantedC4", "m_hBombDefuser");
 				offsets["m_bBombDefused"] = mGetOffset("DT_PlantedC4", "m_bBombDefused");
+				offsets["m_nBombSite"] = mGetOffset("DT_PlantedC4", "m_nBombSite");
 				offsets["m_flFlashMaxAlpha"] = mGetOffset("DT_CSPlayer", "m_flFlashMaxAlpha");
 				offsets["m_bHasHelmet"] = mGetOffset("DT_CSPlayer", "m_bHasHelmet");
 				offsets["m_bHasDefuser"] = mGetOffset("DT_CSPlayer", "m_bHasDefuser");

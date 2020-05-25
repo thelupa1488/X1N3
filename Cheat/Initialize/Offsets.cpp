@@ -28,6 +28,7 @@ namespace Offsets
 	DWORD m_flC4Blow = 0;
 	DWORD m_hBombDefuser = 0;
 	DWORD m_bBombDefused = 0;
+	DWORD m_nBombSite = 0;
 
 	DWORD m_bIsScoped = 0;
 

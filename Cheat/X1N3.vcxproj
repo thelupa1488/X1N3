@@ -73,13 +73,11 @@
     <ClInclude Include="Engine\CSX\CSX_Memory.h" />
     <ClInclude Include="Engine\CSX\CSX_Utils.h" />
     <ClInclude Include="Engine\Engine.h" />
-    <ClInclude Include="Engine\EnginePrediction.h" />
     <ClInclude Include="Engine\Entity.h" />
     <ClInclude Include="Engine\EntityMem.h" />
     <ClInclude Include="Engine\GrenadePrediction.h" />
     <ClInclude Include="Engine\NetVar.h" />
     <ClInclude Include="Engine\SDK\BaseTypes.h" />
-    <ClInclude Include="Engine\SDK\BfRead.h" />
     <ClInclude Include="Engine\SDK\ButtonCode.h" />
     <ClInclude Include="Engine\SDK\CGlobalVarsBase.hpp" />
     <ClInclude Include="Engine\SDK\CGlowObjectManager.h" />
@@ -116,7 +114,6 @@
     <ClInclude Include="Engine\SDK\ILocalize.hpp" />
     <ClInclude Include="Engine\SDK\IMaterial.h" />
     <ClInclude Include="Engine\SDK\IMaterialSystem.h" />
-    <ClInclude Include="Engine\SDK\IMoveHelper.hpp" />
     <ClInclude Include="Engine\SDK\InputEnums.h" />
     <ClInclude Include="Engine\SDK\IPhysics.hpp" />
     <ClInclude Include="Engine\SDK\IPredition.hpp" />
@@ -130,8 +127,6 @@
     <ClInclude Include="Engine\SDK\Math.hpp" />
     <ClInclude Include="Engine\SDK\memalloc.h" />
     <ClInclude Include="Engine\SDK\PlayerInfo.hpp" />
-    <ClInclude Include="Engine\SDK\protomessages.h" />
-    <ClInclude Include="Engine\SDK\protoparse.h" />
     <ClInclude Include="Engine\SDK\QAngle.hpp" />
     <ClInclude Include="Engine\SDK\Recv.hpp" />
     <ClInclude Include="Engine\SDK\RecvCommon.hpp" />
@@ -156,7 +151,6 @@
     <ClInclude Include="Hacks\Skins\DynSkin.h" />
     <ClInclude Include="Hacks\Skins\Skins.h" />
     <ClInclude Include="Hooks\CreateMove.h" />
-    <ClInclude Include="Hooks\DispatchUserMessage.h" />
     <ClInclude Include="Hooks\DrawModelExecute.h" />
     <ClInclude Include="Hooks\FrameStageNotify.h" />
     <ClInclude Include="Hooks\Sound.h" />
@@ -287,19 +281,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\My paste\[Src in git] X1N3 &amp; Injector\X1N3\Cheat\X1API\Protect\VMP;D:\My paste\[Src in git] X1N3 &amp; Injector\X1N3\Cheat\Json;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Cheat\X1API\Protect\VMP;$(SolutionDir)Cheat\Json;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
     <LibraryPath>D:\My paste\[Src in git] X1N3 &amp; Injector\X1N3\Cheat\X1API;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
     <TargetName>test</TargetName>
-    <OutDir>..\build\debug</OutDir>
-    <IntDir>.\output\debug</IntDir>
+    <OutDir>$(SolutionDir)build\debug</OutDir>
+    <IntDir>$(SolutionDir)Cheat\output\debug</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>D:\My paste\[Src in git] X1N3 &amp; Injector\X1N3\Cheat\X1API\Protect\VMP;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;D:\My paste\[Src in git] X1N3 &amp; Injector\X1N3\Cheat\X1API;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;D:\My paste\[Src in git] X1N3 &amp; Injector\X1N3\Cheat\X1API;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Cheat\X1API\Protect\VMP;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(SolutionDir)Cheat\X1API;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(SolutionDir)Cheat\X1API;$(LibraryPath)</LibraryPath>
     <TargetName>test</TargetName>
-    <OutDir>..\build\release</OutDir>
-    <IntDir>.\output\release</IntDir>
+    <OutDir>$(SolutionDir)build\release</OutDir>
+    <IntDir>$(SolutionDir)Cheat\output\release</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

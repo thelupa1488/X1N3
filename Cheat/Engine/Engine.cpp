@@ -14,10 +14,6 @@ float CGlobal::GFovViewExt = 90;
 bool CGlobal::FullUpdateCheck = false;
 Vector CGlobal::GViewAngle;
 vector<string> CGlobal::ConfigList;
-CUserCmd* CGlobal::pCmd = nullptr;
-bool CGlobal::bSendPacket = true;
-float CGlobal::anglereal = 0.f;
-float CGlobal::anglefake = 0.f;
 
 void ReadConfigs(LPCTSTR lpszFileName)
 {

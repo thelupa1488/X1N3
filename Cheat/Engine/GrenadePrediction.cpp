@@ -36,7 +36,6 @@ void grenade_prediction::View()
 
 void grenade_prediction::Paint()
 {
-
 	if ((type) && path.size() > 1)
 	{
 		static vector<Vector> TempPath;

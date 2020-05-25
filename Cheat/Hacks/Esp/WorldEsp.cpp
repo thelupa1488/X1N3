@@ -215,12 +215,7 @@ void CEsp::WorldEsp()
 					if (WorldBombInfo)
 					{
 						if (pEntity != (CBaseEntity*)0xB)
-						{
-							if (pEntity->GetClientClass()->m_ClassID == (int)CLIENT_CLASS_ID::CPlantedC4)
-							{
-								DrawBombInfo(pEntity, plocal);
-							}
-						}
+							DrawBombInfo(pEntity, plocal);
 					}
 				}
 			}
@@ -252,6 +247,9 @@ void CEsp::DrawBombInfo(CBaseEntity* entity, CBaseEntity* Local)
 	if (!entity)
 		return;
 
+	if (!(entity->GetClientClass()->m_ClassID == (int)CLIENT_CLASS_ID::CPlantedC4))
+		return;
+
 	CBaseEntity* local = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
 
 	static bool IsDefusing = false;
@@ -262,7 +260,7 @@ void CEsp::DrawBombInfo(CBaseEntity* entity, CBaseEntity* Local)
 	int w_b = 5;
 	int h_b = 37;
 	if (IsDefusing)
-		h_b += 20;
+		h_b += 15;
 
 	GP_Render->DrawFilledBox(0, CGlobal::iScreenHeight / 2 + h_b / 2, w_b, h_b, Back1);
 	GP_Render->DrawFilledBox(w_b, CGlobal::iScreenHeight / 2 + h_b / 2, 150, h_b, Back2);
@@ -271,6 +269,14 @@ void CEsp::DrawBombInfo(CBaseEntity* entity, CBaseEntity* Local)
 	CBaseEntity* Bomb = (CBaseEntity*)entity;
 	float flBlow = Bomb->GetC4BlowTime();
 	float lifetime = flBlow - (I::GlobalVars()->interval_per_tick * Local->GetTickBase());
+
+	std::string buf3;
+	if (entity->GetBombSite() == 0)
+		buf3 = "A";
+	else if (entity->GetBombSite() == 1)
+		buf3 = "B";
+	else
+		buf3 = "C 0_o?";
 
 	float flDistance = Local->GetEyePosition().DistTo(entity->GetEyePosition());
 	float a = 450.7f;
@@ -303,9 +309,9 @@ void CEsp::DrawBombInfo(CBaseEntity* entity, CBaseEntity* Local)
 		EndTime = Color::Red();
 
 	if (lifetime > 0)
-		GP_Render->DrawString(15, Vec2(w_b + 4, CGlobal::iScreenHeight / 2 + h_b / 2 + 2), NameColor, true, false, XorStr("Explosion time: %.1f"), lifetime);
+		GP_Render->DrawString(15, Vec2(w_b + 4, CGlobal::iScreenHeight / 2 + h_b / 2 + 2), NameColor, true, false, XorStr("Explosion time [%s]: %.1f"), buf3.c_str(), lifetime);
 	else
-		GP_Render->DrawString(15, Vec2(w_b + 4, CGlobal::iScreenHeight / 2 + h_b / 2 + 2), NameColor, true, false, XorStr("Explosion time: 0"));
+		GP_Render->DrawString(15, Vec2(w_b + 4, CGlobal::iScreenHeight / 2 + h_b / 2 + 2), NameColor, true, false, XorStr("Explosion time [%s]: 0"), buf3.c_str());
 
 	Color EndDefuse;
 	if (Bomb->GetBombDefuser() > 0)

@@ -109,7 +109,7 @@ void CLegitAim::Menu()
 			{
 				DCheckBox("Fast zoom", Weapons[GetWeap(SelectedWeapon)].FastZoom);
 				X1Gui().SameLine(246);
-				DCheckBox("In scope", Weapons[GetWeap(SelectedWeapon)].InScope);
+				DCheckBox("Only Zoom", Weapons[GetWeap(SelectedWeapon)].OnlyZoom);
 			}
 
 		}
