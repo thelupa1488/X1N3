@@ -156,7 +156,7 @@ void CSkins::Menu()
 	{
 		X1Gui().PushItemWidth(360);
 		SliderFloats("Seed", Item.seed, 0.f, 2.f);
-		X1Gui().SliderFloat(XorStr("Wear"), &Item.wear, 0.f, 2.f, "%.9f");
+		SliderFloats("Wear", Item.wear, 0.f, 1.f, "%.9f");
 		X1Gui().PushItemWidth(230);
 		SliderInts("StatTrak", Item.stat_track, 0, 5000);
 		X1Gui().SameLine();
@@ -173,7 +173,7 @@ void CSkins::Menu()
 		DComboBox("Quality", Item.quality, itemsQQ);
 
 		string old_name = Item.custom_name;
-		X1Gui().InputText("Name##34343", Item.custom_name, 32);
+		X1Gui().InputText("Name##custom_name", Item.custom_name, 32);
 
 		if (old_name != (string)Item.custom_name)
 			IsNameChange = true;
@@ -500,7 +500,7 @@ void CSkins::Menu()
 				WeaponPreview = GlovesSkin_Array[SelectedGloveCT - 1].Url;
 			}
 			X1Gui().PushItemWidth(400);
-			X1Gui().SliderFloat(XorStr("Wear"), & GloveCTWear, 0.f, 1.f, "%.9f");
+			SliderFloats("Wear", GloveCTWear, 0.f, 1.f, "%.9f");
 		}
 		
 		else if (glvTeamSettingsMode == 1)
@@ -520,7 +520,7 @@ void CSkins::Menu()
 				WeaponPreview = GlovesSkin_Array[SelectedGloveTT - 1].Url;
 			}
 			X1Gui().PushItemWidth(400);
-			X1Gui().SliderFloat(XorStr("Wear"), & GloveTTWear, 0.f, 1.f, "%.9f");
+			SliderFloats("Wear", GloveTTWear, 0.f, 1.f, "%.9f");
 		}
 		
 	}

@@ -51,7 +51,7 @@ void CEsp::PlaySound(Vector _Pos, int EntityIdx)
 void CSoundEsp::Add(Vector _Pos, PLAYER_TEAM _Team, int idx)
 {
 	SoundInfo Sound;
-	Sound.EndTime = I::GlobalVars()->curtime + 1.5f;
+	Sound.EndTime = I::GlobalVars()->curtime + 1.0f;
 	Sound.Pos = _Pos;
 	Sound.EntIdx = idx;
 	if (GP_Esp)
@@ -137,19 +137,10 @@ void CEsp::SoundFrameStage()
 
 	for (int i = 0; i < sndList.Count(); i++)
 	{
-		if (!sndList[i].m_pOrigin)
+		if (!sndList[i].m_pOrigin || !sndList[i].m_nSoundSource || !sndList[i].m_bUpdatePositions || sndList[i].m_nChannel != 4)
 			continue;
 
-		if (!sndList[i].m_nSoundSource)
-			continue;
-
-		if (sndList[i].m_nChannel != 4)
-			continue;
-
-		if (!sndList[i].m_bUpdatePositions)
-			continue;
-
-		if (plocal->GetOrigin().DistTo(*sndList[i].m_pOrigin) >= (SoundDistance / 3))
+		if (plocal->GetOrigin().DistTo(*sndList[i].m_pOrigin) >= SoundDistance)
 			continue;
 
 		GP_Esp->PlaySound(*sndList[i].m_pOrigin, sndList[i].m_nSoundSource);

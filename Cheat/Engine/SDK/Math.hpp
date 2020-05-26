@@ -25,7 +25,14 @@ namespace SDK
 		i >>= 1;
 		return *(float*)&i;
 	}
-
+	inline float ClampYaw(float yaw)
+	{
+		while (yaw > 180.f)
+			yaw -= 360.f;
+		while (yaw < -180.f)
+			yaw += 360.f;
+		return yaw;
+	}
 	void FixAngles(QAngle& angles);
 	template<class T>
 	void lNormalizeAngles(T& vec);

@@ -40,6 +40,7 @@ namespace Offsets
 
 	extern DWORD m_iFOVStart;
 	extern DWORD m_fFlags;
+	extern DWORD m_hOwnerEntity;
 	extern DWORD m_iHealth;
 	extern DWORD m_ArmorValue;
 	extern DWORD m_iTeamNum;

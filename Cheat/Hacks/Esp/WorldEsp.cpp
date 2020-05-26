@@ -119,7 +119,7 @@ void CEsp::WorldEsp()
 									else if (strstr(WeaponName.c_str(), XorStr("rif_famas")))WeaponName = Lol(M_WEAPON_FAMAS_STR);
 									else if (strstr(WeaponName.c_str(), XorStr("rif_galilar"))) WeaponName = Lol(M_WEAPON_GALILAR_STR);
 									else if (strstr(WeaponName.c_str(), XorStr("rif_m4a1_s"))) WeaponName = Lol(M_WEAPON_M4A1_S_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("rif_m4a4"))) WeaponName = Lol(M_WEAPON_M4A4_STR);
+									else if (strstr(WeaponName.c_str(), XorStr("rif_m4a1"))) WeaponName = Lol(M_WEAPON_M4A4_STR);
 									else if (strstr(WeaponName.c_str(), XorStr("rif_sg556"))) WeaponName = Lol(M_WEAPON_SG553_STR);
 									else if (strstr(WeaponName.c_str(), XorStr("pist_223"))) WeaponName = Lol(M_WEAPON_USP_S_STR);
 									else if (strstr(WeaponName.c_str(), XorStr("pist_revolver"))) WeaponName = Lol(M_WEAPON_REVOLVER_STR);
@@ -159,7 +159,7 @@ void CEsp::WorldEsp()
 									else if (strstr(WeaponName.c_str(), XorStr("rif_famas"))) WeaponName = XorStr("R");
 									else if (strstr(WeaponName.c_str(), XorStr("rif_galilar"))) WeaponName = XorStr("Q");
 									else if (strstr(WeaponName.c_str(), XorStr("rif_m4a1_s"))) WeaponName = XorStr("T");
-									else if (strstr(WeaponName.c_str(), XorStr("rif_m4a4"))) WeaponName = XorStr("S");
+									else if (strstr(WeaponName.c_str(), XorStr("rif_m4a1"))) WeaponName = XorStr("S");
 									else if (strstr(WeaponName.c_str(), XorStr("rif_sg556"))) WeaponName = XorStr("V");
 									else if (strstr(WeaponName.c_str(), XorStr("pist_223"))) WeaponName = XorStr("G");
 									else if (strstr(WeaponName.c_str(), XorStr("pist_revolver"))) WeaponName = XorStr("J");

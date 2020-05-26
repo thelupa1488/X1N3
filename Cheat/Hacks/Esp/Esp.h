@@ -201,7 +201,7 @@ public:
 	int SoundEspStyle = 0;
 	int SoundEspSize = 20;
 	bool SoundEspDistance = false;
-	int SoundDistance = 0;
+	int SoundDistance = 400;
 	bool WorldGrenade = false;
 	int WorldGrenadeStyle = 0;
 	bool WorldWeapons = false;

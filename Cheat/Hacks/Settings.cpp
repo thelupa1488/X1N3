@@ -42,7 +42,7 @@ void CGSettings::SaveEx(nlohmann::json &j)
 #define MCC XorStr("MainCheatConfig")
 #define SSS(a,b) j[MCC][XorStr(b)] = a;
 
-	SSS(MainSettings().MenuButton, XorStr("MenuButton"));
+	SSS(MainSettings().MenuButton, "MenuButton");
 
 	CConfig Config = CConfig(XorStr("MainCheatConfig"));
 

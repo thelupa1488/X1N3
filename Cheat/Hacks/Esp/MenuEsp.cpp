@@ -279,13 +279,14 @@ void CEsp::Menu()
 				DColorEdit("Color##sound", SoundColor);
 				X1Gui().SameLine(200);
 				VectorEx<const char*>itemsSE = { lolc("Circle") , lolc("Dynamic Circle(+)"), lolc("Dynamic Circle(-)"), lolc("Box"),lolc("Filled Box"), lolc("Star") };
+				X1Gui().PushItemWidth(PUSH_1);
 				DComboBox("Style##sound", SoundEspStyle, itemsSE);
 
 				X1Gui().Spacing();
 				X1Gui().PushItemWidth(PUSH_2);
 				SliderInts("Size##sound", SoundEspSize, 1, 100);
 				X1Gui().PushItemWidth(PUSH_2);
-				SliderInts("Distance##sound", SoundDistance, 600, 3000);
+				SliderInts("Distance##sound", SoundDistance, 400, 900);
 				X1Gui().PushItemWidth(PUSH_1);
 				X1Gui().Spacing();
 				DCheckBox("Distance Text##sound", SoundEspDistance);

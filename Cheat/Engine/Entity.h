@@ -133,6 +133,7 @@ namespace Engine
 
 		int		GetFovStart();
 		int		GetFlags();
+		int		GetOwner();
 		int		GetHealth();
 		int		GetArmor();
 		int		GetTeam();

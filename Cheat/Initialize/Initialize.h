@@ -195,6 +195,7 @@ public:
 				offsets["m_iGlowIndex"] = mGetOffset("DT_CSPlayer", "m_iGlowIndex");
 				offsets["m_iFOVStart"] = mGetOffset("DT_CSPlayer", "m_iFOVStart");
 				offsets["m_fFlags"] = mGetOffset("DT_CSPlayer", "m_fFlags");
+				offsets["m_hOwnerEntity"] = mGetOffset("DT_BaseEntity", "m_hOwnerEntity");
 				offsets["m_iHealth"] = mGetOffset("DT_BasePlayer", "m_iHealth");
 				offsets["m_ArmorValue"] = mGetOffset("DT_CSPlayer", "m_ArmorValue");
 				offsets["m_iTeamNum"] = mGetOffset("DT_BasePlayer", "m_iTeamNum");

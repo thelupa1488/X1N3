@@ -36,6 +36,7 @@ namespace Offsets
 
 	DWORD m_iFOVStart = 0;
 	DWORD m_fFlags = 0;
+	DWORD m_hOwnerEntity = 0;
 
 	DWORD m_iHealth = 0;
 	DWORD m_ArmorValue = 0;

@@ -878,6 +878,8 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 
 			if (SnipCrosshair)
 				I::GetConVar()->FindVar("weapon_debug_spread_show")->SetValue(SnipCrosshair && !plocal->GetIsScoped() ? 3 : 0);
+			else
+				I::GetConVar()->FindVar("weapon_debug_spread_show")->SetValue(0);
 		}
 	}
 

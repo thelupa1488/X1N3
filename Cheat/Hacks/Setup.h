@@ -72,7 +72,6 @@ public:
 			ADD_LOG("2-1-11-7-4\n");
 			GP_Skins->AllSkinsLoaded = true;
 			ADD_LOG("2-1-11-7-5\n");
-
 			VMP_END;
 		}
 		virtual void Shutdown()

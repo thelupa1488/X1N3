@@ -305,6 +305,11 @@ namespace Engine
 		return *(PINT)((DWORD)this + offsets["m_fFlags"]);
 	}
 
+	int CBaseEntity::GetOwner()
+	{
+		return *(PINT)((DWORD)this + offsets["m_hOwnerEntity"]);
+	}
+
 	int CBaseEntity::GetHealth()
 	{
 		return *(PINT)((DWORD)this + offsets["m_iHealth"]);

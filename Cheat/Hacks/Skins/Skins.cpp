@@ -559,9 +559,7 @@ void CSkinListener::FireGameEvent(IGameEvent *event)
 		if (!strcmp(event->GetName(), XorStr("player_spawn")))
 		{
 			if (I::Engine()->GetPlayerForUserID(event->GetInt(XorStr("userid"))) == I::Engine()->GetLocalPlayer())
-			{
 				GP_Skins->UpdateGlove = false;
-			}
 		}
 
 		if (!strcmp(event->GetName(), XorStr("player_death")))
