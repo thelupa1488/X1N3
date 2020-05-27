@@ -822,7 +822,7 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 
 				if (ThirdPersonBind.Check())
 				{
-					if (GetTickCount64() > lastTime) 
+					if (GetTickCount64() > lastTime)
 					{
 						enable = !enable;
 
@@ -876,10 +876,26 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 				I::Input()->m_vecCameraOffset = Vector(angles.x, angles.y, angles.z);
 			}
 
+			static auto debugspread = I::GetConVar()->FindVar(XorStr("weapon_debug_spread_show"));
 			if (SnipCrosshair)
-				I::GetConVar()->FindVar("weapon_debug_spread_show")->SetValue(SnipCrosshair && !plocal->GetIsScoped() ? 3 : 0);
-			else
-				I::GetConVar()->FindVar("weapon_debug_spread_show")->SetValue(0);
+			{
+				if (CGlobal::GWeaponID == WEAPON_SSG08 || CGlobal::GWeaponID == WEAPON_AWP || 
+					CGlobal::GWeaponID == WEAPON_SCAR20 || CGlobal::GWeaponID == WEAPON_G3SG1)
+				{
+					CBaseWeapon* Wep = plocal->GetBaseWeapon();
+					if (Wep)
+					{
+						if (Wep->GetZoomLevel() != 1 && Wep->GetZoomLevel() != 2)
+						{
+							debugspread->SetValue(3);
+						}
+						else
+							debugspread->SetValue(0);
+					}
+				}
+			}
+			else 
+				debugspread->SetValue(0);
 		}
 	}
 
