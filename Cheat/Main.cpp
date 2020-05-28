@@ -31,6 +31,12 @@ void Start()
 	};
 	ADD_LOG("2-2\n");
 	LStatr();
+
+	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3"), NULL);
+	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Configurations"), NULL);
+	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources"), NULL);
+	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Images"), NULL);
+	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Sounds"), NULL);
 }
 
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
