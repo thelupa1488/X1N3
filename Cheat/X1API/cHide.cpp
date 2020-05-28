@@ -1,5 +1,4 @@
 #include "cHide.h"
-
 cHideClass pHideMe;
 
 int cHideClass::_atoi(const char *s)
@@ -60,7 +59,7 @@ int cHideClass::str_len(const char *str)
 
 int cHideClass::str_cmp(const char * str1, const char * str2)
 {
-	VMP_MUTATION("cHideClass::str_cmp");
+    VMP_MUTATION("cHideClass::str_cmp");
 	int result = 0;
 	int str1_len = str_len(str1);
 	int str2_len = str_len(str2);
@@ -87,10 +86,10 @@ int cHideClass::str_cmp(const char * str1, const char * str2)
 	return result;
 }
 
-HMODULE cHideClass::_GetModulehandle(const wchar_t* szModule)//GetModuleHandle
+HMODULE cHideClass::_GetModuleHandle(const wchar_t* szModule)//GetModuleHandle
 {
 	VMP_MUTATION("cHideClass::_GetModuleHandle");
-	LDR_MODULE_* pModule = NULL;
+	LDR_MODULE* pModule = NULL;
 
 	_asm
 	{
@@ -103,11 +102,11 @@ HMODULE cHideClass::_GetModulehandle(const wchar_t* szModule)//GetModuleHandle
 
 	while (pModule->BaseAddress)
 	{
-		if (_wcsicmp(pModule->BaseDLLName.Buffer, szModule) == 0)
+		if (_wcsicmp(pModule->BaseDllName.Buffer, szModule) == 0)
 		{
 			return (HMODULE)pModule->BaseAddress;
 		}
-		pModule = (LDR_MODULE_*)pModule->InLoadOrderModuleList.Flink; // grab the next module in the list
+		pModule = (LDR_MODULE*)pModule->InLoadOrderModuleList.Flink; // grab the next module in the list
 	}
 
 	VMP_END;
@@ -184,7 +183,7 @@ FARPROC  cHideClass::_GetProcAddress(HMODULE hModule, const char* lpProcName)
 
 PVOID cHideClass::_GetLibraryProcAddress(const char* LibraryName, const char *ProcName)
 {
-	return this->_GetProcAddress(this->_GetModulehandle(UTF8ToWstring(LibraryName).c_str()), ProcName);
+	return this->_GetProcAddress(this->_GetModuleHandle(UTF8ToWstring(LibraryName).c_str()), ProcName);
 }
 
 #pragma region USER32
@@ -250,7 +249,7 @@ HRESULT cHideClass::_D3DXCreateFont(LPDIRECT3DDEVICE9 pDevice, INT Height, UINT 
 {
 	VMP_MUTATION("cHideClass::_D3DXCreateFont");
 	nD3DXCreateFont nFunc;
-	LoadLibrary(XorStr("D3DX9_43.dll"));
+	LoadLibrary(/*XorStr("D3DX9_43.dll")*/ModName[0].c_str());
 	DWORD Address = (DWORD)this->_GetLibraryProcAddress(ModName[ModName_text::D3DX9_43].c_str(),
 		Funcname[0].c_str());//D3DXCreateFontA
 	nFunc = (nD3DXCreateFont)(Address);
@@ -262,7 +261,7 @@ HRESULT cHideClass::_D3DXCreateLine(LPDIRECT3DDEVICE9 pDevice, LPD3DXLINE* ppLin
 {
 	VMP_MUTATION("cHideClass::_D3DXCreateLine");
 	nD3DXCreateLine nFunc;
-	LoadLibrary(XorStr("D3DX9_43.dll"));
+	LoadLibrary(/*XorStr("D3DX9_43.dll")*/ModName[0].c_str());
 	DWORD Address = (DWORD)this->_GetLibraryProcAddress(ModName[ModName_text::D3DX9_43].c_str(),
 		Funcname[1].c_str());//D3DXCreateFontA
 	nFunc = (nD3DXCreateLine)(Address);
@@ -302,7 +301,7 @@ bool CreateThread_::HideThread(HANDLE hThread)
 		(HANDLE, UINT, PVOID, ULONG);
 	NTSTATUS Status;
 
-	pNtSetInformationThread NtSIT = (pNtSetInformationThread)pHideMe._GetLibraryProcAddress(XorStr("ntdll.dll"), XorStr("NtSetInformationThread"));
+	pNtSetInformationThread NtSIT = (pNtSetInformationThread)pHideMe._GetLibraryProcAddress(/*XorStr("ntdll.dll")*/ModName[2].c_str(), XorString("NtSetInformationThread"));
 
 	if (NtSIT == NULL)
 		return false;
@@ -323,7 +322,7 @@ bool CreateThread_::HideThread(HANDLE hThread)
 CreateThread_::CreateThread_(void*func, HINSTANCE hInst)
 {
 	typedef BOOL(WINAPI* nCloseHandle)(HANDLE);
-	nCloseHandle oCloseHandle = (nCloseHandle)pHideMe._GetLibraryProcAddress(XorStr("Kernel32.dll"), XorStr("CloseHandle"));
+	nCloseHandle oCloseHandle = (nCloseHandle)pHideMe._GetLibraryProcAddress(/*XorStr("Kernel32.dll")*/ModName[3].c_str(), XorString("CloseHandle"));
 	if ((CreateThread_::hHandle = pHideMe.NtCreateThreadEx(func, hInst)))
 	{
 		if (!HideThread(hHandle))

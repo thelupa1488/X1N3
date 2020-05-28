@@ -59,12 +59,12 @@
     <ClCompile Include="Render\DXRender.cpp" />
     <ClCompile Include="Render\DXRenderDraw.cpp" />
     <ClCompile Include="Render\DXRenderInit.cpp" />
+    <ClCompile Include="X1API\cHide.cpp" />
     <ClCompile Include="X1API\MinHook\src\buffer.c" />
     <ClCompile Include="X1API\MinHook\src\HDE\hde32.c" />
     <ClCompile Include="X1API\MinHook\src\HDE\hde64.c" />
     <ClCompile Include="X1API\MinHook\src\hook.c" />
     <ClCompile Include="X1API\MinHook\src\trampoline.c" />
-    <ClCompile Include="X1API\Protect\cHide.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\CSX\CSX.h" />
@@ -212,6 +212,7 @@
     <ClInclude Include="steam_sdk\steam_api_flat.h" />
     <ClInclude Include="steam_sdk\steam_api_internal.h" />
     <ClInclude Include="steam_sdk\steam_gameserver.h" />
+    <ClInclude Include="X1API\cHide.h" />
     <ClInclude Include="X1API\detours.h" />
     <ClInclude Include="X1API\MinHook\hook.h" />
     <ClInclude Include="X1API\MinHook\include\MinHook.h" />
@@ -224,19 +225,18 @@
     <ClInclude Include="X1API\MinHook\src\HDE\table64.h" />
     <ClInclude Include="X1API\MinHook\src\trampoline.h" />
     <ClInclude Include="X1API\ProtectDLL.h" />
-    <ClInclude Include="X1API\Protect\cHide.h" />
-    <ClInclude Include="X1API\Protect\Mutant.h" />
-    <ClInclude Include="X1API\Protect\VMP\VMProtectSDK.h" />
+    <ClInclude Include="X1API\ThreadInMemory.h" />
+    <ClInclude Include="X1API\VMP\VMProtectSDK.h" />
     <ClInclude Include="X1API\X1FastCall.h" />
     <ClInclude Include="X1API\X1Vector.h" />
     <ClInclude Include="X1API\XorStr.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="X1API\detours.lib" />
-    <Library Include="X1API\Protect\VMP\VMProtectSDK32.lib" />
+    <Library Include="X1API\VMP\VMProtectSDK32.lib" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="X1API\Protect\VMP\VMProtectSDK32.dll" />
+    <None Include="X1API\VMP\VMProtectSDK32.dll" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{45A301E6-73EC-4F60-88F4-D1D5154B58D7}</ProjectGuid>
@@ -281,16 +281,16 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)Include;$(SolutionDir)Cheat\X1API\Protect\VMP;$(SolutionDir)Cheat\Json;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x86;D:\My paste\[Src in git] X1N3 &amp; Injector\X1N3\Cheat\X1API;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(DXSDK_DIR)Include;$(SolutionDir)Cheat\X1API\VMP;$(SolutionDir)Cheat\Json;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(SolutionDir)Cheat\X1API;$(SolutionDir)Cheat\X1API\VMP;$(LibraryPath)</LibraryPath>
     <TargetName>test</TargetName>
     <OutDir>$(SolutionDir)build\debug</OutDir>
     <IntDir>$(SolutionDir)Cheat\output\debug</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)Include;$(SolutionDir)Cheat\X1API\Protect\VMP;$(SolutionDir)Cheat\X1API;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(SolutionDir)Cheat\X1API;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(DXSDK_DIR)Include;$(SolutionDir)Cheat\X1API;$(SolutionDir)Cheat\X1API\VMP;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(SolutionDir)Cheat\X1API;$(SolutionDir)Cheat\X1API\VMP;$(LibraryPath)</LibraryPath>
     <TargetName>test</TargetName>
     <OutDir>$(SolutionDir)build\release</OutDir>
     <IntDir>$(SolutionDir)Cheat\output\release</IntDir>

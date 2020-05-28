@@ -50,8 +50,10 @@
 
 #ifdef ENABLE_XOR_STR
 #define XorStr( s ) ( XorCompileTime::XorString< sizeof( s ) - 1, __COUNTER__ >( s, std::make_index_sequence< sizeof( s ) - 1>() ).decrypt() )
+#define XorString( String ) ( ( string ( XS < XS_CONSTRUCT_INDEX_LIST < sizeof ( String ) - 1 > :: Result> ( String ).Decrypt( ) ) ).c_str( ) )
 #else
 #define XorStr( s ) s
+#define XorString( String ) String
 #endif
 
 #ifdef ENABLE_VMP

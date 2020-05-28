@@ -26,7 +26,7 @@ public:
 		void*  func;
 		DWORD  JumpAdress;
 	};
-	static vector<ThreadData*> adress_list;
+	static std::vector<ThreadData*> adress_list;
 
 
 	static BOOL CompareMem(const BYTE* pData, const BYTE* bMask, const char* szMask)
@@ -126,7 +126,7 @@ public:
 					WriteMemory((void*)adress, &ByteCode[0], 7);
 
 					adress_list.push_back(threadData);
-					return CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)adress, 0, 0, 0);
+					return FastCall::G().t_CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)adress, 0, 0, 0);
 				}
 				else
 				{

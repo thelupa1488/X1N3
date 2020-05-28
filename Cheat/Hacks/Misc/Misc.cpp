@@ -180,7 +180,7 @@ void CMisc::Draw()
 
 void CMisc::SetNewClan(string New, string Name)
 {
-	static auto pSetClanTag = reinterpret_cast<void(__fastcall*)(const char*, const char*)>(((DWORD)CSX::Memory::NewPatternScan(GetModuleHandleW(L"engine.dll"), XorStr("53 56 57 8B DA 8B F9 FF 15"))));
+	static auto pSetClanTag = reinterpret_cast<void(__fastcall*)(const char*, const char*)>(((DWORD)CSX::Memory::FindPatternV2(XorStr("engine.dll"), XorStr("53 56 57 8B DA 8B F9 FF 15"))));
 
 	if (pSetClanTag)
 		pSetClanTag(New.c_str(), Name.c_str());
@@ -324,7 +324,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				"particle/vistasmokev1/vistasmokev1_emods_impactdust",
 				"particle/vistasmokev1/vistasmokev1_fire",
 			};
-			static auto smoke_count = *reinterpret_cast<uint32_t**>(CSX::Memory::NewPatternScan(GetModuleHandleW(L"client_panorama.dll"), XorStr("A3 ? ? ? ? 57 8B CB")) + 1);
+			static auto smoke_count = *reinterpret_cast<uint32_t**>(CSX::Memory::FindSignature(XorStr("client_panorama.dll"), XorStr("A3 ? ? ? ? 57 8B CB")) + 1);
 			static bool NoSmokeReset = false;
 			if (NoSmoke)
 			{
@@ -893,6 +893,8 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 							debugspread->SetValue(0);
 					}
 				}
+				else
+				    debugspread->SetValue(0);
 			}
 			else 
 				debugspread->SetValue(0);
@@ -993,7 +995,7 @@ void CMisc::AutoAcceptEmit()
 	if (AutoAccept && !CGlobal::FullUpdateCheck)
 	{
 		static auto fnAccept = reinterpret_cast<bool(__stdcall*)(const char*)>
-			(CSX::Memory::NewPatternScan(GetModuleHandleW(L"client_panorama.dll"),
+			(CSX::Memory::FindPatternV2(XorStr("client_panorama.dll"),
 				XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12")));
 
 		if (fnAccept)

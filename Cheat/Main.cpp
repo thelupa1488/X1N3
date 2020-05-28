@@ -1,8 +1,7 @@
 #include "Main.h"
-#include "X1API/ThreadInMemory.h"
 #include "Initialize/Initialize.h"
 #include "GUI/Gui.h"
-#include <thread>
+//#include "X1API/ThreadInMemory.h"
 
 DWORD WINAPI SetupThread(LPVOID lpThreadParameter)
 {
@@ -54,7 +53,6 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
 			ADD_LOG("2\n");
 		};
 		LDllMain();
-
 		VMP_END;
 	}
 	else if (fdwReason == DLL_PROCESS_DETACH)

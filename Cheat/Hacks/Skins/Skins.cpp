@@ -512,8 +512,8 @@ struct hud_weapons_t {
 template<class T>
 static T* FindHudElement(const char* name)
 {
-	static auto pThis = *reinterpret_cast<DWORD**>(CSX::Memory::NewPatternScan(GetModuleHandleW(L"client_panorama.dll"), XorStr("B9 ? ? ? ? E8 ? ? ? ? 8B 5D 08")) + 1);
-	static auto find_hud_element = reinterpret_cast<DWORD(__thiscall*)(void*, const char*)>(CSX::Memory::NewPatternScan(GetModuleHandleW(L"client_panorama.dll"), XorStr("55 8B EC 53 8B 5D 08 56 57 8B F9 33 F6 39 77 28")));
+	static auto pThis = *reinterpret_cast<DWORD**>(CSX::Memory::FindPatternV2(XorStr("client_panorama.dll"), XorStr("B9 ? ? ? ? E8 ? ? ? ? 8B 5D 08")) + 1);
+	static auto find_hud_element = reinterpret_cast<DWORD(__thiscall*)(void*, const char*)>(CSX::Memory::FindPatternV2(XorStr("client_panorama.dll"), XorStr("55 8B EC 53 8B 5D 08 56 57 8B F9 33 F6 39 77 28")));
 	return (T*)find_hud_element(pThis, name);
 }
 
@@ -524,7 +524,7 @@ void CSkins::UpdateSkins(bool reset)
 	SetKillIconCfg();
 
 	typedef void(*ForceUpdate) (void);
-	ForceUpdate FullUpdate = (ForceUpdate)CSX::Memory::NewPatternScan(GetModuleHandleW(L"engine.dll"), FORCE_FULL_UPDATE_PATTERN);
+	ForceUpdate FullUpdate = (ForceUpdate)CSX::Memory::FindPatternV2(XorStr("engine.dll"), FORCE_FULL_UPDATE_PATTERN);
 	FullUpdate();
 
 	ForceUpdated = reset;

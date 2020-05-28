@@ -3,7 +3,6 @@
 #include "../Hacks/Setup.h"
 #include "../Engine/SDK/SDK.h"
 #include "../X1API/MinHook/hook.h"
-#include "..//X1API/Protect/Mutant.h"
 #include "../Engine/SDK/StartSoundParams.h"
 using namespace SDK;
 

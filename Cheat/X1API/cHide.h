@@ -3,12 +3,12 @@
 #include <d3dx9.h>
 #include <vector>
 #include <string>
-#include "../../Include/Def.h"
+#include "../Include/Def.h"
+
 #pragma comment(lib, "d3d9.lib")
 #pragma comment(lib, "d3dx9.lib")
 
 using namespace std;
-
 
 class cHideClass
 {
@@ -23,7 +23,7 @@ public:
 	virtual std::wstring AnsiToWstring(const std::string& input, DWORD locale /*= CP_ACP*/);
 	virtual FARPROC _GetProcAddress(HMODULE hModule, const char* lpProcName);
 	virtual PVOID _GetLibraryProcAddress(const char* LibraryName, const char *ProcName);
-	virtual HMODULE _GetModulehandle(const wchar_t* szModule);
+	virtual HMODULE _GetModuleHandle(const wchar_t* szModule);
 	virtual BOOL _SetRect(_Out_ LPRECT lprc, _In_ int xLeft, _In_ int yTop, _In_ int xRight, _In_ int yBottom);
 	virtual int _MessageBox(HWND hWnd, LPCSTR MbString, LPCSTR lpCaption, UINT uType);
 	virtual void _ExitProcess(UINT uExitCode);
@@ -59,14 +59,14 @@ typedef DWORD WINAPI NtCreateThreadEx_PROC(
 	LPVOID Unknown3
 );
 
-typedef struct _UNICODE_STRING_
+typedef struct _UNICODE_STRING
 {
 	USHORT Length;
 	USHORT MaximumLength;
 	PWSTR Buffer;
-} UNICODE_STRING_, *PUNICODE_STRING_;
+} UNICODE_STRING, *PUNICODE_STRING;
 
-typedef struct _LDR_MODULE_
+typedef struct _LDR_MODULE
 {
 	LIST_ENTRY      InLoadOrderModuleList;
 	LIST_ENTRY      InMemoryOrderModuleList;
@@ -74,14 +74,14 @@ typedef struct _LDR_MODULE_
 	PVOID           BaseAddress;
 	PVOID           EntryPoint;
 	ULONG           SizeOfImage;
-	UNICODE_STRING_  FullDLLName;
-	UNICODE_STRING_  BaseDLLName;
+	UNICODE_STRING  FullDllName;
+	UNICODE_STRING  BaseDllName;
 	ULONG           Flags;
 	SHORT           LoadCount;
 	SHORT           TlsIndex;
 	LIST_ENTRY      HashTableEntry;
 	ULONG           TimeDateStamp;
-}LDR_MODULE_, *PLDR_MODULE_;
+}LDR_MODULE, *PLDR_MODULE;
 
 using nD3DXCreateFont = HRESULT(WINAPI*)(
 	LPDIRECT3DDEVICE9       pDevice,
@@ -110,22 +110,22 @@ using nGetKeyState = SHORT(WINAPI*)(int nVirtKey);
 using nGetAsyncKeyState = SHORT(WINAPI*)(int vKey);
 using nExitProcess = void(WINAPI*)(UINT);
 
-static std::vector<std::string>ModName = { XorStr("D3DX9_43.dll"), XorStr("USER32.dll"), XorStr("ntdll.dll") };
+static std::vector<std::string>ModName = { XorString("D3DX9_43.dll"), XorString("USER32.dll"), XorString("ntdll.dll"), XorString("kernel32.dll") };
 enum ModName_text { D3DX9_43, USER32, ntdll };
 
 static std::vector<std::string>Funcname = 
 {
-	XorStr("D3DXCreateFontA"),//0
-	XorStr("D3DXCreateLine"),//1
-	XorStr("SetRect"),//2
-	XorStr("MessageBoxTimeoutA"),//3
-	XorStr("GetCursorPos"),//4
-	XorStr("ScreenToClient"),//5
-	XorStr("GetForegroundWindow"),//6
-	XorStr("GetKeyState"),//7
-	XorStr("GetAsyncKeyState"),//8
-	XorStr("RtlExitUserProcess"),//9
-	XorStr("NtCreateThreadEx"),//10
+	XorString("D3DXCreateFontA"),//0
+	XorString("D3DXCreateLine"),//1
+	XorString("SetRect"),//2
+	XorString("MessageBoxTimeoutA"),//3
+	XorString("GetCursorPos"),//4
+	XorString("ScreenToClient"),//5
+	XorString("GetForegroundWindow"),//6
+	XorString("GetKeyState"),//7
+	XorString("GetAsyncKeyState"),//8
+	XorString("RtlExitUserProcess"),//9
+	XorString("NtCreateThreadEx"),//10
 };
 
 

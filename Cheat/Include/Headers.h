@@ -4,4 +4,4 @@
 #include "../X1API/X1FastCall.h"
 #include "../X1API/X1Vector.h"
 #include "../Engine/Engine.h"
-#include "../X1API/Protect/VMP/VMProtectSDK.h"
+#include "../X1API/VMP/VMProtectSDK.h"

@@ -387,7 +387,7 @@ public:
 				static std::uintptr_t pViewMatrix;
 				if (!pViewMatrix)
 				{
-					pViewMatrix = reinterpret_cast<std::uintptr_t>(CSX::Memory::NewPatternScan(GetModuleHandleW(L"client_panorama.dll"), XorStr("0F 10 05 ? ? ? ? 8D 85 ? ? ? ? B9")));
+					pViewMatrix = static_cast<std::uintptr_t>(CSX::Memory::FindPatternV2(XorStr("client_panorama.dll"), XorStr("0F 10 05 ? ? ? ? 8D 85 ? ? ? ? B9")));
 					pViewMatrix += 3;
 					pViewMatrix = *reinterpret_cast<std::uintptr_t*>(pViewMatrix);
 					pViewMatrix += 176;
