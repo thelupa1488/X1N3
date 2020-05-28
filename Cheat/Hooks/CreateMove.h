@@ -33,6 +33,9 @@ bool __stdcall CreateMove(float flInputSampleTime, CUserCmd* pCmd)
 		uintptr_t* FPointer; __asm { MOV FPointer, EBP }
 		byte* SendPacket = (byte*)(*FPointer - 0x1C);
 
+		CGlobal::UserCmd = pCmd;
+		CGlobal::LocalPlayer = I::ClientEntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
+
 		bool bSendPacket = *SendPacket;
 
 		if (CGlobal::IsGuiVisble)
@@ -59,35 +62,34 @@ bool __stdcall CreateMove(float flInputSampleTime, CUserCmd* pCmd)
 		if (GP_Misc)
 			GP_Misc->CreateMove(bSendPacket, flInputSampleTime, pCmd);
 
-		//EnginePrediction::Begin(pCmd);
-		//{
-		//	CBaseEntity* local = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-		//	static CCSGOPlayerAnimState AnimState;
+		EnginePred::Begin(pCmd);
+		{
+			static CCSGOPlayerAnimState AnimState;
 
-		//	QAngle vangle = QAngle();
-		//	QAngle angleold = pCmd->viewangles;
+			QAngle vangle = QAngle();
+			QAngle angleold = pCmd->viewangles;
 
-		//	if (GP_Misc && std::fabsf(local->GetSpawnTime() - I::GlobalVars()->curtime) > 1.0f)
-		//		GP_Misc->Desync(bSendPacket, pCmd);
+			if (GP_Misc && std::fabsf(CGlobal::LocalPlayer->GetSpawnTime() - I::GlobalVars()->curtime) > 1.0f)
+				GP_Misc->Desync(bSendPacket, pCmd);
 
-		//	CGlobal::CorrectMouse(pCmd);
+			CGlobal::CorrectMouse(pCmd);
 
-		//	auto anim_state = local->GetBasePlayerAnimState();
-		//	if (anim_state) 
-		//	{
-		//		CCSGOPlayerAnimState anim_state_backup = *anim_state;
-		//		*anim_state = AnimState;
-		//		local->GetVAngles() = pCmd->viewangles;
-		//		local->UpdateClientSideAnimation();
+			auto anim_state = CGlobal::LocalPlayer->GetBasePlayerAnimState();
+			if (anim_state)
+			{
+				CCSGOPlayerAnimState anim_state_backup = *anim_state;
+				*anim_state = AnimState;
+				CGlobal::LocalPlayer->GetVAngles() = pCmd->viewangles;
+				CGlobal::LocalPlayer->UpdateClientSideAnimation();
 
-		//		GP_Misc->updatelby(anim_state);
+				GP_Misc->updatelby(anim_state);
 
-		//		AnimState = *anim_state;
-		//		*anim_state = anim_state_backup;
-		//	}
-		//	FixMovement(pCmd, angleold);
-		//}
-		//EnginePrediction::End();
+				AnimState = *anim_state;
+				*anim_state = anim_state_backup;
+			}
+			FixMovement(pCmd, angleold);
+		}
+		EnginePred::End();
 
 		CGlobal::ClampAngles(pCmd->viewangles);
 		CGlobal::AngleNormalize(pCmd->viewangles);

@@ -14,6 +14,8 @@ float CGlobal::GFovViewExt = 90;
 bool CGlobal::FullUpdateCheck = false;
 Vector CGlobal::GViewAngle;
 vector<string> CGlobal::ConfigList;
+CBaseEntity* CGlobal::LocalPlayer;
+CUserCmd* CGlobal::UserCmd;
 
 void ReadConfigs(LPCTSTR lpszFileName)
 {

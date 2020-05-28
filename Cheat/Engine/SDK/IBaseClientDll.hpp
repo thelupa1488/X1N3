@@ -2,7 +2,7 @@
 
 #include "Definitions.hpp"
 
-#include "CInput.hpp"
+#include "Input.hpp"
 #include "IClientMode.hpp"
 #include "CGlobalVarsBase.hpp"
 #include "ClientClass.hpp"

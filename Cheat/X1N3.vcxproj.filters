@@ -201,6 +201,7 @@
     <ClCompile Include="Engine\SDK\Math.cpp" />
     <ClCompile Include="Engine\SDK\checksum_md5.cpp" />
     <ClCompile Include="X1API\cHide.cpp" />
+    <ClCompile Include="Engine\SDK\Input.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
@@ -367,9 +368,6 @@
       <Filter>Engine\SDK</Filter>
     </ClInclude>
     <ClInclude Include="Engine\SDK\CHandle.hpp">
-      <Filter>Engine\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\SDK\CInput.hpp">
       <Filter>Engine\SDK</Filter>
     </ClInclude>
     <ClInclude Include="Engine\SDK\ClientClass.hpp">
@@ -672,6 +670,10 @@
     <ClInclude Include="X1API\cHide.h" />
     <ClInclude Include="X1API\VMP\VMProtectSDK.h" />
     <ClInclude Include="X1API\ThreadInMemory.h" />
+    <ClInclude Include="Engine\EnginePrediction.h" />
+    <ClInclude Include="Engine\SDK\Input.hpp">
+      <Filter>Engine\SDK</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="3DMenu">

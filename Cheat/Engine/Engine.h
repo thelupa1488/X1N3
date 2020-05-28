@@ -130,6 +130,8 @@ public:
 	static bool FullUpdateCheck;
 	static Vector GViewAngle;
 	static vector<string> ConfigList;
+	static CBaseEntity* LocalPlayer;
+	static CUserCmd* UserCmd;
 
 	static string WeaponNames[34];
 

@@ -35,7 +35,7 @@ namespace SDK
 	IMatchFramework*    I::g_pMatchFramework = nullptr;
 	IPrediction*        I::g_pPrediction = nullptr;
 	IMoveHelper*        I::g_pMoveHelper = nullptr;
-	CGameMovement*      I::g_pGameMovement = nullptr;
+	IGameMovement*      I::g_pGameMovement = nullptr;
 	IGameRules*         I::g_pGameRules = nullptr;
 
 	auto client = GetModuleHandleW(L"client_panorama.dll");
@@ -77,7 +77,6 @@ namespace SDK
 
 	IVEngineClient* I::Engine()
 	{
-	
 		if ( !g_pEngine )
 		{
 			CreateInterfaceFn pfnFactory = CaptureFactory( ENGINE_DLL );
@@ -131,31 +130,34 @@ namespace SDK
 		if (!g_pPrediction)
 		{
 			CreateInterfaceFn pfnFactory = CaptureFactory(CLIENT_DLL);
-
-			g_pPrediction = CaptureInterface<IPrediction>(pfnFactory, VCLIENT_PREDICTION001);
+			g_pPrediction = CaptureInterface<IPrediction>(pfnFactory, VCLIENT_PREDICTION);
 			ADD_LOG("->Prediction -> %X\n", (DWORD)g_pPrediction);
 		}
 
-		if (!IsBadReadPtr(g_pPrediction, sizeof(IPrediction*)))
-			return g_pPrediction;
-		else
-			return nullptr;
+		return g_pPrediction;
 	}
 
-	CGameMovement* I::GameMovement()
+	IMoveHelper* I::MoveHelper()
+	{
+		if (!g_pMoveHelper)
+		{
+			g_pMoveHelper = *(IMoveHelper**)(CSX::Memory::FindPatternV2(CLIENT_DLL, XorStr("8B 0D ? ? ? ? 8B 45 ? 51 8B D4 89 02 8B 01")) + 2);
+			ADD_LOG("->MoveHelper -> %X\n", (DWORD)g_pMoveHelper);
+		}
+
+		return g_pMoveHelper;
+	}
+
+	IGameMovement* I::GameMovement()
 	{
 		if (!g_pGameMovement)
 		{
 			CreateInterfaceFn pfnFactory = CaptureFactory(CLIENT_DLL);
-
-			g_pGameMovement = CaptureInterface<CGameMovement>(pfnFactory, GAME_MOVEMENT001);
+			g_pGameMovement = CaptureInterface<IGameMovement>(pfnFactory, GAME_MOVEMENT);
 			ADD_LOG("->GameMovement -> %X\n", (DWORD)g_pGameMovement);
 		}
 
-		if (!IsBadReadPtr(g_pGameMovement, sizeof(IPrediction*)))
-			return g_pGameMovement;
-		else
-			return nullptr;
+		return g_pGameMovement;
 	}
 
 	IGameRules* I::GameRules()
@@ -247,7 +249,6 @@ namespace SDK
 	{
 		if ( !g_pInput )
 		{
-			auto pdwClient = *(PDWORD_PTR*)g_pClient;
 			g_pInput = **(CInput***)(CSX::Memory::FindPatternV2(CLIENT_DLL, XorStr("B9 ? ? ? ? F3 0F 11 04 24 FF 50 10")) + 1);
 			ADD_LOG("->Input -> %X\n", (DWORD)g_pInput);
 		}
@@ -325,17 +326,6 @@ namespace SDK
 		}
 		
 		return g_pModelRender;
-	}
-
-	IMoveHelper* I::MoveHelper()
-	{
-		if (!g_pMoveHelper)
-		{
-			g_pMoveHelper = *(IMoveHelper**)(CSX::Memory::FindPatternV2(CLIENT_DLL, XorStr("8B 0D ? ? ? ? 8B 45 ? 51 8B D4 89 02 8B 01")) + 2);
-			ADD_LOG("->MoveHelper -> %X\n", (DWORD)g_pMoveHelper);
-		}
-
-		return g_pMoveHelper;
 	}
 
 	CGlowObjectManager* I::GlowObjManager()

@@ -30,7 +30,7 @@
 #include "Recv.hpp"
 #include "IClientMode.hpp"
 #include "IVModelInfoClient.hpp"
-#include "CInput.hpp"
+#include "Input.hpp"
 #include "ICollideable.h"
 #include "IEngineSound.h"
 #include "IVModelRender.h"
@@ -80,8 +80,8 @@
 #define INPUTSYSTEM_INTERFACE_VERSION XorStr("InputSystemVersion001")
 #define VENGINE_GAMETYPES_VERSION002 XorStr("VENGINE_GAMETYPES_VERSION002")
 #define VPHYSICS_SURFACE_PROPS_001 XorStr("VPhysicsSurfaceProps001")
-#define VCLIENT_PREDICTION001 XorStr("VClientPrediction001")
-#define GAME_MOVEMENT001 XorStr("GameMovement001")
+#define VCLIENT_PREDICTION XorStr("VClientPrediction001")
+#define GAME_MOVEMENT XorStr("GameMovement001")
 
 #define ENGINE_DLL XorStr("engine.dll")
 #define CLIENT_DLL XorStr("client_panorama.dll")
@@ -135,7 +135,7 @@ namespace SDK
 		static IMatchFramework*     MatchFramework();
 		static IPrediction*         Prediction();
 		static IMoveHelper*         MoveHelper();
-		static CGameMovement*       GameMovement();
+		static IGameMovement*       GameMovement();
 		static IGameRules*          GameRules();
 	private:
 		static IVEngineClient*		g_pEngine;
@@ -164,12 +164,13 @@ namespace SDK
 		static IMatchFramework*     g_pMatchFramework;
 		static IPrediction*         g_pPrediction;
 		static IMoveHelper*         g_pMoveHelper;
-		static CGameMovement*       g_pGameMovement;
+		static IGameMovement*       g_pGameMovement;
 		static IGameRules*          g_pGameRules;
 	};
 
 	template <typename T>
-	T CallVFunc(void *vTable, int iIndex) {
+	T CallVFunc(void *vTable, int iIndex) 
+	{
 		return (*(T**)vTable)[iIndex];
 	}
 }
