@@ -3,7 +3,7 @@
 #include "GUI/Gui.h"
 #include "X1API/ThreadInMemory.h"
 
-DWORD WINAPI SetupThread(LPVOID lpThreadParameter, HINSTANCE hDll)
+DWORD WINAPI SetupThread(LPVOID lpThreadParameter)
 {
 	VMP_ULTRA("SetupThread");
 	auto LSetupThread = [&]() -> DWORD
@@ -16,7 +16,6 @@ DWORD WINAPI SetupThread(LPVOID lpThreadParameter, HINSTANCE hDll)
 		DELETE_PTR(pInit);
 		ADD_LOG("2-1-2\n");
 		ADD_LOG("======================Setup: Successful\n");
-		FastCall::G().t_FreeLibraryAndExitThread(hDll, 0);
 		return 0;
 	};
 	VMP_END;

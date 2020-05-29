@@ -327,7 +327,7 @@ CreateThread_::CreateThread_(void*func, HINSTANCE hInst)
 	{
 		if (!HideThread(hHandle))
 		{
-			TerminateProcess(hHandle, 0);
+			TerminateThread(hHandle, 0);
 			return;
 		}
 		oCloseHandle(hHandle);
