@@ -29,14 +29,14 @@ public:
 	virtual class IStart
 	{
 	public:
-		virtual void Start(HINSTANCE hDll)
+		virtual void Start(HINSTANCE hinstDLL)
 		{	
 			VMP_ULTRA("CStart_Start");
 			ADD_LOG("2-0\n");
 			auto LStatr = [&]() -> void
 			{
 				ADD_LOG("2-1\n");
-				std::make_unique<CreateThread_>(SetupThread, hDll);
+				std::make_unique<CreateThread_>(SetupThread, hinstDLL);
 			};
 			ADD_LOG("2-2\n");
 			LStatr();
