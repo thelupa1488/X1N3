@@ -1,10 +1,11 @@
 #include "Main.h"
 #include "Initialize/Initialize.h"
 #include "GUI/Gui.h"
-//#include "X1API/ThreadInMemory.h"
+#include "X1API/ThreadInMemory.h"
 
-DWORD WINAPI SetupThread(LPVOID lpThreadParameter)
+DWORD WINAPI SetupThread(LPVOID lpThreadParameter, HINSTANCE hDll)
 {
+	VMP_ULTRA("SetupThread");
 	auto LSetupThread = [&]() -> DWORD
 	{
 		ADD_LOG("2-1-0\n");
@@ -15,29 +16,57 @@ DWORD WINAPI SetupThread(LPVOID lpThreadParameter)
 		DELETE_PTR(pInit);
 		ADD_LOG("2-1-2\n");
 		ADD_LOG("======================Setup: Successful\n");
+		FastCall::G().t_FreeLibraryAndExitThread(hDll, 0);
 		return 0;
 	};
-
+	VMP_END;
 	return LSetupThread();
 }
 
-void Start()
+class CStart : public IIStart
 {
-	ADD_LOG("2-0\n");
-	auto LStatr = [&]() -> void
+public:
+	virtual class IStart
 	{
-		ADD_LOG("2-1\n");
-		FastCall::G().t_CreateThread(NULL, 0, &SetupThread, NULL, 0, NULL);
+	public:
+		virtual void Start(HINSTANCE hDll)
+		{	
+			VMP_ULTRA("CStart_Start");
+			ADD_LOG("2-0\n");
+			auto LStatr = [&]() -> void
+			{
+				ADD_LOG("2-1\n");
+				std::make_unique<CreateThread_>(SetupThread, hDll);
+			};
+			ADD_LOG("2-2\n");
+			LStatr();
+			FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3"), NULL);
+			FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Configurations"), NULL);
+			FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources"), NULL);
+			FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Images"), NULL);
+			FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Sounds"), NULL);
+			VMP_END;
+		}
 	};
-	ADD_LOG("2-2\n");
-	LStatr();
+};
 
-	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3"), NULL);
-	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Configurations"), NULL);
-	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources"), NULL);
-	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Images"), NULL);
-	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Sounds"), NULL);
-}
+//void Start()
+//{
+//	ADD_LOG("2-0\n");
+//	auto LStatr = [&]() -> void
+//	{
+//		ADD_LOG("2-1\n");
+//		FastCall::G().t_CreateThread(NULL, 0, &SetupThread, NULL, 0, NULL);
+//	};
+//	ADD_LOG("2-2\n");
+//	LStatr();
+//
+//	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3"), NULL);
+//	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Configurations"), NULL);
+//	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources"), NULL);
+//	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Images"), NULL);
+//	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Sounds"), NULL);
+//}
 
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
 {
@@ -55,8 +84,12 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
 			ADD_LOG("DLL BUILD: %s | %s\n", __TIME__, __DATE__);
 #endif
 			ADD_LOG("1\n");
-			Start();
+			//Start();
 			ADD_LOG("2\n");
+			CStart::IStart *pStart = new CStart::IStart();
+            pStart->Start(hinstDLL);
+			ADD_LOG("3\n");
+			DELETE_PTR(pStart);
 		};
 		LDllMain();
 		VMP_END;

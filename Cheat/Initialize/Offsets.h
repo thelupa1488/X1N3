@@ -2,7 +2,7 @@
 #include <Windows.h>
 #include <string>
 #include <map>
-
+#include "../Include/Def.h"
 
 extern std::map<std::string, DWORD> offsets;
 

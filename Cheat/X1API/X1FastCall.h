@@ -38,6 +38,7 @@ private:
 	std::map<std::string, FARPROC> lpAddrList
 	{
 		{ "CreateThread", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "CreateThread") },
+	    { "FreeLibraryAndExitThread", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "FreeLibraryAndExitThread") },
 		{ "CloseHandle", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "CloseHandle") },
 		{ "MessageBoxA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()), "MessageBoxA") },
 		{ "FindWindowA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()), "FindWindowA") },
@@ -63,6 +64,7 @@ private:
 		{ "Sleep", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "Sleep") },
 		{ "GetProcAddress", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetProcAddress") },
 		{ "IsBadCodePtr", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "IsBadCodePtr") },
+		{ "IsBadReadPtr", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "IsBadReadPtr") },
 		{ "GetFileAttributesA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetFileAttributesA") },
 		{ "DeleteFileA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "DeleteFileA") },
 		{ "GlobalAlloc", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GlobalAlloc") },
@@ -96,7 +98,6 @@ private:
 		{ "GetModuleHandleA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetModuleHandleA") },
 		{ "lstrlenA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "lstrlenA") },
 		{ "GetCurrentProcess", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetCurrentProcess") },
-		{ "IsBadReadPtr", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "IsBadReadPtr") },
 		{ "GetProcessHeap", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetProcessHeap") },
 		{ "HeapAlloc", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "HeapAlloc") },
 		{ "FindFirstFileExW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "FindFirstFileExW") },
@@ -231,6 +232,17 @@ public:
 			_Out_opt_ lpThreadId
 		));
 
+	CREATE_CALL(VOID, WINAPI, _FreeLibraryAndExitThread, "FreeLibraryAndExitThread",
+		ALL_A(_In_opt_ HMODULE hLibModule,
+			_In_     DWORD   dwExitCode
+		),
+		ALL_A(_In_opt_ HMODULE,
+			_In_     DWORD
+		),
+		ALL_A(_In_opt_ hLibModule,
+			_In_     dwExitCode
+		));
+
 	CREATE_CALL(VOID, WINAPI, _mouse_event, "mouse_event",
 		ALL_A(_In_ DWORD dwFlags,
 			_In_ DWORD dx,
@@ -259,7 +271,7 @@ public:
 		ALL_A(_In_ hObject
 		));
 
-	CREATE_CALL(int, WINAPI, _MessageBoxA, "MessageBoxA",
+	CREATE_CALL(INT, WINAPI, _MessageBoxA, "MessageBoxA",
 		ALL_A(_In_opt_ HWND hWnd,
 			_In_opt_ LPCSTR lpText,
 			_In_opt_ LPCSTR lpCaption,
@@ -366,7 +378,7 @@ public:
 			_In_ dwMilliseconds
 		));
 
-	CREATE_CALL(int, WINAPI, _MultiByteToWideChar, "MultiByteToWideChar",
+	CREATE_CALL(INT, WINAPI, _MultiByteToWideChar, "MultiByteToWideChar",
 		ALL_A(_In_ UINT CodePage,
 			_In_ DWORD dwFlags,
 			_In_NLS_string_(cbMultiByte) LPCCH lpMultiByteStr,
@@ -666,7 +678,7 @@ public:
 			_Inout_opt_ lpOverlapped
 		));
 
-	CREATE_CALL(int, WINAPI, _lstrcmpiA, "lstrcmpiA",
+	CREATE_CALL(INT, WINAPI, _lstrcmpiA, "lstrcmpiA",
 		ALL_A(_In_ LPCSTR lpString1,
 			_In_ LPCSTR lpString2
 		),
@@ -881,20 +893,24 @@ public:
 		ALL_A(_In_ hLibModule
 		));
 
-	//======================================
-
-	void test3()
-	{
-		//WideCharToMultiByte
-	}
-
-	CREATE_CALL(BOOL, WINAPI, _IsBadCodePtr, "IsBadCodePtr", // исключение-норма
+	CREATE_CALL(BOOL, WINAPI, _IsBadCodePtr, "IsBadCodePtr",
 		ALL_A(_In_opt_ FARPROC lpfn
 		),
 		ALL_A(_In_opt_ FARPROC
 		),
 		ALL_A(_In_opt_ lpfn
 		));
+
+	//CREATE_CALL(BOOL, WINAPI, _IsBadReadPtr, "IsBadReadPtr",
+	//    ALL_A(_In_opt_ CONST VOID *lp,
+	//	    _In_ UINT_PTR ucb
+	//    ),
+	//    ALL_A(_In_opt_ CONST VOID,
+	//	    _In_ UINT_PTR
+	//    ),
+	//    ALL_A(_In_opt_ CONST VOID lp,
+	//	    _In_ ucb
+	//    ));
 
 	CREATE_CALL(HGLOBAL, WINAPI, _GlobalAlloc, "GlobalAlloc",
 		ALL_A(_In_ UINT uFlags,
@@ -923,7 +939,7 @@ public:
 		ALL_A(_In_ hMem
 		));
 
-	CREATE_CALL(int, WINAPI, _lstrlenA, "lstrlenA",
+	CREATE_CALL(INT, WINAPI, _lstrlenA, "lstrlenA",
 		ALL_A(_In_ LPCSTR lpString
 		),
 		ALL_A(_In_ LPCSTR
@@ -931,18 +947,7 @@ public:
 		ALL_A(_In_ lpString
 		));
 
-	//CREATE_CALL(BOOL, WINAPI, _IsBadReadPtr, "IsBadReadPtr",
-	//	ALL_A(_In_opt_ CONST VOID *lp,
-	//		_In_     UINT_PTR ucb
-	//	),
-	//	ALL_A(_In_opt_ CONST VOID,
-	//		_In_     UINT_PTR
-	//	),
-	//	ALL_A(_In_opt_ CONST lp,
-	//		_In_     ucb
-	//	));
-
-	CREATE_CALL(int, WINAPI, _WideCharToMultiByte, "WideCharToMultiByte",
+	CREATE_CALL(INT, WINAPI, _WideCharToMultiByte, "WideCharToMultiByte",
 		ALL_A(_In_ UINT CodePage,
 			_In_ DWORD dwFlags,
 			_In_NLS_string_(cchWideChar) LPCWCH lpWideCharStr,
@@ -988,7 +993,7 @@ public:
 			_Out_ lpCharType
 		));
 
-	CREATE_CALL(int, WINAPI, _CompareStringW, "CompareStringW",
+	CREATE_CALL(INT, WINAPI, _CompareStringW, "CompareStringW",
 		ALL_A(_In_ LCID Locale,
 			_In_ DWORD dwCmpFlags,
 			_In_NLS_string_(cchCount1) PCNZWCH lpString1,

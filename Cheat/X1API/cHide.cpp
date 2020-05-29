@@ -57,7 +57,7 @@ int cHideClass::str_len(const char *str)
 	return n;
 }
 
-int cHideClass::str_cmp(const char * str1, const char * str2)
+int cHideClass::str_cmp(const char* str1, const char* str2)
 {
     VMP_MUTATION("cHideClass::str_cmp");
 	int result = 0;
@@ -75,8 +75,8 @@ int cHideClass::str_cmp(const char * str1, const char * str2)
 			result = -1;
 			break;
 		}
-		*str1++;
-		*str2++;
+		str1++;
+		str2++;
 	}
 	VMP_END;
 	if (!result && (str1_len < str2_len))
@@ -89,7 +89,7 @@ int cHideClass::str_cmp(const char * str1, const char * str2)
 HMODULE cHideClass::_GetModuleHandle(const wchar_t* szModule)//GetModuleHandle
 {
 	VMP_MUTATION("cHideClass::_GetModuleHandle");
-	LDR_MODULE* pModule = NULL;
+	LDR_MODULE* pModule;
 
 	_asm
 	{
@@ -323,14 +323,14 @@ CreateThread_::CreateThread_(void*func, HINSTANCE hInst)
 {
 	typedef BOOL(WINAPI* nCloseHandle)(HANDLE);
 	nCloseHandle oCloseHandle = (nCloseHandle)pHideMe._GetLibraryProcAddress(/*XorStr("Kernel32.dll")*/ModName[3].c_str(), XorString("CloseHandle"));
-	if ((CreateThread_::hHandle = pHideMe.NtCreateThreadEx(func, hInst)))
+	if ((hHandle = pHideMe.NtCreateThreadEx(func, hInst)))
 	{
 		if (!HideThread(hHandle))
 		{
-			TerminateThread(hHandle, 0);
+			TerminateProcess(hHandle, 0);
 			return;
 		}
-		oCloseHandle(CreateThread_::hHandle);
+		oCloseHandle(hHandle);
 		return;
 	}
 }

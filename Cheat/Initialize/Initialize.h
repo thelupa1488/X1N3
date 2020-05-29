@@ -253,10 +253,8 @@ public:
 			VMP_ULTRA("SetupThread_Init");
 			auto LInit = [&]() -> bool
 			{
-#ifndef ONLY_DRAW_HOOK
-				ADD_LOG("2-1-4\n");
-				
-				ADD_LOG("2-1-5\n");
+#ifndef ONLY_DRAW_HOOK			
+				ADD_LOG("2-1-1\n");
 				if (!CSX::Utils::IsModuleLoad(ENGINE_DLL, 5001))
 					return false;
 				if (!CSX::Utils::IsModuleLoad(VGUI2_DLL, 5001))
@@ -275,16 +273,16 @@ public:
 				if (!CSX::Utils::IsModuleLoad(XorStr("client_panorama.dll"), 5001))
 					return false;
 
-				ADD_LOG("2-1-8\n");
+				ADD_LOG("2-1-2\n");
 				if (!g_NetVar.Init(I::Client()->GetAllClasses()))
 				{
 					ADD_LOG("2-1-9-8-1\n");
 					FastCall::G().t_MessageBoxA(0, "AllClasses error", "Error!", 0);
 					return false;
 				}
-				ADD_LOG("2-1-9\n");
+				ADD_LOG("2-1-3\n");
 				InitOffsets();
-				ADD_LOG("2-1-10\n");
+				ADD_LOG("2-1-4\n");
 #endif 
 				InitHooks();
 				return true;

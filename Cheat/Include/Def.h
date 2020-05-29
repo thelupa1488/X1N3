@@ -2,8 +2,8 @@
 #include "../Engine/XorStr.h"
 #include <VMProtectSDK.h>
 
-//#define ENABLE_XOR_STR
-//#define ENABLE_VMP 
+#define ENABLE_XOR_STR
+#define ENABLE_VMP 
 //#define YOUGAMEBIZ
 
 #define PRESENT_ENABLE
@@ -50,10 +50,10 @@
 
 #ifdef ENABLE_XOR_STR
 #define XorStr( s ) ( XorCompileTime::XorString< sizeof( s ) - 1, __COUNTER__ >( s, std::make_index_sequence< sizeof( s ) - 1>() ).decrypt() )
-#define XorString( String ) ( ( string ( XS < XS_CONSTRUCT_INDEX_LIST < sizeof ( String ) - 1 > :: Result> ( String ).Decrypt( ) ) ).c_str( ) )
+#define XorString( s ) ( ( string ( XS < XS_CONSTRUCT_INDEX_LIST < sizeof ( s ) - 1 > :: Result> ( s ).Decrypt( ) ) ).c_str( ) )
 #else
 #define XorStr( s ) s
-#define XorString( String ) String
+#define XorString( s ) s
 #endif
 
 #ifdef ENABLE_VMP

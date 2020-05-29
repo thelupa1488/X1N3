@@ -39,7 +39,7 @@ extern cHideClass pHideMe;
 class CreateThread_
 {
 public:
-	CreateThread_(void* func, HINSTANCE hInst);
+    CreateThread_(void* func, HINSTANCE hInst);
 	bool HideThread(HANDLE hThread);
 private:
 	HANDLE hHandle;

@@ -22,6 +22,8 @@ bool __stdcall CreateMove(float flInputSampleTime, CUserCmd* pCmd)
 	if (CGlobal::IsGameReady && pCmd->command_number != 0 && !CGlobal::FullUpdateCheck)
 	{
 		CGlobal::GViewAngle = pCmd->viewangles;
+		CGlobal::UserCmd = pCmd;
+		CGlobal::LocalPlayer = (CBaseEntity*)I::ClientEntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
 
 		if (GP_EntPlayers)
 			GP_EntPlayers->Update();
@@ -32,9 +34,6 @@ bool __stdcall CreateMove(float flInputSampleTime, CUserCmd* pCmd)
 
 		uintptr_t* FPointer; __asm { MOV FPointer, EBP }
 		byte* SendPacket = (byte*)(*FPointer - 0x1C);
-
-		CGlobal::UserCmd = pCmd;
-		CGlobal::LocalPlayer = I::ClientEntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
 
 		bool bSendPacket = *SendPacket;
 
@@ -62,7 +61,7 @@ bool __stdcall CreateMove(float flInputSampleTime, CUserCmd* pCmd)
 		if (GP_Misc)
 			GP_Misc->CreateMove(bSendPacket, flInputSampleTime, pCmd);
 
-		EnginePred::Begin(pCmd);
+		/*EnginePred::Begin(pCmd);
 		{
 			static CCSGOPlayerAnimState AnimState;
 
@@ -89,7 +88,7 @@ bool __stdcall CreateMove(float flInputSampleTime, CUserCmd* pCmd)
 			}
 			FixMovement(pCmd, angleold);
 		}
-		EnginePred::End();
+		EnginePred::End();*/
 
 		CGlobal::ClampAngles(pCmd->viewangles);
 		CGlobal::AngleNormalize(pCmd->viewangles);
