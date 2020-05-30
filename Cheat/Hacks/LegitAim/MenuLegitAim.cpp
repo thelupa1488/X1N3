@@ -165,7 +165,7 @@ void CLegitAim::Menu()
 	}
 	X1Gui().EndChild();
 
-	VectorEx<const char*> AimPSettings = { lolc("Basic"), lolc("RCS"), lolc("pSilent"), lolc("Delays") };
+	VectorEx<const char*> AimPSettings = { lolc("Basic"), lolc("RCS"), lolc("Silent"), lolc("Delays") };
 
 	TabsLabels(SubTabAimSelected, AimPSettings, Vec2(X1Gui().GetCurWindowSize().x - (X1Gui().GetStyle().wndPadding.x * 2), 0), false);
 

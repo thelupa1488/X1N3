@@ -299,9 +299,9 @@ public:
 
 	static void CorrectMouse(CUserCmd* cmd)
 	{
-		static ConVar* m_yaw = m_yaw = I::GetConVar()->FindVar("m_yaw");
-		static ConVar* m_pitch = m_pitch = I::GetConVar()->FindVar("m_pitch");
-		static ConVar* sensitivity = sensitivity = I::GetConVar()->FindVar("sensitivity");
+		static ConVar* m_yaw = m_yaw = I::GetConVar()->FindVar(XorStr("m_yaw"));
+		static ConVar* m_pitch = m_pitch = I::GetConVar()->FindVar(XorStr("m_pitch"));
+		static ConVar* sensitivity = I::GetConVar()->FindVar(XorStr("sensitivity"));
 
 		static QAngle m_angOldViewangles = I::ClientState()->viewangles;
 
