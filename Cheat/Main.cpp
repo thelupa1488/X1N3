@@ -38,12 +38,13 @@ public:
 				std::make_unique<CreateThread_>(SetupThread, hinstDLL);
 			};
 			ADD_LOG("2-2\n");
-			LStatr();
 			FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3"), NULL);
 			FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Configurations"), NULL);
 			FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources"), NULL);
 			FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Images"), NULL);
 			FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Sounds"), NULL);
+			ADD_LOG("2-3\n");
+			LStatr();
 			VMP_END;
 		}
 	};
