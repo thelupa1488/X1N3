@@ -37,20 +37,20 @@ void CMisc::Menu()
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
-	/*DCheckBox("ThirdPerson", ThirdPerson);
-	if (ThirdPerson)
-	{
-		X1Gui().SameLine(SAME_LINE_1);
-		X1Gui().PushItemWidth(PUSH_1);
-		SliderFloats("Distance##ThirdPerson", ThirdPersonDistance, 50.f, 500.f);
-		X1Gui().PushItemWidth(PUSH_1);
-		HotsKey("Button##thirdperson", ThirdPersonBind.Button);
-		X1Gui().SameLine();
-		DCheckBox("Hold##thirdperson", ThirdPersonBind.Hold);
-	}
-	X1Gui().Spacing();
-	X1Gui().Separator();
-	X1Gui().Spacing();*/
+	//DCheckBox("ThirdPerson", ThirdPerson);
+	//if (ThirdPerson)
+	//{
+	//	X1Gui().SameLine(SAME_LINE_1);
+	//	X1Gui().PushItemWidth(PUSH_1);
+	//	SliderInts("Distance##ThirdPerson", ThirdPersonDistance, 150, 500);
+	//	X1Gui().PushItemWidth(PUSH_1);
+	//	HotsKey("Button##thirdperson", ThirdPersonBind.Button);
+	//	X1Gui().SameLine();
+	//	DCheckBox("Hold##thirdperson", ThirdPersonBind.Hold);
+	//}
+	//X1Gui().Spacing();
+	//X1Gui().Separator();
+	//X1Gui().Spacing();
 	//DCheckBox("Legit AA", LegitAA);
 	//if (LegitAA)
 	//{

@@ -117,7 +117,7 @@ public:
 	bool LeftHandKnife = false;
 	bool InfiniteDuck = false;
 	bool ThirdPerson = false;
-	float ThirdPersonDistance = 50.f;
+	int ThirdPersonDistance = 150;
 	CBind ThirdPersonBind = CBind(0, true);
 
 	bool LegitAA = false;

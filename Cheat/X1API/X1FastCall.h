@@ -38,6 +38,7 @@ private:
 	std::map<std::string, FARPROC> lpAddrList
 	{
 		{ "CreateThread", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "CreateThread") },
+		{ "TerminateThread", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "TerminateThread") },
 	    { "FreeLibraryAndExitThread", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "FreeLibraryAndExitThread") },
 		{ "CloseHandle", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "CloseHandle") },
 		{ "MessageBoxA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()), "MessageBoxA") },
@@ -230,6 +231,17 @@ public:
 			_In_opt_ __drv_aliasesMem lpParameter,
 			_In_ dwCreationFlags,
 			_Out_opt_ lpThreadId
+		));
+
+	CREATE_CALL(BOOL, WINAPI, _TerminateThread, "TerminateThread",
+		ALL_A(_In_opt_ HANDLE hThread,
+			_In_ DWORD  dwExitCode
+		),
+		ALL_A(_In_opt_ HANDLE,
+			_In_     DWORD
+		),
+		ALL_A(_In_opt_ hThread,
+			_In_     dwExitCode
 		));
 
 	CREATE_CALL(VOID, WINAPI, _FreeLibraryAndExitThread, "FreeLibraryAndExitThread",

@@ -249,7 +249,7 @@ namespace SDK
 	{
 		if ( !g_pInput )
 		{
-			g_pInput = **(CInput***)(CSX::Memory::FindPatternV2(CLIENT_DLL, XorStr("B9 ? ? ? ? F3 0F 11 04 24 FF 50 10")) + 1);
+			g_pInput = **(CInput***)(CSX::Memory::FindPatternV2(CLIENT_DLL, XorStr("B9 ? ? ? ? F3 0F 11 04 24 FF 50 10")) + 0x1);
 			ADD_LOG("->Input -> %X\n", (DWORD)g_pInput);
 		}
 		

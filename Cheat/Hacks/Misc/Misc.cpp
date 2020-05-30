@@ -815,67 +815,6 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 				}
 			}
 
-			if (ThirdPerson)
-			{
-				static size_t lastTime = 0;
-				static bool enable = false;
-
-				if (ThirdPersonBind.Check())
-				{
-					if (GetTickCount64() > lastTime)
-					{
-						enable = !enable;
-
-						lastTime = GetTickCount64() + 650;
-					}
-				}
-
-				if (enable && plocal->IsDead())
-				{
-					if (!I::Input()->m_fCameraInThirdPerson)
-						I::Input()->m_fCameraInThirdPerson = true;
-				}
-				else
-					I::Input()->m_fCameraInThirdPerson = false;
-
-				auto GetCorrectDistance = [](float ideal_distance) -> float
-				{
-					CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-					/* vector for the inverse angles */
-					QAngle inverseAngles;
-					I::Engine()->GetViewAngles(inverseAngles);
-
-					/* inverse angles by 180 */
-					inverseAngles.x *= -1.f, inverseAngles.y += 180.f;
-
-					/* vector for direction */
-					Vector direction;
-					AngleVectors(inverseAngles, direction);
-
-					/* ray, trace & filters */
-					Ray_t ray;
-					trace_t trace;
-					CTraceFilter filter;
-
-					/* dont trace local player */
-					filter.pSkip = plocal;
-
-					/* create ray */
-					ray.Init(plocal->GetEyePosition(), plocal->GetEyePosition() + (direction * ideal_distance));
-
-					/* trace ray */
-					I::EngineTrace()->TraceRay(ray, MASK_SHOT, &filter, &trace);
-
-					/* return the ideal distance */
-					return (ideal_distance * trace.fraction) - 10.f;
-				};
-
-				QAngle angles;
-				I::Engine()->GetViewAngles(angles);
-				angles.z = GetCorrectDistance(ThirdPersonDistance); // 150 is better distance
-				I::Input()->m_vecCameraOffset = Vector(angles.x, angles.y, angles.z);
-			}
-
 			static auto debugspread = I::GetConVar()->FindVar(XorStr("weapon_debug_spread_show"));
 			if (SnipCrosshair)
 			{
@@ -898,6 +837,62 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 			}
 			else 
 				debugspread->SetValue(0);
+
+			if (ThirdPerson)
+			{
+				static size_t lastTime = 0;
+				static bool enable = false;
+
+				if (ThirdPersonBind.Check())
+				{
+					if (GetTickCount64() > lastTime)
+					{
+						enable = !enable;
+						lastTime = GetTickCount64() + 650;
+					}
+				}
+
+				if (enable && !plocal->IsDead())
+					I::Input()->m_fCameraInThirdPerson = true;
+				else
+					I::Input()->m_fCameraInThirdPerson = false;
+
+				auto GetCorrectDistance = [](float ideal_distance) -> float
+				{
+					/* vector for the inverse angles */
+					QAngle inverseAngles;
+					I::Engine()->GetViewAngles(inverseAngles);
+
+					/* inverse angles by 180 */
+					inverseAngles.x *= -1.f, inverseAngles.y += 180.f;
+
+					/* vector for direction */
+					Vector direction;
+					AngleVectors(inverseAngles, direction);
+
+					/* ray, trace & filters */
+					Ray_t ray;
+					trace_t trace;
+					CTraceFilter filter;
+
+					/* dont trace local player */
+					filter.pSkip = CGlobal::LocalPlayer;
+
+					/* create ray */
+					ray.Init(CGlobal::LocalPlayer->GetEyePosition(), CGlobal::LocalPlayer->GetEyePosition() + (direction * ideal_distance));
+
+					/* trace ray */
+					I::EngineTrace()->TraceRay(ray, MASK_SHOT, &filter, &trace);
+
+					/* return the ideal distance */
+					return (ideal_distance * trace.fraction) - 10.f;
+				};
+
+				QAngle angles;
+				I::Engine()->GetViewAngles(angles);
+				angles.z = GetCorrectDistance(ThirdPersonDistance); // 150 is better distance
+				I::Input()->m_vecCameraOffset = Vector(angles.x, angles.y, angles.z);
+			}
 		}
 	}
 
@@ -1359,7 +1354,6 @@ void CMisc::FrameStageNotify()
 	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
 	{
 		CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-
 		if (plocal)
 		{
 

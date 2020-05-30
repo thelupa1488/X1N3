@@ -17,7 +17,7 @@ void __fastcall FrameStageNotify(void* ecx, void* edx, int Stage)
 			GP_Esp->SoundFrameStage();
 	}
 
-	if (GP_Misc && CGlobal::IsGameReady && (ClientFrameStage_t)Stage == ClientFrameStage_t::FRAME_NET_UPDATE_END)
+	if (GP_Misc && CGlobal::IsGameReady && (ClientFrameStage_t)Stage == ClientFrameStage_t::FRAME_RENDER_START)
 	{
 		if (GP_Misc->Enable)
 			GP_Misc->FrameStageNotify();
