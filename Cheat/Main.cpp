@@ -35,18 +35,18 @@ public:
 			ADD_LOG("2-0\n");
 			auto LStatr = [&]() -> void
 			{
+			//	ADD_LOG("2-1\n");
+			//	FastCall::G().t_DisableThreadLibraryCalls(hinstDLL);
 				ADD_LOG("2-1\n");
-				FastCall::G().t_DisableThreadLibraryCalls(hinstDLL);
-				ADD_LOG("2-2\n");
 				std::make_unique<CreateThread_>(SetupThread, hinstDLL);
 			};
-			ADD_LOG("2-3\n");
+			ADD_LOG("2-2\n");
 			FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3"), NULL);
 			FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Configurations"), NULL);
 			FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources"), NULL);
 			FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Images"), NULL);
 			FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Sounds"), NULL);
-			ADD_LOG("2-4\n");
+			ADD_LOG("2-3\n");
 			LStatr();
 			VMP_END;
 		}
