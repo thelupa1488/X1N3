@@ -253,14 +253,14 @@ void CEsp::DrawBombInfo(CBaseEntity* entity, CBaseEntity* Local)
 	CBaseEntity* local = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
 
 	static bool IsDefusing = false;
-	static bool IsDamage = false;
+	static bool GetDamage = false;
 
 	Color Back1(94, 102, 107, 229);
 	Color Back2(15, 12, 17, 220);
 	Color Back3(0, 0, 0, 0);
 	int w_b = 5;
-	int h_b = 17;
-	if (IsDamage)
+	int h_b = 20;
+	if (GetDamage)
 		h_b += 20;
 	if (IsDefusing)
 		h_b += 20;
@@ -301,11 +301,11 @@ void CEsp::DrawBombInfo(CBaseEntity* entity, CBaseEntity* Local)
 			else
 				EndHp = Color::Red();
 			GP_Render->DrawString(15, Vec2(w_b + 4, CGlobal::iScreenHeight / 2 + h_b / 2 + 20), NameColor, true, false, XorStr("Health left: %.0f"), Local->GetHealth() - damage);
-			IsDamage = true;
 		}
+		GetDamage = true;
 	}
 	else
-		IsDamage = false;
+		GetDamage = false;
 
 	Color EndTime;
 
