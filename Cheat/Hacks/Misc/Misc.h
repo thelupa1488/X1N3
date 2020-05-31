@@ -70,8 +70,7 @@ protected:
 	virtual void Draw() = 0;
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd) = 0;
 	virtual void OverrideView(CViewSetup* pSetup) = 0;
-	virtual void Desync(bool& bSendPacket, CUserCmd* pCmd) = 0;
-	virtual void updatelby(CCSGOPlayerAnimState* animstate) = 0;
+	virtual void UpdateLBY(CCSGOPlayerAnimState* animstate) = 0;
 };
 
 class CMisc : public IMisc
@@ -106,8 +105,7 @@ public:
 	virtual void UpdateSoundList();
 	virtual void CustomWalls();
 	virtual void FrameStageNotify();
-	virtual void Desync(bool& bSendPacket, CUserCmd* pCmd);
-	virtual void updatelby(CCSGOPlayerAnimState* animstate);
+	virtual void UpdateLBY(CCSGOPlayerAnimState* animstate);
 
 	bool Enable = true;
 	bool BHop = false;

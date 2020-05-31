@@ -227,7 +227,6 @@ public:
 				offsets["m_szCustomName"] = mGetOffset("DT_BaseAttributableItem", "m_szCustomName");
 				offsets["m_nFallbackStatTrak"] = mGetOffset("DT_BaseAttributableItem", "m_nFallbackStatTrak");
 				offsets["m_nModelIndex"] = mGetOffset("DT_BaseViewModel", "m_nModelIndex");
-				offsets["m_flSpawnTime"] = mGetOffset("DT_ParticleSmokeGrenade", "m_flSpawnTime");
 				offsets["m_nSequence"] = mGetOffset("DT_BaseViewModel", "m_nSequence");
 				offsets["m_iViewModelIndex"] = mGetOffset("DT_BaseCombatWeapon", "m_iViewModelIndex");
 				offsets["m_hOwner"] = mGetOffset("DT_PredictedViewModel", "m_hOwner");

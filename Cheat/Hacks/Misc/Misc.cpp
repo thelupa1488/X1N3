@@ -186,6 +186,58 @@ void CMisc::SetNewClan(string New, string Name)
 		pSetClanTag(New.c_str(), Name.c_str());
 }
 
+static int GetBestHeadAngle(float yaw)
+{
+	float Back, Right, Left;
+
+	Vector src3D, dst3D, forward, right, up, src, dst;
+	trace_t tr;
+	Ray_t ray, ray2, ray3, ray4, ray5;
+	CTraceFilter filter;
+
+	QAngle engineViewAngles;
+
+	engineViewAngles.x = 0;
+	engineViewAngles.y = yaw;
+
+	AngleVectors(engineViewAngles, forward, right, up);
+
+	filter.pSkip = CGlobal::LocalPlayer;
+	src3D = CGlobal::LocalPlayer->GetEyePosition();
+	dst3D = src3D + (forward * 384);
+
+	ray.Init(src3D, dst3D);
+
+	I::EngineTrace()->TraceRay(ray, MASK_SHOT, &filter, &tr);
+
+	Back = (tr.endpos - tr.startpos).Length();
+
+	ray2.Init(src3D + right * 35, dst3D + right * 35);
+
+	I::EngineTrace()->TraceRay(ray2, MASK_SHOT, &filter, &tr);
+
+	Right = (tr.endpos - tr.startpos).Length();
+
+	ray3.Init(src3D - right * 35, dst3D - right * 35);
+
+	I::EngineTrace()->TraceRay(ray3, MASK_SHOT, &filter, &tr);
+
+	Left = (tr.endpos - tr.startpos).Length();
+
+	static int result = 0;
+
+	if (Left > Right)
+	{
+		result = -1;
+	}
+	else if (Right > Left)
+	{
+		result = 1;
+	}
+
+	return result;
+}
+
 void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCmd)
 {
 	CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
@@ -580,72 +632,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					}
 				}
 			}
-		}
-	}
-}
 
-static int GetBestHeadAngle(float yaw)
-{
-	CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-
-	float Back, Right, Left;
-
-	Vector src3D, dst3D, forward, right, up, src, dst;
-	trace_t tr;
-	Ray_t ray, ray2, ray3, ray4, ray5;
-	CTraceFilter filter;
-
-	QAngle engineViewAngles;
-
-
-	engineViewAngles.x = 0;
-	engineViewAngles.y = yaw;
-
-	AngleVectors(engineViewAngles, forward, right, up);
-
-	filter.pSkip = plocal;
-	src3D = plocal->GetEyePosition();
-	dst3D = src3D + (forward * 384);
-
-	ray.Init(src3D, dst3D);
-
-	I::EngineTrace()->TraceRay(ray, MASK_SHOT, &filter, &tr);
-
-	Back = (tr.endpos - tr.startpos).Length();
-
-	ray2.Init(src3D + right * 35, dst3D + right * 35);
-
-	I::EngineTrace()->TraceRay(ray2, MASK_SHOT, &filter, &tr);
-
-	Right = (tr.endpos - tr.startpos).Length();
-
-	ray3.Init(src3D - right * 35, dst3D - right * 35);
-
-	I::EngineTrace()->TraceRay(ray3, MASK_SHOT, &filter, &tr);
-
-	Left = (tr.endpos - tr.startpos).Length();
-
-	static int result = 0;
-
-	if (Left > Right)
-	{
-		result = -1;
-	}
-	else if (Right > Left)
-	{
-		result = 1;
-	}
-
-	return result;
-}
-
-void CMisc::Desync(bool& bSendPacket, CUserCmd* pCmd)
-{
-	CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
-	{
-		if (plocal)
-		{
 			if (LegitAA)
 			{
 				if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
@@ -655,7 +642,10 @@ void CMisc::Desync(bool& bSendPacket, CUserCmd* pCmd)
 				if (I::GameRules() && I::GameRules()->IsFreezePeriod())
 					return;
 
-				auto weapon = plocal->GetBaseWeapon();
+				if (!std::fabsf(plocal->GetSpawnTime() - I::GlobalVars()->curtime) > 1.0f)
+					return;
+
+				auto weapon = (CBaseWeapon*)plocal->m_hMyWeapons();
 
 				if (!weapon)
 					return;
@@ -725,6 +715,18 @@ void CMisc::Desync(bool& bSendPacket, CUserCmd* pCmd)
 				}
 				FixAngles(pCmd->viewangles);
 			}
+		}
+	}
+}
+
+void CMisc::UpdateLBY(CCSGOPlayerAnimState* animstate)
+{
+	if (animstate->speed_2d > 0.1f || std::fabsf(animstate->flUpVelocity)) {
+		Next_Lby = I::GlobalVars()->curtime + 0.22f;
+	}
+	else if (I::GlobalVars()->curtime > Next_Lby) {
+		if (std::fabsf(CGlobal::AngleDiff(animstate->m_flGoalFeetYaw, animstate->m_flEyeYaw)) > 35.0f) {
+			Next_Lby = I::GlobalVars()->curtime + 1.1f;
 		}
 	}
 }
@@ -1462,18 +1464,6 @@ void CMisc::UpdateSoundList()
 	SoundList.clear();
 	string SoundsDir = CGlobal::SystemDisk + XorStr("X1N3\\Resources\\Sounds\\*.wav");
 	CGlobal::SearchFiles(SoundsDir.c_str(), ReadSounds, FALSE);
-}
-
-void CMisc::updatelby(CCSGOPlayerAnimState* animstate)
-{
-	if (animstate->speed_2d > 0.1f || std::fabsf(animstate->flUpVelocity)) {
-		Next_Lby = I::GlobalVars()->curtime + 0.22f;
-	}
-	else if (I::GlobalVars()->curtime > Next_Lby) {
-		if (std::fabsf(CGlobal::AngleDiff(animstate->m_flGoalFeetYaw, animstate->m_flEyeYaw)) > 35.0f) {
-			Next_Lby = I::GlobalVars()->curtime + 1.1f;
-		}
-	}
 }
 
 void CHitListener::RegListener()

@@ -46,9 +46,7 @@ namespace Offsets
 	DWORD m_aimPunchAngle = 0;
 	DWORD m_viewPunchAngle = 0;
 
-
 	DWORD m_flSimulationTime = 0;
-
 
 	DWORD m_vecVelocity = 0;
 	DWORD m_vecViewOffset = 0;
@@ -86,7 +84,6 @@ namespace Offsets
 	DWORD m_hWeaponWorldModel = 0;
 	DWORD m_bIsAutoaimTarget = 0;
 
-	DWORD m_flSpawnTime = 0;
 	DWORD m_nSequence = 0;
 	DWORD m_nModelIndex = 0;
 	DWORD m_iViewModelIndex = 0;

@@ -252,7 +252,7 @@ namespace Engine
 
 	float CBaseEntity::GetSpawnTime()
 	{
-		return *(float*)((DWORD)this + offsets["m_flSpawnTime"]);
+		return *(float*)((uintptr_t)this + 0xA360); //m_flSpawnTime
 	}
 
 	int CBaseEntity::GetBombDefuser()

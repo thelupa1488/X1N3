@@ -84,7 +84,6 @@ namespace Offsets
 	extern DWORD m_szCustomName;
 	extern DWORD m_hWeaponWorldModel;
 
-	extern DWORD m_flSpawnTime;
 	extern DWORD m_nSequence;
 	extern DWORD m_nModelIndex;
 	extern DWORD  m_iViewModelIndex;

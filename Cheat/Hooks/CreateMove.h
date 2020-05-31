@@ -58,37 +58,34 @@ bool __stdcall CreateMove(float flInputSampleTime, CUserCmd* pCmd)
 		if (GP_Misc->ShowCompetitiveRank && pCmd->buttons & IN_SCORE)
 			RankReveal();
 
-		if (GP_Misc)
-			GP_Misc->CreateMove(bSendPacket, flInputSampleTime, pCmd);
+		//EnginePrediction::Begin(pCmd);
+		//{
+		//	static CCSGOPlayerAnimState AnimState;
 
-		/*EnginePred::Begin(pCmd);
-		{
-			static CCSGOPlayerAnimState AnimState;
+		//	QAngle vangle = QAngle();
+		//	QAngle angleold = pCmd->viewangles;
 
-			QAngle vangle = QAngle();
-			QAngle angleold = pCmd->viewangles;
+			if (GP_Misc)
+				GP_Misc->CreateMove(bSendPacket, flInputSampleTime, pCmd);
 
-			if (GP_Misc && std::fabsf(CGlobal::LocalPlayer->GetSpawnTime() - I::GlobalVars()->curtime) > 1.0f)
-				GP_Misc->Desync(bSendPacket, pCmd);
+		//	CGlobal::CorrectMouse(pCmd);
 
-			CGlobal::CorrectMouse(pCmd);
+		//	auto anim_state = CGlobal::LocalPlayer->GetBasePlayerAnimState();
+		//	if (anim_state)
+		//	{
+		//		CCSGOPlayerAnimState anim_state_backup = *anim_state;
+		//		*anim_state = AnimState;
+		//		CGlobal::LocalPlayer->GetVAngles() = pCmd->viewangles;
+		//		CGlobal::LocalPlayer->UpdateClientSideAnimation();
 
-			auto anim_state = CGlobal::LocalPlayer->GetBasePlayerAnimState();
-			if (anim_state)
-			{
-				CCSGOPlayerAnimState anim_state_backup = *anim_state;
-				*anim_state = AnimState;
-				CGlobal::LocalPlayer->GetVAngles() = pCmd->viewangles;
-				CGlobal::LocalPlayer->UpdateClientSideAnimation();
+		//		GP_Misc->UpdateLBY(anim_state);
 
-				GP_Misc->updatelby(anim_state);
-
-				AnimState = *anim_state;
-				*anim_state = anim_state_backup;
-			}
-			FixMovement(pCmd, angleold);
-		}
-		EnginePred::End();*/
+		//		AnimState = *anim_state;
+		//		*anim_state = anim_state_backup;
+		//	}
+		//	FixMovement(pCmd, angleold);
+		//}
+		//EnginePrediction::End;
 
 		CGlobal::ClampAngles(pCmd->viewangles);
 		CGlobal::AngleNormalize(pCmd->viewangles);
