@@ -9,7 +9,7 @@ public:
 	virtual class IStart
 	{
 	public:
-		virtual void Start() = 0;
+		virtual void Start(HINSTANCE hinstDLL) = 0;
 	};
 };
 

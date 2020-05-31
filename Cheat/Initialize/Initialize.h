@@ -62,7 +62,6 @@ public:
 		virtual void InitHooks()
 		{
 			VMP_ULTRA("InitHooks");
-
 			auto LInitHooks = [&]() -> void
 			{
 				ADD_LOG("======================Init hooks:\n");
