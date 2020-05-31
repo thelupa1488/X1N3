@@ -815,8 +815,7 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 				}
 			}
 
-			static auto debugspread = I::GetConVar()->FindVar(XorStr("weapon_debug_spread_show"));
-			static auto spoofed_ds = new SpoofedConvar(debugspread);
+			static auto debug_spread = I::GetConVar()->FindVar(XorStr("weapon_debug_spread_show"));
 			if (SnipCrosshair)
 			{
 				if (CGlobal::GWeaponID == WEAPON_SSG08 || CGlobal::GWeaponID == WEAPON_AWP || 
@@ -827,17 +826,17 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 					{
 						if (Wep->GetZoomLevel() != 1 && Wep->GetZoomLevel() != 2)
 						{
-							spoofed_ds->SetInt(3);
+							debug_spread->SetValue(3);
 						}
 						else
-							spoofed_ds->SetInt(0);
+							debug_spread->SetValue(0);
 					}
 				}
 				else
-					spoofed_ds->SetInt(0);
+					debug_spread->SetValue(0);
 			}
 			else 
-				spoofed_ds->SetInt(0);
+				debug_spread->SetValue(0);
 
 			if (ThirdPerson)
 			{
@@ -1271,13 +1270,10 @@ void CMisc::Night()
 		if (!nightz)
 		{
 			static auto sv_skyname = I::GetConVar()->FindVar(XorStr("sv_skyname"));
-			static auto spoofed_skyname = new SpoofedConvar(sv_skyname);
-
 			static auto r_DrawSpecificStaticProp = I::GetConVar()->FindVar(XorStr("r_DrawSpecificStaticProp"));
-			static auto spoofed_DrawSpecificStaticProp = new SpoofedConvar(r_DrawSpecificStaticProp);
 
-			spoofed_DrawSpecificStaticProp->SetInt(1);
-			spoofed_skyname->SetString(XorStr("sky_csgo_night02"));
+			r_DrawSpecificStaticProp->SetValue(1);
+			sv_skyname->SetValue(XorStr("sky_csgo_night02"));
 
 			for (MaterialHandle_t i = I::MaterialSystem()->FirstMaterial(); i != I::MaterialSystem()->InvalidMaterial(); i = I::MaterialSystem()->NextMaterial(i))
 			{

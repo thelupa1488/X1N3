@@ -40,6 +40,7 @@ private:
 		{ "CreateThread", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "CreateThread") },
 		{ "TerminateThread", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "TerminateThread") },
 	    { "FreeLibraryAndExitThread", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "FreeLibraryAndExitThread") },
+		{ "DisableThreadLibraryCalls", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "DisableThreadLibraryCalls") },
 		{ "CloseHandle", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "CloseHandle") },
 		{ "MessageBoxA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()), "MessageBoxA") },
 		{ "FindWindowA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()), "FindWindowA") },
@@ -253,6 +254,14 @@ public:
 		),
 		ALL_A(_In_opt_ hLibModule,
 			_In_     dwExitCode
+		));
+
+	CREATE_CALL(BOOL, WINAPI, _DisableThreadLibraryCalls, "DisableThreadLibraryCalls",
+		ALL_A(_In_opt_ HMODULE hLibModule
+		),
+		ALL_A(_In_opt_ HMODULE
+		),
+		ALL_A(_In_opt_ hLibModule
 		));
 
 	CREATE_CALL(VOID, WINAPI, _mouse_event, "mouse_event",

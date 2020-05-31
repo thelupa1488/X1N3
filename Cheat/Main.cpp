@@ -16,6 +16,7 @@ DWORD WINAPI SetupThread(LPVOID lpThreadParameter)
 		DELETE_PTR(pInit);
 		ADD_LOG("2-1-2\n");
 		ADD_LOG("======================Setup: Successful\n");
+		//FastCall::G().t_FreeLibraryAndExitThread(static_cast<HMODULE>(lpThreadParameter), 1);  //unload dll
 		return 0;
 	};
 	VMP_END;
@@ -35,15 +36,17 @@ public:
 			auto LStatr = [&]() -> void
 			{
 				ADD_LOG("2-1\n");
+				FastCall::G().t_DisableThreadLibraryCalls(hinstDLL);
+				ADD_LOG("2-2\n");
 				std::make_unique<CreateThread_>(SetupThread, hinstDLL);
 			};
-			ADD_LOG("2-2\n");
+			ADD_LOG("2-3\n");
 			FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3"), NULL);
 			FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Configurations"), NULL);
 			FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources"), NULL);
 			FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Images"), NULL);
 			FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Sounds"), NULL);
-			ADD_LOG("2-3\n");
+			ADD_LOG("2-4\n");
 			LStatr();
 			VMP_END;
 		}
