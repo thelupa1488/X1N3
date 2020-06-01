@@ -35,7 +35,7 @@ public:
 	};
 
 	virtual void Menu() = 0;
-	virtual void Preview() = 0;
+	//virtual void Preview() = 0;
 	//auto initialize_kits() -> void;
 
 	virtual void PostDataUpdate() = 0;
@@ -325,7 +325,7 @@ public:
 	unordered_map<const char*, const char*> g_KillIconCfg;
 
 	virtual void Menu();
-	virtual void Preview();
+	/*virtual void Preview();*/
 	auto initialize_kits() -> void;
 
 	virtual void PostDataUpdate();

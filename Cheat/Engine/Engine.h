@@ -559,29 +559,28 @@ public:
 		return material;
 	}
 
-	static string FindURl(string paintName, string weapon)
+	static string FindSkinURl(string paintName, string weapon)
 	{
 		ifstream inFile;
-		inFile.open(".\\csgo\\scripts\\items\\items_game_cdn.txt");//path: to item cdn list
+		inFile.open(XorStr(".\\csgo\\scripts\\items\\items_game_cdn.txt"));
 		string line;
-		//int founds = 0;
+
 		unsigned int curLine = 0;
 		string search = paintName.append("=");
-		//string weapon = "aug";
+
 		while (getline(inFile, line)) {
 			curLine++;
 			if (line.find(search, 0) != string::npos) {
 				if (line.find(weapon, 0) != string::npos)
 				{
-					//cout << "link: " << << endl;
-					return line.substr(line.find(search)).erase(0, search.length()); //DOSTAEM SSILKU
+					return line.substr(line.find(search)).erase(0, search.length());
 				}
 			}
 		}
-		return "nf";
+		return XorStr("nf");
 	}
 
-	static std::string DownloadBytes(const char* const szUrl)
+	static string DownloadSkinBytes(const char* const szUrl)
 	{
 		HINTERNET hOpen = NULL;
 		HINTERNET hFile = NULL;
@@ -593,7 +592,8 @@ public:
 		DWORD dataSize = 0;
 
 		hOpen = InternetOpenA("", NULL, NULL, NULL, NULL);
-		if (!hOpen) return (char*)"";
+		if (!hOpen)
+			return (char*)"";
 
 		hFile = InternetOpenUrlA(hOpen, szUrl, NULL, NULL, INTERNET_FLAG_RELOAD | INTERNET_FLAG_DONT_CACHE, NULL);
 
@@ -602,7 +602,7 @@ public:
 			return (char*)"";
 		}
 
-		std::string output;
+		string output;
 		do {
 			char buffer[2000];
 			InternetReadFile(hFile, (LPVOID)buffer, _countof(buffer), &dwBytesRead);
@@ -613,21 +613,6 @@ public:
 		InternetCloseHandle(hOpen);
 
 		return output;
-	}
-	static void UpdatePic(IDirect3DDevice9* thisptr, std::string link, IDirect3DTexture9* texture, bool* show)
-	{
-		texture = nullptr;
-
-		if (texture == nullptr) {
-
-			string imData = DownloadBytes(link.c_str());
-
-			D3DXCreateTextureFromFileInMemoryEx(thisptr
-				, imData.data(), imData.length(),
-				512, 384, D3DX_DEFAULT,
-				0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED,
-				D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &texture);
-		}
 	}
 };
 

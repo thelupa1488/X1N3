@@ -186,57 +186,57 @@ void CMisc::SetNewClan(string New, string Name)
 		pSetClanTag(New.c_str(), Name.c_str());
 }
 
-static int GetBestHeadAngle(float yaw)
-{
-	float Back, Right, Left;
-
-	Vector src3D, dst3D, forward, right, up, src, dst;
-	trace_t tr;
-	Ray_t ray, ray2, ray3, ray4, ray5;
-	CTraceFilter filter;
-
-	QAngle engineViewAngles;
-
-	engineViewAngles.x = 0;
-	engineViewAngles.y = yaw;
-
-	AngleVectors(engineViewAngles, forward, right, up);
-
-	filter.pSkip = CGlobal::LocalPlayer;
-	src3D = CGlobal::LocalPlayer->GetEyePosition();
-	dst3D = src3D + (forward * 384);
-
-	ray.Init(src3D, dst3D);
-
-	I::EngineTrace()->TraceRay(ray, MASK_SHOT, &filter, &tr);
-
-	Back = (tr.endpos - tr.startpos).Length();
-
-	ray2.Init(src3D + right * 35, dst3D + right * 35);
-
-	I::EngineTrace()->TraceRay(ray2, MASK_SHOT, &filter, &tr);
-
-	Right = (tr.endpos - tr.startpos).Length();
-
-	ray3.Init(src3D - right * 35, dst3D - right * 35);
-
-	I::EngineTrace()->TraceRay(ray3, MASK_SHOT, &filter, &tr);
-
-	Left = (tr.endpos - tr.startpos).Length();
-
-	static int result = 0;
-
-	if (Left > Right)
-	{
-		result = -1;
-	}
-	else if (Right > Left)
-	{
-		result = 1;
-	}
-
-	return result;
-}
+//static int GetBestHeadAngle(float yaw)
+//{
+//	float Back, Right, Left;
+//
+//	Vector src3D, dst3D, forward, right, up, src, dst;
+//	trace_t tr;
+//	Ray_t ray, ray2, ray3, ray4, ray5;
+//	CTraceFilter filter;
+//
+//	QAngle engineViewAngles;
+//
+//	engineViewAngles.x = 0;
+//	engineViewAngles.y = yaw;
+//
+//	AngleVectors(engineViewAngles, forward, right, up);
+//
+//	filter.pSkip = CGlobal::LocalPlayer;
+//	src3D = CGlobal::LocalPlayer->GetEyePosition();
+//	dst3D = src3D + (forward * 384);
+//
+//	ray.Init(src3D, dst3D);
+//
+//	I::EngineTrace()->TraceRay(ray, MASK_SHOT, &filter, &tr);
+//
+//	Back = (tr.endpos - tr.startpos).Length();
+//
+//	ray2.Init(src3D + right * 35, dst3D + right * 35);
+//
+//	I::EngineTrace()->TraceRay(ray2, MASK_SHOT, &filter, &tr);
+//
+//	Right = (tr.endpos - tr.startpos).Length();
+//
+//	ray3.Init(src3D - right * 35, dst3D - right * 35);
+//
+//	I::EngineTrace()->TraceRay(ray3, MASK_SHOT, &filter, &tr);
+//
+//	Left = (tr.endpos - tr.startpos).Length();
+//
+//	static int result = 0;
+//
+//	if (Left > Right)
+//	{
+//		result = -1;
+//	}
+//	else if (Right > Left)
+//	{
+//		result = 1;
+//	}
+//
+//	return result;
+//}
 
 void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCmd)
 {
@@ -633,103 +633,103 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				}
 			}
 
-			if (LegitAA)
-			{
-				if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
-					plocal->GetMoveType() == MOVETYPE_LADDER || plocal->GetMoveType() == MOVETYPE_NOCLIP || plocal->IsDead())
-					return;
+			//if (LegitAA)
+			//{
+			//	if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
+			//		plocal->GetMoveType() == MOVETYPE_LADDER || plocal->GetMoveType() == MOVETYPE_NOCLIP || plocal->IsDead())
+			//		return;
 
-				if (I::GameRules() && I::GameRules()->IsFreezePeriod())
-					return;
+			//	if (I::GameRules() && I::GameRules()->IsFreezePeriod())
+			//		return;
 
-				if (!std::fabsf(plocal->GetSpawnTime() - I::GlobalVars()->curtime) > 1.0f)
-					return;
+			//	if (!std::fabsf(plocal->GetSpawnTime() - I::GlobalVars()->curtime) > 1.0f)
+			//		return;
 
-				auto weapon = (CBaseWeapon*)plocal->m_hMyWeapons();
+			//	auto weapon = (CBaseWeapon*)plocal->m_hMyWeapons();
 
-				if (!weapon)
-					return;
+			//	if (!weapon)
+			//		return;
 
-				if ((CGlobal::GWeaponID == WEAPON_ID::WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_ID::WEAPON_FAMAS) && weapon->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
-					return;
+			//	if ((CGlobal::GWeaponID == WEAPON_ID::WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_ID::WEAPON_FAMAS) && weapon->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
+			//		return;
 
-				if (CGlobal::GWeaponType == WEAPON_TYPE::WEAPON_TYPE_GRENADE) {
-					if (!weapon->GetPinPulled()) {
-						float throwTime = weapon->GetThrowTime();
-						if (throwTime > 0.f)
-							return;
-					}
+			//	if (CGlobal::GWeaponType == WEAPON_TYPE::WEAPON_TYPE_GRENADE) {
+			//		if (!weapon->GetPinPulled()) {
+			//			float throwTime = weapon->GetThrowTime();
+			//			if (throwTime > 0.f)
+			//				return;
+			//		}
 
-					if ((pCmd->buttons & IN_ATTACK) || (pCmd->buttons & IN_ATTACK2)) {
-						if (weapon->GetThrowTime() > 0.f)
-							return;
-					}
-				}
+			//		if ((pCmd->buttons & IN_ATTACK) || (pCmd->buttons & IN_ATTACK2)) {
+			//			if (weapon->GetThrowTime() > 0.f)
+			//				return;
+			//		}
+			//	}
 
-				static bool broke_lby = false;
-				QAngle vangle;
-				auto sideauto = GetBestHeadAngle(vangle.y);
+			//	static bool broke_lby = false;
+			//	QAngle vangle;
+			//	auto sideauto = GetBestHeadAngle(vangle.y);
 
-				if (!LegitAA_ad) {
-					if (LegitAABind.Check()) {
-						Side = -Side;
-					}
-				}
-				else
-					Next_Lby = sideauto;
+			//	if (!LegitAA_ad) {
+			//		if (LegitAABind.Check()) {
+			//			Side = -Side;
+			//		}
+			//	}
+			//	else
+			//		Next_Lby = sideauto;
 
-				if (LegitAA_type == 1) {
-					float minimal_move = plocal->GetFlags() & IN_DUCK ? 3.0f : 1.0f;
+			//	if (LegitAA_type == 1) {
+			//		float minimal_move = plocal->GetFlags() & IN_DUCK ? 3.0f : 1.0f;
 
-					if (!bSendPacket) {
-						pCmd->viewangles.y += 120.f * Side;
-					}
+			//		if (!bSendPacket) {
+			//			pCmd->viewangles.y += 120.f * Side;
+			//		}
 
-					static bool flip = 1;
-					flip = !flip;
+			//		static bool flip = 1;
+			//		flip = !flip;
 
-					pCmd->sidemove += flip ? minimal_move : -minimal_move;
-				}
-				else if (LegitAA_type == 2) {
-					if (Next_Lby >= I::GlobalVars()->curtime) {
-						if (!broke_lby && bSendPacket)
-							return;
+			//		pCmd->sidemove += flip ? minimal_move : -minimal_move;
+			//	}
+			//	else if (LegitAA_type == 2) {
+			//		if (Next_Lby >= I::GlobalVars()->curtime) {
+			//			if (!broke_lby && bSendPacket)
+			//				return;
 
-						broke_lby = false;
-						bSendPacket = false;
-						pCmd->viewangles.y += 120.0f * Side;
-					}
-					else {
-						broke_lby = true;
-						bSendPacket = false;
-						pCmd->viewangles.y += 120.0f * -Side;
-					}
-				}
-				else if (LegitAA_type == 3)
-				{
-					static bool switchaa = false;
-					switchaa = !switchaa;
+			//			broke_lby = false;
+			//			bSendPacket = false;
+			//			pCmd->viewangles.y += 120.0f * Side;
+			//		}
+			//		else {
+			//			broke_lby = true;
+			//			bSendPacket = false;
+			//			pCmd->viewangles.y += 120.0f * -Side;
+			//		}
+			//	}
+			//	else if (LegitAA_type == 3)
+			//	{
+			//		static bool switchaa = false;
+			//		switchaa = !switchaa;
 
-					if (!bSendPacket)
-						pCmd->viewangles.y += switchaa ? 180.f : 0.f;
-				}
-				FixAngles(pCmd->viewangles);
-			}
+			//		if (!bSendPacket)
+			//			pCmd->viewangles.y += switchaa ? 180.f : 0.f;
+			//	}
+			//	FixAngles(pCmd->viewangles);
+			//}
 		}
 	}
 }
 
-void CMisc::UpdateLBY(CCSGOPlayerAnimState* animstate)
-{
-	if (animstate->speed_2d > 0.1f || std::fabsf(animstate->flUpVelocity)) {
-		Next_Lby = I::GlobalVars()->curtime + 0.22f;
-	}
-	else if (I::GlobalVars()->curtime > Next_Lby) {
-		if (std::fabsf(CGlobal::AngleDiff(animstate->m_flGoalFeetYaw, animstate->m_flEyeYaw)) > 35.0f) {
-			Next_Lby = I::GlobalVars()->curtime + 1.1f;
-		}
-	}
-}
+//void CMisc::UpdateLBY(CCSGOPlayerAnimState* animstate)
+//{
+//	if (animstate->speed_2d > 0.1f || std::fabsf(animstate->flUpVelocity)) {
+//		Next_Lby = I::GlobalVars()->curtime + 0.22f;
+//	}
+//	else if (I::GlobalVars()->curtime > Next_Lby) {
+//		if (std::fabsf(CGlobal::AngleDiff(animstate->m_flGoalFeetYaw, animstate->m_flEyeYaw)) > 35.0f) {
+//			Next_Lby = I::GlobalVars()->curtime + 1.1f;
+//		}
+//	}
+//}
 
 void CMisc::OverrideView(CViewSetup* pSetup)
 {

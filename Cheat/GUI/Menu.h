@@ -262,9 +262,9 @@ public:
 									if (GP_Esp)
 										GP_Esp->VisualPreview();
 
-								if (SelectedTab == 3)
-									if(GP_Skins)
-										GP_Skins->Preview();
+								//if (SelectedTab == 3)
+								//	if(GP_Skins)
+								//		GP_Skins->Preview();
 							}
 							X1Gui().End();
 						}
