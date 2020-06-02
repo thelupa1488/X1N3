@@ -16,7 +16,6 @@ DWORD WINAPI SetupThread(LPVOID lpThreadParameter)
 		DELETE_PTR(pInit);
 		ADD_LOG("2-1-2\n");
 		ADD_LOG("======================Setup: Successful\n");
-		//FastCall::G().t_FreeLibraryAndExitThread(static_cast<HMODULE>(lpThreadParameter), 1);  //unload dll
 		return 0;
 	};
 	VMP_END;
@@ -96,7 +95,7 @@ void CMain::SetMenuColors()
 {
 	GuiStyle& style = X1Gui().GetStyle();
 
-	auto AutoChagngeColor = [&](Color col, float ch) -> Color
+	auto AutoChangeColor = [&](Color col, float ch) -> Color
 	{
 		Color entry;
 
@@ -113,22 +112,22 @@ void CMain::SetMenuColors()
 	style.clrText = TextColor;
 
 	style.clrFrame = FrameColor;
-	style.clrFrameHover = AutoChagngeColor(FrameColor, -5);
-	style.clrFrameHold = AutoChagngeColor(FrameColor, -9);
+	style.clrFrameHover = AutoChangeColor(FrameColor, -5);
+	style.clrFrameHold = AutoChangeColor(FrameColor, -9);
 
 	style.clrTabLabel = color_t(ButtonColor.r(), ButtonColor.g(), ButtonColor.b(), 120);
 	style.clrTabLabelText = color_t(TextColor.r(), TextColor.g(), TextColor.b(), 160);
 
 	style.clrButton = ButtonColor;
-	style.clrButtonHover = AutoChagngeColor(ButtonColor, -10);
-	style.clrButtonHold = AutoChagngeColor(ButtonColor, -20);
+	style.clrButtonHover = AutoChangeColor(ButtonColor, -10);
+	style.clrButtonHold = AutoChangeColor(ButtonColor, -20);
 
 	style.clrDisButton = DisableButtonColor;
-	style.clrDisButtonHover = AutoChagngeColor(DisableButtonColor, -10);
-	style.clrDisButtonHold = AutoChagngeColor(DisableButtonColor, -20);
+	style.clrDisButtonHover = AutoChangeColor(DisableButtonColor, -10);
+	style.clrDisButtonHold = AutoChangeColor(DisableButtonColor, -20);
 
-	style.clrScroll = AutoChagngeColor(ButtonColor, -20);
-	style.clrScrollHover = AutoChagngeColor(ButtonColor, -20);
-	style.clrScrollHold = AutoChagngeColor(ButtonColor, -20);
+	style.clrScroll = AutoChangeColor(ButtonColor, -20);
+	style.clrScrollHover = AutoChangeColor(ButtonColor, -20);
+	style.clrScrollHold = AutoChangeColor(ButtonColor, -20);
 	style.clrTitle = TitleColor;
 }

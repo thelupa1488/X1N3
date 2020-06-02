@@ -63,7 +63,6 @@ struct GuiStyle
 	color_t clrLine;
 	color_t clrTabLabel;
 	color_t clrTabLabelText;
-	//color_t clrChildBackground;
 	color_t clrFrame, clrFrameHover, clrFrameHold;
 	color_t clrButton, clrButtonHover, clrButtonHold;
 	color_t clrDisButton, clrDisButtonHover, clrDisButtonHold;
@@ -80,7 +79,6 @@ struct GuiStyle
 
 		clrLine = color_t(120, 121, 123, 180);
 		clrTmp = color_t(0, 0, 0, 0);
-		//	clrChildBackground = color_t(18, 18, 22, 255);
 		clrBackground = color_t(18, 18, 22, 255);
 		clrTitle = color_t(112, 112, 116, 255);
 		clrText = color_t(255, 255, 255, 255);
@@ -103,7 +101,6 @@ struct GuiStyle
 		clrScroll = color_t(128 - 20, 135 - 20, 140 - 20, 255);
 		clrScrollHover = color_t(128 - 20, 135 - 20, 140 - 20, 255);
 		clrScrollHold = color_t(128 - 20, 135 - 20, 140 - 20, 255);
-
 	}
 };
 
