@@ -55,6 +55,7 @@ class IMisc
 protected:
 
 	virtual void GetViewModelFOV(float &Fov) = 0;
+	//virtual void Thirdperson() = 0;
 //	virtual void PlaySound(const char* pszSoundName) = 0;
 	virtual void AutoAcceptEmit() = 0;
 	virtual void DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t &state, const ModelRenderInfo_t &pInfo, matrix3x4_t *pCustomBoneToWorld) = 0;
@@ -70,7 +71,6 @@ protected:
 	virtual void Draw() = 0;
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd) = 0;
 	virtual void OverrideView(CViewSetup* pSetup) = 0;
-	//virtual void UpdateLBY(CCSGOPlayerAnimState* animstate) = 0;
 };
 
 class CMisc : public IMisc
@@ -86,13 +86,11 @@ public:
 		float Alpha;
 	};
 
-	float Next_Lby;
-	float Side;
-
 	virtual void Menu();
 	virtual void Draw();
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd);
 	virtual void OverrideView(CViewSetup* pSetup);
+	//virtual void Thirdperson();
 	virtual void GetViewModelFOV(float &Fov);
 //	virtual void PlaySound(const char* pszSoundName);
 	virtual void AutoAcceptEmit();
@@ -105,7 +103,6 @@ public:
 	virtual void UpdateSoundList();
 	virtual void CustomWalls();
 	virtual void FrameStageNotify();
-	//virtual void UpdateLBY(CCSGOPlayerAnimState* animstate);
 
 	bool Enable = true;
 	bool BHop = false;
@@ -114,9 +111,10 @@ public:
 	bool AutoStrafe = false;
 	bool LeftHandKnife = false;
 	bool InfiniteDuck = false;
-	bool ThirdPerson = false;
-	int ThirdPersonDistance = 150;
-	CBind ThirdPersonBind = CBind(0, true);
+
+	//bool ThirdPerson = false;
+	//int ThirdPersonDistance = 150;
+	//CBind ThirdPersonBind = CBind(0, true);
 
 	//bool LegitAA = false;
 	//int  LegitAA_type = 0;

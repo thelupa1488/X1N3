@@ -159,3 +159,7 @@ Cheat/output/release/X1N3.vcxproj.FileListAbsolute.txt
 *.tlog
 NEW SDK.rar
 build/release/Protect DLL.bat
+build/release/release.iobj
+build/release/release.ipdb
+build/release/release.pdb
+Cheat/output/release/release.Build.CppClean.log

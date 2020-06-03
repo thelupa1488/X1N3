@@ -19,13 +19,3 @@ void __fastcall DrawModelExecute(void* thisptr, int edx, IMatRenderContext* ctx,
 
 	I::ModelRender()->ForcedMaterialOverride(0);
 }
-
-//int __fastcall DoPostScreenEffects(void* thisptr, int edx, int a1)
-//{
-//	static auto ofunc = HookTables::pDoPostScreenEffects->GetTrampoline();
-//
-//	if (GP_Esp)
-//		GP_Esp->DrawGlow();
-//
-//	return ofunc(thisptr, edx, a1);
-//}

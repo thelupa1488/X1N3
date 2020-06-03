@@ -15,7 +15,6 @@ namespace HookTables
 	using FireEventClientSideThinkFn = bool(__thiscall*)(void*, IGameEvent*);
 	using DrawModelExecuteFn = bool(__thiscall*)(void*, IMatRenderContext*, const DrawModelState_t&,
 		const ModelRenderInfo_t&, matrix3x4_t*);
-	using DoPostScreenEffectsFn = int(__fastcall*)(void*, int, int);
 	using PlaySoundFn = bool(__thiscall*)(void*, const char*);
 	using LockCursorFn = bool(__thiscall*)(void*);
 	using RetrieveMessageFn = EGCResults(__thiscall*)(void*, uint32_t*, void*, uint32_t, uint32_t*);
@@ -31,7 +30,6 @@ namespace HookTables
 	cDetour<FrameStageNotifyFn>* pFrameStageNotify;
 	cDetour<FireEventClientSideThinkFn>* pFireEventClientSideThink;
 	cDetour<DrawModelExecuteFn>* pDrawModelExecute;
-	cDetour<DoPostScreenEffectsFn>* pDoPostScreenEffects;
 	cDetour<PlaySoundFn>* pPlaySound;
 	cDetour<LockCursorFn>* pLockCursor;
 	cDetour<RetrieveMessageFn>* pRetrieveMessage;

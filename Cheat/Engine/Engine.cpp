@@ -4,6 +4,7 @@
 
 bool CGlobal::IsGuiVisble = false;
 bool CGlobal::IsGameReady = false;
+bool CGlobal::AcceptMatchBeep = false;
 int CGlobal::iScreenWidth = 1920;
 int CGlobal::iScreenHeight = 1080;
 string CGlobal::SystemDisk = "C:\\";
@@ -16,7 +17,6 @@ Vector CGlobal::GViewAngle;
 vector<string> CGlobal::ConfigList;
 CBaseEntity* CGlobal::LocalPlayer;
 CUserCmd* CGlobal::UserCmd;
-bool CGlobal::AcceptMatchBeep = false;
 
 void ReadConfigs(LPCTSTR lpszFileName)
 {

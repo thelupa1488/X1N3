@@ -671,7 +671,6 @@
     <ClInclude Include="Engine\SDK\Input.hpp">
       <Filter>Engine\SDK</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\EnginePrediction.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="3DMenu">

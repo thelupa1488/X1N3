@@ -5,16 +5,6 @@
 
 using namespace SDK;
 
-class IIStart
-{
-public:
-	virtual class IStart
-	{
-	public:
-		virtual void Start(HINSTANCE hinstDLL) = 0;
-	};
-};
-
 class CMain
 {
 public:

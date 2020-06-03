@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine.h"
+
 namespace EnginePrediction
 {
 	float _curtime_backup;
@@ -11,7 +12,7 @@ namespace EnginePrediction
 	int32_t* _prediction_seed;
 	CBaseEntity*** _prediction_player;
 
-	void Begin(CUserCmd* cmd)
+	void Begin()
 	{
 		_curtime_backup = I::GlobalVars()->curtime;
 		_frametime_backup = I::GlobalVars()->frametime;
@@ -23,17 +24,17 @@ namespace EnginePrediction
 
 		if (!_prediction_seed || !_prediction_player) 
 		{
-			_prediction_seed = *(int32_t**)(CSX::Memory::FindPatternV2("client_panorama.dll", "8B 0D ? ? ? ? BA ? ? ? ? E8 ? ? ? ? 83 C4 04") + 0x2);
-			_prediction_player = (CBaseEntity***)(CSX::Memory::FindPatternV2("client_panorama.dll", "89 35 ? ? ? ? F3 0F 10 48 20") + 0x2);
+			_prediction_seed = *(int32_t**)(CSX::Memory::FindPatternV2(XorStr("client_panorama.dll"), XorStr("8B 0D ? ? ? ? BA ? ? ? ? E8 ? ? ? ? 83 C4 04")) + 0x2);
+			_prediction_player = (CBaseEntity***)(CSX::Memory::FindPatternV2(XorStr("client_panorama.dll"), XorStr("89 35 ? ? ? ? F3 0F 10 48 20")) + 0x2);
 		}
 
 		if (_prediction_seed)
-			*_prediction_seed = MD5_PseudoRandom(cmd->command_number) & 0x7FFFFFFF;
+			*_prediction_seed = MD5_PseudoRandom(CGlobal::UserCmd->command_number) & 0x7FFFFFFF;
 
 		if (_prediction_player)
 			**_prediction_player = CGlobal::LocalPlayer;
 
-		CGlobal::LocalPlayer->GetCurrentCommand() = cmd;
+		CGlobal::LocalPlayer->GetCurrentCommand() = CGlobal::UserCmd;
 
 		I::GlobalVars()->curtime = _fixedtick * I::GlobalVars()->interval_per_tick;
 		I::GlobalVars()->frametime = I::GlobalVars()->interval_per_tick;
@@ -46,11 +47,10 @@ namespace EnginePrediction
 
 		I::MoveHelper()->SetHost(CGlobal::LocalPlayer);
 		I::GameMovement()->StartTrackPredictionErrors(CGlobal::LocalPlayer);
-		I::Prediction()->SetupMove(CGlobal::LocalPlayer, cmd, I::MoveHelper(), &_movedata);
+		I::Prediction()->SetupMove(CGlobal::LocalPlayer, CGlobal::UserCmd, I::MoveHelper(), &_movedata);
 		I::GameMovement()->ProcessMovement(CGlobal::LocalPlayer, &_movedata);
-		I::Prediction()->FinishMove(CGlobal::LocalPlayer, cmd, &_movedata);
+		I::Prediction()->FinishMove(CGlobal::LocalPlayer, CGlobal::UserCmd, &_movedata);
 		I::GameMovement()->FinishTrackPredictionErrors(CGlobal::LocalPlayer);
-		I::MoveHelper()->SetHost(nullptr);
 
 		*(bool*)((uintptr_t)I::GlobalVars() + 0x8) = _inpred_backup;
 
@@ -60,7 +60,10 @@ namespace EnginePrediction
 		if (_prediction_seed)
 			*_prediction_seed = -1;
 
-		_prevcmd = cmd;
+	    CGlobal::LocalPlayer->GetCurrentCommand() = nullptr;
+		I::MoveHelper()->SetHost(nullptr);
+
+		_prevcmd = CGlobal::UserCmd;
 	}
 
 	void End() 

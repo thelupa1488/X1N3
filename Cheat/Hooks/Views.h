@@ -10,6 +10,9 @@ bool WINAPI OverrideView(CViewSetup* pSetup)
 		if (GP_Esp->GranadePrediction)
 			grenade_prediction::Get().View();
 
+	//if (GP_Misc)
+	//	GP_Misc->Thirdperson();
+
 	return HookTables::pOverrideView->GetTrampoline()(pSetup);
 }
 

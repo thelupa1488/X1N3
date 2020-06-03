@@ -122,6 +122,7 @@ public:
 	static WEAPON_ID GWeaponID;
 	static bool IsGuiVisble;
 	static bool IsGameReady;
+	static bool AcceptMatchBeep;
 	static int iScreenWidth;
 	static int iScreenHeight;
 	static string SystemDisk;
@@ -132,7 +133,6 @@ public:
 	static vector<string> ConfigList;
 	static CBaseEntity* LocalPlayer;
 	static CUserCmd* UserCmd;
-	static bool AcceptMatchBeep;
 
 	static string WeaponNames[34];
 

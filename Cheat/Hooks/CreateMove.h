@@ -1,6 +1,5 @@
 #pragma once
 #include "Tables.h"
-#include "../Engine/EnginePrediction.h"
 
 void RankReveal()
 {
@@ -24,6 +23,9 @@ bool __stdcall CreateMove(float flInputSampleTime, CUserCmd* pCmd)
 		CGlobal::GViewAngle = pCmd->viewangles;
 		CGlobal::UserCmd = pCmd;
 		CGlobal::LocalPlayer = (CBaseEntity*)I::ClientEntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
+
+		//if (bReturn)
+		//	I::Prediction()->SetLocalViewangles(Vector(pCmd->viewangles.x, pCmd->viewangles.y, pCmd->viewangles.z));
 
 		if (GP_EntPlayers)
 			GP_EntPlayers->Update();
@@ -58,34 +60,8 @@ bool __stdcall CreateMove(float flInputSampleTime, CUserCmd* pCmd)
 		if (GP_Misc->ShowCompetitiveRank && pCmd->buttons & IN_SCORE)
 			RankReveal();
 
-		//EnginePrediction::Begin(pCmd);
-		//{
-		//	static CCSGOPlayerAnimState AnimState;
-
-		//	QAngle vangle = QAngle();
-		//	QAngle angleold = pCmd->viewangles;
-
-			if (GP_Misc)
-				GP_Misc->CreateMove(bSendPacket, flInputSampleTime, pCmd);
-
-		//	CGlobal::CorrectMouse(pCmd);
-
-		//	auto anim_state = CGlobal::LocalPlayer->GetBasePlayerAnimState();
-		//	if (anim_state)
-		//	{
-		//		CCSGOPlayerAnimState anim_state_backup = *anim_state;
-		//		*anim_state = AnimState;
-		//		CGlobal::LocalPlayer->GetVAngles() = pCmd->viewangles;
-		//		CGlobal::LocalPlayer->UpdateClientSideAnimation();
-
-		//		GP_Misc->UpdateLBY(anim_state);
-
-		//		AnimState = *anim_state;
-		//		*anim_state = anim_state_backup;
-		//	}
-		//	FixMovement(pCmd, angleold);
-		//}
-		//EnginePrediction::End;
+		if (GP_Misc)
+			GP_Misc->CreateMove(bSendPacket, flInputSampleTime, pCmd);
 
 		CGlobal::ClampAngles(pCmd->viewangles);
 		CGlobal::AngleNormalize(pCmd->viewangles);

@@ -39,10 +39,11 @@ inline int decod(const char *s)
 }
 
 //#define RetrieveMessageIdx XorStr("2")
-//#define FireEventClientSideThinkIdx XorStr("9")
 #define EmitSoundIdx XorStr("5")
+//#define FireEventClientSideThinkIdx XorStr("9")
 //#define ResetIdx XorStr("16")
 #define OverrideViewIdx XorStr("18")
+//#define RunCommandIdx XorStr("19")
 #define DrawModelExecuteIdx XorStr("21")
 #define CreateMoveIdx XorStr("24")
 #define GetViewModelFOVIdx XorStr("35")
@@ -120,12 +121,6 @@ public:
 						(GetViewModelFOV),
 						&pGetViewModelFOV);
 					ADD_LOG("Hook: GetViewModelFOV\n");
-
-					//pContext.ApplyDetour<DoPostScreenEffectsFn>(static_cast<DoPostScreenEffectsFn>(ClientModeTable[decod(DoPostScreenEffectsIdx)]),
-					//	reinterpret_cast<DoPostScreenEffectsFn>
-					//	(DoPostScreenEffects),
-					//	&pDoPostScreenEffects);
-					//ADD_LOG("Hook: DoPostScreenEffects\n");
 				}
 				ADD_LOG("2-1-11-6\n");
 				if (ClientTable)

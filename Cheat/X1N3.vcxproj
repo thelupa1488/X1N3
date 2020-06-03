@@ -74,7 +74,6 @@
     <ClInclude Include="Engine\CSX\CSX_Memory.h" />
     <ClInclude Include="Engine\CSX\CSX_Utils.h" />
     <ClInclude Include="Engine\Engine.h" />
-    <ClInclude Include="Engine\EnginePrediction.h" />
     <ClInclude Include="Engine\Entity.h" />
     <ClInclude Include="Engine\EntityMem.h" />
     <ClInclude Include="Engine\GrenadePrediction.h" />
@@ -284,7 +283,7 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(DXSDK_DIR)Include;$(SolutionDir)Cheat\X1API\VMP;$(SolutionDir)Cheat\Json;$(IncludePath)</IncludePath>
     <LibraryPath>$(DXSDK_DIR)Lib\x86;$(SolutionDir)Cheat\X1API;$(SolutionDir)Cheat\X1API\VMP;$(LibraryPath)</LibraryPath>
-    <TargetName>test</TargetName>
+    <TargetName>debug</TargetName>
     <OutDir>$(SolutionDir)build\debug</OutDir>
     <IntDir>$(SolutionDir)Cheat\output\debug</IntDir>
   </PropertyGroup>
@@ -292,7 +291,7 @@
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(DXSDK_DIR)Include;$(SolutionDir)Cheat\X1API;$(SolutionDir)Cheat\X1API\VMP;$(IncludePath)</IncludePath>
     <LibraryPath>$(DXSDK_DIR)Lib\x86;$(SolutionDir)Cheat\X1API;$(SolutionDir)Cheat\X1API\VMP;$(LibraryPath)</LibraryPath>
-    <TargetName>test</TargetName>
+    <TargetName>release</TargetName>
     <OutDir>$(SolutionDir)build\release</OutDir>
     <IntDir>$(SolutionDir)Cheat\output\release</IntDir>
   </PropertyGroup>
