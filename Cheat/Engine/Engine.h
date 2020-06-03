@@ -132,6 +132,7 @@ public:
 	static vector<string> ConfigList;
 	static CBaseEntity* LocalPlayer;
 	static CUserCmd* UserCmd;
+	static bool AcceptMatchBeep;
 
 	static string WeaponNames[34];
 
@@ -510,7 +511,7 @@ public:
 		auto matname = "custom_" + std::to_string(created);
 		++created;
 
-		auto keyValues = static_cast<SDK::KeyValues*>(malloc(sizeof(SDK::KeyValues)));
+		auto keyValues = static_cast<KeyValues*>(malloc(sizeof(KeyValues)));
 
 		InitKeyValues(keyValues, type.c_str());
 		LoadFromBuffer(keyValues, matname, matdata);
@@ -547,7 +548,7 @@ public:
 		auto matname = "custom_" + std::to_string(created);
 		++created;
 
-		auto keyValues = static_cast<SDK::KeyValues*>(malloc(sizeof(SDK::KeyValues)));
+		auto keyValues = static_cast<KeyValues*>(malloc(sizeof(KeyValues)));
 
 		InitKeyValues(keyValues, type.c_str());
 		LoadFromBuffer(keyValues, matname, matdata);
@@ -559,60 +560,60 @@ public:
 		return material;
 	}
 
-	static string FindSkinURl(string paintName, string weapon)
-	{
-		ifstream inFile;
-		inFile.open(XorStr(".\\csgo\\scripts\\items\\items_game_cdn.txt"));
-		string line;
+	//static string FindSkinURl(string paintName, string weapon)
+	//{
+	//	ifstream inFile;
+	//	inFile.open(XorStr(".\\csgo\\scripts\\items\\items_game_cdn.txt"));
+	//	string line;
 
-		unsigned int curLine = 0;
-		string search = paintName.append("=");
+	//	unsigned int curLine = 0;
+	//	string search = paintName.append("=");
 
-		while (getline(inFile, line)) {
-			curLine++;
-			if (line.find(search, 0) != string::npos) {
-				if (line.find(weapon, 0) != string::npos)
-				{
-					return line.substr(line.find(search)).erase(0, search.length());
-				}
-			}
-		}
-		return XorStr("nf");
-	}
+	//	while (getline(inFile, line)) {
+	//		curLine++;
+	//		if (line.find(search, 0) != string::npos) {
+	//			if (line.find(weapon, 0) != string::npos)
+	//			{
+	//				return line.substr(line.find(search)).erase(0, search.length());
+	//			}
+	//		}
+	//	}
+	//	return XorStr("nf");
+	//}
 
-	static string DownloadSkinBytes(const char* const szUrl)
-	{
-		HINTERNET hOpen = NULL;
-		HINTERNET hFile = NULL;
-		char* lpBuffer = NULL;
-		DWORD dwBytesRead = 0;
-		//Pointer to dynamic buffer.
-		char* data = 0;
-		//Dynamic data size.
-		DWORD dataSize = 0;
+	//static string DownloadSkinBytes(const char* const szUrl)
+	//{
+	//	HINTERNET hOpen = NULL;
+	//	HINTERNET hFile = NULL;
+	//	char* lpBuffer = NULL;
+	//	DWORD dwBytesRead = 0;
+	//	//Pointer to dynamic buffer.
+	//	char* data = 0;
+	//	//Dynamic data size.
+	//	DWORD dataSize = 0;
 
-		hOpen = InternetOpenA("", NULL, NULL, NULL, NULL);
-		if (!hOpen)
-			return (char*)"";
+	//	hOpen = InternetOpenA("", NULL, NULL, NULL, NULL);
+	//	if (!hOpen)
+	//		return (char*)"";
 
-		hFile = InternetOpenUrlA(hOpen, szUrl, NULL, NULL, INTERNET_FLAG_RELOAD | INTERNET_FLAG_DONT_CACHE, NULL);
+	//	hFile = InternetOpenUrlA(hOpen, szUrl, NULL, NULL, INTERNET_FLAG_RELOAD | INTERNET_FLAG_DONT_CACHE, NULL);
 
-		if (!hFile) {
-			InternetCloseHandle(hOpen);
-			return (char*)"";
-		}
+	//	if (!hFile) {
+	//		InternetCloseHandle(hOpen);
+	//		return (char*)"";
+	//	}
 
-		string output;
-		do {
-			char buffer[2000];
-			InternetReadFile(hFile, (LPVOID)buffer, _countof(buffer), &dwBytesRead);
-			output.append(buffer, dwBytesRead);
-		} while (dwBytesRead);
+	//	string output;
+	//	do {
+	//		char buffer[2000];
+	//		InternetReadFile(hFile, (LPVOID)buffer, _countof(buffer), &dwBytesRead);
+	//		output.append(buffer, dwBytesRead);
+	//	} while (dwBytesRead);
 
-		InternetCloseHandle(hFile);
-		InternetCloseHandle(hOpen);
+	//	InternetCloseHandle(hFile);
+	//	InternetCloseHandle(hOpen);
 
-		return output;
-	}
+	//	return output;
+	//}
 };
 

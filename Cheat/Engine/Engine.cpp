@@ -16,6 +16,7 @@ Vector CGlobal::GViewAngle;
 vector<string> CGlobal::ConfigList;
 CBaseEntity* CGlobal::LocalPlayer;
 CUserCmd* CGlobal::UserCmd;
+bool CGlobal::AcceptMatchBeep = false;
 
 void ReadConfigs(LPCTSTR lpszFileName)
 {

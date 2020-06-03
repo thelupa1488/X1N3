@@ -149,25 +149,25 @@ void CMisc::Menu()
 	X1Gui().Separator();
 	X1Gui().Spacing();
 	DCheckBox("Sniper crosshair", SnipCrosshair);
-	//if (SnipCrosshair)
-	//{
-	//	X1Gui().SameLine(SAME_LINE_1);
+	if (SnipCrosshair)
+	{
+		X1Gui().SameLine(SAME_LINE_1);
 
-	//	X1Gui().PushItemWidth(PUSH_1);
-	//	VectorEx<const char* >itemsCSS = { lolc("Type 1") , lolc("Type 2"), lolc("Type 3") };
-	//	DComboBox("Style##Crosshsnip", SnipCrosshairStyle, itemsCSS);
+		X1Gui().PushItemWidth(PUSH_1);
+		VectorEx<const char* >itemsCSS = { lolc("Type 1") , lolc("Type 2"), lolc("Type 3") };
+		DComboBox("Style##Crosshsnip", SnipCrosshairStyle, itemsCSS);
 
-	//	X1Gui().PushItemWidth(PUSH_2);
-	//	if (SnipCrosshairStyle == 2)
-	//	SliderInts("Size##Crosshsnip", SnipCrosshairSize, 1, 100);
+		X1Gui().PushItemWidth(PUSH_2);
+		if (SnipCrosshairStyle == 2)
+		SliderInts("Size##Crosshsnip", SnipCrosshairSize, 1, 100);
 
-	//	DCheckBox("Recoil##Crosshsnip", SnipCrosshairRecoil);
-	//	X1Gui().SameLine(SAME_LINE_1);
-	//	if (SnipCrosshairStyle <= 1)
-	//	DCheckBox("Outline##Crosshsnip", SnipCrosshairOutline);
+		DCheckBox("Recoil##Crosshsnip", SnipCrosshairRecoil);
+		X1Gui().SameLine(SAME_LINE_1);
+		if (SnipCrosshairStyle <= 1)
+		DCheckBox("Outline##Crosshsnip", SnipCrosshairOutline);
 
-	//	DColorEdit("Color##Crosshsnip", SnipCrosshairColor);
-	//}
+		DColorEdit("Color##Crosshsnip", SnipCrosshairColor);
+	}
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();

@@ -82,75 +82,75 @@ void CMisc::Draw()
 					}
 				}
 
-				//if (SnipCrosshair)
-				//{
-				//	if (CGlobal::GWeaponType == WEAPON_TYPE_SNIPER && CGlobal::GWeaponID != WEAPON_AUG && CGlobal::GWeaponID != WEAPON_SG553)
-				//	{
-				//		CBaseWeapon* Wep = plocal->GetBaseWeapon();
-				//		if (Wep)
-				//		{
-				//			if (Wep->GetZoomLevel() != 1 && Wep->GetZoomLevel() != 2)
-				//			{
-				//				float punch_x = !SnipCrosshairRecoil ? (CGlobal::iScreenWidth / 2.f) :
-				//					((CGlobal::iScreenWidth / 2) - (int)((CGlobal::iScreenWidth / CGlobal::GFovView) * (plocal->GetAimPunchAngle().y * 0.9)));
-				//				float punch_y = !SnipCrosshairRecoil ? (CGlobal::iScreenHeight / 2.f) :
-				//					((CGlobal::iScreenHeight / 2) + (int)((CGlobal::iScreenHeight / CGlobal::GFovView) * (plocal->GetAimPunchAngle().x * 0.9)));
+				if (SnipCrosshair)
+				{
+					if (CGlobal::GWeaponType == WEAPON_TYPE_SNIPER && CGlobal::GWeaponID != WEAPON_AUG && CGlobal::GWeaponID != WEAPON_SG553)
+					{
+						CBaseWeapon* Wep = plocal->GetBaseWeapon();
+						if (Wep)
+						{
+							if (Wep->GetZoomLevel() != 1 && Wep->GetZoomLevel() != 2)
+							{
+								float punch_x = !SnipCrosshairRecoil ? (CGlobal::iScreenWidth / 2.f) :
+									((CGlobal::iScreenWidth / 2) - (int)((CGlobal::iScreenWidth / CGlobal::GFovView) * (plocal->GetAimPunchAngle().y * 0.9)));
+								float punch_y = !SnipCrosshairRecoil ? (CGlobal::iScreenHeight / 2.f) :
+									((CGlobal::iScreenHeight / 2) + (int)((CGlobal::iScreenHeight / CGlobal::GFovView) * (plocal->GetAimPunchAngle().x * 0.9)));
 
-				//				switch (SnipCrosshairStyle)
-				//				{
-				//				case 0:
-				//				{
-				//					GP_Render->DrawFilledBox(punch_x - CrosshairSize / 2, punch_y - CrosshairSize / 2, CrosshairSize, CrosshairSize, SnipCrosshairColor);
-				//					if (SnipCrosshairOutline)
-				//						GP_Render->DrawBox((punch_x - CrosshairSize / 2) - 1, (punch_y - CrosshairSize / 2) - 1, CrosshairSize + 1, CrosshairSize + 1, 1, Color::Black());
-				//					break;
-				//				}
-				//				case 1:
-				//				{
-				//					GP_Render->DrawLine(punch_x - CrosshairSize, punch_y, punch_x + CrosshairSize + 1, punch_y, SnipCrosshairColor);
-				//					GP_Render->DrawLine(punch_x, punch_y - CrosshairSize, punch_x, punch_y + CrosshairSize + 1, SnipCrosshairColor);
+								switch (SnipCrosshairStyle)
+								{
+								case 0:
+								{
+									GP_Render->DrawFilledBox(punch_x - CrosshairSize / 2, punch_y - CrosshairSize / 2, CrosshairSize, CrosshairSize, SnipCrosshairColor);
+									if (SnipCrosshairOutline)
+										GP_Render->DrawBox((punch_x - CrosshairSize / 2) - 1, (punch_y - CrosshairSize / 2) - 1, CrosshairSize + 1, CrosshairSize + 1, 1, Color::Black());
+									break;
+								}
+								case 1:
+								{
+									GP_Render->DrawLine(punch_x - CrosshairSize, punch_y, punch_x + CrosshairSize + 1, punch_y, SnipCrosshairColor);
+									GP_Render->DrawLine(punch_x, punch_y - CrosshairSize, punch_x, punch_y + CrosshairSize + 1, SnipCrosshairColor);
 
-				//					if (SnipCrosshairOutline)
-				//					{
-				//						GP_Render->DrawLine(punch_x - CrosshairSize - 1, punch_y - 1, punch_x, punch_y - 1, Color::Black());
-				//						GP_Render->DrawLine(punch_x + 1, punch_y - 1, punch_x + CrosshairSize + 1, punch_y - 1, Color::Black());
+									if (SnipCrosshairOutline)
+									{
+										GP_Render->DrawLine(punch_x - CrosshairSize - 1, punch_y - 1, punch_x, punch_y - 1, Color::Black());
+										GP_Render->DrawLine(punch_x + 1, punch_y - 1, punch_x + CrosshairSize + 1, punch_y - 1, Color::Black());
 
-				//						GP_Render->DrawLine(punch_x - CrosshairSize - 1, punch_y + 1, punch_x, punch_y + 1, Color::Black());
-				//						GP_Render->DrawLine(punch_x + 1, punch_y + 1, punch_x + CrosshairSize + 1, punch_y + 1, Color::Black());
+										GP_Render->DrawLine(punch_x - CrosshairSize - 1, punch_y + 1, punch_x, punch_y + 1, Color::Black());
+										GP_Render->DrawLine(punch_x + 1, punch_y + 1, punch_x + CrosshairSize + 1, punch_y + 1, Color::Black());
 
-				//						GP_Render->DrawLine(punch_x - CrosshairSize - 1, punch_y - 1, punch_x - CrosshairSize - 1, punch_y + 1, Color::Black());
-				//						GP_Render->DrawLine(punch_x + CrosshairSize + 1, punch_y - 1, punch_x + CrosshairSize + 1, punch_y + 2, Color::Black());
+										GP_Render->DrawLine(punch_x - CrosshairSize - 1, punch_y - 1, punch_x - CrosshairSize - 1, punch_y + 1, Color::Black());
+										GP_Render->DrawLine(punch_x + CrosshairSize + 1, punch_y - 1, punch_x + CrosshairSize + 1, punch_y + 2, Color::Black());
 
 
-				//						GP_Render->DrawLine(punch_x - 1, punch_y - CrosshairSize - 1, punch_x - 1, punch_y - 1, Color::Black());
-				//						GP_Render->DrawLine(punch_x + 1, punch_y - CrosshairSize - 1, punch_x + 1, punch_y - 1, Color::Black());
+										GP_Render->DrawLine(punch_x - 1, punch_y - CrosshairSize - 1, punch_x - 1, punch_y - 1, Color::Black());
+										GP_Render->DrawLine(punch_x + 1, punch_y - CrosshairSize - 1, punch_x + 1, punch_y - 1, Color::Black());
 
-				//						GP_Render->DrawLine(punch_x - 1, punch_y + CrosshairSize + 1, punch_x - 1, punch_y + 1, Color::Black());
-				//						GP_Render->DrawLine(punch_x + 1, punch_y + CrosshairSize + 1, punch_x + 1, punch_y + 1, Color::Black());
+										GP_Render->DrawLine(punch_x - 1, punch_y + CrosshairSize + 1, punch_x - 1, punch_y + 1, Color::Black());
+										GP_Render->DrawLine(punch_x + 1, punch_y + CrosshairSize + 1, punch_x + 1, punch_y + 1, Color::Black());
 
-				//						GP_Render->DrawLine(punch_x - 1, punch_y + CrosshairSize + 1, punch_x + 1, punch_y + CrosshairSize + 1, Color::Black());
-				//						GP_Render->DrawLine(punch_x - 1, punch_y - CrosshairSize - 1, punch_x + 1, punch_y - CrosshairSize - 1, Color::Black());
-				//					}
-				//					break;
-				//				}
-				//				case 2:
-				//				{
-				//					auto lineSize = SnipCrosshairSize;
-				//					int screenCenterX = punch_x;
-				//					int screenCenterY = punch_y;
-				//					GP_Render->DrawLine(screenCenterX - lineSize, screenCenterY - lineSize, screenCenterX - (lineSize / 4), screenCenterY - (lineSize / 4), SnipCrosshairColor);
-				//					GP_Render->DrawLine(screenCenterX - lineSize, screenCenterY + lineSize, screenCenterX - (lineSize / 4), screenCenterY + (lineSize / 4), SnipCrosshairColor);
-				//					GP_Render->DrawLine(screenCenterX + lineSize, screenCenterY + lineSize, screenCenterX + (lineSize / 4), screenCenterY + (lineSize / 4), SnipCrosshairColor);
-				//					GP_Render->DrawLine(screenCenterX + lineSize, screenCenterY - lineSize, screenCenterX + (lineSize / 4), screenCenterY - (lineSize / 4), SnipCrosshairColor);
-				//					break;
-				//				}
-				//				default:
-				//					break;
-				//				}
-				//			}
-				//		}
-				//	}
-				//}
+										GP_Render->DrawLine(punch_x - 1, punch_y + CrosshairSize + 1, punch_x + 1, punch_y + CrosshairSize + 1, Color::Black());
+										GP_Render->DrawLine(punch_x - 1, punch_y - CrosshairSize - 1, punch_x + 1, punch_y - CrosshairSize - 1, Color::Black());
+									}
+									break;
+								}
+								case 2:
+								{
+									auto lineSize = SnipCrosshairSize;
+									int screenCenterX = punch_x;
+									int screenCenterY = punch_y;
+									GP_Render->DrawLine(screenCenterX - lineSize, screenCenterY - lineSize, screenCenterX - (lineSize / 4), screenCenterY - (lineSize / 4), SnipCrosshairColor);
+									GP_Render->DrawLine(screenCenterX - lineSize, screenCenterY + lineSize, screenCenterX - (lineSize / 4), screenCenterY + (lineSize / 4), SnipCrosshairColor);
+									GP_Render->DrawLine(screenCenterX + lineSize, screenCenterY + lineSize, screenCenterX + (lineSize / 4), screenCenterY + (lineSize / 4), SnipCrosshairColor);
+									GP_Render->DrawLine(screenCenterX + lineSize, screenCenterY - lineSize, screenCenterX + (lineSize / 4), screenCenterY - (lineSize / 4), SnipCrosshairColor);
+									break;
+								}
+								default:
+									break;
+								}
+							}
+						}
+					}
+				}
 
 				if (SpreadCircel)
 				{
@@ -816,29 +816,6 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 					pSetup->origin = newOrigin;
 				}
 			}
-
-			static auto debug_spread = I::GetConVar()->FindVar(XorStr("weapon_debug_spread_show"));
-			if (SnipCrosshair)
-			{
-				if (CGlobal::GWeaponID == WEAPON_SSG08 || CGlobal::GWeaponID == WEAPON_AWP || 
-					CGlobal::GWeaponID == WEAPON_SCAR20 || CGlobal::GWeaponID == WEAPON_G3SG1)
-				{
-					CBaseWeapon* Wep = plocal->GetBaseWeapon();
-					if (Wep)
-					{
-						if (Wep->GetZoomLevel() != 1 && Wep->GetZoomLevel() != 2)
-						{
-							debug_spread->SetValue(3);
-						}
-						else
-							debug_spread->SetValue(0);
-					}
-				}
-				else
-					debug_spread->SetValue(0);
-			}
-			else 
-				debug_spread->SetValue(0);
 
 			if (ThirdPerson)
 			{
