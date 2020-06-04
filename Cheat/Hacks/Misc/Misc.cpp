@@ -14,11 +14,9 @@ void CMisc::Draw()
 {
 	if (Enable)
 	{
-		CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-
-		if (plocal)
+		if (CGlobal::LocalPlayer)
 		{
-			CBaseWeapon* pWeapon = plocal->GetBaseWeapon();
+			CBaseWeapon* pWeapon = CGlobal::LocalPlayer->GetBaseWeapon();
 
 			if (pWeapon)
 			{
@@ -27,9 +25,9 @@ void CMisc::Draw()
 					if (CGlobal::GWeaponType != WEAPON_TYPE_SNIPER)
 					{
 						float punch_x = !CrosshairRecoil ? (CGlobal::iScreenWidth / 2.f) : 
-							((CGlobal::iScreenWidth / 2) - (int)((CGlobal::iScreenWidth / CGlobal::GFovView) * (plocal->GetAimPunchAngle().y * 0.9)));
+							((CGlobal::iScreenWidth / 2) - (int)((CGlobal::iScreenWidth / CGlobal::GFovView) * (CGlobal::LocalPlayer->GetAimPunchAngle().y * 0.9)));
 						float punch_y = !CrosshairRecoil ? (CGlobal::iScreenHeight / 2.f) :
-							((CGlobal::iScreenHeight / 2) + (int)((CGlobal::iScreenHeight / CGlobal::GFovView) * (plocal->GetAimPunchAngle().x * 0.9)));
+							((CGlobal::iScreenHeight / 2) + (int)((CGlobal::iScreenHeight / CGlobal::GFovView) * (CGlobal::LocalPlayer->GetAimPunchAngle().x * 0.9)));
 
 						switch (CrosshairStyle)
 						{
@@ -90,15 +88,15 @@ void CMisc::Draw()
 				{
 					if (CGlobal::GWeaponType == WEAPON_TYPE_SNIPER && CGlobal::GWeaponID != WEAPON_AUG && CGlobal::GWeaponID != WEAPON_SG553)
 					{
-						CBaseWeapon* Wep = plocal->GetBaseWeapon();
+						CBaseWeapon* Wep = CGlobal::LocalPlayer->GetBaseWeapon();
 						if (Wep)
 						{
 							if (Wep->GetZoomLevel() != 1 && Wep->GetZoomLevel() != 2)
 							{
 								float punch_x = !SnipCrosshairRecoil ? (CGlobal::iScreenWidth / 2.f) :
-									((CGlobal::iScreenWidth / 2) - (int)((CGlobal::iScreenWidth / CGlobal::GFovView) * (plocal->GetAimPunchAngle().y * 0.9)));
+									((CGlobal::iScreenWidth / 2) - (int)((CGlobal::iScreenWidth / CGlobal::GFovView) * (CGlobal::LocalPlayer->GetAimPunchAngle().y * 0.9)));
 								float punch_y = !SnipCrosshairRecoil ? (CGlobal::iScreenHeight / 2.f) :
-									((CGlobal::iScreenHeight / 2) + (int)((CGlobal::iScreenHeight / CGlobal::GFovView) * (plocal->GetAimPunchAngle().x * 0.9)));
+									((CGlobal::iScreenHeight / 2) + (int)((CGlobal::iScreenHeight / CGlobal::GFovView) * (CGlobal::LocalPlayer->GetAimPunchAngle().x * 0.9)));
 
 								switch (SnipCrosshairStyle)
 								{
@@ -160,15 +158,15 @@ void CMisc::Draw()
 				{
 					WEAPON_TYPE WeapType = CGlobal::GWeaponType;
 
-					if (!plocal->IsDead() &&
+					if (!CGlobal::LocalPlayer->IsDead() &&
 						WeapType != WEAPON_TYPE_GRENADE &&
 						WeapType != WEAPON_TYPE_KNIFE &&
 						WeapType != WEAPON_TYPE_C4 &&
 						WeapType != WEAPON_TYPE_UNKNOWN)
 					{
 						GP_Render->DrawRing(
-							(CGlobal::iScreenWidth / 2) - (int)((CGlobal::iScreenWidth / CGlobal::GFovView) * (plocal->GetAimPunchAngle().y * 0.9)),
-							(CGlobal::iScreenHeight / 2) + (int)((CGlobal::iScreenHeight / CGlobal::GFovView) * (plocal->GetAimPunchAngle().x * 0.9)),
+							(CGlobal::iScreenWidth / 2) - (int)((CGlobal::iScreenWidth / CGlobal::GFovView) * (CGlobal::LocalPlayer->GetAimPunchAngle().y * 0.9)),
+							(CGlobal::iScreenHeight / 2) + (int)((CGlobal::iScreenHeight / CGlobal::GFovView) * (CGlobal::LocalPlayer->GetAimPunchAngle().x * 0.9)),
 							pWeapon->GetInaccuracy() * 550.f, 42, SpreadColor);
 					}
 				}
@@ -256,27 +254,26 @@ void CMisc::SetNewClan(string New, string Name)
 
 void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCmd)
 {
-	CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
 	ConVar* cl_righthand = I::GetConVar()->FindVar(XorStr("cl_righthand"));
 
-	if (plocal && CGlobal::IsGameReady)
+	if (CGlobal::LocalPlayer && CGlobal::IsGameReady)
 	{
-		if (plocal->GetBaseWeapon())
+		if (CGlobal::LocalPlayer->GetBaseWeapon())
 		{
-			CGlobal::GWeaponType = CGlobal::GetWeaponType(plocal->GetBaseWeapon());
-			if (plocal->GetBaseWeapon()->GeteAttributableItem())
-				CGlobal::GWeaponID = (WEAPON_ID)*plocal->GetBaseWeapon()->GeteAttributableItem()->GetItemDefinitionIndex();
+			CGlobal::GWeaponType = CGlobal::GetWeaponType(CGlobal::LocalPlayer->GetBaseWeapon());
+			if (CGlobal::LocalPlayer->GetBaseWeapon()->GeteAttributableItem())
+				CGlobal::GWeaponID = (WEAPON_ID)*CGlobal::LocalPlayer->GetBaseWeapon()->GeteAttributableItem()->GetItemDefinitionIndex();
 		}
 	}
 	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
 	{
-		if (plocal)
+		if (CGlobal::LocalPlayer)
 		{
 			if (BHop)
 			{
-				if (!plocal->IsDead())
+				if (!CGlobal::LocalPlayer->IsDead())
 				{
-					if (pCmd->buttons & IN_JUMP && !(plocal->GetFlags() & FL_ONGROUND))
+					if (pCmd->buttons & IN_JUMP && !(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
 					{
 						static bool bLastJumped = false;
 						static bool bShouldFake = false;
@@ -288,7 +285,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 						}
 						else if (pCmd->buttons & IN_JUMP)
 						{
-							if (plocal->GetFlags() & FL_ONGROUND)
+							if (CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND)
 							{
 								bLastJumped = true;
 								bShouldFake = true;
@@ -306,7 +303,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 						}
 					}
 
-					if (AutoStrafe && !(plocal->GetFlags() & FL_ONGROUND))
+					if (AutoStrafe && !(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
 					{
 						if (pCmd->mousedx < 0)
 							pCmd->sidemove = -450.0f;
@@ -318,21 +315,21 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 
 			/*if (EdgeJump && EdgeJumpBind.Check())
 			{
-				if (plocal->IsDead())
+				if (CGlobal::LocalPlayer->IsDead())
 					return;
 
-				const auto mt = plocal->GetMoveType();
+				const auto mt = CGlobal::LocalPlayer->GetMoveType();
 
 				if (mt == MOVETYPE_LADDER || mt == MOVETYPE_NOCLIP)
 					return;
 
-				const auto start = plocal->GetOrigin();
+				const auto start = CGlobal::LocalPlayer->GetOrigin();
 				auto end = start;
 				end.z -= 32;
 
 				CTraceFilter filter;
 
-				filter.pSkip = plocal;
+				filter.pSkip = CGlobal::LocalPlayer;
 
 				trace_t trace;
 				Ray_t ray;
@@ -346,7 +343,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 
 			if (LeftHandKnife)
 			{
-				if (plocal && CGlobal::GWeaponType == WEAPON_TYPE_KNIFE)
+				if (CGlobal::LocalPlayer && CGlobal::GWeaponType == WEAPON_TYPE_KNIFE)
 				{
 					cl_righthand->SetValue(0);
 				}
@@ -362,7 +359,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 
 			if (InfiniteDuck)
 			{
-				if (!plocal->IsDead())
+				if (!CGlobal::LocalPlayer->IsDead())
 				{
 					pCmd->buttons |= IN_BULLRUSH;
 				}
@@ -371,7 +368,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 			static bool NoFlashReset = false;
 			if (AntiFlash)
 			{
-				float* maxAlpha = plocal->GetFlashMaxAlpha();
+				float* maxAlpha = CGlobal::LocalPlayer->GetFlashMaxAlpha();
 				if (maxAlpha)
 					*maxAlpha = (float)AntiFlashAlpha;
 
@@ -379,7 +376,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 			}
 			if (!AntiFlash && NoFlashReset)
 			{
-				float* maxAlpha = plocal->GetFlashMaxAlpha();
+				float* maxAlpha = CGlobal::LocalPlayer->GetFlashMaxAlpha();
 				if (maxAlpha)
 					*maxAlpha = 255.f;
 				NoFlashReset = false;
@@ -429,7 +426,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				case 1: NewClan = XorStr("[VALV\xE1\xB4\xB1]"); break;
 				case 2:
 				{
-					switch (int((float)plocal->GetTickBase() * I::GlobalVars()->interval_per_tick) % 10)
+					switch (int((float)CGlobal::LocalPlayer->GetTickBase() * I::GlobalVars()->interval_per_tick) % 10)
 					{
 					case 0: NewClan = XorStr("-----"); break;
 					case 1: NewClan = XorStr("----X"); break;
@@ -446,7 +443,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				}
 				case 3:
 				{
-					switch (int((float)plocal->GetTickBase() * I::GlobalVars()->interval_per_tick) % 15)
+					switch (int((float)CGlobal::LocalPlayer->GetTickBase() * I::GlobalVars()->interval_per_tick) % 15)
 					{
 					case 0: NewClan = XorStr("-------"); break;
 					case 1: NewClan = XorStr("------T"); break;
@@ -522,7 +519,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 
 			if (FakeLag && FakeLagBind.Check())
 			{
-				if (!plocal->IsDead() && bSendPacket && abs(pCmd->sidemove) > 30 &&
+				if (!CGlobal::LocalPlayer->IsDead() && bSendPacket && abs(pCmd->sidemove) > 30 &&
 					abs(pCmd->forwardmove) > 30)
 				{
 					if (ticks >= 20)
@@ -540,7 +537,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 			{
 				if (CGlobal::GWeaponType == WEAPON_TYPE_KNIFE)
 				{
-					CBaseWeapon* pLocalWeapon = plocal->GetBaseWeapon();
+					CBaseWeapon* pLocalWeapon = CGlobal::LocalPlayer->GetBaseWeapon();
 					if (pLocalWeapon)
 					{
 						for (int EntIndex = 0; EntIndex < MAX_ENTITY_PLAYERS; EntIndex++)
@@ -566,12 +563,12 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 
 							if (KnifeBotFilter == 1)
 							{
-								if ((int)Entity->Team != plocal->GetTeam())
+								if ((int)Entity->Team != CGlobal::LocalPlayer->GetTeam())
 									continue;
 							}
 							else if (KnifeBotFilter == 2)
 							{
-								if ((int)Entity->Team == plocal->GetTeam())
+								if ((int)Entity->Team == CGlobal::LocalPlayer->GetTeam())
 									continue;
 							}
 
@@ -591,7 +588,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 									pCmd->buttons |= IN_ATTACK;
 								else
 								{
-									if ((plocal->GetTickBase() * I::GlobalVars()->interval_per_tick) - pLocalWeapon->GetNextPrimaryAttack() > 0)
+									if ((CGlobal::LocalPlayer->GetTickBase() * I::GlobalVars()->interval_per_tick) - pLocalWeapon->GetNextPrimaryAttack() > 0)
 									{
 										if (Entity->Armor > 0)
 										{
@@ -623,7 +620,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 								}
 								else
 								{
-									float TimeSinceFire = (plocal->GetTickBase() * I::GlobalVars()->interval_per_tick) - pLocalWeapon->GetNextPrimaryAttack();
+									float TimeSinceFire = (CGlobal::LocalPlayer->GetTickBase() * I::GlobalVars()->interval_per_tick) - pLocalWeapon->GetNextPrimaryAttack();
 
 									if (cur_attack > 0 && TimeSinceFire > 0)
 									{
@@ -658,16 +655,16 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 			//	if (LegitAA)
 			//	{
 			//		if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
-			//			plocal->GetMoveType() == MOVETYPE_LADDER || plocal->GetMoveType() == MOVETYPE_NOCLIP || plocal->IsDead())
+			//			CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER || CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP || CGlobal::LocalPlayer->IsDead())
 			//			return;
 
 			//		if (I::GameRules() && I::GameRules()->IsFreezePeriod())
 			//			return;
 
-			//		if (std::fabsf(plocal->GetSpawnTime() - I::GlobalVars()->curtime) < 1.0f)
+			//		if (std::fabsf(CGlobal::LocalPlayer->GetSpawnTime() - I::GlobalVars()->curtime) < 1.0f)
 			//			return;
 
-			//		auto weapon = (CBaseWeapon*)plocal->m_hMyWeapons();
+			//		auto weapon = (CBaseWeapon*)CGlobal::LocalPlayer->m_hMyWeapons();
 
 			//		if (!weapon)
 			//			return;
@@ -701,7 +698,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 			//			Next_Lby = sideauto;
 
 			//		if (LegitAA_type == 1) {
-			//			float minimal_move = plocal->GetFlags() & IN_DUCK ? 3.0f : 1.0f;
+			//			float minimal_move = CGlobal::LocalPlayer->GetFlags() & IN_DUCK ? 3.0f : 1.0f;
 
 			//			if (!bSendPacket) {
 			//				pCmd->viewangles.y += 120.f * Side;
@@ -766,28 +763,26 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 		if (!pSetup)
 			return;
 
-		CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-
-		if (plocal)
+		if (CGlobal::LocalPlayer)
 		{
 			CGlobal::GFovViewExt = pSetup->fov;
 			if (FovChanger)
 			{
-				if (plocal->IsDead())
+				if (CGlobal::LocalPlayer->IsDead())
 				{
-					if (plocal->GetObserverMode() == ObserverMode_t::OBS_MODE_IN_EYE && plocal->GetObserverTarget())
-						plocal = (CBaseEntity*)I::EntityList()->GetClientEntityFromHandle(plocal->GetObserverTarget());
+					if (CGlobal::LocalPlayer->GetObserverMode() == ObserverMode_t::OBS_MODE_IN_EYE && CGlobal::LocalPlayer->GetObserverTarget())
+						CGlobal::LocalPlayer = (CBaseEntity*)I::EntityList()->GetClientEntityFromHandle(CGlobal::LocalPlayer->GetObserverTarget());
 
-					if (!plocal)
+					if (!CGlobal::LocalPlayer)
 						return;
 				}
 				bool ChangeFov = true;
-				CBaseWeapon* Wep = plocal->GetBaseWeapon();
+				CBaseWeapon* Wep = CGlobal::LocalPlayer->GetBaseWeapon();
 				if (Wep)
 				{
 					if (((WEAPON_ID)*Wep->GeteAttributableItem()->GetItemDefinitionIndex() == WEAPON_AWP ||
 						(WEAPON_ID)*Wep->GeteAttributableItem()->GetItemDefinitionIndex() == WEAPON_SSG08) &&
-						(CGlobal::GFovViewExt == 90 || CGlobal::GFovViewExt == FovView) && !plocal->IsDead())
+						(CGlobal::GFovViewExt == 90 || CGlobal::GFovViewExt == FovView) && !CGlobal::LocalPlayer->IsDead())
 					{
 						ChangeFov = true;
 					}
@@ -810,8 +805,8 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 
 			if (NoVisualRecoil)
 			{
-				pSetup->angles.x -= ((plocal->GetViewPunchAngle().x * 2.f) * 0.45f);
-				pSetup->angles.y -= ((plocal->GetViewPunchAngle().y * 2.f) * 0.45f);
+				pSetup->angles.x -= ((CGlobal::LocalPlayer->GetViewPunchAngle().x * 2.f) * 0.45f);
+				pSetup->angles.y -= ((CGlobal::LocalPlayer->GetViewPunchAngle().y * 2.f) * 0.45f);
 			}
 
 			if (FreeCam)
@@ -844,19 +839,73 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 					pSetup->origin = newOrigin;
 				}
 			}
+
+			//if (ThirdPerson)
+			//{
+			//	static size_t lastTime = 0;
+			//	static bool enable = false;
+
+			//	if (ThirdPersonBind.Check())
+			//	{
+			//		if (GetTickCount64() > lastTime)
+			//		{
+			//			enable = !enable;
+			//			lastTime = GetTickCount64() + 650;
+			//		}
+			//	}
+
+			//	if (enable && !plocal->IsDead())
+			//		I::Input()->m_fCameraInThirdPerson = true;
+			//	else
+			//		I::Input()->m_fCameraInThirdPerson = false;
+
+			//	auto GetCorrectDistance = [](float ideal_distance) -> float
+			//	{
+			//		/* vector for the inverse angles */
+			//		QAngle inverseAngles;
+			//		I::Engine()->GetViewAngles(inverseAngles);
+
+			//		/* inverse angles by 180 */
+			//		inverseAngles.x *= -1.f, inverseAngles.y += 180.f;
+
+			//		/* vector for direction */
+			//		Vector direction;
+			//		AngleVectors(inverseAngles, direction);
+
+			//		/* ray, trace & filters */
+			//		Ray_t ray;
+			//		trace_t trace;
+			//		CTraceFilter filter;
+
+			//		/* dont trace local player */
+			//		filter.pSkip = CGlobal::LocalPlayer;
+
+			//		/* create ray */
+			//		ray.Init(CGlobal::LocalPlayer->GetEyePosition(), CGlobal::LocalPlayer->GetEyePosition() + (direction * ideal_distance));
+
+			//		/* trace ray */
+			//		I::EngineTrace()->TraceRay(ray, MASK_SHOT, &filter, &trace);
+
+			//		/* return the ideal distance */
+			//		return (ideal_distance * trace.fraction) - 10.f;
+			//	};
+
+			//	QAngle angles;
+			//	I::Engine()->GetViewAngles(angles);
+			//	angles.z = GetCorrectDistance(ThirdPersonDistance); // 150 is better distance
+			//	I::Input()->m_vecCameraOffset = Vector(angles.x, angles.y, angles.z);
+			//}
 		}
 	}
 
-	CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-
-	if (plocal && !CGlobal::FullUpdateCheck)
+	if (CGlobal::LocalPlayer && !CGlobal::FullUpdateCheck)
 	{
 		if (GP_LegitAim)
 		{
 			if (GP_LegitAim->CanRCSStandelone && GP_LegitAim->CanRCS)
 			{
-				pSetup->angles.x -= ((plocal->GetViewPunchAngle().x * 2.f) * 0.2f);
-				pSetup->angles.y -= ((plocal->GetViewPunchAngle().y * 2.f) * 0.2f);
+				pSetup->angles.x -= ((CGlobal::LocalPlayer->GetViewPunchAngle().x * 2.f) * 0.2f);
+				pSetup->angles.y -= ((CGlobal::LocalPlayer->GetViewPunchAngle().y * 2.f) * 0.2f);
 			}
 		}
 	}
@@ -864,99 +913,30 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 	CGlobal::GFovView = pSetup->fov;
 }
 
-//void CMisc::Thirdperson()
-//{
-//	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
-//	{
-//		CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-//
-//		if (plocal)
-//		{
-//			if (ThirdPerson)
-//			{
-//				static size_t lastTime = 0;
-//				static bool enable = false;
-//
-//				if (ThirdPersonBind.Check())
-//				{
-//					if (GetTickCount64() > lastTime)
-//					{
-//						enable = !enable;
-//						lastTime = GetTickCount64() + 650;
-//					}
-//				}
-//
-//				if (enable && !plocal->IsDead())
-//					I::Input()->m_fCameraInThirdPerson = true;
-//				else
-//					I::Input()->m_fCameraInThirdPerson = false;
-//
-//				auto GetCorrectDistance = [](float ideal_distance) -> float
-//				{
-//					/* vector for the inverse angles */
-//					QAngle inverseAngles;
-//					I::Engine()->GetViewAngles(inverseAngles);
-//
-//					/* inverse angles by 180 */
-//					inverseAngles.x *= -1.f, inverseAngles.y += 180.f;
-//
-//					/* vector for direction */
-//					Vector direction;
-//					AngleVectors(inverseAngles, direction);
-//
-//					/* ray, trace & filters */
-//					Ray_t ray;
-//					trace_t trace;
-//					CTraceFilter filter;
-//
-//					/* dont trace local player */
-//					filter.pSkip = CGlobal::LocalPlayer;
-//
-//					/* create ray */
-//					ray.Init(CGlobal::LocalPlayer->GetEyePosition(), CGlobal::LocalPlayer->GetEyePosition() + (direction * ideal_distance));
-//
-//					/* trace ray */
-//					I::EngineTrace()->TraceRay(ray, MASK_SHOT, &filter, &trace);
-//
-//					/* return the ideal distance */
-//					return (ideal_distance * trace.fraction) - 10.f;
-//				};
-//
-//				QAngle angles;
-//				I::Engine()->GetViewAngles(angles);
-//				angles.z = GetCorrectDistance(ThirdPersonDistance); // 150 is better distance
-//				I::Input()->m_vecCameraOffset = Vector(angles.x, angles.y, angles.z);
-//			}
-//		}
-//	}
-//}
-
 void CMisc::GetViewModelFOV(float &Fov)
 {
 	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
 	{
-		CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-
-		if (plocal)
+		if (CGlobal::LocalPlayer)
 		{
 			if (FovModelChanger)
 			{
-				if (plocal->IsDead())
+				if (CGlobal::LocalPlayer->IsDead())
 				{
-					if (plocal->GetObserverMode() == ObserverMode_t::OBS_MODE_IN_EYE && plocal->GetObserverTarget())
-						plocal = (CBaseEntity*)I::EntityList()->GetClientEntityFromHandle(plocal->GetObserverTarget());
+					if (CGlobal::LocalPlayer->GetObserverMode() == ObserverMode_t::OBS_MODE_IN_EYE && CGlobal::LocalPlayer->GetObserverTarget())
+						CGlobal::LocalPlayer = (CBaseEntity*)I::EntityList()->GetClientEntityFromHandle(CGlobal::LocalPlayer->GetObserverTarget());
 
-					if (!plocal)
+					if (!CGlobal::LocalPlayer)
 						return;
 				}
 
 				bool ChangeFov = true;
-				CBaseWeapon* Wep = plocal->GetBaseWeapon();
+				CBaseWeapon* Wep = CGlobal::LocalPlayer->GetBaseWeapon();
 				if (Wep)
 				{
 					if (((WEAPON_ID)*Wep->GeteAttributableItem()->GetItemDefinitionIndex() == WEAPON_AWP ||
 						(WEAPON_ID)*Wep->GeteAttributableItem()->GetItemDefinitionIndex() == WEAPON_SSG08) &&
-						(CGlobal::GFovViewExt == 90 || CGlobal::GFovViewExt == FovView) && !plocal->IsDead())
+						(CGlobal::GFovViewExt == 90 || CGlobal::GFovViewExt == FovView) && !CGlobal::LocalPlayer->IsDead())
 					{
 						ChangeFov = true;
 					}
@@ -1372,10 +1352,9 @@ void CMisc::FrameStageNotify()
 {
 	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
 	{
-		CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-		if (plocal)
+		if (CGlobal::LocalPlayer)
 		{
-
+			//...
 		}
 	}
 }
@@ -1500,8 +1479,7 @@ void CHitListener::FireGameEvent(IGameEvent *event)
 	{
 		if (GP_Misc->Enable)
 		{
-			CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-			if (plocal)
+			if (CGlobal::LocalPlayer)
 			{
 				if (!strcmp(event->GetName(), XorStr("bullet_impact")))
 				{
@@ -1512,10 +1490,10 @@ void CHitListener::FireGameEvent(IGameEvent *event)
 						Vector ImpactPos(event->GetFloat(XorStr("x")), event->GetFloat(XorStr("y")), event->GetFloat(XorStr("z")));
 
 						Ray_t ray;
-						ray.Init(plocal->GetEyePosition(), ImpactPos);
+						ray.Init(CGlobal::LocalPlayer->GetEyePosition(), ImpactPos);
 
 						CTraceFilter filter;
-						filter.pSkip = plocal;
+						filter.pSkip = CGlobal::LocalPlayer;
 
 						trace_t tr;
 						I::EngineTrace()->TraceRay(ray, MASK_SHOT, &filter, &tr);
@@ -1526,7 +1504,7 @@ void CHitListener::FireGameEvent(IGameEvent *event)
 							{
 								CMisc::HitImpact_t ImpEntry;
 								ImpEntry.Pos = ImpactPos;
-								ImpEntry.MyHeadPos = plocal->GetEyePosition();
+								ImpEntry.MyHeadPos = CGlobal::LocalPlayer->GetEyePosition();
 								ImpEntry.EndTime = I::GlobalVars()->curtime + HIT_TRACE_SHOW_TIME;
 								ImpEntry.Alpha = 255;
 								GP_Misc->HitImpacts.push_back(ImpEntry);

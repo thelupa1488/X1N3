@@ -164,13 +164,12 @@ void CSkins::RecvProxy_Viewmodel(CRecvProxyData *pData, void *pStruct, void *pOu
 		int iTalon = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_widowmaker.mdl");
 		int iSkeleton = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_skeleton.mdl");
 
-		CBaseEntity* pLocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-		if (pLocal)
+		if (CGlobal::LocalPlayer)
 		{
-			bool IsTT = pLocal->GetTeam() == 2;
+			bool IsTT = CGlobal::LocalPlayer->GetTeam() == 2;
 			int sel_mod = IsTT ? SelectedKnifeModelTT : SelectedKnifeModelCT;
 
-			if (!pLocal->IsDead() && sel_mod && (
+			if (!CGlobal::LocalPlayer->IsDead() && sel_mod && (
 				pData->m_Value.m_Int == default_t ||
 				pData->m_Value.m_Int == default_ct ||
 				pData->m_Value.m_Int == iBayonet ||
@@ -574,10 +573,9 @@ void CSkinListener::FireGameEvent(IGameEvent *event)
 
 			if (GP_Skins->SelectedWeapon < (int)GP_Skins->WeaponNames.size() && CGlobal::GWeaponType != WEAPON_TYPE_UNKNOWN)
 			{
-				CBaseEntity* local = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-				if (local)
+				if (CGlobal::LocalPlayer)
 				{
-					bool IsTT = local->GetTeam() == 2;
+					bool IsTT = CGlobal::LocalPlayer->GetTeam() == 2;
 					if (CGlobal::GWeaponType == WEAPON_TYPE_KNIFE)
 					{
 						int ListIdx = 0;
@@ -587,7 +585,7 @@ void CSkinListener::FireGameEvent(IGameEvent *event)
 							if (WItem->Skin.auto_stat_track)
 							{
 								WItem->Skin.stat_track++;
-								ForceItemUpdate(local->GetBaseWeapon());
+								ForceItemUpdate(CGlobal::LocalPlayer->GetBaseWeapon());
 							}
 						}
 					}
@@ -597,7 +595,7 @@ void CSkinListener::FireGameEvent(IGameEvent *event)
 						if (WItem->Skin.auto_stat_track)
 						{
 							WItem->Skin.stat_track++;
-							ForceItemUpdate(local->GetBaseWeapon());
+							ForceItemUpdate(CGlobal::LocalPlayer->GetBaseWeapon());
 						}
 					}
 				}

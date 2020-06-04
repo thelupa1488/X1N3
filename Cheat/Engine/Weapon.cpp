@@ -67,25 +67,23 @@ namespace Engine
 
 	bool CBaseWeapon::CanFire()
 	{
-		auto local_player = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-
-		if (!local_player)
+		if (!CGlobal::LocalPlayer)
 			return false;
 
 		static auto stored_tick = 0;
 		static decltype(this) stored_weapon = nullptr;
-		if (stored_weapon != this || stored_tick >= local_player->GetTickBase())
+		if (stored_weapon != this || stored_tick >= CGlobal::LocalPlayer->GetTickBase())
 		{
 			stored_weapon = this;
-			stored_tick = local_player->GetTickBase();
+			stored_tick = CGlobal::LocalPlayer->GetTickBase();
 
 			return false;
 		}
 
-		if (IsReloading() || GetWeaponAmmo() <= 0 || !local_player)
+		if (IsReloading() || GetWeaponAmmo() <= 0 || !CGlobal::LocalPlayer)
 			return false;
 
-		auto flServerTime = local_player->GetTickBase() * I::GlobalVars()->interval_per_tick;
+		auto flServerTime = CGlobal::LocalPlayer->GetTickBase() * I::GlobalVars()->interval_per_tick;
 
 		return GetNextPrimaryAttack() <= flServerTime;
 	}

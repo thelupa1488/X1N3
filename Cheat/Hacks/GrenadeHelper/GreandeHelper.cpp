@@ -97,10 +97,9 @@ string CGHelper::GetGName(WEAPON_ID id)
 void CGHelper::AutoAddHelp(string _game_name)
 {
 	GHInfo entry;
-	CBaseEntity* pLocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-	if (pLocal)
+	if (CGlobal::LocalPlayer)
 	{
-		Vector MyEyePos = pLocal->GetEyePosition();
+		Vector MyEyePos = CGlobal::LocalPlayer->GetEyePosition();
 		float BestFovCrosshair = FLT_MAX;
 		float BestDistStart = FLT_MAX;
 
@@ -114,7 +113,7 @@ void CGHelper::AutoAddHelp(string _game_name)
 			if (!pEntity)
 				continue;
 
-			if (pEntity == pLocal)
+			if (pEntity == CGlobal::LocalPlayer)
 				continue;
 
 			const model_t* pModel = pEntity->GetModel();
@@ -148,7 +147,7 @@ void CGHelper::AutoAddHelp(string _game_name)
 			}
 		}
 
-		BestStart.z = pLocal->GetRenderOrigin().z;
+		BestStart.z = CGlobal::LocalPlayer->GetRenderOrigin().z;
 
 		entry.start_pos = BestStart;
 

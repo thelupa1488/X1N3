@@ -17,9 +17,7 @@ void grenade_prediction::Tick(int buttons)
 
 void grenade_prediction::View()
 {
-	CBaseEntity* local = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-
-	if (local && !local->IsDead() )
+	if (CGlobal::LocalPlayer && !CGlobal::LocalPlayer->IsDead() )
 	{
 
 		if (CGlobal::GWeaponType == WEAPON_TYPE_GRENADE && (ACT)act != ACT_NONE)

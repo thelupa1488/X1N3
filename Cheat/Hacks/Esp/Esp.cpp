@@ -129,7 +129,6 @@ void CSoundEsp::Draw(CEntityPlayer* Local)
 
 void CEsp::SoundFrameStage()
 {
-	CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
 	CUtlVector<SndInfo_t> sndList;
 	sndList.RemoveAll();
 
@@ -140,7 +139,7 @@ void CEsp::SoundFrameStage()
 		if (!sndList[i].m_pOrigin || !sndList[i].m_nSoundSource || !sndList[i].m_bUpdatePositions || sndList[i].m_nChannel != 4)
 			continue;
 
-		if (plocal->GetOrigin().DistTo(*sndList[i].m_pOrigin) >= SoundDistance)
+		if (CGlobal::LocalPlayer->GetOrigin().DistTo(*sndList[i].m_pOrigin) >= SoundDistance)
 			continue;
 
 		GP_Esp->PlaySound(*sndList[i].m_pOrigin, sndList[i].m_nSoundSource);

@@ -55,7 +55,6 @@ class IMisc
 protected:
 
 	virtual void GetViewModelFOV(float &Fov) = 0;
-	//virtual void Thirdperson() = 0;
 //	virtual void PlaySound(const char* pszSoundName) = 0;
 	virtual void AutoAcceptEmit() = 0;
 	virtual void DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t &state, const ModelRenderInfo_t &pInfo, matrix3x4_t *pCustomBoneToWorld) = 0;
@@ -90,7 +89,6 @@ public:
 	virtual void Draw();
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd);
 	virtual void OverrideView(CViewSetup* pSetup);
-	//virtual void Thirdperson();
 	virtual void GetViewModelFOV(float &Fov);
 //	virtual void PlaySound(const char* pszSoundName);
 	virtual void AutoAcceptEmit();

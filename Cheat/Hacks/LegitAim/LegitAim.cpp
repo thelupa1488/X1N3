@@ -207,25 +207,24 @@ void CLegitAim::Draw()
 	{
 		for (int i = 0; i < I::EntityList()->GetHighestEntityIndex(); i++)
 		{
-			CBaseEntity* local = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
 			CBaseEntity *entity = (CBaseEntity*)I::EntityList()->GetClientEntity(i);
 			PlayerInfo pinfo;
-			if (entity == nullptr || !local)
+			if (entity == nullptr || !CGlobal::LocalPlayer)
 				continue;
-			if (entity == local)
+			if (entity == CGlobal::LocalPlayer)
 				continue;
 			if (entity->IsDormant())
 				continue;
 
 			if (I::Engine()->GetPlayerInfo(i, &pinfo) && !entity->IsDead())
 			{
-				if (!local->IsDead())
+				if (!CGlobal::LocalPlayer->IsDead())
 				{
 					for (int t = 0; t < Weapons[GetWeap(SelectedWeapon)].BacktrackTicks; ++t)
 					{
 						Vector screenbacktrack[64][12];
 
-						if (headPositions[i][t].simtime && headPositions[i][t].simtime + 1 > local->GetSimTime())
+						if (headPositions[i][t].simtime && headPositions[i][t].simtime + 1 > CGlobal::LocalPlayer->GetSimTime())
 						{
 							for (BYTE IndexArray = 0; IndexArray < 18; IndexArray++)
 							{

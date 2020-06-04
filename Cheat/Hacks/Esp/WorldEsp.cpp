@@ -7,9 +7,8 @@ void CEsp::WorldEsp()
 	{
 		if (WorldGrenade || WorldWeapons || WorldBomb || WorldBombInfo)
 		{
-			CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
 			int max_e = I::EntityList()->GetHighestEntityIndex();
-			if (plocal)
+			if (CGlobal::LocalPlayer)
 			{
 				for (int EntIndex = 0; EntIndex < max_e; EntIndex++)
 				{
@@ -215,7 +214,7 @@ void CEsp::WorldEsp()
 					if (WorldBombInfo)
 					{
 						if (pEntity != (CBaseEntity*)0xB)
-							DrawBombInfo(pEntity, plocal);
+							DrawBombInfo(pEntity, CGlobal::LocalPlayer);
 					}
 				}
 			}

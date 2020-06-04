@@ -4,9 +4,7 @@
 
 void CEntityPlayers::Update()
 {
-	CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-
-	if (plocal)
+	if (CGlobal::LocalPlayer)
 	{
 		for (int EntIndex = 0; EntIndex < MAX_ENTITY_PLAYERS; EntIndex++)
 		{
@@ -51,12 +49,12 @@ void CEntityPlayers::Update()
 				EntityPlayer[EntIndex].HideEndTime = 0.f;
 			}
 
-			EntityPlayer[EntIndex].IsVisble = pEntity->IsVisible(plocal);
+			EntityPlayer[EntIndex].IsVisble = pEntity->IsVisible(CGlobal::LocalPlayer);
 			EntityPlayer[EntIndex].Name = pEntity->GetPlayerName();
 			EntityPlayer[EntIndex].Idx = EntIndex;
-			EntityPlayer[EntIndex].IsLocal = pEntity == plocal;
+			EntityPlayer[EntIndex].IsLocal = pEntity == CGlobal::LocalPlayer;
 			EntityPlayer[EntIndex].Team = (PLAYER_TEAM)pEntity->GetTeam();
-			EntityPlayer[EntIndex].Distance = EntityPlayer[EntIndex].RenderOrigin.DistTo(plocal->GetRenderOrigin()) / 33;
+			EntityPlayer[EntIndex].Distance = EntityPlayer[EntIndex].RenderOrigin.DistTo(CGlobal::LocalPlayer->GetRenderOrigin()) / 33;
 			EntityPlayer[EntIndex].Money = pEntity->GetMoney();
 			EntityPlayer[EntIndex].Health = pEntity->GetHealth();
 			EntityPlayer[EntIndex].Armor = pEntity->GetArmor();
