@@ -197,7 +197,7 @@ namespace Engine
 
 	AnimationLayer* CBaseEntity::GetAnimOverlays()
 	{
-		return *reinterpret_cast<AnimationLayer**>(uintptr_t(this) + 0x2990);
+		return *reinterpret_cast<AnimationLayer**>(uintptr_t(this) + 0x2980);
 	}
 
 	AnimationLayer* CBaseEntity::GetAnimOverlay(int i)
