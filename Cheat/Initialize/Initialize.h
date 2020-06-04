@@ -233,8 +233,8 @@ public:
 				offsets["m_iWorldModelIndex"] = mGetOffset("DT_BaseCombatWeapon", "m_iWorldModelIndex");
 				offsets["m_Item"] = mGetOffset("DT_BaseAttributableItem", "m_Item");
 				ADD_LOG("2-1-9-1\n");
-				offsets["KeyValues_KeyValues"] = CSX::Memory::FindPatternV2(XorStr("client_panorama.dll"), KEY_VALUES_MASK);
-				offsets["KeyValues_LoadFromBuffer"] = CSX::Memory::FindPatternV2(XorStr("client_panorama.dll"), KEY_VALUES_LOAD_FROM_BUFFER_MASK);
+				offsets["KeyValues_KeyValues"] = CSX::Memory::FindPatternV2(XorStr("client.dll"), KEY_VALUES_MASK);
+				offsets["KeyValues_LoadFromBuffer"] = CSX::Memory::FindPatternV2(XorStr("client.dll"), KEY_VALUES_LOAD_FROM_BUFFER_MASK);
 				ADD_LOG("All Offsets sucessful\n");
 				ADD_LOG("2-1-9-2\n");
 	 		};
@@ -263,7 +263,7 @@ public:
 
 				FastCall::G().t_Sleep(1500);
 
-				if (!CSX::Utils::IsModuleLoad(XorStr("client_panorama.dll"), 5001))
+				if (!CSX::Utils::IsModuleLoad(XorStr("client.dll"), 5001))
 					return false;
 
 				ADD_LOG("2-1-2\n");

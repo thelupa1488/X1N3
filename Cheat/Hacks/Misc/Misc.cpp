@@ -392,7 +392,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				"particle/vistasmokev1/vistasmokev1_emods_impactdust",
 				"particle/vistasmokev1/vistasmokev1_fire",
 			};
-			static auto smoke_count = *reinterpret_cast<uint32_t**>(CSX::Memory::FindSignature(XorStr("client_panorama.dll"), XorStr("A3 ? ? ? ? 57 8B CB")) + 1);
+			static auto smoke_count = *reinterpret_cast<uint32_t**>(CSX::Memory::FindSignature(XorStr("client.dll"), XorStr("A3 ? ? ? ? 57 8B CB")) + 1);
 			static bool NoSmokeReset = false;
 			if (NoSmoke)
 			{
@@ -984,7 +984,7 @@ void CMisc::GetViewModelFOV(float &Fov)
 //void SetLocalPlayerReady()
 //{
 //	static auto SetLocalPlayerReadyFn = reinterpret_cast<bool(__stdcall*)(const char*)>
-//		(CSX::Memory::FindPatternV2(XorStr("client_panorama.dll"),
+//		(CSX::Memory::FindPatternV2(XorStr("client.dll"),
 //			XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12")));
 //
 //	if (SetLocalPlayerReadyFn)
@@ -994,7 +994,7 @@ void CMisc::GetViewModelFOV(float &Fov)
 //void accept()
 //{
 //	typedef void(__cdecl* accept_t)(void);
-//	static accept_t accept = (accept_t)CSX::Memory::FindPatternV2(XorStr("client_panorama.dll"),
+//	static accept_t accept = (accept_t)CSX::Memory::FindPatternV2(XorStr("client.dll"),
 //		XorStr("55 8B EC 51 56 8B 35 ? ? ? ? 57 83 BE"));
 //
 //	if (accept && **(unsigned long**)((unsigned long)accept + 0x7))
@@ -1008,7 +1008,7 @@ void CMisc::AutoAcceptEmit()
 	if (AutoAccept && !CGlobal::FullUpdateCheck)
 	{
 		static auto fnAccept = reinterpret_cast<bool(__stdcall*)(const char*)>
-			(CSX::Memory::FindPatternV2(XorStr("client_panorama.dll"),
+			(CSX::Memory::FindPatternV2(XorStr("client.dll"),
 				XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12")));
 
 		if (fnAccept)
@@ -1020,11 +1020,11 @@ void CMisc::AutoAcceptEmit()
 		}
 
 		//typedef void(__cdecl* accept_t)(void);
-		//static accept_t accept = (accept_t)CSX::Memory::FindPatternV2(XorStr("client_panorama.dll"),
+		//static accept_t accept = (accept_t)CSX::Memory::FindPatternV2(XorStr("client.dll"),
 		//	XorStr("55 8B EC 51 56 8B 35 ? ? ? ? 57 83 BE"));
 
 		//static auto SetLocalPlayerReadyFn = reinterpret_cast<bool(__stdcall*)(const char*)>
-		//	(CSX::Memory::FindPatternV2(XorStr("client_panorama.dll"),
+		//	(CSX::Memory::FindPatternV2(XorStr("client.dll"),
 		//		XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12")));
 
 		//auto match_session = I::MatchFramework()->get_match_session();

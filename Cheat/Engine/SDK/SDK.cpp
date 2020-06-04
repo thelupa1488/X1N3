@@ -38,9 +38,6 @@ namespace SDK
 	IGameMovement*      I::g_pGameMovement = nullptr;
 	IGameRules*         I::g_pGameRules = nullptr;
 
-	auto client = GetModuleHandleW(L"client_panorama.dll");
-	auto engine = GetModuleHandleW(L"engine.dll");
-
 	CreateInterfaceFn CaptureFactory( char* FactoryModule )
 	{
 		CreateInterfaceFn Interface = 0;

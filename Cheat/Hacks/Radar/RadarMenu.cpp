@@ -9,7 +9,7 @@ void CRadar::Menu()
 
 	X1Gui().PushItemWidth(360);
 
-	DCheckBox("Radar", RadarInGame);
+	DCheckBox("InGame Radar", RadarInGame);
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();

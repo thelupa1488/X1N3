@@ -205,7 +205,6 @@ void CLegitAim::Draw()
 
 	if (ShowBacktrack && Weapons[GetWeap(SelectedWeapon)].Backtrack && Weapons[GetWeap(SelectedWeapon)].BacktrackTicks)
 	{
-		Color BackColor = Color(255, 255, 255, 60);
 		for (int i = 0; i < I::EntityList()->GetHighestEntityIndex(); i++)
 		{
 			CBaseEntity* local = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
@@ -231,7 +230,7 @@ void CLegitAim::Draw()
 							for (BYTE IndexArray = 0; IndexArray < 18; IndexArray++)
 							{
 
-								DrawHitBoxLine(headPositions[i][t].vHitboxSkeletonArray[IndexArray], BackColor);
+								DrawHitBoxLine(headPositions[i][t].vHitboxSkeletonArray[IndexArray], ShowBacktrackColor);
 							}
 						}
 					}

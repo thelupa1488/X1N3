@@ -84,7 +84,7 @@
 #define GAME_MOVEMENT XorStr("GameMovement001")
 
 #define ENGINE_DLL XorStr("engine.dll")
-#define CLIENT_DLL XorStr("client_panorama.dll")
+#define CLIENT_DLL XorStr("client.dll")
 #define MATERIAL_DLL XorStr("materialsystem.dll")
 #define VGUIMT_DLL XorStr("vguimatsurface.dll")
 #define VSTDLIB_DLL	XorStr("vstdlib.dll")

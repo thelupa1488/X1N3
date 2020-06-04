@@ -298,7 +298,7 @@ public:
 		float TriggerDelay = 0;
 
 		bool Backtrack = false;
-		int BacktrackTicks = 16;
+		int BacktrackTicks = 12;
 
 		int SmoothMoveFactor = 0;
 
@@ -415,6 +415,8 @@ public:
 		RV(DrawSilentFov, "DrawSilentFov");
 		RV(FovColor, "FovColor");
 		RV(SilentFovColor, "SilentFovColor");
+		RV(ShowBacktrack, "ShowBacktrack");
+		RV(ShowBacktrackColor, "ShowBacktrackColor");
 		RV(ShowSpot, "ShowSpot");
 		RV(FaceIt, "FaceIt");
 		RV(EntityAim, "EntityAim");
@@ -443,6 +445,7 @@ public:
 	CBaseEntity *pBestBacktrTarget;
 
 	bool ShowBacktrack = false;
+	Color ShowBacktrackColor = Color(0, 255, 255, 255);
 
 	virtual float CalcFOV(Vector& viewangles, const Vector& vSrc, const Vector& vEnd);
 

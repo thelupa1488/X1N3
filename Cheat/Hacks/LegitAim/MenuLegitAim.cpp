@@ -87,7 +87,7 @@ void CLegitAim::Menu()
 			DCheckBox("Draw FOV", DrawFov);
 
 			X1Gui().SameLine(185.f);
-			DColorEdit("Color##Fov1", FovColor);
+			DColorEdit("Color##FovClr", FovColor);
 			X1Gui().SameLine(246);
 
 			DCheckBox("Show target", ShowSpot);
@@ -95,7 +95,7 @@ void CLegitAim::Menu()
 			DCheckBox("Draw silent FOV", DrawSilentFov);
 
 			X1Gui().SameLine(185.f);
-			DColorEdit("Color##SFov1", SilentFovColor);
+			DColorEdit("Color##SFovClr", SilentFovColor);
 
 			X1Gui().SameLine(246);
 
@@ -221,8 +221,10 @@ void CLegitAim::Menu()
 					{
 						X1Gui().SameLine();
 						DCheckBox("Show backtrack", ShowBacktrack);
+						X1Gui().SameLine();
+						DColorEdit("Color##Backtrack", ShowBacktrackColor);
 
-						SliderInts("Ticks", Weapons[GetWeap(SelectedWeapon)].BacktrackTicks, 0, 16);
+						SliderInts("Ticks", Weapons[GetWeap(SelectedWeapon)].BacktrackTicks, 0, 12);
 					}
 				}
 			}
