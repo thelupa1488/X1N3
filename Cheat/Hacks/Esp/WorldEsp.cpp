@@ -249,8 +249,6 @@ void CEsp::DrawBombInfo(CBaseEntity* entity, CBaseEntity* Local)
 	if (!(entity->GetClientClass()->m_ClassID == (int)CLIENT_CLASS_ID::CPlantedC4))
 		return;
 
-	CBaseEntity* local = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-
 	static bool IsDefusing = false;
 	static bool GetDamage = false;
 
@@ -291,9 +289,9 @@ void CEsp::DrawBombInfo(CBaseEntity* entity, CBaseEntity* Local)
 	Color EndHp;
 	if (lifetime > -2.f)
 	{
-		if (damage >= Local->GetHealth() && !local->IsDead())
+		if (damage >= Local->GetHealth() && !CGlobal::LocalPlayer->IsDead())
 			GP_Render->DrawString(15, Vec2(w_b + 4, CGlobal::iScreenHeight / 2 + h_b / 2 + 20), NameColor, true, false, XorStr("You will die"));
-		else if (Local->GetHealth() > damage && !local->IsDead())
+		else if (Local->GetHealth() > damage && !CGlobal::LocalPlayer->IsDead())
 		{
 			if (Local->GetHealth() - damage > 10)
 				EndHp = Color::White();

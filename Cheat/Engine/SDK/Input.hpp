@@ -14,7 +14,7 @@ namespace SDK
 		bool                m_fMouseActive;               //0x0A
 		bool                m_fJoystickAdvancedInit;      //0x0B
 		char                pad_0x08[0x2C];               //0x0C
-		void* m_pKeys;                      //0x38
+		void*               m_pKeys;                      //0x38
 		char                pad_0x38[0x6C];               //0x3C
 		bool                m_fCameraInterceptingMouse;   //0xA8
 		bool                m_fCameraInThirdPerson;       //0xA9

@@ -31,7 +31,7 @@ void Start(HINSTANCE hInst)
 		ADD_LOG("2-1\n");
 		FastCall::G().t_DisableThreadLibraryCalls(hInst);
 		ADD_LOG("2-2\n");
-		std::make_unique<CreateThread_>(&SetupThread, hInst);
+		std::make_unique<CreateThread_>(reinterpret_cast<LPTHREAD_START_ROUTINE>(&SetupThread), hInst);
 	};
 	ADD_LOG("2-3\n");
 	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3"), NULL);

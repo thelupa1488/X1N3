@@ -102,7 +102,7 @@ static auto random_sequence(const int low, const int high) -> int
 
 //void remapping(CRecvProxyData* data, CBaseViewModel* entity)
 //{
-//	const auto pLocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
+//	const auto pLocal = CGlobal::LocalPlayer;
 //
 //	if (!pLocal || pLocal->IsDead())
 //		return;

@@ -1,7 +1,6 @@
 #pragma once
 #include"../Main.h"
 
-
 enum ACT
 {
 	ACT_NONE,

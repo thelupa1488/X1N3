@@ -165,10 +165,9 @@ void CGHelper::AutoAddHelp(string _game_name)
 void CGHelper::AddHelp(string _game_name, GHInfo Info)
 {
 	GHInfo entry;
-	CBaseEntity* pLocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-	if (pLocal)
+	if (CGlobal::LocalPlayer)
 	{
-		Vector Start = pLocal->GetRenderOrigin();
+		Vector Start = CGlobal::LocalPlayer->GetRenderOrigin();
 
 		if (!CheckOldDistance(GetMapByGName(_game_name), Start))
 		{
@@ -181,7 +180,7 @@ void CGHelper::AddHelp(string _game_name, GHInfo Info)
 		else
 			I::Engine()->GetViewAngles(entry.directn);
 
-		entry.head_pos = pLocal->GetEyePosition();
+		entry.head_pos = CGlobal::LocalPlayer->GetEyePosition();
 
 		entry.start_pos = Start;
 		entry.act = Info.act;
@@ -201,9 +200,8 @@ void CGHelper::AddHelp(string _game_name, GHInfo Info)
 void CGHelper::Draw()
 {
 	Map* cur_map = GetMapByGName(I::Engine()->GetLevelName());
-	CBaseEntity* pLocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
 
-	if (cur_map && pLocal)
+	if (cur_map && CGlobal::LocalPlayer)
 	{
 		GHInfo BestInfo;
 		float BestDistance = FLT_MAX;
@@ -224,7 +222,7 @@ void CGHelper::Draw()
 				if ((cur_map->helpers[i].grenade != CGlobal::GWeaponID) && !force_show)
 					continue;
 			}
-			float dist = cur_map->helpers[i].start_pos.DistTo(pLocal->GetRenderOrigin());
+			float dist = cur_map->helpers[i].start_pos.DistTo(CGlobal::LocalPlayer->GetRenderOrigin());
 
 			if (dist > DistShowHelp && !selected)
 				continue;
@@ -384,9 +382,7 @@ void CGHelper::Draw()
 
 Vector CGHelper::CalcHelpPos(Vector target)
 {
-	CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-
-	if (!plocal)
+	if (!CGlobal::LocalPlayer)
 		return Vector(0, 0, 0);
 
 	Vector vAngle = Vector(0, 0, 0);;
@@ -398,8 +394,8 @@ Vector CGHelper::CalcHelpPos(Vector target)
 	float r_1, r_2;
 	float x_1, y_1;
 
-	Vector LocalRendOrig = plocal->GetRenderOrigin();
-	Vector LocalViewOfst = plocal->GetViewOffset();
+	Vector LocalRendOrig = CGlobal::LocalPlayer->GetRenderOrigin();
+	Vector LocalViewOfst = CGlobal::LocalPlayer->GetViewOffset();
 
 	Vector vEyeOrigin = LocalRendOrig + LocalViewOfst;
 

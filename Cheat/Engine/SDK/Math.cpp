@@ -23,9 +23,7 @@ namespace SDK
 	//		auto movedata = Vector(m_Cmd->forwardmove, m_Cmd->sidemove, m_Cmd->upmove);
 	//		viewangles.Normalized();
 
-	//		CBaseEntity* pLocalPlayer = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-
-	//		if (!(pLocalPlayer->GetFlags() & FL_ONGROUND) && viewangles.z != 0.f)
+	//		if (!(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND) && viewangles.z != 0.f)
 	//			movedata.y = 0.f;
 
 	//		AngleVectors(wish_angle, wish_forward, wish_right, wish_up);

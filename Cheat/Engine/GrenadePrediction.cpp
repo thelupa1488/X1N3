@@ -114,10 +114,9 @@ void angle_vectors2(const Vector &angles, Vector *forward, Vector *right, Vector
 void grenade_prediction::Setup(Vector& vecSrc, Vector& vecThrow, Vector viewangles)
 {
 	Vector angThrow = viewangles;
-	CBaseEntity* local = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
 	float pitch = angThrow.x;
 
-	if (!local)
+	if (!CGlobal::LocalPlayer)
 		return;
 
 	if (pitch <= 90.0f)
@@ -150,7 +149,7 @@ void grenade_prediction::Setup(Vector& vecSrc, Vector& vecThrow, Vector viewangl
 	Vector vForward, vRight, vUp;
 	angle_vectors2(angThrow, &vForward, &vRight, &vUp); //angThrow.ToVector(vForward, vRight, vUp);
 
-	vecSrc = local->GetEyePosition();
+	vecSrc = CGlobal::LocalPlayer->GetEyePosition();
 	float off = (power[act] * 12.0f) - 12.0f;
 	vecSrc.z += off;
 
@@ -168,7 +167,7 @@ void grenade_prediction::Setup(Vector& vecSrc, Vector& vecThrow, Vector viewangl
 	vecSrc -= vecBack;
 
 	// Finally calculate velocity
-	vecThrow = local->GetVelocity(); vecThrow *= 1.25f;
+	vecThrow = CGlobal::LocalPlayer->GetVelocity(); vecThrow *= 1.25f;
 	vecThrow += vForward * flVel; //	vecThrow.MultAdd(vForward, flVel);
 }
 

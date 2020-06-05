@@ -730,7 +730,7 @@ bool CLegitAim::CheckOpportWork(CUserCmd* pCmd)
 	if (!AimBind.Check())
 		return false;
 
-	pLocalPlayer = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
+	pLocalPlayer = CGlobal::LocalPlayer;
 
 	if (!pLocalPlayer)
 		return false;
@@ -1624,7 +1624,7 @@ void CLegitAim::TriggerCreateMove(CUserCmd* pCmd)
 	if (IsNonAimWeapon())
 		return;
 
-	pLocalPlayer = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
+	pLocalPlayer = CGlobal::LocalPlayer;
 
 	if (!pLocalPlayer)
 		return;
@@ -1697,7 +1697,7 @@ void CLegitAim::TriggerCreateMove(CUserCmd* pCmd)
 	TriggerRCS(Weapons[GetWeap(SelectedWeapon)].TriggerRcsX, Weapons[GetWeap(SelectedWeapon)].TriggerRcsY, pCmd, EnableRcs);
 }
 
-bool __declspec(noinline) CLegitAim::CanFire(Vector mAngle, CUserCmd* pCmd, CBaseEntity* BaseEnt, int BestInd, CBaseEntity* Local, bool AllHitGroup)
+bool __declspec(noinline) CLegitAim::CanFire(Vector mAngle, CUserCmd* pCmd, CBaseEntity* BaseEnt, int BestInd, CBaseEntity* local, bool AllHitGroup)
 {
 	if (BestInd != -1 && BaseEnt)
 	{
@@ -1705,17 +1705,17 @@ bool __declspec(noinline) CLegitAim::CanFire(Vector mAngle, CUserCmd* pCmd, CBas
 		Ray_t Ray;
 		CTraceFilter Filter;
 
-		Vector vecS = Local->GetRenderOrigin() + Local->GetViewOffset();
+		Vector vecS = CGlobal::LocalPlayer->GetRenderOrigin() + CGlobal::LocalPlayer->GetViewOffset();
 		Vector vecForvard;
-		Vector vAngle = Vector(pCmd->viewangles.x + (Local->GetAimPunchAngle().x * 2),
-			pCmd->viewangles.y + (Local->GetAimPunchAngle().y * 2), 0);
+		Vector vAngle = Vector(pCmd->viewangles.x + (CGlobal::LocalPlayer->GetAimPunchAngle().x * 2),
+			pCmd->viewangles.y + (CGlobal::LocalPlayer->GetAimPunchAngle().y * 2), 0);
 
 		AngleVectors(vAngle, vecForvard);
 		vecForvard *= 8000.0f;
 
 		Ray.Init(vecS, vecS + vecForvard);
 
-		Filter.pSkip = Local;
+		Filter.pSkip = CGlobal::LocalPlayer;
 		I::EngineTrace()->TraceRay(Ray, PlayerVisibleMask, &Filter, &Trace);
 
 		auto CheckEnableHBox = [&](int HBox) -> bool
@@ -1864,16 +1864,15 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 	if (Weapons[GetWeap(SelectedWeapon)].Backtrack && !FaceIt && Weapons[GetWeap(SelectedWeapon)].BacktrackTicks)
 	{
 		float bestFov = FLT_MAX;
-		CBaseEntity* local = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
 		PlayerInfo info;
 		for (int i = 0; i < SDK::I::Engine()->GetMaxClients(); i++)
 		{
 			auto entity = (CBaseEntity*)SDK::I::EntityList()->GetClientEntity(i);
 
-			if (!entity || !local)
+			if (!entity || !CGlobal::LocalPlayer)
 				continue;
 
-			if (entity == local)
+			if (entity == CGlobal::LocalPlayer)
 				continue;
 
 			if (!I::Engine()->GetPlayerInfo(i, &info))
@@ -1882,7 +1881,7 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 			if (entity->IsDormant())
 				continue;
 
-			if (local->GetTeam() == entity->GetTeam())
+			if (CGlobal::LocalPlayer->GetTeam() == entity->GetTeam())
 				continue;
 
 			if (!entity->IsDead())
@@ -1932,8 +1931,8 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 				{
 					headPositions[i][pCmd->command_number % MAXBACKTRACKTICKS] = bfg;
 
-					Vector ViewDir = AngleVector(pCmd->viewangles + (local->GetAimPunchAngle() * 2.f));
-					float FOVDistance = DistancePointToLine(hitboxPos, local->GetEyePosition(), ViewDir);
+					Vector ViewDir = AngleVector(pCmd->viewangles + (CGlobal::LocalPlayer->GetAimPunchAngle() * 2.f));
+					float FOVDistance = DistancePointToLine(hitboxPos, CGlobal::LocalPlayer->GetEyePosition(), ViewDir);
 
 					if (bestFov > FOVDistance)
 					{
@@ -1950,11 +1949,11 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 		{
 			float tempFloat = FLT_MAX;
 
-			Vector ViewDir = AngleVector(pCmd->viewangles + (local->GetAimPunchAngle() * 2.f));
+			Vector ViewDir = AngleVector(pCmd->viewangles + (CGlobal::LocalPlayer->GetAimPunchAngle() * 2.f));
 
 			for (int t = 0; t <= MAXBACKTRACKTICKS - 1; ++t)
 			{
-				float tempFOVDistance = DistancePointToLine(headPositions[iBackTrackbestTarget][t].hitboxPos, local->GetEyePosition(), ViewDir);
+				float tempFOVDistance = DistancePointToLine(headPositions[iBackTrackbestTarget][t].hitboxPos, CGlobal::LocalPlayer->GetEyePosition(), ViewDir);
 
 				if (tempFloat > tempFOVDistance && headPositions[iBackTrackbestTarget][t].simtime > I::GlobalVars()->curtime - 1)
 				{
