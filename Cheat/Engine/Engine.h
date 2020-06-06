@@ -133,7 +133,6 @@ public:
 	static vector<string> ConfigList;
 	static CBaseEntity* LocalPlayer;
 	static CUserCmd* UserCmd;
-	static CCSGOPlayerAnimState g_AnimState;
 	static bool bSendPacket;
 	static float NextLby;
 	static float Side;

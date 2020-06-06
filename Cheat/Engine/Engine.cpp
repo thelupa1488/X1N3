@@ -17,7 +17,6 @@ Vector CGlobal::GViewAngle;
 vector<string> CGlobal::ConfigList;
 CBaseEntity* CGlobal::LocalPlayer;
 CUserCmd* CGlobal::UserCmd;
-CCSGOPlayerAnimState CGlobal::g_AnimState;
 bool CGlobal::bSendPacket;
 float CGlobal::NextLby = 0.0f;
 float CGlobal::Side = 1.0f;

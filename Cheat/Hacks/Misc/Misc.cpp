@@ -688,6 +688,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					if ((unpred_flags & FL_ONGROUND) && !(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
 						pCmd->buttons |= IN_JUMP;
 				}
+				CCSGOPlayerAnimState g_AnimState;
 				QAngle vangle = QAngle();
 				QAngle angleold = pCmd->viewangles;
 				if (Desync)
@@ -784,18 +785,18 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				if (anim_state)
 				{
 					CCSGOPlayerAnimState anim_state_backup = *anim_state;
-					*anim_state = CGlobal::g_AnimState;
+					*anim_state = g_AnimState;
 					CGlobal::LocalPlayer->GetVAngles() = pCmd->viewangles;
 					CGlobal::LocalPlayer->UpdateClientSideAnimation();
 
 					UpdateLBY(anim_state);
 
-					CGlobal::g_AnimState = *anim_state;
+					g_AnimState = *anim_state;
 					*anim_state = anim_state_backup;
 				}
 				if (bSendPacket)
 				{
-					CGlobal::AngleReal = CGlobal::g_AnimState.m_flGoalFeetYaw;
+					CGlobal::AngleReal = g_AnimState.m_flGoalFeetYaw;
 					if (anim_state)
 						CGlobal::AngleFake = anim_state->m_flGoalFeetYaw;
 					vangle = pCmd->viewangles;
