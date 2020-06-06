@@ -30,7 +30,7 @@
 #include "Recv.hpp"
 #include "IClientMode.hpp"
 #include "IVModelInfoClient.hpp"
-#include "Input.hpp"
+#include "CInput.hpp"
 #include "ICollideable.h"
 #include "IEngineSound.h"
 #include "IVModelRender.h"
@@ -42,7 +42,6 @@
 #include "IGameEvent.h"
 #include "TextureGroupNames.h"
 #include "CVar.h"
-#include "IGameTypes.h"
 #include "CGlowObjManager.h"
 #include "IPhysics.hpp"
 #include "Math.hpp"
@@ -64,34 +63,21 @@
 
 #pragma comment(lib, "Wininet.lib")
 
-#define CREATEINTERFACE_PROCNAME XorStr("CreateInterface")
-#define VENGINE_CLIENT_INTERFACE_VERSION XorStr("VEngineClient014")
-#define CLIENT_DLL_INTERFACE_VERSION XorStr("VClient018")
-#define VCLIENTENTITYLIST_INTERFACE_VERSION	XorStr("VClientEntityList003")
-#define INTERFACEVERSION_ENGINETRACE_CLIENT	XorStr("EngineTraceClient004")
-#define VMODELINFO_CLIENT_INTERACE_VERSION XorStr("VModelInfoClient004")
-#define IENGINESOUND_CLIENT_INTERFACE_VERSION XorStr("IEngineSoundClient003")
-#define VENGINE_HUDMODEL_INTERFACE_VERSION XorStr("VEngineModel016")
-#define VENGINE_RENDERVIEW_INTERFACE_VERSION XorStr("VEngineRenderView014")
-#define MATERIAL_SYSTEM_INTERFACE_VERSION XorStr("VMaterialSystem080")
-#define VGUI_SURFACE_INTERFACE_VERSION XorStr("VGUI_Surface031")
-#define GAMEEVENTMANAGER_INTERFACE_VERSION	XorStr("GAMEEVENTSMANAGER002")
-#define VENGINEVCAR_INTERFACE_VERSION XorStr("VEngineCvar007")
-#define INPUTSYSTEM_INTERFACE_VERSION XorStr("InputSystemVersion001")
-#define VENGINE_GAMETYPES_VERSION002 XorStr("VENGINE_GAMETYPES_VERSION002")
-#define VPHYSICS_SURFACE_PROPS_001 XorStr("VPhysicsSurfaceProps001")
-#define VCLIENT_PREDICTION XorStr("VClientPrediction001")
-#define GAME_MOVEMENT XorStr("GameMovement001")
-
-#define ENGINE_DLL XorStr("engine.dll")
-#define CLIENT_DLL XorStr("client.dll")
-#define MATERIAL_DLL XorStr("materialsystem.dll")
-#define VGUIMT_DLL XorStr("vguimatsurface.dll")
-#define VSTDLIB_DLL	XorStr("vstdlib.dll")
-#define INPUTSYSTEM_DLL XorStr("inputsystem.dll")
-#define STEAMAPI_DLL XorStr("steam_api.dll")
-#define SERVERBROWSER_DLL XorStr("serverbrowser.dll")
-#define VPHYSICS_DLL XorStr("vphysics.dll")
+#define engineFactory XorStr("engine.dll")
+#define clientFactory XorStr("client.dll")
+#define valveStdFactory XorStr("vstdlib.dll")
+#define vguiFactory XorStr("vguimatsurface.dll")
+#define vgui2Factory XorStr("vgui2.dll")
+#define matSysFactory XorStr("materialsystem.dll")
+#define dataCacheFactory XorStr("datacache.dll")
+#define vphysicsFactory XorStr("vphysics.dll")
+#define inputSysFactory XorStr("inputsystem.dll")
+#define localizeFactory XorStr("localize.dll")
+#define steamApiFactory XorStr("steam_api.dll")
+#define serverBrowserFactory XorStr("serverbrowser.dll")
+#define vgui2Factory XorStr("vgui2.dll")
+#define vguiMatSurfaceFactory XorStr("vguimatsurface.dll")
+#define dx9apiFactory XorStr("shaderapidx9.dll")
 
 #define GLOBAL_VARS_PATTERN XorStr("\xA1\x00\x00\x00\x00\x8B\x4D\xFC\x8B\x55\x08")
 #define GLOBAL_VARS_MASK XorStr("x????xxxxxx")
@@ -131,12 +117,11 @@ namespace SDK
 		static ILocalize*           Localize();
 		static ISteamGameCoordinator* SteamGameCoordinator();
 		static ISteamUser*          SteamUser();
-		static IGameTypes*          GameTypes();
 		static IMatchFramework*     MatchFramework();
 		static IPrediction*         Prediction();
 		static IMoveHelper*         MoveHelper();
 		static IGameMovement*       GameMovement();
-		static IGameRules*          GameRules();
+		static IGameRules**         GameRules();
 	private:
 		static IVEngineClient*		g_pEngine;
 		static IBaseClientDLL*		g_pClient;
@@ -160,12 +145,11 @@ namespace SDK
 		static ILocalize*           g_pLocalize;
 		static ISteamGameCoordinator* g_pSteamGameCoordinator;
 		static ISteamUser*          g_pSteamUser;
-		static IGameTypes*          g_pGameTypes;
 		static IMatchFramework*     g_pMatchFramework;
 		static IPrediction*         g_pPrediction;
 		static IMoveHelper*         g_pMoveHelper;
 		static IGameMovement*       g_pGameMovement;
-		static IGameRules*          g_pGameRules;
+		static IGameRules**         g_pGameRules;
 	};
 
 	template <typename T>

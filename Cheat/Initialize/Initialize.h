@@ -177,6 +177,7 @@ public:
 				offsets["m_iAccount"] = mGetOffset("DT_CSPlayer", "m_iAccount");
 				offsets["m_lifeState"] = mGetOffset("DT_CSPlayer", "m_lifeState");
 				offsets["m_flFlashDuration"] = mGetOffset("DT_CSPlayer", "m_flFlashDuration");
+				offsets["m_flSpawnTime"] = mGetOffset("DT_CSPlayer", "m_flSpawnTime");
 				offsets["m_flC4Blow"] = mGetOffset("DT_PlantedC4", "m_flC4Blow");
 				offsets["m_flDefuseCountDown"] = mGetOffset("DT_PlantedC4", "m_flDefuseCountDown");
 				offsets["m_hBombDefuser"] = mGetOffset("DT_PlantedC4", "m_hBombDefuser");
@@ -204,9 +205,9 @@ public:
 				offsets["m_iClip1"] = mGetOffset("DT_BaseCombatWeapon", "m_iClip1");
 				offsets["m_iClip2"] = mGetOffset("DT_BaseCombatWeapon", "m_iPrimaryReserveAmmoCount");
 				offsets["m_flNextPrimaryAttack"] = mGetOffset("DT_BaseCombatWeapon", "m_flNextPrimaryAttack");
-				offsets["m_flLowerBodyYawTarget"] = mGetOffset("CCSPlayer", "m_flLowerBodyYawTarget");
+				offsets["m_flLowerBodyYawTarget"] = mGetOffset("DT_CSPlayer", "m_flLowerBodyYawTarget");
 				offsets["m_bCanReload"] = offsets["m_flNextPrimaryAttack"] + 0x6D;
-				offsets["m_bGunGameImmunity"] = mGetOffset("CCSPlayer", "m_bGunGameImmunity");
+				offsets["m_bGunGameImmunity"] = mGetOffset("DT_CSPlayer", "m_bGunGameImmunity");
 				offsets["m_bPinPulled"] = mGetOffset("DT_BaseCSGrenade", "m_bPinPulled");
 				offsets["m_fThrowTime"] = mGetOffset("DT_BaseCSGrenade", "m_fThrowTime");
 				offsets["m_iItemDefinitionIndex"] = mGetOffset("DT_BaseCombatWeapon", "m_iItemDefinitionIndex");
@@ -233,8 +234,8 @@ public:
 				offsets["m_iWorldModelIndex"] = mGetOffset("DT_BaseCombatWeapon", "m_iWorldModelIndex");
 				offsets["m_Item"] = mGetOffset("DT_BaseAttributableItem", "m_Item");
 				ADD_LOG("2-1-9-1\n");
-				offsets["KeyValues_KeyValues"] = CSX::Memory::FindPatternV2(XorStr("client.dll"), KEY_VALUES_MASK);
-				offsets["KeyValues_LoadFromBuffer"] = CSX::Memory::FindPatternV2(XorStr("client.dll"), KEY_VALUES_LOAD_FROM_BUFFER_MASK);
+				offsets["KeyValues_KeyValues"] = CSX::Memory::FindPatternV2(clientFactory, KEY_VALUES_MASK);
+				offsets["KeyValues_LoadFromBuffer"] = CSX::Memory::FindPatternV2(clientFactory, KEY_VALUES_LOAD_FROM_BUFFER_MASK);
 				ADD_LOG("All Offsets sucessful\n");
 				ADD_LOG("2-1-9-2\n");
 	 		};
@@ -248,22 +249,22 @@ public:
 			{
 #ifndef ONLY_DRAW_HOOK			
 				ADD_LOG("2-1-1\n");
-				if (!CSX::Utils::IsModuleLoad(ENGINE_DLL, 5001))
+				if (!CSX::Utils::IsModuleLoad(engineFactory, 5001))
 					return false;
-				if (!CSX::Utils::IsModuleLoad(VGUI2_DLL, 5001))
+				if (!CSX::Utils::IsModuleLoad(vgui2Factory, 5001))
 					return false;
-				if (!CSX::Utils::IsModuleLoad(VGUIMAT_DLL, 5001))
+				if (!CSX::Utils::IsModuleLoad(vguiMatSurfaceFactory, 5001))
 					return false;
-				if (!CSX::Utils::IsModuleLoad(VSTDLIB_DLL, 5001))
+				if (!CSX::Utils::IsModuleLoad(valveStdFactory, 5001))
 					return false;
-				if (!CSX::Utils::IsModuleLoad(STEAMAPI_DLL, 5001))
+				if (!CSX::Utils::IsModuleLoad(steamApiFactory, 5001))
 					return false;
-				if (!CSX::Utils::IsModuleLoad(SERVERBROWSER_DLL, 40000))
+				if (!CSX::Utils::IsModuleLoad(serverBrowserFactory, 40000))
 					return false;
 
 				FastCall::G().t_Sleep(1500);
 
-				if (!CSX::Utils::IsModuleLoad(XorStr("client.dll"), 5001))
+				if (!CSX::Utils::IsModuleLoad(clientFactory, 5001))
 					return false;
 
 				ADD_LOG("2-1-2\n");

@@ -29,7 +29,7 @@ namespace Engine
 			return -1;
 
 		static auto GetSequenceActivity = reinterpret_cast<int(__fastcall*)(void*, studiohdr_t*, int)>(
-			CSX::Memory::FindPatternV2(XorStr("client.dll"), XorStr("55 8B EC 53 8B 5D 08 56 8B F1 83")));
+			CSX::Memory::FindPatternV2(clientFactory, XorStr("55 8B EC 53 8B 5D 08 56 8B F1 83")));
 
 		return GetSequenceActivity(this, hdr, sequence);
 	}
@@ -208,7 +208,7 @@ namespace Engine
 
 	CUserCmd*& CBaseEntity::GetCurrentCommand() 
 	{
-		static auto currentCommand = *(uint32_t*)(CSX::Memory::FindPatternV2(XorStr("client.dll"), XorStr("89 BE ? ? ? ? E8 ? ? ? ? 85 FF")) + 2);
+		static auto currentCommand = *(uint32_t*)(CSX::Memory::FindPatternV2(clientFactory, XorStr("89 BE ? ? ? ? E8 ? ? ? ? 85 FF")) + 2);
 		return *(CUserCmd**)((uintptr_t)this + currentCommand);
 	}
 
@@ -252,7 +252,7 @@ namespace Engine
 
 	float CBaseEntity::GetSpawnTime()
 	{
-		return *(float*)((uintptr_t)this + 0xA360); //m_flSpawnTime
+		return *(float*)((uintptr_t)this + offsets["m_flSpawnTime"]);
 	}
 
 	int CBaseEntity::GetBombDefuser()
@@ -431,16 +431,17 @@ namespace Engine
 
 	Vector CBaseEntity::GetEyePosition()
 	{
-		if (this == (CBaseEntity*)0xA)
-			return Vector(0, 0, 0);
+		//if (this == (CBaseEntity*)0xA)
+		//	return Vector(0, 0, 0);
 
-		if (this == (CBaseEntity*)0xE)
-			return Vector(0, 0, 0);
+		//if (this == (CBaseEntity*)0xE)
+		//	return Vector(0, 0, 0);
 
-		if (IsBadReadPtr(this, sizeof(Vector)))
-			return Vector(0, 0, 0);
+		//if (IsBadReadPtr(this, sizeof(Vector)))
+		//	return Vector(0, 0, 0);
 
-		return GetRenderOrigin() + GetViewOffset();
+		//return GetRenderOrigin() + GetViewOffset();
+		return GetOrigin() + GetViewOffset();
 	}
 
 	Vector CBaseEntity::GetPunchAngles()

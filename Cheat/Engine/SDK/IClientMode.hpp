@@ -5,7 +5,7 @@
 
 namespace SDK
 {
-	class IPanel;
+	class CPanel;
 	class C_BaseEntity;
 
 	enum class ClearFlags_t {

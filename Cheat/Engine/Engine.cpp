@@ -17,6 +17,12 @@ Vector CGlobal::GViewAngle;
 vector<string> CGlobal::ConfigList;
 CBaseEntity* CGlobal::LocalPlayer;
 CUserCmd* CGlobal::UserCmd;
+CCSGOPlayerAnimState g_AnimState;
+bool CGlobal::bSendPacket;
+float CGlobal::NextLby = 0.0f;
+float CGlobal::Side = 1.0f;
+float CGlobal::AngleReal = 0.f;
+float CGlobal::AngleFake = 0.f;
 
 void ReadConfigs(LPCTSTR lpszFileName)
 {

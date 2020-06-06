@@ -13,7 +13,7 @@ namespace SDK
 
 		if (!SearchFunction)
 		{
-			DWORD dwFunctionAddress = CSX::Memory::FindPattern(XorStr("client.dll"), XorStr("55 8B EC 83 EC 44 53 56 57 8B F9 89 7D F8 FF 15 ? ? ? ? 8B F0 B9"), 0);
+			DWORD dwFunctionAddress = CSX::Memory::FindPattern(clientFactory, XorStr("55 8B EC 83 EC 44 53 56 57 8B F9 89 7D F8 FF 15 ? ? ? ? 8B F0 B9"), 0);
 
 
 			if (dwFunctionAddress)

@@ -1165,7 +1165,7 @@ bool CLegitAim::GetBestTarget(bool _CheckSilent)
 				if (CheckEntity == pLocalPlayer)
 					continue;
 
-				if (!Deathmatch && CheckEntity->GetTeam() == pLocalPlayer->GetTeam() && I::GameTypes()->GetCurrentGameMode() != 6)
+				if (!Deathmatch && CheckEntity->GetTeam() == pLocalPlayer->GetTeam())
 					continue;
 
 				if (!(CheckEntity->GetFlags() & FL_ONGROUND) && JumpEnemyCheck)
@@ -1777,7 +1777,7 @@ void  CLegitAim::TriggerGetBestTarget(Vector mAngle)
 		if (pBaseEntity == pLocalPlayer)
 			continue;
 
-		if (!TriggerDeathmatch && pBaseEntity->GetTeam() == pLocalPlayer->GetTeam() && I::GameTypes()->GetCurrentGameMode() != 6)
+		if (!TriggerDeathmatch && pBaseEntity->GetTeam() == pLocalPlayer->GetTeam())
 			continue;
 
 		if (!(pBaseEntity->GetFlags() & FL_ONGROUND) && TriggerJumpEnemyCheck)

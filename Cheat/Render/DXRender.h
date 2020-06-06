@@ -207,6 +207,9 @@ public:
 		virtual void DrawCircle(int16_t x, int16_t y, int16_t radius, uint16_t points = 64, color_t color1 = 0xFF);
 		virtual void DrawRing(int16_t x, int16_t y, int16_t radius, uint16_t points = 64, color_t color1 = 0xFF, float thickness = 1.0f);
 		void DrawRing3D(int16_t x, int16_t y, int16_t z, int16_t radius, uint16_t points = 64, color_t color1 = 0xFF, float thickness = 1.0f);
+		virtual void RenderTriangle(Vec2 x, Vec2 y, Vec2 z, color_t color1 = 0xFF, float thickness = 1.f);
+		virtual void AddTriangle(Vec2 a, Vec2 b, Vec2 c, color_t color1 = 0xFF, float thickness = 1.0f);
+		virtual void AddTriangleFilled(Vec2 a, Vec2 b, Vec2 c, color_t color1 = 0xFF);
 		virtual void DrawTriangle(int16_t x1, int16_t y1, int16_t x2, int16_t y2, int16_t x3, int16_t y3, color_t color1 = 0xFF, float thickness = 1.0f);
 		virtual void DrawTriangleFilled(int16_t x1, int16_t y1, int16_t x2, int16_t y2, int16_t x3, int16_t y3, color_t color1 = 0xFF);
 		virtual void DrawImage(LPDIRECT3DTEXTURE9 _texture, Vec2 _a, Vec2 _b);

@@ -161,7 +161,6 @@ namespace Engine
 		Vector	    GetVelocity();
 		Vector	    GetViewOffset();
 		Vector	    GetEyePosition();
-		//Vector3	GetEyePosition3();
 		Vector      GetPunchAngles();
 
 		QAngle	            GetEyeAngles();

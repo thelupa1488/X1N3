@@ -13,7 +13,7 @@ void CRadar::Menu()
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
-	DCheckBox("Drawn radar", RadarActive);
+	DCheckBox("Draw radar", RadarActive);
 	if (RadarActive)
 	{
 		X1Gui().SameLine();

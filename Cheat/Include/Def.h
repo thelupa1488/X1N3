@@ -2,8 +2,8 @@
 #include "../Engine/XorStr.h"
 #include <VMProtectSDK.h>
 
-#define ENABLE_XOR_STR 
-#define ENABLE_VMP
+//#define ENABLE_XOR_STR 
+//#define ENABLE_VMP
 //#define YOUGAMEBIZ
 
 #define PRESENT_ENABLE
@@ -26,9 +26,6 @@
 #define ADD_LOG(m, ...)
 #endif
 
-#define VGUI2_DLL XorStr("vgui2.dll")
-#define VGUIMAT_DLL	XorStr("vguimatsurface.dll")
-#define D3D9_DLL XorStr("d3d9.dll")
 #define SHADERPIDX9_DLL XorStr("shaderapidx9.dll")
 #define GAMEOVERLAYRENDERER_DLL XorStr("GameOverlayRenderer.dll")
 #define D3D9_MASK XorStr("x????xxxxxx")

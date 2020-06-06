@@ -37,7 +37,7 @@ void CRender::IRender::DX_Init(DWORD* table)
 	LPDIRECT3DDEVICE9 pd3dDevice = NULL;
 	do
 	{
-		WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, MsgProc, 0L, 0L, GetModuleHandleA(NULL), NULL, NULL, NULL, NULL, "SEGUARD_Window", NULL };
+		WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, MsgProc, 0L, 0L, FastCall::G().t_GetModuleHandleA(NULL), NULL, NULL, NULL, NULL, "SEGUARD_Window", NULL };
 		RegisterClassEx(&wc);
 		HWND hWnd = CreateWindowA("SEGUARD_Window", NULL, WS_OVERLAPPEDWINDOW, 100, 100, 300, 300, GetDesktopWindow(), NULL, wc.hInstance, NULL);
 		LPDIRECT3D9 pD3D = Direct3DCreate9(D3D_SDK_VERSION);
@@ -64,9 +64,9 @@ void CRender::IRender::DX_Init(DWORD* table)
 		else if (res == D3DERR_OUTOFVIDEOMEMORY)
 			int tt = GetLastError();
 
-		DestroyWindow(hWnd);
+		FastCall::G().t_DestroyWindow(hWnd);
 
-		Sleep(1000);
+		FastCall::G().t_Sleep(1000);
 		ADD_LOG("device!!!\n");
 	} while (!pd3dDevice);
 
@@ -100,7 +100,7 @@ void CRender::IRender::Initialize()
 
 	auto& pContext = cContext::GetInstance();
 
-	DWORD d3d9TablePtrPtr = FindPattern(SHADERPIDX9_DLL, D3D9_PATTERN, D3D9_MASK, 1);
+	DWORD d3d9TablePtrPtr = CSX::Memory::FindPattern(dx9apiFactory, XorStr("A1 ? ? ? ? 50 8B 08 FF 51 0C"), 1);
 	if (d3d9TablePtrPtr)
 	{
 		g_pDevice = (IDirect3DDevice9*)(**(PDWORD*)d3d9TablePtrPtr);
@@ -144,7 +144,7 @@ void CRender::IRender::Initialize()
 	ADD_LOG("2-1-11-7-3-12\n");
 
 	ADD_LOG("Waith device...\n");
-	while (!nm_pD3Ddev) { nm_pD3Ddev = m_pDevice; Sleep(50); }
+	while (!nm_pD3Ddev) { nm_pD3Ddev = m_pDevice; FastCall::G().t_Sleep(50); }
 	ADD_LOG("2-1-11-7-3-13\n");
 	g_pDevice = m_pDevice;
 

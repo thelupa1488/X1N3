@@ -163,3 +163,7 @@ build/release/release.pdb
 Cheat/output/release/release.Build.CppClean.log
 Auto animation knife.txt
 build/release/release.dll
+build/debug/debug.pdb
+build/debug/debug.dll
+Cheat/output/debug/debug.Build.CppClean.log
+build/release/Protect.bat

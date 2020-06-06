@@ -1,10 +1,7 @@
 #include "Misc.h"
 #include  "../Setup.h"
 #include "../../GUI/Gui.h"
-//#include "../../Engine/EnginePrediction.h"
-
-//static float Next_Lby;
-//static float Side;
+#include "../../Engine/EnginePrediction.h"
 
 #define KEY_DOWN(VK_NNM) ((FastCall::G().t_GetAsyncKeyState(VK_NNM) & 0x8000) ? 1:0)
 
@@ -171,6 +168,71 @@ void CMisc::Draw()
 					}
 				}
 
+				if (Desync)
+				{
+					if (DesyncArrows)
+					{
+						auto client_viewangles = QAngle();
+						I::Engine()->GetViewAngles(client_viewangles);
+						const auto screen_center = Vector2D(CGlobal::iScreenWidth / 2, CGlobal::iScreenHeight / 2);
+
+						constexpr auto radius = 225.f;
+						auto DrawArrow = [&](float rot, Color color) -> void
+						{
+							vector<Vec2> vertices;
+							vertices.push_back((Vec2(screen_center.x + cosf(rot) * radius, screen_center.y + sinf(rot) * radius)));
+							vertices.push_back((Vec2(screen_center.x + cosf(rot + DEG2RAD(2)) * (radius - 6), screen_center.y + sinf(rot + DEG2RAD(2)) * (radius - 6)))); //25
+							vertices.push_back((Vec2(screen_center.x + cosf(rot - DEG2RAD(2)) * (radius - 6), screen_center.y + sinf(rot - DEG2RAD(2)) * (radius - 6)))); //25
+
+							GP_Render->RenderTriangle(vertices.at(0), vertices.at(1), vertices.at(2), Color::Purple(), 2.f);
+						};
+
+						static auto alpha = 0.f; static auto plus_or_minus = false;
+						if (alpha <= 0.f || alpha >= 255.f) plus_or_minus = !plus_or_minus;
+						alpha += plus_or_minus ? (255.f / 7 * 0.015) : -(255.f / 7 * 0.015); alpha = clamp(alpha, 0.f, 255.f);
+
+						auto FakeClr = Color(200, 0, 0, 170);
+						const auto FakeRot = DEG2RAD((CGlobal::Side < 0.0f ? 90 : -90) - 90);
+						DrawArrow(FakeRot, FakeClr);
+					}
+			
+					if (AngleLines)
+					{
+						auto DrawAngleLines = [&](const Vector& origin, const Vector& w2sOrigin, const float& angle, const char* text, Color clr)
+						{
+							Vector forward;
+							AngleVectors(QAngle(0.0f, angle, 0.0f), forward);
+							float AngleLinesLength = 30.0f;
+
+							Vector w2sReal;
+							if (CGlobal::WorldToScreen(origin + forward * AngleLinesLength, w2sReal))
+							{
+								GP_Render->DrawLine(w2sOrigin.x, w2sOrigin.y, w2sReal.x, w2sReal.y, Color::White(), 1.0f);
+								GP_Render->DrawString(w2sReal.x, w2sReal.y /* - 5.0f, 14.f*/, clr, true, true, text);
+							}
+						};
+
+						if (!CGlobal::LocalPlayer || !CGlobal::LocalPlayer->GetBasePlayerAnimState())
+							return;
+
+						if (CGlobal::LocalPlayer->IsDead())
+							return;
+
+						Vector w2sOrigin;
+						if (CGlobal::WorldToScreen(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin))
+						{
+							static float view;
+							if (CGlobal::)
+								view = CGlobal::UserCmd->viewangles.y;
+
+							DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, CGlobal::LocalPlayer->GetBasePlayerAnimState()->m_flGoalFeetYaw, "fake", Color::Orange());
+							DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, CGlobal::LocalPlayer->GetLowerBodyYawTarget(), "lby", Color::Blue());
+							DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, CGlobal::AngleReal, "real", Color::Green());
+							DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, view, "view", Color::Red());
+						}
+					}
+				}
+
 				Night();
 				CustomWalls();
 			}
@@ -188,69 +250,68 @@ void CMisc::SetNewClan(string New, string Name)
 		pSetClanTag(New.c_str(), Name.c_str());
 }
 
-//static int GetBestHeadAngle(float yaw)
-//{
-//	float Back, Right, Left;
-//
-//	Vector src3D, dst3D, forward, right, up, src, dst;
-//	trace_t tr;
-//	Ray_t ray, ray2, ray3, ray4, ray5;
-//	CTraceFilter filter;
-//
-//	QAngle engineViewAngles;
-//
-//	engineViewAngles.x = 0;
-//	engineViewAngles.y = yaw;
-//
-//	AngleVectors(engineViewAngles, forward, right, up);
-//
-//	filter.pSkip = CGlobal::LocalPlayer;
-//	src3D = CGlobal::LocalPlayer->GetEyePosition();
-//	dst3D = src3D + (forward * 384);
-//
-//	ray.Init(src3D, dst3D);
-//
-//	I::EngineTrace()->TraceRay(ray, MASK_SHOT, &filter, &tr);
-//
-//	Back = (tr.endpos - tr.startpos).Length();
-//
-//	ray2.Init(src3D + right * 35, dst3D + right * 35);
-//
-//	I::EngineTrace()->TraceRay(ray2, MASK_SHOT, &filter, &tr);
-//
-//	Right = (tr.endpos - tr.startpos).Length();
-//
-//	ray3.Init(src3D - right * 35, dst3D - right * 35);
-//
-//	I::EngineTrace()->TraceRay(ray3, MASK_SHOT, &filter, &tr);
-//
-//	Left = (tr.endpos - tr.startpos).Length();
-//
-//	static int result = 0;
-//
-//	if (Left > Right)
-//	{
-//		result = -1;
-//	}
-//	else if (Right > Left)
-//	{
-//		result = 1;
-//	}
-//
-//	return result;
-//}
+static int GetBestHeadAngle(float yaw)
+{
+	float Back, Right, Left;
 
-//static void UpdateLBY(CCSGOPlayerAnimState* animstate)
-//{
-//	if (animstate->speed_2d > 0.1f || std::fabsf(animstate->flUpVelocity)) {
-//		Next_Lby = I::GlobalVars()->curtime + 0.22f;
-//	}
-//	else if (I::GlobalVars()->curtime > Next_Lby) {
-//		if (std::fabsf(CGlobal::AngleDiff(animstate->m_flGoalFeetYaw, animstate->m_flEyeYaw)) > 35.0f) {
-//			Next_Lby = I::GlobalVars()->curtime + 1.1f;
-//		}
-//	}
-//}
+	Vector src3D, dst3D, forward, right, up, src, dst;
+	trace_t tr;
+	Ray_t ray, ray2, ray3, ray4, ray5;
+	CTraceFilter filter;
+
+	QAngle engineViewAngles;
+
+	engineViewAngles.x = 0;
+	engineViewAngles.y = yaw;
+
+	AngleVectors(engineViewAngles, forward, right, up);
+
+	filter.pSkip = CGlobal::LocalPlayer;
+	src3D = CGlobal::LocalPlayer->GetEyePosition();
+	dst3D = src3D + (forward * 384);
+
+	ray.Init(src3D, dst3D);
+
+	I::EngineTrace()->TraceRay(ray, MASK_SHOT, &filter, &tr);
+
+	Back = (tr.endpos - tr.startpos).Length();
+
+	ray2.Init(src3D + right * 35, dst3D + right * 35);
+
+	I::EngineTrace()->TraceRay(ray2, MASK_SHOT, &filter, &tr);
+
+	Right = (tr.endpos - tr.startpos).Length();
+
+	ray3.Init(src3D - right * 35, dst3D - right * 35);
+
+	I::EngineTrace()->TraceRay(ray3, MASK_SHOT, &filter, &tr);
+
+	Left = (tr.endpos - tr.startpos).Length();
+
+	static int result = 0;
+
+	if (Left > Right)
+	{
+		result = -1;
+	}
+	else if (Right > Left)
+	{
+		result = 1;
+	}
+
+	return result;
+}
+
+void CMisc::UpdateLBY(CCSGOPlayerAnimState* animstate)
+{
+	if (animstate->speed_2d > 0.1f || std::fabsf(animstate->flUpVelocity))
+		CGlobal::NextLby = I::GlobalVars()->curtime + 0.22f;
+	else if (I::GlobalVars()->curtime > CGlobal::NextLby)
+	{
+		if (std::fabsf(CGlobal::AngleDiff(animstate->m_flGoalFeetYaw, animstate->m_flEyeYaw)) > 35.0f)
+			CGlobal::NextLby = I::GlobalVars()->curtime + 1.1f;
+	}
+}
 
 void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCmd)
 {
@@ -285,7 +346,8 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 						}
 						else if (pCmd->buttons & IN_JUMP)
 						{
-							if (CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND)
+							if (CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND &&
+								BHopChance == 100 ? true : ((1 + (rand() % 101)) >= BHopChance))
 							{
 								bLastJumped = true;
 								bShouldFake = true;
@@ -313,34 +375,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				}
 			}
 
-			/*if (EdgeJump && EdgeJumpBind.Check())
-			{
-				if (CGlobal::LocalPlayer->IsDead())
-					return;
-
-				const auto mt = CGlobal::LocalPlayer->GetMoveType();
-
-				if (mt == MOVETYPE_LADDER || mt == MOVETYPE_NOCLIP)
-					return;
-
-				const auto start = CGlobal::LocalPlayer->GetOrigin();
-				auto end = start;
-				end.z -= 32;
-
-				CTraceFilter filter;
-
-				filter.pSkip = CGlobal::LocalPlayer;
-
-				trace_t trace;
-				Ray_t ray;
-
-				ray.Init(start, end);
-				I::EngineTrace()->TraceRay(ray, MASK_VISIBLE, &filter, &trace);
-
-				if (trace.fraction == 1.0f)
-					pCmd->buttons |= IN_JUMP;
-			}*/
-
 			if (LeftHandKnife)
 			{
 				if (CGlobal::LocalPlayer && CGlobal::GWeaponType == WEAPON_TYPE_KNIFE)
@@ -352,7 +386,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					cl_righthand->SetValue(1);
 				}
 			}
-			else
+			if (!LeftHandKnife)
 			{
 				cl_righthand->SetValue(1);
 			}
@@ -389,7 +423,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				"particle/vistasmokev1/vistasmokev1_emods_impactdust",
 				"particle/vistasmokev1/vistasmokev1_fire",
 			};
-			static auto smoke_count = *reinterpret_cast<uint32_t**>(CSX::Memory::FindSignature(XorStr("client.dll"), XorStr("A3 ? ? ? ? 57 8B CB")) + 1);
+			static auto smoke_count = *reinterpret_cast<uint32_t**>(CSX::Memory::FindSignature(clientFactory, XorStr("A3 ? ? ? ? 57 8B CB")) + 1);
 			static bool NoSmokeReset = false;
 			if (NoSmoke)
 			{
@@ -646,112 +680,172 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				}
 			}
 
-			//EnginePrediction::Begin();
-			//{
-			//	static CCSGOPlayerAnimState AnimState;
-			//	QAngle vangle = QAngle();
-			//	QAngle angleold = pCmd->viewangles;
+			auto unpred_flags = CGlobal::LocalPlayer->GetFlags();
+			EnginePrediction::Begin(pCmd);
+			{
+				if (EdgeJump && EdgeJumpBind.Check())
+				{
+					if ((unpred_flags & FL_ONGROUND) && !(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
+						pCmd->buttons |= IN_JUMP;
+				}
+				QAngle vangle = QAngle();
+				QAngle angleold = pCmd->viewangles;
+				if (Desync)
+				{
+					if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
+						CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER || CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP || CGlobal::LocalPlayer->IsDead())
+						return;
 
-			//	if (LegitAA)
-			//	{
-			//		if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
-			//			CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER || CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP || CGlobal::LocalPlayer->IsDead())
-			//			return;
+					//if (*I::GameRules() && (*I::GameRules())->IsFreezePeriod()) //need fix
+					//	return;
 
-			//		if (I::GameRules() && I::GameRules()->IsFreezePeriod())
-			//			return;
+					if (fabsf(CGlobal::LocalPlayer->GetSpawnTime() - I::GlobalVars()->curtime) < 1.0f)
+						return;
 
-			//		if (std::fabsf(CGlobal::LocalPlayer->GetSpawnTime() - I::GlobalVars()->curtime) < 1.0f)
-			//			return;
+					auto weapon = (CBaseWeapon*)CGlobal::LocalPlayer->GetActiveWeapon();
 
-			//		auto weapon = (CBaseWeapon*)CGlobal::LocalPlayer->m_hMyWeapons();
+					if (!weapon)
+						return;
 
-			//		if (!weapon)
-			//			return;
+					if ((CGlobal::GWeaponID == WEAPON_ID::WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_ID::WEAPON_FAMAS) && weapon->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
+						return;
 
-			//		if ((CGlobal::GWeaponID == WEAPON_ID::WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_ID::WEAPON_FAMAS) && weapon->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
-			//			return;
+					if (CGlobal::GWeaponType == WEAPON_TYPE::WEAPON_TYPE_GRENADE)
+					{
+						if (!weapon->GetPinPulled())
+						{
+							float throwTime = weapon->GetThrowTime();
+							if (throwTime > 0.f)
+								return;
+						}
 
-			//		if (CGlobal::GWeaponType == WEAPON_TYPE::WEAPON_TYPE_GRENADE) {
-			//			if (!weapon->GetPinPulled()) {
-			//				float throwTime = weapon->GetThrowTime();
-			//				if (throwTime > 0.f)
-			//					return;
-			//			}
+						if ((pCmd->buttons & IN_ATTACK) || (pCmd->buttons & IN_ATTACK2))
+						{
+							if (weapon->GetThrowTime() > 0.f)
+								return;
+						}
+					}
+					static bool broke_lby = false;
+					QAngle vangle;
+					auto sideauto = GetBestHeadAngle(vangle.y);
 
-			//			if ((pCmd->buttons & IN_ATTACK) || (pCmd->buttons & IN_ATTACK2)) {
-			//				if (weapon->GetThrowTime() > 0.f)
-			//					return;
-			//			}
-			//		}
+					if (!DesyncAd)
+					{
+						if (DesyncBind.Check())
+							CGlobal::Side = -CGlobal::Side; //need fix
+					}
+					else
+						CGlobal::NextLby = sideauto;
 
-			//		static bool broke_lby = false;
-			//		QAngle vangle;
-			//		auto sideauto = GetBestHeadAngle(vangle.y);
+					if (DesyncType == 1)
+					{
+						float minimal_move = CGlobal::LocalPlayer->GetFlags() & IN_DUCK ? 3.0f : 1.0f;
 
-			//		if (!LegitAA_ad) {
-			//			if (LegitAABind.Check()) {
-			//				Side = -Side;
-			//			}
-			//		}
-			//		else
-			//			Next_Lby = sideauto;
+						if (!bSendPacket)
+							pCmd->viewangles.y += 120.f * CGlobal::Side;
 
-			//		if (LegitAA_type == 1) {
-			//			float minimal_move = CGlobal::LocalPlayer->GetFlags() & IN_DUCK ? 3.0f : 1.0f;
+						static bool flip = 1;
+						flip = !flip;
 
-			//			if (!bSendPacket) {
-			//				pCmd->viewangles.y += 120.f * Side;
-			//			}
+						pCmd->sidemove += flip ? minimal_move : -minimal_move;
+					}
+					else if (DesyncType == 2)
+					{
+						if (CGlobal::NextLby >= I::GlobalVars()->curtime)
+						{
+							if (!broke_lby && bSendPacket)
+								return;
 
-			//			static bool flip = 1;
-			//			flip = !flip;
+							broke_lby = false;
+							bSendPacket = false;
+							pCmd->viewangles.y += 120.0f * CGlobal::Side;
+						}
+						else
+						{
+							broke_lby = true;
+							bSendPacket = false;
+							pCmd->viewangles.y += 120.0f * -CGlobal::Side;
+						}
+					}
+					else if (DesyncType == 3)
+					{
+						static bool switchaa = false;
+						switchaa = !switchaa;
 
-			//			pCmd->sidemove += flip ? minimal_move : -minimal_move;
-			//		}
-			//		else if (LegitAA_type == 2) {
-			//			if (Next_Lby >= I::GlobalVars()->curtime) {
-			//				if (!broke_lby && bSendPacket)
-			//					return;
+						if (!bSendPacket)
+							pCmd->viewangles.y += switchaa ? 180.f : 0.f;
+					}
+					FixAngles(pCmd->viewangles);
+				}
 
-			//				broke_lby = false;
-			//				bSendPacket = false;
-			//				pCmd->viewangles.y += 120.0f * Side;
-			//			}
-			//			else {
-			//				broke_lby = true;
-			//				bSendPacket = false;
-			//				pCmd->viewangles.y += 120.0f * -Side;
-			//			}
-			//		}
-			//		else if (LegitAA_type == 3)
-			//		{
-			//			static bool switchaa = false;
-			//			switchaa = !switchaa;
+				CGlobal::CorrectMouse(pCmd);
 
-			//			if (!bSendPacket)
-			//				pCmd->viewangles.y += switchaa ? 180.f : 0.f;
-			//		}
-			//		FixAngles(pCmd->viewangles);
-			//	}
-			//	CGlobal::CorrectMouse(pCmd);
+				auto anim_state = CGlobal::LocalPlayer->GetBasePlayerAnimState();
+				if (anim_state)
+				{
+					CCSGOPlayerAnimState anim_state_backup = *anim_state;
+					*anim_state = CGlobal::g_AnimState;
+					CGlobal::LocalPlayer->GetVAngles() = pCmd->viewangles;
+					CGlobal::LocalPlayer->UpdateClientSideAnimation();
 
-			//	auto anim_state = CGlobal::LocalPlayer->GetBasePlayerAnimState();
-			//	if (anim_state)
-			//	{
-			//		CCSGOPlayerAnimState anim_state_backup = *anim_state;
-			//		*anim_state = AnimState;
-			//		CGlobal::LocalPlayer->GetVAngles() = pCmd->viewangles;
-			//		CGlobal::LocalPlayer->UpdateClientSideAnimation();
+					UpdateLBY(anim_state);
 
-			//		UpdateLBY(anim_state);
+					CGlobal::g_AnimState = *anim_state;
+					*anim_state = anim_state_backup;
+				}
+				if (bSendPacket)
+				{
+					CGlobal::AngleReal = CGlobal::g_AnimState.m_flGoalFeetYaw;
+					if (anim_state)
+						CGlobal::AngleFake = anim_state->m_flGoalFeetYaw;
+					vangle = pCmd->viewangles;
+				}
+				FixMovement(pCmd, angleold);
 
-			//		AnimState = *anim_state;
-			//		*anim_state = anim_state_backup;
-			//	}
-			//	FixMovement(pCmd, angleold);
-			//}
-			//EnginePrediction::End();
+				if (AutoBlock && AutoBlockBind.Check())
+				{			
+					float bestdist = 250.f;
+					int index = -1;
+
+					for (int i = 1; i < I::Engine()->GetMaxClients(); i++)
+					{
+						CBaseEntity* entity = (CBaseEntity*)I::ClientEntityList()->GetClientEntity(i);
+
+						if (!entity)
+							continue;
+
+						if (entity->IsDead() || entity->IsDormant() || entity == CGlobal::LocalPlayer)
+							continue;
+
+						float dist = CGlobal::LocalPlayer->GetOrigin().DistTo(entity->GetOrigin());
+
+						if (dist < bestdist)
+						{
+							bestdist = dist;
+							index = i;
+						}
+					}
+
+					if (index == -1)
+						return;
+
+					CBaseEntity* target = (CBaseEntity*)I::ClientEntityList()->GetClientEntity(index);
+
+					if (!target)
+						return;
+
+					QAngle angles = CalcAngle(CGlobal::LocalPlayer->GetOrigin(), target->GetOrigin());
+
+					angles.y -= CGlobal::LocalPlayer->GetEyeAngles().y;
+					NormalizeAngles(angles);
+
+					if (angles.y < 0.0f)
+						pCmd->sidemove = 250.f;
+					else if (angles.y > 0.0f)
+						pCmd->sidemove = -250.f;
+				}
+			}
+			EnginePrediction::End();
 		}
 	}
 }
@@ -840,61 +934,52 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 				}
 			}
 
-			//if (ThirdPerson)
-			//{
-			//	static size_t lastTime = 0;
-			//	static bool enable = false;
+			if (ThirdPerson)
+			{
+				if (ThirdPersonBind.Check())
+				{
+					if (!CGlobal::LocalPlayer->IsDead())
+						I::Input()->m_fCameraInThirdPerson = true;
 
-			//	if (ThirdPersonBind.Check())
-			//	{
-			//		if (GetTickCount64() > lastTime)
-			//		{
-			//			enable = !enable;
-			//			lastTime = GetTickCount64() + 650;
-			//		}
-			//	}
+					auto GetCorrectDistance = [](float ideal_distance) -> float
+					{
+						/* vector for the inverse angles */
+						QAngle inverseAngles;
+						I::Engine()->GetViewAngles(inverseAngles);
 
-			//	if (enable && !plocal->IsDead())
-			//		I::Input()->m_fCameraInThirdPerson = true;
-			//	else
-			//		I::Input()->m_fCameraInThirdPerson = false;
+						/* inverse angles by 180 */
+						inverseAngles.x *= -1.f, inverseAngles.y += 180.f;
 
-			//	auto GetCorrectDistance = [](float ideal_distance) -> float
-			//	{
-			//		/* vector for the inverse angles */
-			//		QAngle inverseAngles;
-			//		I::Engine()->GetViewAngles(inverseAngles);
+						/* vector for direction */
+						Vector direction;
+						AngleVectors(inverseAngles, direction);
 
-			//		/* inverse angles by 180 */
-			//		inverseAngles.x *= -1.f, inverseAngles.y += 180.f;
+						/* ray, trace & filters */
+						Ray_t ray;
+						trace_t trace;
+						CTraceFilter filter;
 
-			//		/* vector for direction */
-			//		Vector direction;
-			//		AngleVectors(inverseAngles, direction);
+						/* dont trace local player */
+						filter.pSkip = CGlobal::LocalPlayer;
 
-			//		/* ray, trace & filters */
-			//		Ray_t ray;
-			//		trace_t trace;
-			//		CTraceFilter filter;
+						/* create ray */
+						ray.Init(CGlobal::LocalPlayer->GetEyePosition(), CGlobal::LocalPlayer->GetEyePosition() + (direction * ideal_distance));
 
-			//		/* dont trace local player */
-			//		filter.pSkip = CGlobal::LocalPlayer;
+						/* trace ray */
+						I::EngineTrace()->TraceRay(ray, MASK_SHOT, &filter, &trace);
 
-			//		/* create ray */
-			//		ray.Init(CGlobal::LocalPlayer->GetEyePosition(), CGlobal::LocalPlayer->GetEyePosition() + (direction * ideal_distance));
+						/* return the ideal distance */
+						return (ideal_distance * trace.fraction) - 10.f;
+					};
 
-			//		/* trace ray */
-			//		I::EngineTrace()->TraceRay(ray, MASK_SHOT, &filter, &trace);
-
-			//		/* return the ideal distance */
-			//		return (ideal_distance * trace.fraction) - 10.f;
-			//	};
-
-			//	QAngle angles;
-			//	I::Engine()->GetViewAngles(angles);
-			//	angles.z = GetCorrectDistance(ThirdPersonDistance); // 150 is better distance
-			//	I::Input()->m_vecCameraOffset = Vector(angles.x, angles.y, angles.z);
-			//}
+					QAngle angles;
+					I::Engine()->GetViewAngles(angles);
+					angles.z = GetCorrectDistance(ThirdPersonDistance); // 150 is better distance
+					I::Input()->m_vecCameraOffset = Vector(angles.x, angles.y, angles.z);
+				}
+				else
+					I::Input()->m_fCameraInThirdPerson = false;
+			}
 		}
 	}
 
@@ -988,7 +1073,7 @@ void CMisc::AutoAcceptEmit()
 	if (AutoAccept && !CGlobal::FullUpdateCheck)
 	{
 		static auto fnAccept = reinterpret_cast<bool(__stdcall*)(const char*)>
-			(CSX::Memory::FindPatternV2(XorStr("client.dll"),
+			(CSX::Memory::FindPatternV2(clientFactory,
 				XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12")));
 
 		if (fnAccept)

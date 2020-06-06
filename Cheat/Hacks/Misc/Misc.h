@@ -68,6 +68,7 @@ protected:
 	virtual void FrameStageNotify() = 0;
 	virtual void Menu() = 0;
 	virtual void Draw() = 0;
+	virtual void UpdateLBY(CCSGOPlayerAnimState* animstate) = 0;
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd) = 0;
 	virtual void OverrideView(CViewSetup* pSetup) = 0;
 };
@@ -87,6 +88,7 @@ public:
 
 	virtual void Menu();
 	virtual void Draw();
+	virtual void UpdateLBY(CCSGOPlayerAnimState* animstate);
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd);
 	virtual void OverrideView(CViewSetup* pSetup);
 	virtual void GetViewModelFOV(float &Fov);
@@ -104,20 +106,24 @@ public:
 
 	bool Enable = true;
 	bool BHop = false;
-	//bool EdgeJump = false;
-	//CBind EdgeJumpBind = CBind(0, true);
+	int  BHopChance = 100;
+	bool EdgeJump = false;
+	CBind EdgeJumpBind = CBind(0, true);
 	bool AutoStrafe = false;
 	bool LeftHandKnife = false;
 	bool InfiniteDuck = false;
 
-	//bool ThirdPerson = false;
-	//int ThirdPersonDistance = 150;
-	//CBind ThirdPersonBind = CBind(0, true);
+	bool ThirdPerson = false;
+	int ThirdPersonDistance = 50;
+	CBind ThirdPersonBind = CBind(0, true);
 
-	//bool LegitAA = false;
-	//int  LegitAA_type = 0;
-	//bool LegitAA_ad = false;
-	//CBind LegitAABind = CBind(0, true);
+	bool Desync = false;
+	int  DesyncType = 0;
+	bool DesyncAd = false;
+	CBind DesyncBind = CBind(0, true);
+
+	bool DesyncArrows = false;
+	bool AngleLines = false;
 
 	bool FovChanger = false;
 	int FovView = 100;
@@ -207,8 +213,8 @@ public:
 	int KnifeBotFilter = 0;
 	int KnifeBotMode = 0;
 	CBind KnifeBotBind = CBind(0);
-	bool BulletTrace = false;
-
+	bool AutoBlock = false;
+	CBind AutoBlockBind = CBind(0);
 
 	Color CrosshairColor = Color(255, 0, 0, 255);
 	Color SnipCrosshairColor = Color(255, 0, 0, 255);
@@ -231,11 +237,17 @@ public:
 		RV(ColoredWallsColor, "ColoredWallsColor");
 
 		RV(BHop, "BHop");
-		//RV(EdgeJump, "EdgeJump");
-		//RV(EdgeJumpBind, "EdgeJumpBind");
+		RV(BHopChance, "BHopChance");
+		RV(EdgeJump, "EdgeJump");
+		RV(EdgeJumpBind, "EdgeJumpBind");
 		RV(AutoStrafe, "AutoStrafe");
 		RV(LeftHandKnife, "LeftHandKnife");
 		RV(InfiniteDuck, "InfiniteDuck");
+		RV(ThirdPerson, "ThirdPerson");
+		RV(ThirdPersonBind, "ThirdPersonBind");
+		RV(ThirdPersonDistance, "ThirdPersonDistance");
+		RV(DesyncArrows, "DesyncArrows");
+		RV(AngleLines, "AngleLines");
 		RV(FovChanger, "FovChanger");
 		RV(FovView, "FovView");
 		RV(FovModelChanger, "FovModelChanger");
@@ -303,6 +315,9 @@ public:
 		RV(KnifeBotFilter, "KnifeBotFilter");
 		RV(KnifeBotBind, "KnifeBotBind");
 		RV(KnifeBotMode, "KnifeBotMode");
+		
+		RV(AutoBlock, "AutoBlock");
+		RV(AutoBlock, "AutoBlockBind");
 
 		ADD_LOG("Setup: CMisc sucessful\n");
 	}

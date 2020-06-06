@@ -18,6 +18,7 @@ namespace Offsets
 
 	DWORD m_lifeState = 0;
 	DWORD m_flFlashDuration = 0;
+	DWORD m_flSpawnTime = 0;
 
 	DWORD m_iAccount = 0;
 

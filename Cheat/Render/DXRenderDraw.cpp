@@ -341,6 +341,28 @@ void CRender::IRender::DrawRing3D(int16_t x, int16_t y, int16_t z, int16_t radiu
 	}
 }
 
+void CRender::IRender::RenderTriangle(Vec2 x, Vec2 y, Vec2 z, color_t color, float thickness)
+{
+	AddTriangle(x, y, z, color.color, thickness);
+	AddTriangleFilled(x, y, z, color.color);
+}
+
+void CRender::IRender::AddTriangle(Vec2 a, Vec2 b, Vec2 c, color_t color, float thickness)
+{
+    m_pDrawMngr->PathLineTo(a);
+	m_pDrawMngr->PathLineTo(b);
+	m_pDrawMngr->PathLineTo(c);
+	m_pDrawMngr->PathStroke(color.color, true, thickness);
+}
+
+void CRender::IRender::AddTriangleFilled(Vec2 a, Vec2 b, Vec2 c, color_t color)
+{
+	m_pDrawMngr->PathLineTo(a);
+	m_pDrawMngr->PathLineTo(b);
+	m_pDrawMngr->PathLineTo(c);
+	m_pDrawMngr->PathFillConvex(color.color);
+}
+
 void CRender::IRender::DrawTriangle(int16_t x1, int16_t y1, int16_t x2, int16_t y2, int16_t x3, int16_t y3, color_t color, float thickness)
 {
 	m_pDrawMngr->PathLineTo(Vec2(x1, y1));

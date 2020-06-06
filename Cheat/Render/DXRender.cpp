@@ -242,7 +242,6 @@ bool check_closed = false;
 
 LRESULT WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-
 	if (FastCall::G().t_GetAsyncKeyState(MainSettings().MenuButton))
 	{
 		is_clicked = false;

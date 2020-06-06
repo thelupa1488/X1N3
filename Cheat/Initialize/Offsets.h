@@ -22,6 +22,7 @@ namespace Offsets
 
 	extern DWORD m_lifeState;
 	extern DWORD m_flFlashDuration;
+	extern DWORD m_flSpawnTime;
 
 	extern DWORD m_iAccount;
 

@@ -61,7 +61,7 @@ namespace Engine
 	bool CBaseWeapon::IsReloading()
 	{
 		static auto inReload = *reinterpret_cast<uint32_t*>(
-			CSX::Memory::FindPatternV2(XorStr("client.dll"), XorStr("C6 87 ? ? ? ? ? 8B 06 8B CE FF 90")));
+			CSX::Memory::FindPatternV2(clientFactory, XorStr("C6 87 ? ? ? ? ? 8B 06 8B CE FF 90")));
 		return *reinterpret_cast<bool*>(uintptr_t(this) + inReload);
 	}
 

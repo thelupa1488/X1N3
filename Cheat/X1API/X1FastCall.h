@@ -191,6 +191,7 @@ private:
 		{ "D3DXCreateTextureFromFileInMemoryEx", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("d3dx9_43.dll").c_str()), "D3DXCreateTextureFromFileInMemoryEx") },
 		{ "D3DXCreateTextureFromFileExA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("d3dx9_43.dll").c_str()), "D3DXCreateTextureFromFileExA") },
 		{ "CreateDXGIFactory1", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("dxgi.dll").c_str()), "CreateDXGIFactory1") },
+		{ "DestroyWindow", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()), "DestroyWindow") },
 	};
 public:
 
@@ -1415,4 +1416,11 @@ public:
 			_In_ lParam
 		));
 
+	CREATE_CALL(BOOL, WINAPI, _DestroyWindow, "DestroyWindow",
+		ALL_A(_In_ HWND hWnd
+		),
+		ALL_A(_In_ HWND 
+		),
+		ALL_A(_In_ hWnd
+		));
 };

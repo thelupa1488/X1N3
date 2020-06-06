@@ -201,7 +201,6 @@
     <ClCompile Include="Engine\SDK\Math.cpp" />
     <ClCompile Include="Engine\SDK\checksum_md5.cpp" />
     <ClCompile Include="X1API\cHide.cpp" />
-    <ClCompile Include="Engine\SDK\Input.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
@@ -652,7 +651,6 @@
     <ClInclude Include="Hacks\Radar\Radar.h">
       <Filter>Hacks\Radar</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\SDK\IGameTypes.h" />
     <ClInclude Include="Engine\SDK\StartSoundParams.h" />
     <ClInclude Include="Engine\SDK\CGlowObjManager.h" />
     <ClInclude Include="Render\TestTexture.h" />
@@ -668,9 +666,10 @@
     <ClInclude Include="Engine\SDK\CUserCmd.hpp" />
     <ClInclude Include="X1API\cHide.h" />
     <ClInclude Include="X1API\VMP\VMProtectSDK.h" />
-    <ClInclude Include="Engine\SDK\Input.hpp">
+    <ClInclude Include="Engine\SDK\CInput.hpp">
       <Filter>Engine\SDK</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\EnginePrediction.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="3DMenu">

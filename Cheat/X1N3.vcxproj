@@ -22,7 +22,6 @@
     <ClCompile Include="Engine\NetVar.cpp" />
     <ClCompile Include="Engine\SDK\checksum_md5.cpp" />
     <ClCompile Include="Engine\SDK\CRC.cpp" />
-    <ClCompile Include="Engine\SDK\Input.cpp" />
     <ClCompile Include="Engine\SDK\KeyValues.cpp" />
     <ClCompile Include="Engine\SDK\Math.cpp" />
     <ClCompile Include="Engine\SDK\SDK.cpp" />
@@ -74,6 +73,7 @@
     <ClInclude Include="Engine\CSX\CSX_Memory.h" />
     <ClInclude Include="Engine\CSX\CSX_Utils.h" />
     <ClInclude Include="Engine\Engine.h" />
+    <ClInclude Include="Engine\EnginePrediction.h" />
     <ClInclude Include="Engine\Entity.h" />
     <ClInclude Include="Engine\EntityMem.h" />
     <ClInclude Include="Engine\GrenadePrediction.h" />
@@ -85,7 +85,7 @@
     <ClInclude Include="Engine\SDK\CGlowObjManager.h" />
     <ClInclude Include="Engine\SDK\CHandle.hpp" />
     <ClInclude Include="Engine\SDK\checksum_md5.hpp" />
-    <ClInclude Include="Engine\SDK\Input.hpp" />
+    <ClInclude Include="Engine\SDK\CInput.hpp" />
     <ClInclude Include="Engine\SDK\ClientClass.hpp" />
     <ClInclude Include="Engine\SDK\ClientState.hpp" />
     <ClInclude Include="Engine\SDK\Color.hpp" />
@@ -109,7 +109,6 @@
     <ClInclude Include="Engine\SDK\IEngineTrace.hpp" />
     <ClInclude Include="Engine\SDK\IGameEvent.h" />
     <ClInclude Include="Engine\SDK\IGameRules.h" />
-    <ClInclude Include="Engine\SDK\IGameTypes.h" />
     <ClInclude Include="Engine\SDK\IHandleEntity.hpp" />
     <ClInclude Include="Engine\SDK\IInputSystem.hpp" />
     <ClInclude Include="Engine\SDK\ILocalize.hpp" />

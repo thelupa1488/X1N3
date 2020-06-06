@@ -13,22 +13,25 @@ void CMisc::Menu()
 	if (BHop)
 	{
 		X1Gui().SameLine(SAME_LINE_1);
+		X1Gui().PushItemWidth(PUSH_1);
+		SliderInts("%Chance##Bhop", BHopChance, 0, 100);
 		DCheckBox("Air strafe", AutoStrafe);
 	}
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
-	//DCheckBox("Edge Jump", EdgeJump);
-	//if (EdgeJump)
-	//{
-	//	X1Gui().PushItemWidth(PUSH_1);
-	//	HotsKey("Button##edgejump", EdgeJumpBind.Button);
-	//	X1Gui().SameLine();
-	//	DCheckBox("Hold##edgejump", EdgeJumpBind.Hold);
-	//}
-	//X1Gui().Spacing();
-	//X1Gui().Separator();
-	//X1Gui().Spacing();
+	DCheckBox("Edge Jump", EdgeJump);
+	if (EdgeJump)
+	{
+		X1Gui().SameLine(SAME_LINE_1);
+		X1Gui().PushItemWidth(PUSH_1);
+		HotsKey("Button##edgejump", EdgeJumpBind.Button);
+		X1Gui().SameLine();
+		DCheckBox("Hold##edgejump", EdgeJumpBind.Hold);
+	}
+	X1Gui().Spacing();
+	X1Gui().Separator();
+	X1Gui().Spacing();
 	DCheckBox("Left Hand Knife", LeftHandKnife);
 	X1Gui().Spacing();
 	X1Gui().Separator();
@@ -37,36 +40,39 @@ void CMisc::Menu()
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
-	//DCheckBox("ThirdPerson", ThirdPerson);
-	//if (ThirdPerson)
-	//{
-	//	X1Gui().SameLine(SAME_LINE_1);
-	//	X1Gui().PushItemWidth(PUSH_1);
-	//	SliderInts("Distance##ThirdPerson", ThirdPersonDistance, 150, 500);
-	//	X1Gui().PushItemWidth(PUSH_1);
-	//	HotsKey("Button##thirdperson", ThirdPersonBind.Button);
-	//	X1Gui().SameLine();
-	//	DCheckBox("Hold##thirdperson", ThirdPersonBind.Hold);
-	//}
-	//X1Gui().Spacing();
-	//X1Gui().Separator();
-	//X1Gui().Spacing();
-	//DCheckBox("Legit AA", LegitAA);
-	//if (LegitAA)
-	//{
-	//	X1Gui().SameLine(SAME_LINE_1);
-	//	X1Gui().PushItemWidth(PUSH_1);
-	//	VectorEx<const char* >itemsCSS = { lolc("Off") , lolc("Static"), lolc("Balance") };
-	//	DComboBox("Type##LegitAA", LegitAA_type, itemsCSS);
-	//	DCheckBox("Autodirection", LegitAA_ad);
-	//	X1Gui().SameLine(SAME_LINE_1);
-	//	HotsKey("Button##LegitAA", LegitAABind.Button);
-	//	X1Gui().SameLine();
-	//	DCheckBox("Hold##LegitAA", LegitAABind.Hold);
-	//}
-	//X1Gui().Spacing();
-	//X1Gui().Separator();
-	//X1Gui().Spacing();
+	DCheckBox("ThirdPerson", ThirdPerson);
+	if (ThirdPerson)
+	{
+		X1Gui().SameLine(SAME_LINE_1);
+		X1Gui().PushItemWidth(PUSH_1);
+		SliderInts("Distance##ThirdPerson", ThirdPersonDistance, 50, 300);
+		X1Gui().PushItemWidth(PUSH_1);
+		HotsKey("Button##thirdperson", ThirdPersonBind.Button);
+		X1Gui().SameLine();
+		DCheckBox("Hold##thirdperson", ThirdPersonBind.Hold);
+	}
+	X1Gui().Spacing();
+	X1Gui().Separator();
+	X1Gui().Spacing();
+	DCheckBox("Desync", Desync);
+	if (Desync)
+	{
+		X1Gui().SameLine(SAME_LINE_1);
+		X1Gui().PushItemWidth(PUSH_1);
+		VectorEx<const char* >itemsCSS = { lolc("Off") , lolc("Static"), lolc("Balance") };
+		DComboBox("Type##Desync", DesyncType, itemsCSS);
+		DCheckBox("Autodirection", DesyncAd);
+		X1Gui().SameLine(SAME_LINE_1);
+		HotsKey("Button##Desync", DesyncBind.Button);
+		X1Gui().SameLine();
+		DCheckBox("Hold##Desync", DesyncBind.Hold);
+		DCheckBox("Desync Arrows", DesyncArrows);
+		X1Gui().SameLine();
+		DCheckBox("Angle Lines", AngleLines);
+	}
+	X1Gui().Spacing();
+	X1Gui().Separator();
+	X1Gui().Spacing();
 	DCheckBox("Show Competitive Rank", ShowCompetitiveRank);
 	X1Gui().Spacing();
 	X1Gui().Separator();
@@ -380,6 +386,22 @@ void CMisc::Menu()
 			DCheckBox("Hold##knfb", KnifeBotBind.Hold);
 			X1Gui().PushItemWidth(PUSH_2);
 			HotsKey("Button##knfb", KnifeBotBind.Button);
+		}
+	}
+	X1Gui().Spacing();
+	X1Gui().Separator();
+	X1Gui().Spacing();
+	DCheckBox("AutoBlock", AutoBlock);
+	if (AutoBlock)
+	{
+		DCheckBox("Bind##AutoBlock", AutoBlockBind.Enable);
+		if (AutoBlockBind.Enable)
+		{
+			X1Gui().SameLine(SAME_LINE_1);
+			X1Gui().PushItemWidth(PUSH_1);
+			HotsKey("Button##AutoBlock", AutoBlockBind.Button);
+			X1Gui().SameLine();
+			DCheckBox("Hold##AutoBlock", AutoBlockBind.Hold);
 		}
 	}
 }
