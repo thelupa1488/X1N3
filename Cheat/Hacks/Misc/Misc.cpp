@@ -794,7 +794,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					g_AnimState = *anim_state;
 					*anim_state = anim_state_backup;
 				}
-				if (bSendPacket)
+				if (CGlobal::bSendPacket)
 				{
 					CGlobal::AngleReal = g_AnimState.m_flGoalFeetYaw;
 					if (anim_state)
