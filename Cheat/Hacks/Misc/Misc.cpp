@@ -222,7 +222,7 @@ void CMisc::Draw()
 						if (CGlobal::WorldToScreen(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin))
 						{
 							static float view;
-							if (CGlobal::)
+							if (CGlobal::bSendPacket)
 								view = CGlobal::UserCmd->viewangles.y;
 
 							DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, CGlobal::LocalPlayer->GetBasePlayerAnimState()->m_flGoalFeetYaw, "fake", Color::Orange());
