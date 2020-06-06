@@ -172,28 +172,28 @@ void CEsp::Menu()
 			X1Gui().Separator();
 			X1Gui().Spacing();
 
-			//DCheckBox("Glow", Glow)
-			//if (Glow)
-			//{
-			//	X1Gui().SameLine(SAME_LINE_1);
-			//	X1Gui().PushItemWidth(PUSH_1);
-			//	VectorEx<const char*>itemsCS = { lolc("Default"), lolc("Pulse"), lolc("Outline"), lolc("Outline Pulse") };
-			//	DComboBox("Style##glow", GlowStyle, itemsCS);
-			//	X1Gui().SameLine(SAME_LINE_1 + PUSH_1 + 40);
-			//	DCheckBox("Visible only##glow", GlowVisibleOnly);
+			/*DCheckBox("Glow", Glow)
+			if (Glow)
+			{
+				X1Gui().SameLine(SAME_LINE_1);
+				X1Gui().PushItemWidth(PUSH_1);
+				VectorEx<const char*>itemsCS = { lolc("Default"), lolc("Pulse"), lolc("Outline"), lolc("Outline Pulse") };
+				DComboBox("Style##Glow", GlowStyle, itemsCS);
+				X1Gui().SameLine(SAME_LINE_1 + PUSH_1 + 40);
+				DCheckBox("Visible only##Glow", GlowVisibleOnly);
 
-			//	DColorEdit("CT color##glow", GlowCT);
-			//	X1Gui().SameLine(100);
-			//	DColorEdit("T color##glow", GlowTT);
-			//	X1Gui().SameLine(200);
-			//	DColorEdit("Visible CT color##glow", GlowVisibleCT);
-			//	X1Gui().SameLine(340);
-			//	DColorEdit("Visible T color##glow", GlowVisibleTT);
-			//}
+				DColorEdit("CT color##Glow", GlowCT);
+				X1Gui().SameLine(100);
+				DColorEdit("T color##Glow", GlowTT);
+				X1Gui().SameLine(200);
+				DColorEdit("Visible CT color##Glow", GlowVisibleCT);
+				X1Gui().SameLine(340);
+				DColorEdit("Visible T color##Glow", GlowVisibleTT);
+			}
 
-			//X1Gui().Spacing();
-			//X1Gui().Separator();
-			//X1Gui().Spacing();
+			X1Gui().Spacing();
+			X1Gui().Separator();
+			X1Gui().Spacing();*/
 
 			DCheckBox("Chams", Chams);
 			if (Chams)

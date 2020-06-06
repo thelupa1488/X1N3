@@ -196,7 +196,7 @@ void CMisc::Draw()
 						DrawArrow(FakeRot, FakeClr);
 					}
 			
-					if (AngleLines)
+					if (AngleLines && ThirdPersonBind.Check())
 					{
 						auto DrawAngleLines = [&](const Vector& origin, const Vector& w2sOrigin, const float& angle, const char* text, Color clr)
 						{

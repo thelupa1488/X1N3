@@ -114,7 +114,7 @@ public:
 	bool InfiniteDuck = false;
 
 	bool ThirdPerson = false;
-	int ThirdPersonDistance = 50;
+	int ThirdPersonDistance = 150;
 	CBind ThirdPersonBind = CBind(0, true);
 
 	bool Desync = false;

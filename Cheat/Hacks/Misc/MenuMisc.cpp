@@ -47,6 +47,8 @@ void CMisc::Menu()
 		X1Gui().PushItemWidth(PUSH_1);
 		SliderInts("Distance##ThirdPerson", ThirdPersonDistance, 50, 300);
 		X1Gui().PushItemWidth(PUSH_1);
+		DCheckBox("Angle Lines", AngleLines);
+		X1Gui().SameLine(SAME_LINE_1);
 		HotsKey("Button##thirdperson", ThirdPersonBind.Button);
 		X1Gui().SameLine();
 		DCheckBox("Hold##thirdperson", ThirdPersonBind.Hold);
@@ -67,8 +69,6 @@ void CMisc::Menu()
 		X1Gui().SameLine();
 		DCheckBox("Hold##Desync", DesyncBind.Hold);
 		DCheckBox("Desync Arrows", DesyncArrows);
-		X1Gui().SameLine();
-		DCheckBox("Angle Lines", AngleLines);
 	}
 	X1Gui().Spacing();
 	X1Gui().Separator();

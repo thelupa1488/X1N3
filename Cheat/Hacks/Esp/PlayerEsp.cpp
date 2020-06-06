@@ -288,9 +288,7 @@ void CEsp::DrawPlayerEx(CEntityPlayer* Entity, CEntityPlayer* Local, bool IsDorm
 					}
 					}
 				}
-			}
-
-		
+			}		
 
 			if (Armor && MV_Armor &&  MV_Armor_Text)
 			{
@@ -971,34 +969,31 @@ void CEsp::DrawGlow(CEntityPlayer* Entity, CEntityPlayer* Local)
 	//		Color InvisColor = (ent->Team == PLAYER_TEAM::TEAM_CT) ? GlowCT : GlowTT;
 	//		Color VisibleColor = (ent->Team == PLAYER_TEAM::TEAM_CT) ? GlowVisibleCT : GlowVisibleTT;
 
-	//		if (ent->BaseEntity->GetClientClass()->m_ClassID == CLIENT_CLASS_ID::CCSPlayer)
+	//		if (glow_object.IsUnused() || !ent)
+	//			continue;
+
+	//		if (!ent->IsPlayer || ent->IsDormant)
+	//			continue;
+
+	//		glow_object.m_nGlowStyle = GlowStyle;
+
+	//		if (!GlowVisibleOnly)
 	//		{
-	//			if (glow_object.IsUnused() || !ent)
-	//				continue;
-
-	//			if (!ent->IsPlayer || ent->IsDormant)
-	//				continue;
-
-	//			glow_object.m_nGlowStyle = GlowStyle;
-
-	//			if (!GlowVisibleOnly)
-	//			{
-	//				float ArrInvisColor[3] = { InvisColor.G1R(), InvisColor.G1G(), InvisColor.G1B() };
-	//				glow_object.m_bRenderWhenOccluded = true;
-	//				glow_object.m_bRenderWhenUnoccluded = false;
-	//				glow_object.m_vGlowColor = ArrInvisColor;
-	//				glow_object.m_flAlpha = InvisColor.G1A();
-	//				glow_object.m_bFullBloomRender = true;
-	//			}
-	//			else
-	//			{
-	//				float ArrVisibleColor[3] = { VisibleColor.G1R(), VisibleColor.G1G(), VisibleColor.G1B() };
-	//				glow_object.m_bRenderWhenOccluded = true;
-	//				glow_object.m_bRenderWhenUnoccluded = false;
-	//				glow_object.m_vGlowColor = ArrVisibleColor;
-	//				glow_object.m_flAlpha = VisibleColor.G1A();
-	//				glow_object.m_bFullBloomRender = false;
-	//			}
+	//			float ArrInvisColor[3] = { InvisColor.G1R(), InvisColor.G1G(), InvisColor.G1B() };
+	//			glow_object.m_bRenderWhenOccluded = true;
+	//			glow_object.m_bRenderWhenUnoccluded = false;
+	//			glow_object.m_vGlowColor = ArrInvisColor;
+	//			glow_object.m_flAlpha = InvisColor.G1A();
+	//			glow_object.m_bFullBloomRender = true;
+	//		}
+	//		else
+	//		{
+	//			float ArrVisibleColor[3] = { VisibleColor.G1R(), VisibleColor.G1G(), VisibleColor.G1B() };
+	//			glow_object.m_bRenderWhenOccluded = true;
+	//			glow_object.m_bRenderWhenUnoccluded = false;
+	//			glow_object.m_vGlowColor = ArrVisibleColor;
+	//			glow_object.m_flAlpha = VisibleColor.G1A();
+	//			glow_object.m_bFullBloomRender = false;
 	//		}
 	//	}
 	//}
