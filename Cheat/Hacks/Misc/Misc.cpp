@@ -681,6 +681,8 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 			}
 
 			auto unpred_flags = CGlobal::LocalPlayer->GetFlags();
+			CCSGOPlayerAnimState g_AnimState;
+			QAngle vangle = QAngle();
 			EnginePrediction::Begin(pCmd);
 			{
 				if (EdgeJump && EdgeJumpBind.Check())
@@ -688,8 +690,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					if ((unpred_flags & FL_ONGROUND) && !(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
 						pCmd->buttons |= IN_JUMP;
 				}
-				CCSGOPlayerAnimState g_AnimState;
-				QAngle vangle = QAngle();
 				QAngle angleold = pCmd->viewangles;
 				if (Desync)
 				{
@@ -794,7 +794,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					g_AnimState = *anim_state;
 					*anim_state = anim_state_backup;
 				}
-				if (CGlobal::bSendPacket)
+				if (bSendPacket)
 				{
 					CGlobal::AngleReal = g_AnimState.m_flGoalFeetYaw;
 					if (anim_state)
