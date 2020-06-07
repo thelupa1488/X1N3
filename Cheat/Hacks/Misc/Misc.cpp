@@ -250,15 +250,7 @@ void CMisc::Draw()
 	}
 }
 
-void CMisc::SetNewClan(string New, string Name)
-{
-	static auto pSetClanTag = reinterpret_cast<void(__fastcall*)(const char*, const char*)>(((DWORD)CSX::Memory::FindPatternV2(engineFactory, XorStr("53 56 57 8B DA 8B F9 FF 15"))));
-
-	if (pSetClanTag)
-		pSetClanTag(New.c_str(), Name.c_str());
-}
-
-static int LagCompBreak()
+int CMisc::LagCompBreak()
 {
 	if (!CGlobal::LocalPlayer || CGlobal::LocalPlayer->IsDead())
 		return 1;
@@ -271,17 +263,13 @@ static int LagCompBreak()
 	return min<int>(choked_ticks, 14.f);
 }
 
-//static void updatelby(CCSGOPlayerAnimState* animstate)
-//{
-//	if (animstate->speed_2d > 0.1f || fabsf(animstate->flUpVelocity)) {
-//		next_lby = I::GlobalVars()->curtime + 0.22f;
-//	}
-//	else if (I::GlobalVars()->curtime > next_lby) {
-//		if (fabsf(CGlobal::AngleDiff(animstate->m_flGoalFeetYaw, animstate->m_flEyeYaw)) > 35.0f) {
-//			next_lby = I::GlobalVars()->curtime + 1.1f;
-//		}
-//	}
-//}
+void CMisc::SetNewClan(string New, string Name)
+{
+	static auto pSetClanTag = reinterpret_cast<void(__fastcall*)(const char*, const char*)>(((DWORD)CSX::Memory::FindPatternV2(engineFactory, XorStr("53 56 57 8B DA 8B F9 FF 15"))));
+
+	if (pSetClanTag)
+		pSetClanTag(New.c_str(), Name.c_str());
+}
 
 void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCmd)
 {
@@ -476,68 +464,129 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				NoSmokeReset = false;
 			}
 
-			static bool ClanTagReset = false;
 			if (ClanTagChanger)
 			{
-				static string OldClan = "";
-				string NewClan = ClanTagChangerText;
+				static std::string old_tag = "";
+				static int oldvalue = 0;
+				static int old_setting_mode = -1;
+				string tag = ClanTagChangerText;
+				int setting_mode = ClanTagChangerStyle;
+				static int str_size = tag.size();
 
-				switch (ClanTagChangerStyle)
+				if (old_setting_mode != setting_mode)
 				{
-				case 0: NewClan = XorStr("X1N3 > All"); break;
-				case 1: NewClan = XorStr("[VALV\xE1\xB4\xB1]"); break;
+					old_tag = "";
+					old_setting_mode = setting_mode;
+				}
+
+				if (old_tag != tag && setting_mode > 1)
+				{
+					oldvalue = 0;
+					old_tag = tag;
+					str_size = tag.size();
+				}
+
+				int ServerTime = (float)I::Engine()->GetServerTick() * I::GlobalVars()->interval_per_tick;
+
+				switch (setting_mode)
+				{
+				case 0:
+				{
+					if (old_tag != tag)
+					{
+						old_tag = tag;
+						SetNewClan("", " ");
+					}
+
+					break;
+				}
+				case 1:
+				{
+					if (old_tag != tag)
+					{
+						old_tag = tag;
+						SetNewClan(tag.c_str(), " ");
+					}
+
+					break;
+				}
 				case 2:
 				{
-					switch (int((float)CGlobal::LocalPlayer->GetTickBase() * I::GlobalVars()->interval_per_tick) % 10)
+					int value = (ServerTime % (str_size * 2)) + 1;
+
+					if (oldvalue != value)
 					{
-					case 0: NewClan = XorStr("-----"); break;
-					case 1: NewClan = XorStr("----X"); break;
-					case 2: NewClan = XorStr("---X1"); break;
-					case 3: NewClan = XorStr("--X1N"); break;
-					case 4: NewClan = XorStr("-X1N3"); break;
-					case 5: NewClan = XorStr("X1N3-"); break;
-					case 6: NewClan = XorStr("1N3--"); break;
-					case 7: NewClan = XorStr("N3---"); break;
-					case 8: NewClan = XorStr("3----"); break;
-					case 9: NewClan = XorStr("-----"); break;
+						if (value > str_size)
+							value = str_size - (value - str_size);
+
+						tag.erase(value);
+						SetNewClan(tag.c_str(), " ");
+						oldvalue = value;
 					}
+
 					break;
 				}
 				case 3:
 				{
-					switch (int((float)CGlobal::LocalPlayer->GetTickBase() * I::GlobalVars()->interval_per_tick) % 15)
+					int value = ServerTime % str_size + 1;
+
+					if (oldvalue != value)
 					{
-					case 0: NewClan = XorStr("-------"); break;
-					case 1: NewClan = XorStr("------T"); break;
-					case 2: NewClan = XorStr("-----TH"); break;
-					case 3: NewClan = XorStr("----THE"); break;
-					case 4: NewClan = XorStr("---THEL"); break;
-					case 5: NewClan = XorStr("--THELU"); break;
-					case 6: NewClan = XorStr("-THELUP"); break;
-					case 7: NewClan = XorStr("THELUPA"); break;
-					case 8: NewClan = XorStr("HELUPA-"); break;
-					case 9: NewClan = XorStr("ELUPA--"); break;
-					case 10: NewClan = XorStr("LUPA---"); break;
-					case 11: NewClan = XorStr("UPA----"); break;
-					case 12: NewClan = XorStr("PA-----"); break;
-					case 13: NewClan = XorStr("A------"); break;
-					case 14: NewClan = XorStr("-------"); break;
+						std::string tag_now = "";
+
+						tag_now.append(tag, value);
+
+						tag.erase(value);
+						tag_now += tag;
+
+						SetNewClan(tag_now.c_str(), " ");
+						oldvalue = value;
 					}
+
 					break;
 				}
-				default: break;
+				case 4:
+				{
+					int value = str_size - (ServerTime % str_size + 1);
+
+					if (oldvalue != value)
+					{
+						std::string tag_now = "";
+
+						tag_now.append(tag, value);
+
+						tag.erase(value);
+						tag_now += tag;
+
+						SetNewClan(tag_now.c_str(), " ");
+						oldvalue = value;
+					}
+
+					break;
 				}
+				case 5:
+				{
+					int value = (ServerTime % (str_size * 2)) + 1;
 
-				if (OldClan != NewClan)
-					SetNewClan(NewClan, NewClan);
+					if (oldvalue != value)
+					{
+						if (value > str_size)
+						{
+							value -= str_size;
+							tag.erase(0, value);
+						}
+						else
+							tag.erase(value);
 
-				OldClan = NewClan;
-				ClanTagReset = true;
-			}
-			if (!ClanTagChanger && ClanTagReset)
-			{
-				SetNewClan("", "");
-				ClanTagReset = false;
+						SetNewClan(tag.c_str(), " ");
+						oldvalue = value;
+					}
+
+					break;
+				}
+				default:
+					break;
+				}
 			}
 
 			if (ChatSpam && ChatSpamStart)

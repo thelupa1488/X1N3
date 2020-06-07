@@ -2,8 +2,8 @@
 #include "../Engine/XorStr.h"
 #include <VMProtectSDK.h>
 
-#define ENABLE_XOR_STR
-#define ENABLE_VMP
+//#define ENABLE_XOR_STR
+//#define ENABLE_VMP
 //#define YOUGAMEBIZ
 
 #define PRESENT_ENABLE
@@ -29,7 +29,7 @@
 #ifdef ENABLE_XOR_STR
 #define XorStr( s ) (_xor_( s ).c_str())
 #else
-#define XorStr ( s ) s
+#define XorStr( s ) s
 #endif
 
 #ifdef ENABLE_VMP

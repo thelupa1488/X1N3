@@ -61,13 +61,14 @@ protected:
 	virtual void ShowSpectatorList() = 0;
 	virtual vector<int> GetObservervators(int playerId) = 0;
 	virtual void Night() = 0;
-	virtual void SetNewClan(string New, string Name) = 0;
 	virtual void Reset() = 0;
 	virtual void UpdateSoundList() = 0;
 	virtual void CustomWalls() = 0;
 	virtual void FrameStageNotify() = 0;
 	virtual void Menu() = 0;
 	virtual void Draw() = 0;
+	virtual int  LagCompBreak() = 0;
+	virtual void SetNewClan(string New, string Name) = 0;
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd) = 0;
 	virtual void OverrideView(CViewSetup* pSetup) = 0;
 };
@@ -87,6 +88,8 @@ public:
 
 	virtual void Menu();
 	virtual void Draw();
+	virtual int  LagCompBreak();
+	virtual void SetNewClan(string New, string Name);
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd);
 	virtual void OverrideView(CViewSetup* pSetup);
 	virtual void GetViewModelFOV(float &Fov);
@@ -96,7 +99,6 @@ public:
 	virtual void ShowSpectatorList();
 	virtual vector<int> GetObservervators(int playerId);
 	virtual void Night();
-	virtual void SetNewClan(string New, string Name);
 	virtual void Reset();
 	virtual void UpdateSoundList();
 	virtual void CustomWalls();
@@ -163,7 +165,7 @@ public:
 	CHitListener HitWorker;
 
 	bool ClanTagChanger = false;
-	int ClanTagChangerStyle = 2;
+	int ClanTagChangerStyle = 0;
 	string ClanTagChangerText = "";
 
 	bool ChatSpam = false;

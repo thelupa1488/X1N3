@@ -261,14 +261,10 @@ void CMisc::Menu()
 	{
 		X1Gui().SameLine(SAME_LINE_1);
 		X1Gui().PushItemWidth(PUSH_1);
-		VectorEx<const char* >itemsCS = { lolc("X1N3 > All"),lolc("VALVE"), lolc("Animation X1N3"), lolc("Animation THELUPA"), lolc("X1N3"), lolc("Custom") };
-		DComboBox("Style##clan", ClanTagChangerStyle, itemsCS);
-
-		if (ClanTagChangerStyle == 5)
-		{
-			static char ClanBuf[32] = { 0 };
-			TextEdit("Text##clan", ClanTagChangerText, ClanBuf, 32);
-		}
+		VectorEx<const char* >itemsCS = { lolc("None"),lolc("Static"), lolc("Dynamic 1"), lolc("Dynamic 2"), lolc("Dynamic 3"), lolc("Dynamic 4") };
+		DComboBox("Type##ClanTag", ClanTagChangerStyle, itemsCS);
+		static char ClanBuf[32] = { 0 };
+		TextEdit("Text##ClanTag", ClanTagChangerText, ClanBuf, 32);
 	}
 	X1Gui().Spacing();
 	X1Gui().Separator();
