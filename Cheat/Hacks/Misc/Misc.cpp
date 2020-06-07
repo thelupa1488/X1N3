@@ -1088,6 +1088,9 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 					I::Input()->m_vecCameraOffset = Vector(angles.x, angles.y, angles.z);
 				}
 			}
+			if (!ThirdPerson)
+				I::Input()->m_fCameraInThirdPerson = false;
+
 		}
 	}
 

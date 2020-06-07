@@ -849,7 +849,7 @@ void CSkins::LoadSkins(nlohmann::json &j)
 	}
 }
 
-#define lol(e) string(XorStr(e))
+#define lol(e) string(XorString(e))
 
 #define WEAPON_DEAGLE_STR		lol("deagle")		// 0
 #define WEAPON_ELITE_STR		lol("elite")		// 1

@@ -24,7 +24,7 @@ DWORD WINAPI SetupThread(LPVOID lpThreadParameter)
 
 void Start(HINSTANCE hInst)
 {
-	VMP_MUTATION("Start");
+	VMP_MUTATION("StartMain");
 	ADD_LOG("2-0\n");
 	auto LStatr = [&]() -> void
 	{
