@@ -57,7 +57,7 @@ namespace SDK
 		InterfaceReg* ifaceRegList;
 		int partMatchLen = strlen(ifaceName);
 
-		DWORD ifaceFn = reinterpret_cast<DWORD>(GetProcAddress(GetModuleHandleA(modName), "CreateInterface"));
+		DWORD ifaceFn = reinterpret_cast<DWORD>(FastCall::G().t_GetProcAddress(FastCall::G().t_GetModuleHandleA(modName), XorStr("CreateInterface")));
 
 		if (!ifaceFn)
 			return nullptr;

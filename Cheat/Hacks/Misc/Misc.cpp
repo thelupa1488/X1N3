@@ -579,16 +579,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 			}
 			static int ticks = 0;
 
-			CGlobal::viewmodel_offset_convar_x = I::GetConVar()->FindVar(XorStr("viewmodel_offset_x"));
-			CGlobal::viewmodel_offset_convar_y = I::GetConVar()->FindVar(XorStr("viewmodel_offset_y"));
-			CGlobal::viewmodel_offset_convar_z = I::GetConVar()->FindVar(XorStr("viewmodel_offset_z"));
-			*(int*)((DWORD)&CGlobal::viewmodel_offset_convar_x->fnChangeCallback + 0xC) = NULL;
-			*(int*)((DWORD)&CGlobal::viewmodel_offset_convar_y->fnChangeCallback + 0xC) = NULL;
-			*(int*)((DWORD)&CGlobal::viewmodel_offset_convar_z->fnChangeCallback + 0xC) = NULL;
-			CGlobal::old_viewmodel_offset_x = -CGlobal::viewmodel_offset_convar_x->GetFloat();
-			CGlobal::old_viewmodel_offset_y = -CGlobal::viewmodel_offset_convar_y->GetFloat();
-			CGlobal::old_viewmodel_offset_z = -CGlobal::viewmodel_offset_convar_z->GetFloat();
-
 			if (ViewModelXYZ)
 			{
 				CGlobal::viewmodel_offset_convar_x->SetValue(ViewModelX);
@@ -1167,7 +1157,7 @@ void CMisc::GetViewModelFOV(float &Fov)
 //void SetLocalPlayerReady()
 //{
 //	static auto SetLocalPlayerReadyFn = reinterpret_cast<bool(__stdcall*)(const char*)>
-//		(CSX::Memory::FindPatternV2(XorStr("client.dll"),
+//		(CSX::Memory::FindPatternV2(clientFactory,
 //			XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12")));
 //
 //	if (SetLocalPlayerReadyFn)
@@ -1177,7 +1167,7 @@ void CMisc::GetViewModelFOV(float &Fov)
 //void accept()
 //{
 //	typedef void(__cdecl* accept_t)(void);
-//	static accept_t accept = (accept_t)CSX::Memory::FindPatternV2(XorStr("client.dll"),
+//	static accept_t accept = (accept_t)CSX::Memory::FindPatternV2(clientFactory,
 //		XorStr("55 8B EC 51 56 8B 35 ? ? ? ? 57 83 BE"));
 //
 //	if (accept && **(unsigned long**)((unsigned long)accept + 0x7))
@@ -1203,11 +1193,11 @@ void CMisc::AutoAcceptEmit()
 		}
 
 		//typedef void(__cdecl* accept_t)(void);
-		//static accept_t accept = (accept_t)CSX::Memory::FindPatternV2(XorStr("client.dll"),
+		//static accept_t accept = (accept_t)CSX::Memory::FindPatternV2(clientFactory,
 		//	XorStr("55 8B EC 51 56 8B 35 ? ? ? ? 57 83 BE"));
 
 		//static auto SetLocalPlayerReadyFn = reinterpret_cast<bool(__stdcall*)(const char*)>
-		//	(CSX::Memory::FindPatternV2(XorStr("client.dll"),
+		//	(CSX::Memory::FindPatternV2(clientFactory,
 		//		XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12")));
 
 		//auto match_session = I::MatchFramework()->get_match_session();

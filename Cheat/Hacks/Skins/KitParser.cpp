@@ -328,7 +328,7 @@ void NetvarHook()
 }
 auto CSkins::initialize_kits() -> void
 {
-	const auto V_UCS2ToUTF8 = static_cast<int(*)(const wchar_t* ucs2, char* utf8, int len)>(get_export(XorStr("vstdlib.dll"), XorStr("V_UCS2ToUTF8")));
+	const auto V_UCS2ToUTF8 = static_cast<int(*)(const wchar_t* ucs2, char* utf8, int len)>(get_export(valveStdFactory, XorStr("V_UCS2ToUTF8")));
 
 	// Search the relative calls
 
@@ -337,7 +337,7 @@ auto CSkins::initialize_kits() -> void
 	// lea     ecx, [eax+4]
 	// call    CEconItemSchema::GetPaintKitDefinition
 
-	const auto sig_address = CSX::Memory::FindPattern(clientFactory, XorStr("\xE8\x00\x00\x00\x00\xFF\x76\x0C\x8D\x48\x04\xE8"), XorStr("x????xxxxxxx"), 0);
+	const auto sig_address = CSX::Memory::FindPattern(clientFactory, XorStr("\xE8\x00\x00\x00\x00\xFF\x76\x0C\x8D\x48\x04\xE8"), "x????xxxxxxx", 0);
 
 
 	// Skip the opcode, read rel32 address
@@ -397,7 +397,7 @@ auto CSkins::initialize_kits() -> void
 	}
 
 	{
-		const auto sticker_sig = CSX::Memory::FindPattern(clientFactory, XorStr("\x53\x8D\x48\x04\xE8\x00\x00\x00\x00\x8B\x4D\x10"), XorStr("xxxxx????xxx"), 4);
+		const auto sticker_sig = CSX::Memory::FindPattern(clientFactory, XorStr("\x53\x8D\x48\x04\xE8\x00\x00\x00\x00\x8B\x4D\x10"), "xxxxx????xxx", 4);
 
 		// Skip the opcode, read rel32 address
 		const auto get_sticker_kit_definition_offset = *reinterpret_cast<std::intptr_t*>(sticker_sig + 1);

@@ -240,7 +240,7 @@ public:
 
 			if (!SearchFunction)
 			{
-				DWORD dwFunctionAddress = CSX::Memory::FindPattern(clientFactory, SMOK_PATTERN, XorStr("xxxxxxxx????xxx"), 0);
+				DWORD dwFunctionAddress = CSX::Memory::FindPattern(clientFactory, SMOK_PATTERN, "xxxxxxxx????xxx", 0);
 
 				if (dwFunctionAddress)
 				{

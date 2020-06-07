@@ -2,8 +2,8 @@
 #include "../Engine/XorStr.h"
 #include <VMProtectSDK.h>
 
-//#define ENABLE_XOR_STR 
-//#define ENABLE_VMP
+#define ENABLE_XOR_STR 
+#define ENABLE_VMP
 //#define YOUGAMEBIZ
 
 #define PRESENT_ENABLE

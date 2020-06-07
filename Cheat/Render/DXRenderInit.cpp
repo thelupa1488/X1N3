@@ -100,7 +100,8 @@ void CRender::IRender::Initialize()
 
 	auto& pContext = cContext::GetInstance();
 
-	DWORD d3d9TablePtrPtr = CSX::Memory::FindPattern(dx9apiFactory, XorStr("A1 ? ? ? ? 50 8B 08 FF 51 0C"), 1);
+	DWORD d3d9TablePtrPtr = FindPattern(dx9apiFactory, XorStr("A1 ? ? ? ? 50 8B 08 FF 51 0C"), 1);
+//	DWORD d3d9TablePtrPtr = FindPattern(SHADERPIDX9_DLL, D3D9_PATTERN, D3D9_MASK, 1);
 	if (d3d9TablePtrPtr)
 	{
 		g_pDevice = (IDirect3DDevice9*)(**(PDWORD*)d3d9TablePtrPtr);

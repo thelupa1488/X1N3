@@ -63,9 +63,9 @@ static auto make_glove(int entry, int serial) -> CBaseAttributableItem*
 	const auto glove = static_cast<CBaseAttributableItem*>(I::EntityList()->GetClientEntity(entry));
 	assert(glove);
 	{
-		CSX::Memory::FindPattern(clientFactory, XorStr("\x53\x8D\x48\x04\xE8\x00\x00\x00\x00\x8B\x4D\x10"), XorStr("xxxxx????xxx"), 4);
+		CSX::Memory::FindPattern(clientFactory, XorStr("\x53\x8D\x48\x04\xE8\x00\x00\x00\x00\x8B\x4D\x10"), "xxxxx????xxx", 4);
 
-		static auto set_abs_origin_addr = CSX::Memory::FindPattern(clientFactory, XorStr("\x55\x8B\xEC\x83\xE4\xF8\x51\x53\x56\x57\x8B\xF1"), XorStr("xxxxxxxxxxxx"), 0);
+		static auto set_abs_origin_addr = CSX::Memory::FindPattern(clientFactory, XorStr("\x55\x8B\xEC\x83\xE4\xF8\x51\x53\x56\x57\x8B\xF1"), "xxxxxxxxxxxx", 0);
 		const auto set_abs_origin_fn = reinterpret_cast<void(__thiscall*)(void*, const std::array<float, 3>&)>(set_abs_origin_addr);
 
 		static constexpr std::array<float, 3> new_pos = { 10000.f, 10000.f, 10000.f };
@@ -523,7 +523,7 @@ void CSkins::UpdateSkins(bool reset)
 	SetKillIconCfg();
 
 	typedef void(*ForceUpdate) (void);
-	ForceUpdate FullUpdate = (ForceUpdate)CSX::Memory::FindPatternV2(XorStr("engine.dll"), FORCE_FULL_UPDATE_PATTERN);
+	ForceUpdate FullUpdate = (ForceUpdate)CSX::Memory::FindPatternV2(engineFactory, FORCE_FULL_UPDATE_PATTERN);
 	FullUpdate();
 
 	ForceUpdated = reset;
