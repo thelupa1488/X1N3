@@ -84,7 +84,7 @@ using namespace  CSX::Memory;
 
 void CRender::IRender::Initialize()
 {
-	VMP_ULTRA("RenderInitialize");
+	VMP_MUTATION("RenderInitialize");
 	ADD_LOG("2-1-11-7-3-0\n");
 	m_pDevice = nullptr;
 	m_pDrawMngr = nullptr;

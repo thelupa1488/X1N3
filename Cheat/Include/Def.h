@@ -42,8 +42,7 @@
 #define VMP_BEGIN(e) VMProtectBegin(e);
 #define VMP_END VMProtectEnd();
 #else
-#define XorStr(e)
-#define VMP_VIRTUAL(e)
+#define VMP_ProtectStringA(e) 
 #define VMP_MUTATION(e)
 #define VMP_ULTRA(e)
 #define VMP_BEGIN(e)

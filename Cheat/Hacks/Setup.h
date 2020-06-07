@@ -44,7 +44,7 @@ public:
 	public:
 		virtual void Setup()
 		{
-			VMP_ULTRA("SetupThread_Init_Setup");
+			VMP_MUTATION("SetupThread_Init_Setup");
 			ADD_LOG("2-1-11-7-0\n");
 			GP_Render =		new CRender::IRender();
 			GP_EntPlayers = new CEntityPlayers();
