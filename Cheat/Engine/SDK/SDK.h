@@ -46,7 +46,6 @@
 #include "IPhysics.hpp"
 #include "Math.hpp"
 #include "Match.h"
-#include "../XorStr.h"
 #include "IPredition.hpp"
 #include "checksum_md5.hpp"
 #include "IGameRules.h"
@@ -66,18 +65,12 @@
 #define engineFactory XorStr("engine.dll")
 #define clientFactory XorStr("client.dll")
 #define valveStdFactory XorStr("vstdlib.dll")
-#define vguiFactory XorStr("vguimatsurface.dll")
-#define vgui2Factory XorStr("vgui2.dll")
 #define matSysFactory XorStr("materialsystem.dll")
-#define dataCacheFactory XorStr("datacache.dll")
 #define vphysicsFactory XorStr("vphysics.dll")
 #define inputSysFactory XorStr("inputsystem.dll")
 #define localizeFactory XorStr("localize.dll")
 #define steamApiFactory XorStr("steam_api.dll")
 #define serverBrowserFactory XorStr("serverbrowser.dll")
-#define vgui2Factory XorStr("vgui2.dll")
-#define vguiMatSurfaceFactory XorStr("vguimatsurface.dll")
-#define dx9apiFactory XorStr("shaderapidx9.dll")
 
 #define GLOBAL_VARS_PATTERN XorStr("\xA1\x00\x00\x00\x00\x8B\x4D\xFC\x8B\x55\x08")
 #define GLOBAL_VARS_MASK XorStr("x????xxxxxx")

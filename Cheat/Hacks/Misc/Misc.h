@@ -119,7 +119,6 @@ public:
 
 	bool Desync = false;
 	int  DesyncType = 0;
-	bool DesyncAd = false;
 	CBind DesyncBind = CBind(0, true);
 
 	bool DesyncArrows = false;
@@ -243,6 +242,7 @@ public:
 		RV(HandChamsColor, "HandChamsColor");
 		RV(DamageInfoColor, "DamageInfoColor");
 		RV(ColoredWallsColor, "ColoredWallsColor");
+		RV(ArrowsColor, "ArrowsColor");
 
 		RV(BHop, "BHop");
 		RV(BHopChance, "BHopChance");
@@ -255,8 +255,10 @@ public:
 		RV(ThirdPerson, "ThirdPerson");
 		RV(ThirdPersonDistance, "ThirdPersonDistance");
 		RV(ThirdPersonBind, "ThirdPersonBind");
+		RV(Desync, "Desync");
+		RV(DesyncType, "DesyncType");
+		RV(DesyncBind, "DesyncBind");
 		RV(DesyncArrows, "DesyncArrows");
-		RV(ArrowsColor, "ArrowsColor");
 //		RV(AngleLines, "AngleLines");
 		RV(FovChanger, "FovChanger");
 		RV(FovView, "FovView");

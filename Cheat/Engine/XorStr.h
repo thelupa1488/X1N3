@@ -141,6 +141,7 @@ END_NAMESPACE
 #define _CRT_SECURE_CPP_NOTHROW
 
 #include <Windows.h>
+
 #include <string>
 #include <vector>
 

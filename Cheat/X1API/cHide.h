@@ -113,7 +113,7 @@ using nExitProcess = void(WINAPI*)(UINT);
 static std::vector<std::string>ModName = { XorString("D3DX9_43.dll"), XorString("USER32.dll"), XorString("ntdll.dll"), XorString("kernel32.dll") };
 enum ModName_text { D3DX9_43, USER32, ntdll };
 
-static std::vector<std::string>Funcname = 
+static std::vector<std::string>Funcname =
 {
 	XorString("D3DXCreateFontA"),//0
 	XorString("D3DXCreateLine"),//1

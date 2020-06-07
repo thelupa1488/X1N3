@@ -122,7 +122,7 @@ public:
 		vector<paint_kit> skin_kits;
 	};
 
-#define lol(e) string(XorStr(e))
+#define lol(e) string(XorString(e))
 
 	vector<ItemSettings> WeaponNames =
 	{

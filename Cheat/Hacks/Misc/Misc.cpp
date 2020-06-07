@@ -797,7 +797,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					if ((CGlobal::GWeaponID == WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_FAMAS) && weapon->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
 						return;
 
-					if (CGlobal::GWeaponType == WEAPON_TYPE_GRENADE) 
+					if (CGlobal::GWeaponType == WEAPON_TYPE_GRENADE) //need fix
 					{
 						return;
 						//if (!weapon->GetPinPulled()) 
@@ -1181,7 +1181,7 @@ void CMisc::AutoAcceptEmit()
 	if (AutoAccept && !CGlobal::FullUpdateCheck)
 	{
 		static auto fnAccept = reinterpret_cast<bool(__stdcall*)(const char*)>
-			(CSX::Memory::FindPatternV2(clientFactory,
+			(CSX::Memory::FindPatternV2(XorStr("client.dll"),
 				XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12")));
 
 		if (fnAccept)
