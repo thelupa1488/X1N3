@@ -27,11 +27,9 @@
 #endif
 
 #ifdef ENABLE_XOR_STR
-#define XorStr( s ) ( XorCompileTime::XorString< sizeof( s ) - 1, __COUNTER__ >( s, std::make_index_sequence< sizeof( s ) - 1>() ).decrypt() )
-#define XorString( s ) ( ( string ( XS < XS_CONSTRUCT_INDEX_LIST < sizeof ( s ) - 1 > :: Result> ( s ).Decrypt( ) ) ).c_str( ) )
+#define XorStr( s ) (_xor_( s ).c_str())
 #else
-#define XorStr( s ) s
-#define XorString( s ) s
+#define XorStr ( s ) s
 #endif
 
 #ifdef ENABLE_VMP

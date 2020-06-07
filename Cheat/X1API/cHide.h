@@ -110,22 +110,22 @@ using nGetKeyState = SHORT(WINAPI*)(int nVirtKey);
 using nGetAsyncKeyState = SHORT(WINAPI*)(int vKey);
 using nExitProcess = void(WINAPI*)(UINT);
 
-static std::vector<std::string>ModName = { XorString("D3DX9_43.dll"), XorString("USER32.dll"), XorString("ntdll.dll"), XorString("kernel32.dll") };
+static std::vector<std::string>ModName = { XorStr("D3DX9_43.dll"), XorStr("USER32.dll"), XorStr("ntdll.dll"), XorStr("kernel32.dll") };
 enum ModName_text { D3DX9_43, USER32, ntdll };
 
 static std::vector<std::string>Funcname =
 {
-	XorString("D3DXCreateFontA"),//0
-	XorString("D3DXCreateLine"),//1
-	XorString("SetRect"),//2
-	XorString("MessageBoxTimeoutA"),//3
-	XorString("GetCursorPos"),//4
-	XorString("ScreenToClient"),//5
-	XorString("GetForegroundWindow"),//6
-	XorString("GetKeyState"),//7
-	XorString("GetAsyncKeyState"),//8
-	XorString("RtlExitUserProcess"),//9
-	XorString("NtCreateThreadEx"),//10
+	XorStr("D3DXCreateFontA"),//0
+	XorStr("D3DXCreateLine"),//1
+	XorStr("SetRect"),//2
+	XorStr("MessageBoxTimeoutA"),//3
+	XorStr("GetCursorPos"),//4
+	XorStr("ScreenToClient"),//5
+	XorStr("GetForegroundWindow"),//6
+	XorStr("GetKeyState"),//7
+	XorStr("GetAsyncKeyState"),//8
+	XorStr("RtlExitUserProcess"),//9
+	XorStr("NtCreateThreadEx"),//10
 };
 
 

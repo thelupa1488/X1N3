@@ -32,7 +32,7 @@ public:
 	}
 };
 
-#define RV(a,b) Config.RegVar(a, XorString(b));
+#define RV(a,b) Config.RegVar(a, XorStr(b));
 
 class IConfig
 {

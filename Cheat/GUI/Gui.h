@@ -36,9 +36,9 @@
 #define TextEdit(text, var, buf, sim) strcpy(buf, var.c_str()); X1Gui().InputText(XorStr(text), buf, sim); var = buf; /*strcpy(buf, var.c_str()); ImGui::InputText(text, buf, sim); var = buf;*/
 #define TabsLabels(var, text, size, vertic) X1Gui().TabLabels(&var, size, text, vertic);  /*ImGui::SubTabLabels(text, sizeof(text) / sizeof(text[0]), var, order);*/
 
-#define lols(e) string(XorString(e))
-#define lolc(e) XorString(e)
-#define lolsc(e) string(XorString(e)).c_str()
+#define lols(e) string((e))
+#define lolc(e) (e)
+#define lolsc(e) string((e)).c_str()
 
 class CGui;
 

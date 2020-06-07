@@ -122,7 +122,7 @@ public:
 		vector<paint_kit> skin_kits;
 	};
 
-#define lol(e) string(XorString(e))
+#define lol(e) string(XorStr(e))
 
 	vector<ItemSettings> WeaponNames =
 	{
@@ -315,7 +315,7 @@ class CSkins : public ISkins
 private:
 	bool IsNameChange = false;
 public:
-	CConfig Config = CConfig(XorStr("Skins"));
+	CConfig Config = CConfig(("Skins"));
 
 	vector<paint_kit> skin_kits;
 	vector<paint_kit> glove_kits;

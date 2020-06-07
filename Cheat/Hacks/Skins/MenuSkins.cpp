@@ -8,7 +8,7 @@
 #define ITEM_LIST_X 231
 #define ITEM_LIST_Y 409
 
-#define lol(e) (e)
+#define lol(e) XorStr(e)
 
 string GlovesModels[49] =
 {
@@ -144,7 +144,7 @@ void CSkins::Menu()
 #else
 	//X1Gui().Spacing();
 	//X1Gui().SameLine(333);
-	//if (X1Gui().Button(GP_Skins->ShowSkinPreview ? XorStr("Preview <<<") : XorStr("Preview >>>"), Vec2(129, 20)))
+	//if (X1Gui().Button(GP_Skins->ShowSkinPreview ? ("Preview <<<") : ("Preview >>>"), Vec2(129, 20)))
 	//	GP_Skins->ShowSkinPreview = !GP_Skins->ShowSkinPreview;
 
 	//X1Gui().Spacing();
@@ -196,17 +196,17 @@ void CSkins::Menu()
 		X1Gui().Separator();
 		X1Gui().Spacing();
 
-		if (X1Gui().Button(XorStr("Update"), Vec2(long_item_w, 22)))
+		if (X1Gui().Button(("Update"), Vec2(long_item_w, 22)))
 		{
 			UpdateSkins();
-			Message::Get().Start(XorStr("Updated!"));
+			Message::Get().Start(("Updated!"));
 		}
 
 		X1Gui().Spacing();
 
 		if (WeapSkinSettingsMode == 0)
 		{
-			ItemsList(WeaponNames, SelectedWeapon, Vec2(ITEM_LIST_X, ITEM_LIST_Y), XorStr("##AllWeapons"));
+			ItemsList(WeaponNames, SelectedWeapon, Vec2(ITEM_LIST_X, ITEM_LIST_Y), ("##AllWeapons"));
 
 			X1Gui().SameLine();
 
@@ -225,7 +225,7 @@ void CSkins::Menu()
 				X1Gui().Spacing();
 				if (WItem->Skin.skins_mode == 0)
 				{
-					SkinsList(skin_kits, WItem->Skin.paint_kit_menu, Vec2(KITS_LIST_X, KITS_LIST_Y), XorStr("##AllSkins"), FindSkin);
+					SkinsList(skin_kits, WItem->Skin.paint_kit_menu, Vec2(KITS_LIST_X, KITS_LIST_Y), ("##AllSkins"), FindSkin);
 					WItem->Skin.paint_kit_id = skin_kits[WItem->Skin.paint_kit_menu].id;
 					SkinPreview = skin_kits[WItem->Skin.paint_kit_menu].cdn_name;
 				}
@@ -233,7 +233,7 @@ void CSkins::Menu()
 				{
 					if (AllSkinsLoaded)
 					{
-						SortSkinsList(SortedWeapons[SelectedWeapon].kits, WItem->Skin.paint_kit_menu, Vec2(KITS_LIST_X, KITS_LIST_Y), XorStr("##AllSkins"), FindSkin);
+						SortSkinsList(SortedWeapons[SelectedWeapon].kits, WItem->Skin.paint_kit_menu, Vec2(KITS_LIST_X, KITS_LIST_Y), ("##AllSkins"), FindSkin);
 						if (WItem->Skin.paint_kit_menu < (int)SortedWeapons[SelectedWeapon].kits.size())
 						{
 							WItem->Skin.paint_kit_id = SortedWeapons[SelectedWeapon].kits[WItem->Skin.paint_kit_menu].kit;
@@ -242,8 +242,8 @@ void CSkins::Menu()
 					}
 					else
 					{
-						X1Gui().ListBoxHeader(XorStr("##AllSkinsEmpty"), Vec2(KITS_LIST_X, KITS_LIST_Y));
-						X1Gui().Text(XorStr("Loading skins..."));
+						X1Gui().ListBoxHeader(("##AllSkinsEmpty"), Vec2(KITS_LIST_X, KITS_LIST_Y));
+						X1Gui().Text(("Loading skins..."));
 						X1Gui().ListBoxFooter();
 					}
 
@@ -283,7 +283,7 @@ void CSkins::Menu()
 			if (StikersMode == 0)
 			{
 				TextEdit("Find", FindSticker, FindBuf, 128);
-				X1Gui().ListBoxHeader(XorStr("##StikerSerials"), Vec2(453, 326));
+				X1Gui().ListBoxHeader(("##StikerSerials"), Vec2(453, 326));
 				for (size_t i = 0; i < sticker_kits.size(); i++)
 				{
 					if (!FindLower(sticker_kits[i].name, FindSticker))
@@ -300,7 +300,7 @@ void CSkins::Menu()
 			{
 				if (AllSkinsLoaded)
 				{
-					X1Gui().ListBoxHeader(XorStr("##SortStikerSerials"), Vec2(71, 363));
+					X1Gui().ListBoxHeader(("##SortStikerSerials"), Vec2(71, 363));
 					for (size_t i = 0; i < SortedStickers.size(); i++)
 					{
 						bool selected = i == SortSelectedS;
@@ -312,7 +312,7 @@ void CSkins::Menu()
 					X1Gui().BeginGroup();
 					{
 						TextEdit("Find", FindSticker, FindBuf, 128);
-						X1Gui().ListBoxHeader(XorStr("##StikerSerials"), Vec2(376, 340));
+						X1Gui().ListBoxHeader(("##StikerSerials"), Vec2(376, 340));
 						for (size_t i = 0; i < SortedStickers[SortSelectedS].Stckers.size(); i++)
 						{
 							if (!FindLower(SortedStickers[SortSelectedS].Stckers[i].name, FindSticker))
@@ -332,7 +332,7 @@ void CSkins::Menu()
 				}
 				else
 				{
-					X1Gui().Text(XorStr("Loading stickers..."));
+					X1Gui().Text(("Loading stickers..."));
 				}
 			}
 
@@ -354,10 +354,10 @@ void CSkins::Menu()
 		X1Gui().Separator();
 		X1Gui().Spacing();
 
-		if (X1Gui().Button(XorStr("Update"), Vec2(long_item_w, 22)))
+		if (X1Gui().Button(("Update"), Vec2(long_item_w, 22)))
 		{
 			UpdateSkins();
-			Message::Get().Start(XorStr("Updated!"));
+			Message::Get().Start(("Updated!"));
 		}
 
 		X1Gui().Spacing();
@@ -381,7 +381,7 @@ void CSkins::Menu()
 				X1Gui().Spacing();
 				if (WItem->Skin.skins_mode == 0)
 				{
-					SkinsList(skin_kits, WItem->Skin.paint_kit_menu, Vec2(KITS_LIST_X, KITS_LIST_Y), XorStr("##AllKnifSkins"), FindSkin);
+					SkinsList(skin_kits, WItem->Skin.paint_kit_menu, Vec2(KITS_LIST_X, KITS_LIST_Y), ("##AllKnifSkins"), FindSkin);
 					WItem->Skin.paint_kit_id = skin_kits[WItem->Skin.paint_kit_menu].id;
 					SkinPreview = skin_kits[WItem->Skin.paint_kit_menu].cdn_name;
 				}
@@ -389,7 +389,7 @@ void CSkins::Menu()
 				{
 					if (AllSkinsLoaded)
 					{
-						SortSkinsList(SortedKnives[SelectedKnifeModelCT].kits, WItem->Skin.paint_kit_menu, Vec2(KITS_LIST_X, KITS_LIST_Y), XorStr("##AllKnifSkins"), FindSkin);
+						SortSkinsList(SortedKnives[SelectedKnifeModelCT].kits, WItem->Skin.paint_kit_menu, Vec2(KITS_LIST_X, KITS_LIST_Y), ("##AllKnifSkins"), FindSkin);
 						if (WItem->Skin.paint_kit_menu < (int)SortedKnives[SelectedKnifeModelCT].kits.size())
 						{
 							WItem->Skin.paint_kit_id = SortedKnives[SelectedKnifeModelCT].kits[WItem->Skin.paint_kit_menu].kit;
@@ -398,8 +398,8 @@ void CSkins::Menu()
 					}
 					else
 					{
-						X1Gui().ListBoxHeader(XorStr("##AllSkinsEmpty"), Vec2(KITS_LIST_X, KITS_LIST_Y));
-						X1Gui().Text(XorStr("Loading skins..."));
+						X1Gui().ListBoxHeader(("##AllSkinsEmpty"), Vec2(KITS_LIST_X, KITS_LIST_Y));
+						X1Gui().Text(("Loading skins..."));
 						X1Gui().ListBoxFooter();
 					}
 				}
@@ -414,7 +414,7 @@ void CSkins::Menu()
 		}
 		else if (KnfTeamSettingsMode == 1)
 		{
-			ItemsList(KnifeNamesTT, SelectedKnifeModelTT, Vec2(ITEM_LIST_X, ITEM_LIST_Y), XorStr("##AllKnifes"));
+			ItemsList(KnifeNamesTT, SelectedKnifeModelTT, Vec2(ITEM_LIST_X, ITEM_LIST_Y), ("##AllKnifes"));
 			X1Gui().SameLine();
 			ItemSettings* WItem = &KnifeNamesTT[SelectedKnifeModelTT];
 
@@ -431,7 +431,7 @@ void CSkins::Menu()
 				X1Gui().Spacing();
 				if (WItem->Skin.skins_mode == 0)
 				{
-					SkinsList(skin_kits, WItem->Skin.paint_kit_menu, Vec2(KITS_LIST_X, KITS_LIST_Y), XorStr("##AllKnifSkins"), FindSkin);
+					SkinsList(skin_kits, WItem->Skin.paint_kit_menu, Vec2(KITS_LIST_X, KITS_LIST_Y), ("##AllKnifSkins"), FindSkin);
 					WItem->Skin.paint_kit_id = skin_kits[WItem->Skin.paint_kit_menu].id;
 					SkinPreview = skin_kits[WItem->Skin.paint_kit_menu].cdn_name;
 				}
@@ -439,7 +439,7 @@ void CSkins::Menu()
 				{
 					if (AllSkinsLoaded)
 					{
-						SortSkinsList(SortedKnives[SelectedKnifeModelTT].kits, WItem->Skin.paint_kit_menu, Vec2(KITS_LIST_X, KITS_LIST_Y), XorStr("##AllKnifSkins"), FindSkin);
+						SortSkinsList(SortedKnives[SelectedKnifeModelTT].kits, WItem->Skin.paint_kit_menu, Vec2(KITS_LIST_X, KITS_LIST_Y), ("##AllKnifSkins"), FindSkin);
 						if (WItem->Skin.paint_kit_menu < (int)SortedKnives[SelectedKnifeModelTT].kits.size())
 						{
 							WItem->Skin.paint_kit_id = SortedKnives[SelectedKnifeModelTT].kits[WItem->Skin.paint_kit_menu].kit;
@@ -448,8 +448,8 @@ void CSkins::Menu()
 					}
 					else
 					{
-						X1Gui().ListBoxHeader(XorStr("##AllSkinsEmpty"), Vec2(KITS_LIST_X, KITS_LIST_Y));
-						X1Gui().Text(XorStr("Loading skins..."));
+						X1Gui().ListBoxHeader(("##AllSkinsEmpty"), Vec2(KITS_LIST_X, KITS_LIST_Y));
+						X1Gui().Text(("Loading skins..."));
 						X1Gui().ListBoxFooter();
 					}
 				}
@@ -475,17 +475,17 @@ void CSkins::Menu()
 		X1Gui().Separator();
 		X1Gui().Spacing();
 
-		if (X1Gui().Button(XorStr("Update"), Vec2(long_item_w, 22)))
+		if (X1Gui().Button(("Update"), Vec2(long_item_w, 22)))
 		{
 			UpdateSkins();
-			Message::Get().Start(XorStr("Updated!"));
+			Message::Get().Start(("Updated!"));
 		}
 
 		X1Gui().Spacing();
 
 		if (glvTeamSettingsMode == 0)
 		{
-			X1Gui().ListBoxHeader(XorStr("##Gloves"), Vec2(long_item_w, 522));
+			X1Gui().ListBoxHeader(("##Gloves"), Vec2(long_item_w, 522));
 			for (int i = 0; i < sizeof(GlovesModels) / sizeof(GlovesModels[0]); i++)
 			{
 				bool selected = i == SelectedGloveCT;
@@ -505,7 +505,7 @@ void CSkins::Menu()
 		
 		else if (glvTeamSettingsMode == 1)
 		{
-			X1Gui().ListBoxHeader(XorStr("##Gloves"), Vec2(long_item_w, 522));
+			X1Gui().ListBoxHeader(("##Gloves"), Vec2(long_item_w, 522));
 			for (int i = 0; i < sizeof(GlovesModels) / sizeof(GlovesModels[0]); i++)
 			{
 				bool selected = i == SelectedGloveTT;

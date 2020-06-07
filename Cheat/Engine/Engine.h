@@ -7,7 +7,7 @@
 #include "Weapon.h"
 #include "EntityMem.h"
 
-#define  lol(s) string(XorString(s))
+#define  lol(s) string((s))
 
 #define M_WEAPON_DEAGLE_STR		lol("Deagle")		
 #define M_WEAPON_ELITE_STR		lol("Elite")		
