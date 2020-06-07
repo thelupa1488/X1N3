@@ -186,9 +186,9 @@ namespace Engine
 
 	void CBaseEntity::UpdateClientSideAnimation()
 	{
-		//VirtualFn(void)(PVOID);
-		//GetMethod< OriginalFn >(this, 223)(this);
-	//	return GetVFunc<void(__thiscall*)(void*)>(this, 223)(this);
+		VirtualFn(void)(PVOID);
+		GetMethod< OriginalFn >(this, 223)(this);
+//		return call_vfunc<void(__thiscall*)(void*)>(this, 223)(this);
 	}
 
 	CCSGOPlayerAnimState* CBaseEntity::GetBasePlayerAnimState()

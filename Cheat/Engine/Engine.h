@@ -134,10 +134,15 @@ public:
 	static CBaseEntity* LocalPlayer;
 	static CUserCmd* UserCmd;
 	static bool bSendPacket;
-	static float NextLby;
-	static float Side;
-	static float AngleReal;
-	static float AngleFake;
+	static float RealAngle;
+	static float FakeAngle;
+
+	static ConVar* viewmodel_offset_convar_x;
+	static ConVar* viewmodel_offset_convar_y;
+	static ConVar* viewmodel_offset_convar_z;
+	static int old_viewmodel_offset_x;
+	static int old_viewmodel_offset_y;
+	static int old_viewmodel_offset_z;
 
 	static string WeaponNames[34];
 
@@ -366,6 +371,8 @@ public:
 			cmd->mousedx = mousedx;
 		}
 	}
+
+	static int GetBestHeadAngle(float yaw);
 
 	static float AngleDiff(float destAngle, float srcAngle) 
 	{

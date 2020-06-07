@@ -68,7 +68,6 @@ protected:
 	virtual void FrameStageNotify() = 0;
 	virtual void Menu() = 0;
 	virtual void Draw() = 0;
-	virtual void UpdateLBY(CCSGOPlayerAnimState* animstate) = 0;
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd) = 0;
 	virtual void OverrideView(CViewSetup* pSetup) = 0;
 };
@@ -88,7 +87,6 @@ public:
 
 	virtual void Menu();
 	virtual void Draw();
-	virtual void UpdateLBY(CCSGOPlayerAnimState* animstate);
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd);
 	virtual void OverrideView(CViewSetup* pSetup);
 	virtual void GetViewModelFOV(float &Fov);
@@ -106,12 +104,14 @@ public:
 
 	bool Enable = true;
 	bool BHop = false;
-	int  BHopChance = 100;
+	int  BHopChance = 0;
 	bool EdgeJump = false;
 	CBind EdgeJumpBind = CBind(0, true);
 	bool AutoStrafe = false;
+	int  AutoStrafeSpeed = 0;
+
 	bool LeftHandKnife = false;
-	bool InfiniteDuck = false;
+	bool InfiniteCrouch = false;
 
 	bool ThirdPerson = false;
 	int ThirdPersonDistance = 150;
@@ -123,7 +123,7 @@ public:
 	CBind DesyncBind = CBind(0, true);
 
 	bool DesyncArrows = false;
-	bool AngleLines = false;
+//	bool AngleLines = false;
 
 	bool FovChanger = false;
 	int FovView = 100;
@@ -160,7 +160,6 @@ public:
 	int AntiFlashAlpha = 255;
 
 	bool NoSmoke = false;
-	int TypeNoSmoke = 0;
 
 	CHitListener HitWorker;
 
@@ -199,9 +198,17 @@ public:
 	int DamageInfoHeight = 90;
 	int DamageInfoSpeed = 30;
 
+	bool ViewModelXYZ = false;
+	float ViewModelX = 0;
+	float ViewModelY = 0;
+	float ViewModelZ = 0;
+
 	bool FakeLag = false;
-	int FakeLagFactor = 7;
-	CBind FakeLagBind = CBind(0, true);
+	CBind FakeLagBind = CBind(0, false);
+	int FakeLagType = 0;
+	int FakeLagStandingAmount = 0;
+	int FakeLagMovingAmount = 0;
+	int FakeLagJumpingAmount = 0;
 
 	int TextDamageInfo = 38;
 
@@ -223,6 +230,7 @@ public:
 	Color HandChamsColor = Color(255, 198, 0, 255);
 	Color DamageInfoColor = Color(255, 100, 100, 255);
 	Color ColoredWallsColor = Color(255, 100, 100, 255);
+	Color ArrowsColor = Color(255, 0, 0, 255);
 
 	vector<string> SoundList;
 
@@ -238,16 +246,18 @@ public:
 
 		RV(BHop, "BHop");
 		RV(BHopChance, "BHopChance");
+		RV(AutoStrafe, "AutoStrafe");
+		RV(AutoStrafeSpeed, "AutoStrafeSpeed");
 		RV(EdgeJump, "EdgeJump");
 		RV(EdgeJumpBind, "EdgeJumpBind");
-		RV(AutoStrafe, "AutoStrafe");
 		RV(LeftHandKnife, "LeftHandKnife");
-		RV(InfiniteDuck, "InfiniteDuck");
+		RV(InfiniteCrouch, "InfiniteCrouch");
 		RV(ThirdPerson, "ThirdPerson");
-		RV(ThirdPersonBind, "ThirdPersonBind");
 		RV(ThirdPersonDistance, "ThirdPersonDistance");
+		RV(ThirdPersonBind, "ThirdPersonBind");
 		RV(DesyncArrows, "DesyncArrows");
-		RV(AngleLines, "AngleLines");
+		RV(ArrowsColor, "ArrowsColor");
+//		RV(AngleLines, "AngleLines");
 		RV(FovChanger, "FovChanger");
 		RV(FovView, "FovView");
 		RV(FovModelChanger, "FovModelChanger");
@@ -303,8 +313,14 @@ public:
 		RV(DamageInfoSize, "DamageInfoSize");
 		RV(DamageInfoHeight, "DamageInfoHeight");
 		RV(DamageInfoSpeed, "DamageInfoSpeed");
+		RV(ViewModelXYZ, "ViewModelXYZ");
+		RV(ViewModelX, "ViewModelX");
+		RV(ViewModelY, "ViewModelY");
+		RV(ViewModelZ, "ViewModelZ");
 		RV(FakeLag, "FakeLag");
-		RV(FakeLagFactor, "FakeLagFactor");
+		RV(FakeLagStandingAmount, "FakeLagStandingAmount");
+		RV(FakeLagMovingAmount, "FakeLagMovingAmount");
+		RV(FakeLagJumpingAmount, "FakeLagJumpingAmount");
 		RV(FakeLagBind, "FakeLagBind");
 
 		RV(TextDamageInfo, "TextDamageInfo");

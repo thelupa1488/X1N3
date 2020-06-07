@@ -75,6 +75,17 @@ public:
 				PVOID* ClientTable = *reinterpret_cast<PVOID**>(I::Client());
 				PVOID* ClientStateTable = *reinterpret_cast<PVOID**>(I::ClientState());
 				PVOID* ModelRenderTable = *reinterpret_cast<PVOID**>(I::ModelRender());
+
+				CGlobal::viewmodel_offset_convar_x = I::GetConVar()->FindVar(XorStr("viewmodel_offset_x"));
+				CGlobal::viewmodel_offset_convar_y = I::GetConVar()->FindVar(XorStr("viewmodel_offset_y"));
+				CGlobal::viewmodel_offset_convar_z = I::GetConVar()->FindVar(XorStr("viewmodel_offset_z"));
+				*(int*)((DWORD)&CGlobal::viewmodel_offset_convar_x->fnChangeCallback + 0xC) = NULL;
+				*(int*)((DWORD)&CGlobal::viewmodel_offset_convar_y->fnChangeCallback + 0xC) = NULL;
+				*(int*)((DWORD)&CGlobal::viewmodel_offset_convar_z->fnChangeCallback + 0xC) = NULL;
+				CGlobal::old_viewmodel_offset_x = -CGlobal::viewmodel_offset_convar_x->GetFloat();
+				CGlobal::old_viewmodel_offset_y = -CGlobal::viewmodel_offset_convar_y->GetFloat();
+				CGlobal::old_viewmodel_offset_z = -CGlobal::viewmodel_offset_convar_z->GetFloat();
+
 				ADD_LOG("2-1-11-2\n");
 #ifndef ONLY_DRAW_HOOK
 				ADD_LOG("2-1-11-3\n");

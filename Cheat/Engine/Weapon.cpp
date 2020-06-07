@@ -67,20 +67,15 @@ namespace Engine
 
 	bool CBaseWeapon::CanFire()
 	{
-		if (!CGlobal::LocalPlayer)
-			return false;
-
-		static auto stored_tick = 0;
 		static decltype(this) stored_weapon = nullptr;
-		if (stored_weapon != this || stored_tick >= CGlobal::LocalPlayer->GetTickBase())
-		{
+		static auto stored_tick = 0;
+		if (stored_weapon != this || stored_tick >= CGlobal::LocalPlayer->GetTickBase()) {
 			stored_weapon = this;
 			stored_tick = CGlobal::LocalPlayer->GetTickBase();
-
-			return false;
+			return false; //cannot shoot first tick after switch
 		}
 
-		if (IsReloading() || GetWeaponAmmo() <= 0 || !CGlobal::LocalPlayer)
+		if (GetWeaponAmmo() <= 0 || !CGlobal::LocalPlayer)
 			return false;
 
 		auto flServerTime = CGlobal::LocalPlayer->GetTickBase() * I::GlobalVars()->interval_per_tick;

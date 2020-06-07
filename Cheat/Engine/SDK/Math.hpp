@@ -76,7 +76,7 @@ namespace SDK
 	}
 
 	void AngleVector(const Vector& angles, Vector& forward);
-	//void MovementFix(CUserCmd* m_Cmd, QAngle wish_angle, QAngle old_angles);
+	void MovementFix(CUserCmd* m_Cmd, QAngle wish_angle, QAngle old_angles);
 	void FixMovement(CUserCmd* cmd, QAngle& wishangle);
 	void VectorTransform(const Vector& in1, const matrix3x4_t& in2, Vector& out);
 	void Normalize(Vector& f);

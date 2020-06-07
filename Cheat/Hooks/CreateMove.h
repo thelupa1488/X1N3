@@ -22,7 +22,7 @@ bool __stdcall CreateMove(float flInputSampleTime, CUserCmd* pCmd)
 	{
 		CGlobal::GViewAngle = pCmd->viewangles;
 		CGlobal::UserCmd = pCmd;
-		CGlobal::LocalPlayer = (CBaseEntity*)I::ClientEntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
+		CGlobal::LocalPlayer = I::ClientEntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
 
 		if (bReturn)
 			I::Prediction()->SetLocalViewangles(Vector(pCmd->viewangles.x, pCmd->viewangles.y, pCmd->viewangles.z));

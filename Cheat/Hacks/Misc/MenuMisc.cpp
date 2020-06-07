@@ -14,8 +14,13 @@ void CMisc::Menu()
 	{
 		X1Gui().SameLine(SAME_LINE_1);
 		X1Gui().PushItemWidth(PUSH_1);
-		SliderInts("%Chance##Bhop", BHopChance, 0, 100);
-		DCheckBox("Air strafe", AutoStrafe);
+		SliderInts("Chance##BHop", BHopChance, 0, 100);
+		DCheckBox("Auto strafe", AutoStrafe);
+		if (AutoStrafe)
+		{
+			X1Gui().SameLine(SAME_LINE_1);
+			SliderInts("Speed##AutoStrafe", AutoStrafeSpeed, 0, 15);
+		}
 	}
 	X1Gui().Spacing();
 	X1Gui().Separator();
@@ -36,7 +41,7 @@ void CMisc::Menu()
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
-	DCheckBox("Infinite duck", InfiniteDuck);
+	DCheckBox("Infinite Crouch", InfiniteCrouch);
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
@@ -47,11 +52,10 @@ void CMisc::Menu()
 		X1Gui().PushItemWidth(PUSH_1);
 		SliderInts("Distance##ThirdPerson", ThirdPersonDistance, 50, 300);
 		X1Gui().PushItemWidth(PUSH_1);
-		DCheckBox("Angle Lines", AngleLines);
-		X1Gui().SameLine(SAME_LINE_1);
-		HotsKey("Button##thirdperson", ThirdPersonBind.Button);
+		//DCheckBox("Angle Lines", AngleLines);
+		HotsKey("Button##ThirdPerson", ThirdPersonBind.Button);
 		X1Gui().SameLine();
-		DCheckBox("Hold##thirdperson", ThirdPersonBind.Hold);
+		DCheckBox("Hold##ThirdPerson", ThirdPersonBind.Hold);
 	}
 	X1Gui().Spacing();
 	X1Gui().Separator();
@@ -61,14 +65,16 @@ void CMisc::Menu()
 	{
 		X1Gui().SameLine(SAME_LINE_1);
 		X1Gui().PushItemWidth(PUSH_1);
-		VectorEx<const char* >itemsCSS = { lolc("Off") , lolc("Static"), lolc("Balance") };
+		VectorEx<const char* >itemsCSS = {lolc("Static"), lolc("Balance") };
 		DComboBox("Type##Desync", DesyncType, itemsCSS);
-		DCheckBox("Autodirection", DesyncAd);
-		X1Gui().SameLine(SAME_LINE_1);
-		HotsKey("Button##Desync", DesyncBind.Button);
-		X1Gui().SameLine();
-		DCheckBox("Hold##Desync", DesyncBind.Hold);
 		DCheckBox("Desync Arrows", DesyncArrows);
+		if (DesyncArrows)
+		{
+			X1Gui().SameLine();
+			DColorEdit("Color##Arrows", ArrowsColor);
+		}
+		X1Gui().SameLine();
+		HotsKey("Button##Desync", DesyncBind.Button);
 	}
 	X1Gui().Spacing();
 	X1Gui().Separator();
@@ -112,6 +118,17 @@ void CMisc::Menu()
 		X1Gui().SameLine(SAME_LINE_1);
 		X1Gui().PushItemWidth(PUSH_1);
 		SliderInts("FOV model", FovModel, 1, 180);
+	}
+	X1Gui().Spacing();
+	X1Gui().Separator();
+	X1Gui().Spacing();
+	DCheckBox("Viewmodel XYZ", ViewModelXYZ);
+	if (ViewModelXYZ)
+	{
+		X1Gui().PushItemWidth(PUSH_2);
+		SliderFloats("ViewModel X", ViewModelX, -30.f, 30.f, "%.2f");
+		SliderFloats("ViewModel Y", ViewModelY, -30.f, 30.f, "%.2f");
+		SliderFloats("ViewModel Z", ViewModelZ, -30.f, 30.f, "%.2f");
 	}
 	X1Gui().Spacing();
 	X1Gui().Separator();
@@ -339,17 +356,23 @@ void CMisc::Menu()
 	DCheckBox("Fake lag", FakeLag);
 	if (FakeLag)
 	{
-		X1Gui().SameLine(SAME_LINE_1);
+		X1Gui().SameLine();
+		DCheckBox("Bind##FakeLag", FakeLagBind.Enable);
+		X1Gui().SameLine();
 		X1Gui().PushItemWidth(PUSH_1);
-		SliderInts("Factor", FakeLagFactor, 1, 50);
-		DCheckBox("Bind##fake", FakeLagBind.Enable);
+		VectorEx<const char* >itemsCSS = { lolc("Factor") , lolc("Adaptive")};
+		DComboBox("Type##FakeLag", FakeLagType, itemsCSS);
 		if (FakeLagBind.Enable)
 		{
-			X1Gui().SameLine(SAME_LINE_1);
-			DCheckBox("Hold##fake", FakeLagBind.Hold);
-			X1Gui().PushItemWidth(PUSH_2);
-			HotsKey("Button##fake", FakeLagBind.Button);
+			X1Gui().PushItemWidth(PUSH_1);
+			HotsKey("Button##FakeLag", FakeLagBind.Button);
+			X1Gui().SameLine();
+			DCheckBox("Hold##FakeLag", FakeLagBind.Hold);
 		}
+		X1Gui().PushItemWidth(PUSH_2);
+		SliderInts("Standing Ticks##FakeLag", FakeLagStandingAmount, 1, 14);
+		SliderInts("Moving Ticks##FakeLag", FakeLagMovingAmount, 1, 14);
+		SliderInts("Jumping Ticks##FakeLag", FakeLagJumpingAmount, 1, 14);
 	}
 	X1Gui().Spacing();
 	X1Gui().Separator();
@@ -394,10 +417,10 @@ void CMisc::Menu()
 	DCheckBox("AutoBlock", AutoBlock);
 	if (AutoBlock)
 	{
+		X1Gui().SameLine();
 		DCheckBox("Bind##AutoBlock", AutoBlockBind.Enable);
 		if (AutoBlockBind.Enable)
 		{
-			X1Gui().SameLine(SAME_LINE_1);
 			X1Gui().PushItemWidth(PUSH_1);
 			HotsKey("Button##AutoBlock", AutoBlockBind.Button);
 			X1Gui().SameLine();

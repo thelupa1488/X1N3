@@ -97,7 +97,6 @@ namespace SDK
 	class NetChannel
 	{
 	public:
-
 		uint8_t pad_0x0000[0x17];
 		bool m_bShouldDelete;
 		int m_nOutSequenceNr;
@@ -355,15 +354,10 @@ namespace SDK
 			return ((Fn)GetVFunction<Fn>(this, 37))(this);
 		}
 
-		template <typename t>
-		static t DUMBNIGGERSLOL(void* class_pointer, size_t index) 
-		{
-			return (*(t * *)class_pointer)[index];
-		}
-		NetChannel* GetNetChannel() // i wanna fucking die
+		NetChannel* GetNetChannel()
 		{
 			typedef NetChannel* (__thiscall * Fn)(void*);
-			return DUMBNIGGERSLOL<Fn>(this, 78)(this);
+			return GetVFunction<Fn>(this, 78)(this);
 		}
 	};
 }
