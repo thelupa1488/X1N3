@@ -245,8 +245,8 @@ public:
 				offsets["m_iWorldModelIndex"] = mGetOffset("DT_BaseCombatWeapon", "m_iWorldModelIndex");
 				offsets["m_Item"] = mGetOffset("DT_BaseAttributableItem", "m_Item");
 				ADD_LOG("2-1-9-1\n");
-				offsets["KeyValues_KeyValues"] = CSX::Memory::FindPatternV2(XorStr("client.dll"), KEY_VALUES_MASK);
-				offsets["KeyValues_LoadFromBuffer"] = CSX::Memory::FindPatternV2(XorStr("client.dll"), KEY_VALUES_LOAD_FROM_BUFFER_MASK);
+				offsets["KeyValues_KeyValues"] = CSX::Memory::FindPatternV2(clientFactory, KEY_VALUES_MASK);
+				offsets["KeyValues_LoadFromBuffer"] = CSX::Memory::FindPatternV2(clientFactory, KEY_VALUES_LOAD_FROM_BUFFER_MASK);
 				ADD_LOG("All Offsets sucessful\n");
 				ADD_LOG("2-1-9-2\n");
 	 		};
@@ -262,9 +262,9 @@ public:
 				ADD_LOG("2-1-1\n");
 				if (!CSX::Utils::IsModuleLoad(engineFactory, 5001))
 					return false;
-				if (!CSX::Utils::IsModuleLoad(VGUI2_DLL, 5001))
+				if (!CSX::Utils::IsModuleLoad(vguiFactory, 5001))
 					return false;
-				if (!CSX::Utils::IsModuleLoad(VGUIMAT_DLL, 5001))
+				if (!CSX::Utils::IsModuleLoad(vguimatFactory, 5001))
 					return false;
 				if (!CSX::Utils::IsModuleLoad(valveStdFactory, 5001))
 					return false;

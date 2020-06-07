@@ -267,7 +267,7 @@ namespace SDK
 	{
 		if (!g_pPanel)
 		{
-			g_pPanel = GetInterface<CPanel>(VGUI2_DLL, XorStr("VGUI_Panel"));
+			g_pPanel = GetInterface<CPanel>(vguiFactory, XorStr("VGUI_Panel"));
 			ADD_LOG("->Panel -> %X\n", (DWORD)g_pPanel);
 		}
 		return g_pPanel;
@@ -277,7 +277,7 @@ namespace SDK
 	{
 		if (!g_pSurface)
 		{
-			g_pSurface = GetInterface<ISurface>(VGUIMAT_DLL, XorStr("VGUI_Surface"));
+			g_pSurface = GetInterface<ISurface>(vguimatFactory, XorStr("VGUI_Surface"));
 			ADD_LOG("->Surface -> %X\n", (DWORD)g_pSurface);
 		}
 		return g_pSurface;

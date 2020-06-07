@@ -6,7 +6,7 @@ void RankReveal()
 	using ServerRankRevealAll = bool(__cdecl*)(int*);
 
 	static auto fnServerRankRevealAll = reinterpret_cast<int(__thiscall*)(ServerRankRevealAll*, DWORD, void*)>
-		(CSX::Memory::FindPatternV2(XorStr("client.dll"),
+		(CSX::Memory::FindPatternV2(clientFactory,
 		XorStr("55 8B EC 8B 0D ? ? ? ? 85 C9 75 28 A1 ? ? ? ? 68 ? ? ? ? 8B 08 8B 01 FF 50 04 85 C0 74 0B 8B C8 E8 ? ? ? ? 8B C8 EB 02 33 C9 89 0D ? ? ? ? 8B 45 08")));
 
 	int v[3] = { 0,0,0 };

@@ -252,7 +252,7 @@ void CMisc::Draw()
 
 void CMisc::SetNewClan(string New, string Name)
 {
-	static auto pSetClanTag = reinterpret_cast<void(__fastcall*)(const char*, const char*)>(((DWORD)CSX::Memory::FindPatternV2(XorStr("engine.dll"), XorStr("53 56 57 8B DA 8B F9 FF 15"))));
+	static auto pSetClanTag = reinterpret_cast<void(__fastcall*)(const char*, const char*)>(((DWORD)CSX::Memory::FindPatternV2(engineFactory, XorStr("53 56 57 8B DA 8B F9 FF 15"))));
 
 	if (pSetClanTag)
 		pSetClanTag(New.c_str(), Name.c_str());
@@ -1181,7 +1181,7 @@ void CMisc::AutoAcceptEmit()
 	if (AutoAccept && !CGlobal::FullUpdateCheck)
 	{
 		static auto fnAccept = reinterpret_cast<bool(__stdcall*)(const char*)>
-			(CSX::Memory::FindPatternV2(XorStr("client.dll"),
+			(CSX::Memory::FindPatternV2(clientFactory,
 				XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12")));
 
 		if (fnAccept)
