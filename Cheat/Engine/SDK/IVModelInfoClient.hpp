@@ -11,9 +11,8 @@ typedef unsigned short MDLHandle_t;
 
 namespace SDK
 {
-
-
-	enum HitboxEnum_t {
+	enum HitboxEnum_t 
+	{
 		HITBOX_HEAD,
 		HITBOX_NECK,
 		HITBOX_PELVIS,

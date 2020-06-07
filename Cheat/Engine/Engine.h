@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "../Main.h"
 #include "../Include/Def.h"
 #include "../Initialize/Offsets.h"
@@ -134,8 +134,8 @@ public:
 	static CBaseEntity* LocalPlayer;
 	static CUserCmd* UserCmd;
 	static bool bSendPacket;
-	static float RealAngle;
-	static float FakeAngle;
+	static QAngle RealAngle;
+	static QAngle FakeAngle;
 
 	static ConVar* viewmodel_offset_convar_x;
 	static ConVar* viewmodel_offset_convar_y;

@@ -178,6 +178,11 @@ namespace Engine
 		return *(float*)((uintptr_t)this + offsets["m_flLowerBodyYawTarget"]);
 	}
 
+	Vector CBaseEntity::GetPredicted(Vector p0)
+	{
+		return ExtrapolateTick(p0, this->GetVelocity());
+	}
+
 	QAngle& CBaseEntity::GetVAngles()
 	{
 		static auto deadflag = offsets["deadflag"];

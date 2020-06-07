@@ -69,6 +69,7 @@ protected:
 	virtual void Draw() = 0;
 	virtual int  LagCompBreak() = 0;
 	virtual void SetNewClan(string New, string Name) = 0;
+	virtual bool ChangeName(bool reconnect, const char* newName, float delay) = 0;
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd) = 0;
 	virtual void OverrideView(CViewSetup* pSetup) = 0;
 };
@@ -90,6 +91,7 @@ public:
 	virtual void Draw();
 	virtual int  LagCompBreak();
 	virtual void SetNewClan(string New, string Name);
+	virtual bool ChangeName(bool reconnect, const char* newName, float delay);
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd);
 	virtual void OverrideView(CViewSetup* pSetup);
 	virtual void GetViewModelFOV(float &Fov);
@@ -124,7 +126,7 @@ public:
 	CBind DesyncBind = CBind(0, true);
 
 	bool DesyncArrows = false;
-//	bool AngleLines = false;
+	//bool AngleLines = false;
 
 	bool FovChanger = false;
 	int FovView = 100;
@@ -164,6 +166,7 @@ public:
 
 	CHitListener HitWorker;
 
+	bool NameStealer = false;
 	bool ClanTagChanger = false;
 	int ClanTagChangerStyle = 0;
 	string ClanTagChangerText = "";
@@ -221,6 +224,8 @@ public:
 	int KnifeBotFilter = 0;
 	int KnifeBotMode = 0;
 	CBind KnifeBotBind = CBind(0);
+	//bool AutoZeus = false;
+	//int  AutoZeusFilter = 0;
 	bool AutoBlock = false;
 	CBind AutoBlockBind = CBind(0);
 
@@ -289,6 +294,7 @@ public:
 		RV(AntiFlash, "AntiFlash");
 		RV(AntiFlashAlpha, "AntiFlashAlpha");
 		RV(NoSmoke, "NoSmoke");
+		RV(NameStealer, "NameStealer")
 		RV(ClanTagChanger, "ClanTagChanger");
 		RV(ClanTagChangerStyle, "ClanTagChangerStyle");
 		RV(ClanTagChangerText, "ClanTagChangerText");

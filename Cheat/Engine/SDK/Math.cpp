@@ -115,6 +115,11 @@ namespace SDK
 		wishangle = cmd->viewangles;
 	}
 
+	Vector ExtrapolateTick(Vector p0, Vector v0)
+	{
+		return p0 + (v0 * I::GlobalVars()->interval_per_tick);
+	}
+
 	//--------------------------------------------------------------------------------
 	float VectorDistance(const Vector& v1, const Vector& v2)
 	{
@@ -264,22 +269,13 @@ namespace SDK
 	{
 		return rand() % (max - min + 1) + min;
 	}
-	QAngle CalcAngle(const Vector& src, const Vector& dst)
+	QAngle CalcAngle(Vector src, Vector dst)
 	{
-		QAngle vAngle;
-		Vector delta((src.x - dst.x), (src.y - dst.y), (src.z - dst.z));
-		double hyp = sqrt(delta.x * delta.x + delta.y * delta.y);
-
-		vAngle.x = float(atanf(float(delta.z / hyp)) * 57.295779513082f);
-		vAngle.y = float(atanf(float(delta.y / delta.x)) * 57.295779513082f);
-		vAngle.z = 0.0f;
-
-		if (delta.x >= 0.0)
-		{
-			vAngle.y += 180.0f;
-		}
-
-		return vAngle;
+		QAngle angles;
+		Vector delta = src - dst;
+		VectorAngles(delta, angles);
+		delta.Normalized();
+		return angles;
 	}
 
 	Vector gCalcAngle(Vector src, Vector dst)

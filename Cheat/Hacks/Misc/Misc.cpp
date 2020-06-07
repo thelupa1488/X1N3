@@ -233,9 +233,9 @@ void CMisc::Draw()
 					//		if (CGlobal::bSendPacket)
 					//			view = CGlobal::UserCmd->viewangles.y;
 
-					//		DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, CGlobal::FakeAngle, "fake", Color::Orange());
+					//		DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, CGlobal::FakeAngle.y, "fake", Color::Orange());
 					//		DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, CGlobal::LocalPlayer->GetLowerBodyYawTarget(), "lby", Color::Blue());
-					//		DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, CGlobal::RealAngle, "real", Color::Green());
+					//		DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, CGlobal::RealAngle.y, "real", Color::Green()); //need fix
 					//		DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, view, "view", Color::Red());
 					//	}
 					//}
@@ -269,6 +269,43 @@ void CMisc::SetNewClan(string New, string Name)
 
 	if (pSetClanTag)
 		pSetClanTag(New.c_str(), Name.c_str());
+}
+
+bool CMisc::ChangeName(bool reconnect, const char* newName, float delay)
+{
+	static auto exploitInitialized = false;
+
+	static auto name = I::GetConVar()->FindVar("name");
+
+	if (reconnect)
+	{
+		exploitInitialized = false;
+		return false;
+	}
+
+	if (!exploitInitialized && CGlobal::IsGameReady)
+	{
+		PlayerInfo playerInfo;
+		if (CGlobal::LocalPlayer && I::Engine()->GetPlayerInfo(CGlobal::LocalPlayer->EntIndex(), &playerInfo) && (!strcmp(playerInfo.m_szPlayerName, "?empty") ||
+			!strcmp(playerInfo.m_szPlayerName, "\n\xAD\xAD\xAD")))
+		{
+			exploitInitialized = true;
+		}
+		else
+		{
+			*(int*)((DWORD)&name->fnChangeCallback + 0xC) = NULL;
+			name->SetValue("\n\xAD\xAD\xAD");
+			return false;
+		}
+	}
+	static auto nextChangeTime = 0.0f;
+	if (nextChangeTime <= I::GlobalVars()->realtime)
+	{
+		name->SetValue(newName);
+		nextChangeTime = I::GlobalVars()->realtime + delay;
+		return true;
+	}
+	return false;
 }
 
 void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCmd)
@@ -462,6 +499,31 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 						*(int*)smoke_count = 1;
 				}
 				NoSmokeReset = false;
+			}
+
+			if (NameStealer)
+			{
+				static std::vector<int> stolenIds;
+				for (int i = 1; i <= I::GlobalVars()->maxClients; ++i) 
+				{
+					const auto entity = I::ClientEntityList()->GetClientEntity(i);
+
+					if (!entity || entity == CGlobal::LocalPlayer)
+						continue;
+
+					PlayerInfo playerInfo;
+					if (!I::Engine()->GetPlayerInfo(entity->EntIndex(), &playerInfo))
+						continue;
+
+					if (playerInfo.m_bIsFakePlayer || std::find(stolenIds.cbegin(), stolenIds.cend(), playerInfo.m_nUserID) != stolenIds.cend())
+						continue;
+
+					if (ChangeName(false, (std::string(playerInfo.m_szPlayerName) +'\x1').c_str(), 1.0f))
+						stolenIds.push_back(playerInfo.m_nUserID);
+
+					return;
+				}
+				stolenIds.clear();
 			}
 
 			if (ClanTagChanger)
@@ -810,6 +872,66 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				}
 			}
 
+			//if (AutoZeus)
+			//{
+			//	for (int i = 0; i < MAX_ENTITY_PLAYERS; ++i)
+			//	{
+			//		CEntityPlayer* Entity = GP_EntPlayers->GetByIdx(i);
+			//		CEntityPlayer* Local = GP_EntPlayers->EntityLocal;
+
+			//		if (!Entity->IsUpdated)
+			//			continue;
+
+			//		if (Entity->IsLocal)
+			//			continue;
+
+			//		if (!Entity->IsPlayer)
+			//			continue;
+
+			//		if (Entity->IsDead)
+			//			continue;
+
+			//		if (AutoZeusFilter == 1)
+			//		{
+			//			if ((int)Entity->Team != CGlobal::LocalPlayer->GetTeam())
+			//				continue;
+			//		}
+			//		else if (AutoZeusFilter == 2)
+			//		{
+			//			if ((int)Entity->Team == CGlobal::LocalPlayer->GetTeam())
+			//				continue;
+			//		}
+
+			//		float dist = Entity->Distance * 33;
+
+			//		if (dist > 170.f) 
+			//			return;
+
+			//		Vector OrignWorld = Entity->RenderOrigin;
+			//		Vector OrignScreen;
+
+			//		if (!CGlobal::WorldToScreen(OrignWorld, OrignScreen))
+			//			continue;
+
+			//		Vector vecHitBox = Entity->BaseEntity->GetHitboxPosition(HITBOX_LOWER_CHEST);
+			//		QAngle dst = CalcAngle(CGlobal::LocalPlayer->GetEyePosition(), vecHitBox);
+			//		pCmd->viewangles = dst.Normalized();
+
+			//		static bool fired = false;
+
+			//		if (!fired)
+			//		{
+			//			pCmd->buttons |= IN_ATTACK;
+			//			fired = true;
+			//		}
+			//		else if (fired)
+			//		{
+			//			pCmd->buttons &= ~IN_ATTACK;
+			//			fired = false;
+			//		}
+			//	}
+			//}
+
 			auto unpred_flags = CGlobal::LocalPlayer->GetFlags();
 			QAngle angleold = pCmd->viewangles;
 			EnginePrediction::Begin(pCmd);
@@ -869,7 +991,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					else
 						side = -1.0f;
 				
-
 					if (fabsf(CGlobal::LocalPlayer->GetSpawnTime() - I::GlobalVars()->curtime) > 1.0f)
 					{
 						if (DesyncType == 0) // static
@@ -888,7 +1009,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 								pCmd->viewangles.y += 120.0f * side;
 								if (should_move)
 									pCmd->sidemove -= minimal_move;
-								CGlobal::bSendPacket = false;
+								bSendPacket = false;
 							}
 							else if (should_move) {
 								pCmd->sidemove += minimal_move;
@@ -898,17 +1019,17 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 						{
 							if (next_lby >= I::GlobalVars()->curtime)
 							{
-								if (!broke_lby && CGlobal::bSendPacket && I::ClientState()->chokedcommands > 0)
+								if (!broke_lby && !bSendPacket && I::ClientState()->chokedcommands > 0)
 									return;
 
 								broke_lby = false;
-								CGlobal::bSendPacket = false;
+								bSendPacket = false;
 								pCmd->viewangles.y += 120.0f * side;
 							}
 							else
 							{
 								broke_lby = true;
-								CGlobal::bSendPacket = false;
+								bSendPacket = false;
 								pCmd->viewangles.y += 120.0f * -side;
 							}
 						}
@@ -920,7 +1041,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					pCmd->viewangles.y = remainderf(pCmd->viewangles.y, 360.0f);
 
 					if (I::ClientState()->chokedcommands >= max_choke_ticks) {
-						CGlobal::bSendPacket = true;
+						bSendPacket = true;
 						pCmd->viewangles = I::ClientState()->viewangles;
 					}
 
@@ -947,11 +1068,10 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 						*anim_state = anim_state_backup;
 					}
 
-					if (CGlobal::bSendPacket)
+					if (bSendPacket)
 					{
-						CGlobal::RealAngle = (pCmd->viewangles.x, g_AnimState.m_flGoalFeetYaw, 0);
-						CGlobal::FakeAngle = (pCmd->viewangles.x, g_AnimState.m_flEyeYaw, 0);
-						vangle = pCmd->viewangles.y;
+						CGlobal::RealAngle = QAngle(pCmd->viewangles.x, g_AnimState.m_flGoalFeetYaw, 0);
+						CGlobal::FakeAngle = QAngle(pCmd->viewangles.x, g_AnimState.m_flEyeYaw, 0);
 					}
 
 					FixAngles(pCmd->viewangles);				

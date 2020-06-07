@@ -25,7 +25,7 @@ void CMisc::Menu()
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
-	DCheckBox("Edge Jump", EdgeJump);
+	DCheckBox("Edge jump", EdgeJump);
 	if (EdgeJump)
 	{
 		X1Gui().SameLine(SAME_LINE_1);
@@ -37,22 +37,23 @@ void CMisc::Menu()
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
-	DCheckBox("Left Hand Knife", LeftHandKnife);
+	DCheckBox("Left hand knife", LeftHandKnife);
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
-	DCheckBox("Infinite Crouch", InfiniteCrouch);
+	DCheckBox("Infinite crouch", InfiniteCrouch);
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
-	DCheckBox("ThirdPerson", ThirdPerson);
+	DCheckBox("Third person", ThirdPerson);
 	if (ThirdPerson)
 	{
 		X1Gui().SameLine(SAME_LINE_1);
 		X1Gui().PushItemWidth(PUSH_1);
 		SliderInts("Distance##ThirdPerson", ThirdPersonDistance, 50, 300);
 		X1Gui().PushItemWidth(PUSH_1);
-		//DCheckBox("Angle Lines", AngleLines);
+//		DCheckBox("Angle Lines", AngleLines);
+//		X1Gui().SameLine(SAME_LINE_1);
 		HotsKey("Button##ThirdPerson", ThirdPersonBind.Button);
 		X1Gui().SameLine();
 		DCheckBox("Hold##ThirdPerson", ThirdPersonBind.Hold);
@@ -67,7 +68,7 @@ void CMisc::Menu()
 		X1Gui().PushItemWidth(PUSH_1);
 		VectorEx<const char* >itemsCSS = {lolc("Static"), lolc("Balance") };
 		DComboBox("Type##Desync", DesyncType, itemsCSS);
-		DCheckBox("Desync Arrows", DesyncArrows);
+		DCheckBox("Desync arrows", DesyncArrows);
 		if (DesyncArrows)
 		{
 			X1Gui().SameLine();
@@ -79,7 +80,7 @@ void CMisc::Menu()
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
-	DCheckBox("Show Competitive Rank", ShowCompetitiveRank);
+	DCheckBox("Show competitive rank", ShowCompetitiveRank);
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
@@ -256,6 +257,10 @@ void CMisc::Menu()
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
+	DCheckBox("Name stealer", NameStealer);
+	X1Gui().Spacing();
+	X1Gui().Separator();
+	X1Gui().Spacing();
 	DCheckBox("Clan tag spammer", ClanTagChanger);
 	if (ClanTagChanger)
 	{
@@ -410,7 +415,7 @@ void CMisc::Menu()
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
-	DCheckBox("AutoBlock", AutoBlock);
+	DCheckBox("Auto block", AutoBlock);
 	if (AutoBlock)
 	{
 		X1Gui().SameLine();

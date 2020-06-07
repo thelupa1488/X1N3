@@ -1578,14 +1578,6 @@ void CLegitAim::LegitResolver()
 				}
 			}
 		}
-		//if (!pl->GetBasePlayerAnimState() || pl->GetVelocity().Length() > 0)
-		//	return;
-
-		//if (fabs(std::remainderf(pl->GetLowerBodyYawTarget(), 360.f) - std::remainderf(pl->GetEyeAngles().y, 360.f)) < 60)
-		//	return;
-
-		//auto lbyfix = ClampYaw(std::remainderf(pl->GetLowerBodyYawTarget() + 180, 360.f));
-		//pl->GetBasePlayerAnimState()->m_flGoalFeetYaw = lbyfix;
 	}
 }
 

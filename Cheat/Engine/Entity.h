@@ -110,6 +110,7 @@ namespace Engine
 
 		float   GetC4DefuseCountDown();
 		float   GetLowerBodyYawTarget();
+		Vector  GetPredicted(Vector p0);
 		QAngle& GetVAngles();
 		void    UpdateClientSideAnimation();
 		CCSGOPlayerAnimState* GetBasePlayerAnimState();

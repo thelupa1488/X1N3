@@ -115,11 +115,20 @@ void CLegitAim::Menu()
 		}
 		else if (SubtabAimMiscSelected == 1)
 		{
-			X1Gui().PushItemWidth(250.f);
 			X1Gui().Spacing();
-
+			DCheckBox("Aim bind", AimBind.Enable);
+			if (AimBind.Enable)
+			{
+				X1Gui().SameLine();
+				DCheckBox("Hold", AimBind.Hold);
+				X1Gui().Spacing();
+				HotsKey("Button", AimBind.Button);
+			}
+			X1Gui().Spacing();
+			X1Gui().Separator();
+			X1Gui().Spacing();
+			X1Gui().PushItemWidth(250.f);
 			DCheckBox("FACEIT", FaceIt);
-
 			if (FaceIt)
 			{
 				X1Gui().SameLine();
@@ -150,15 +159,6 @@ void CLegitAim::Menu()
 			X1Gui().Separator();
 			X1Gui().Spacing();
 
-			DCheckBox("Aim bind", AimBind.Enable);
-			if (AimBind.Enable)
-			{
-				X1Gui().SameLine();
-				DCheckBox("Hold", AimBind.Hold);
-				X1Gui().Spacing();
-				HotsKey("Button", AimBind.Button);
-
-			}
 		//	X1Gui().Spacing();
 		//	DCheckBox("Debug", Debug);
 		}

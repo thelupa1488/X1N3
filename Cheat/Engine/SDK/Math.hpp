@@ -16,7 +16,7 @@
 
 namespace SDK
 {
-	inline float FASTSQRT(float x)
+	static float FASTSQRT(float x)
 	{
 		unsigned int i = *(unsigned int*)&x;
 
@@ -25,7 +25,7 @@ namespace SDK
 		i >>= 1;
 		return *(float*)&i;
 	}
-	inline float ClampYaw(float yaw)
+	static float ClampYaw(float yaw)
 	{
 		while (yaw > 180.f)
 			yaw -= 360.f;
@@ -38,8 +38,9 @@ namespace SDK
 	void lNormalizeAngles(T& vec);
 	void lClampAngles(QAngle& angles);
 
+	Vector ExtrapolateTick(Vector p0, Vector v0);
 	float VectorDistance(const Vector& v1, const Vector& v2);
-	QAngle CalcAngle(const Vector& src, const Vector& dst);
+	QAngle CalcAngle(Vector src, Vector dst);
 	float GetFOV(const QAngle& viewAngle, const QAngle& aimAngle);
 	float RandomFloat(float min, float max);
 	void RandomSeed(int iSeed);

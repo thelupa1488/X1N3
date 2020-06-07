@@ -17,8 +17,8 @@ vector<string> CGlobal::ConfigList;
 CBaseEntity* CGlobal::LocalPlayer;
 CUserCmd* CGlobal::UserCmd;
 bool CGlobal::bSendPacket;
-float CGlobal::RealAngle;
-float CGlobal::FakeAngle;
+QAngle CGlobal::RealAngle;
+QAngle CGlobal::FakeAngle;
 
 ConVar* CGlobal::viewmodel_offset_convar_x = new ConVar();
 ConVar* CGlobal::viewmodel_offset_convar_y = new ConVar();
