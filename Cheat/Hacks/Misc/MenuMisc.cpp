@@ -360,15 +360,13 @@ void CMisc::Menu()
 	{
 		X1Gui().SameLine(SAME_LINE_1);
 		X1Gui().PushItemWidth(PUSH_1);
-		VectorEx<const char* >itemsCSS = { "Factor", "Switch", "Adaptive", "Random", "Legit peek" };
+		VectorEx<const char* >itemsCSS = { "Factor", "Adaptive" };
 		DComboBox("Type##FakeLag", FakeLagType, itemsCSS);
-		DCheckBox("Standing", FakeLagStanding);
+		SliderInts("Standing", FakeLagStanding, 0, 14);
 		X1Gui().SameLine();
-		DCheckBox("Moving", FakeLagMoving);
+		SliderInts("Moving", FakeLagMoving, 0, 14);
 		X1Gui().SameLine();
-		DCheckBox("Unducking", FakeLagUnducking);
-		X1Gui().PushItemWidth(PUSH_2);
-		SliderInts("Factor", FakeLagFactor, 1, 15);
+		SliderInts("Jumping", FakeLagJumping, 0, 14);
 		DCheckBox("Bind##FakeLag", FakeLagBind.Enable);
 		if (FakeLagBind.Enable)
 		{

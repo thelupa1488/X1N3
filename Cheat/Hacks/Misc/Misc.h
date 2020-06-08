@@ -229,10 +229,9 @@ public:
 
 	bool FakeLag = false;
 	int FakeLagType = 0;
-	int FakeLagFactor = 0;
-	bool FakeLagStanding = false;
-	bool FakeLagMoving = false;
-	bool FakeLagUnducking = false;
+	int FakeLagStanding = 0;
+	int FakeLagMoving = 0;
+	int FakeLagJumping = 0;
 	CBind FakeLagBind = CBind(0, false);
 
 	int TextDamageInfo = 38;
@@ -350,10 +349,9 @@ public:
 		RV(ViewModelZ, "ViewModelZ");
 		RV(FakeLag, "FakeLag");
 		RV(FakeLagType, "FakeLagType");
-		RV(FakeLagFactor, "FakeLagFactor");
-		RV(FakeLagMoving, "FakeLagMoving");
 		RV(FakeLagStanding, "FakeLagStanding");
-		RV(FakeLagUnducking, "FakeLagUnducking");
+		RV(FakeLagMoving, "FakeLagMoving");
+		RV(FakeLagJumping, "FakeLagJumping");
 		RV(FakeLagBind, "FakeLagBind");
 
 		RV(TextDamageInfo, "TextDamageInfo");
