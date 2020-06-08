@@ -445,7 +445,7 @@ auto CSkins::initialize_kits() -> void
 			sticker_kits.push_back({ sticker_kit->id, name, name, "" });
 		}
 
-		sticker_kits.insert(sticker_kits.begin(), { 0, "None", "", "" });
+		sticker_kits.insert(sticker_kits.begin(), { 0, XorStr("None"), "", "" });
 	}
 
 	SetKillIconCfg();

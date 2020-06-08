@@ -139,7 +139,7 @@ void CRender::IRender::Initialize()
 	else
 	{
 		ADD_LOG("Setup: Hook Present Error\n");
-		FastCall::G().t_MessageBoxA(0, "Present error", "Error!", 0);
+		FastCall::G().t_MessageBoxA(0, XorStr("Present error"), XorStr("Error!"), 0);
 	}
 	ADD_LOG("2-1-11-7-3-12\n");
 
@@ -150,9 +150,9 @@ void CRender::IRender::Initialize()
 
 	ADD_LOG("2-1-11-7-3-14\n");
 #ifdef ENABLE_HOOK_CS_WND_PROC
-	HWND hWindow = FastCall::G().t_FindWindowA("Valve001", 0);
+	HWND hWindow = FastCall::G().t_FindWindowA(XorStr("Valve001"), 0);
 #else
-	HWND hWindow = FastCall::G().t_FindWindowA("winA", 0);
+	HWND hWindow = FastCall::G().t_FindWindowA(XorStr("winA"), 0);
 #endif 
 	ADD_LOG("->Window -> %X\n", (DWORD)hWindow);
 	ADD_LOG("2-1-11-7-3-15\n");

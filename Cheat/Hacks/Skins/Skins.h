@@ -315,7 +315,7 @@ class CSkins : public ISkins
 private:
 	bool IsNameChange = false;
 public:
-	CConfig Config = CConfig(("Skins"));
+	CConfig Config = CConfig(XorStr("Skins"));
 
 	vector<paint_kit> skin_kits;
 	vector<paint_kit> glove_kits;
@@ -367,8 +367,8 @@ public:
 
 	bool ShowSkinPreview = false;
 
-	string WeaponPreview = "<default>";
-	string SkinPreview = "<default>";
+	string WeaponPreview = XorStr("<default>");
+	string SkinPreview = XorStr("<default>");
 
 	bool SkinsEnable = true;
 

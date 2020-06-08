@@ -31,7 +31,7 @@ private:
 	{
 		static int SelectedSettings = 0;
 
-		VectorEx<const char*>tabs = { "Configurations", "Settings" };
+		VectorEx<const char*>tabs = { lolc("Configurations"), lolc("Settings") };
 
 		TabsLabels(SelectedSettings, tabs, Vec2(X1Gui().GetCurWindowSize().x - (X1Gui().GetStyle().wndPadding.x * 2), 0), false);
 
@@ -83,7 +83,7 @@ public:
 
 	void SelectWindow()
 	{
-		VectorEx<const char*>tabs = { "Aimbot", "Visualizations", "Radar", "Changer", "Miscellaneous", "Grenade helper", "Configuration" };
+		VectorEx<const char*>tabs = { lolc("Aimbot"), lolc("Visualizations"), lolc("Radar"), lolc("Changer"), lolc("Miscellaneous"), lolc("Grenade helper"), lolc("Configuration") };
 		TabsLabels(SelectedTab, tabs, Vec2(X1Gui().GetCurWindowSize().x - (X1Gui().GetStyle().wndPadding.x * 2), 220), true);
 
 #ifdef YOUGAMEBIZ
@@ -91,7 +91,7 @@ public:
 		X1Gui().Text("Developer | THE LUPA");
 		X1Gui().Text("yougame.biz/threads/98943/");
 #else //OWN
-		X1Gui().Text("Build | %s", __DATE__);
+		X1Gui().Text(XorStr("Build | %s"), __DATE__);
 #endif
 	}
 

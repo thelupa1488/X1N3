@@ -1,19 +1,6 @@
 #pragma once
 #include "Tables.h"
 
-void RankReveal()
-{
-	using ServerRankRevealAll = bool(__cdecl*)(int*);
-
-	static auto fnServerRankRevealAll = reinterpret_cast<int(__thiscall*)(ServerRankRevealAll*, DWORD, void*)>
-		(CSX::Memory::FindPatternV2(clientFactory,
-		XorStr("55 8B EC 8B 0D ? ? ? ? 85 C9 75 28 A1 ? ? ? ? 68 ? ? ? ? 8B 08 8B 01 FF 50 04 85 C0 74 0B 8B C8 E8 ? ? ? ? 8B C8 EB 02 33 C9 89 0D ? ? ? ? 8B 45 08")));
-
-	int v[3] = { 0,0,0 };
-
-	reinterpret_cast<ServerRankRevealAll>(fnServerRankRevealAll)(v);
-}
-
 bool __stdcall CreateMove(float flInputSampleTime, CUserCmd* pCmd)
 {
 	bool bReturn = HookTables::pCreateMove->GetTrampoline()(flInputSampleTime, pCmd);
@@ -56,12 +43,21 @@ bool __stdcall CreateMove(float flInputSampleTime, CUserCmd* pCmd)
 			if (GP_LegitAim->TriggerEnable)
 				GP_LegitAim->TriggerCreateMove(pCmd);
 		}
-
-		if (GP_Misc->ShowCompetitiveRank && pCmd->buttons & IN_SCORE)
-			RankReveal();
-
 		if (GP_Misc)
+		{
+			if (GP_Misc->ShowCompetitiveRank && pCmd->buttons & IN_SCORE)
+				GP_Misc->RankReveal();
+
 			GP_Misc->CreateMove(CGlobal::bSendPacket, flInputSampleTime, pCmd);
+
+			if (GP_Misc->Desync && I::ClientState()->chokedcommands >= GP_Misc->MaxChokeTicks())
+			{
+				CGlobal::bSendPacket = true;
+				pCmd->viewangles = I::ClientState()->viewangles;
+			}
+
+			GP_Misc->EnginePrediction(CGlobal::bSendPacket, pCmd);
+		}
 
 		CGlobal::ClampAngles(pCmd->viewangles);
 		CGlobal::AngleNormalize(pCmd->viewangles);

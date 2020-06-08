@@ -272,11 +272,11 @@ void CEsp::DrawBombInfo(CBaseEntity* entity, CBaseEntity* Local)
 
 	std::string buf3;
 	if (entity->GetBombSite() == 0)
-		buf3 = "A";
+		buf3 = XorStr("A");
 	else if (entity->GetBombSite() == 1)
-		buf3 = "B";
+		buf3 = XorStr("B");
 	else
-		buf3 = "C 0_o?";
+		buf3 = XorStr("C 0_o?");
 
 	float flDistance = Local->GetEyePosition().DistTo(entity->GetEyePosition());
 	float a = 450.7f;

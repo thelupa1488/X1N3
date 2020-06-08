@@ -13,8 +13,8 @@ void CGHelper::ChangeGHI(GHInfo* info, char NameBuf[], char DescpBuf[], char Map
 		static int SelecteMapMode = 0;
 
 		VectorEx<const char*> itemsGHSS;
-		itemsGHSS.push_back("Auto");
-		itemsGHSS.push_back("Custom");
+		itemsGHSS.push_back(XorStr("Auto"));
+		itemsGHSS.push_back(XorStr("Custom"));
 
 		for (size_t i(2); i < maps.size() + 2; i++)
 		{
@@ -46,13 +46,10 @@ void CGHelper::ChangeGHI(GHInfo* info, char NameBuf[], char DescpBuf[], char Map
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
-
-#define chu(e)  e
-
 	if (!AdvMap)
 	{
 
-		VectorEx<const char*> itemsCS = { chu("Incendiary grenade"), chu("Molotov"), chu("High explosive grenade"), chu("Smoke grenade"), chu("Decoy grenade"), chu("Flashbang") };
+		VectorEx<const char*> itemsCS = { lolc("Incendiary grenade"), lolc("Molotov"), lolc("High explosive grenade"), lolc("Smoke grenade"), lolc("Decoy grenade"), lolc("Flashbang") };
 
 		int bg = 0;
 
@@ -82,7 +79,7 @@ void CGHelper::ChangeGHI(GHInfo* info, char NameBuf[], char DescpBuf[], char Map
 	}
 	else
 	{
-		VectorEx<const char*> itemsCS_ = { chu("Auto"), chu("Incendiary grenade"), chu("Molotov"), chu("High explosive grenade"), chu("Smoke grenade"), chu("Decoy grenade"), chu("Flashbang") };
+		VectorEx<const char*> itemsCS_ = { lolc("Auto"), lolc("Incendiary grenade"), lolc("Molotov"), lolc("High explosive grenade"), lolc("Smoke grenade"), lolc("Decoy grenade"), lolc("Flashbang") };
 
 		int bg = 0;
 
@@ -139,7 +136,7 @@ void CGHelper::Menu()
 	SliderFloats("Show info distance", DistShowInfo, 1, 400);
 	SliderFloats("Show distance", DistShowHelp, 1, 2000);
 
-	VectorEx<const char*> itemsCS = { chu("Type 1"), chu("Type 2") };
+	VectorEx<const char*> itemsCS = { lolc("Type 1"), lolc("Type 2") };
 
 	DComboBox("Crosshair", CrosshairStyle, itemsCS,);
 
@@ -203,7 +200,7 @@ void CGHelper::Menu()
 					CreateNode(24, 20, j != 0, prev_pos_2);
 					bool selected = SelectedGHInf && SelectedGHInf == &maps[i].helpers[j];
 
-					if (X1Gui().SelectLabel((maps[i].helpers[j].name + " (" + GetGName(maps[i].helpers[j].grenade) + ")##" + to_string((i + 1) + (j + 1))).c_str(),
+					if (X1Gui().SelectLabel((maps[i].helpers[j].name + XorStr(" (") + GetGName(maps[i].helpers[j].grenade) + XorStr(")##") + to_string((i + 1) + (j + 1))).c_str(),
 						selected, Vec2(selected ? 305 : 395, 0)))
 					{
 						SelectedGHInf = &maps[i].helpers[j];

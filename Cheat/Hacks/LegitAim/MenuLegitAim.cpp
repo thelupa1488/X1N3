@@ -349,7 +349,7 @@ void CLegitAim::Menu()
 	{
 		static int SubtabTrigMiscSelected = 0;
 
-		static VectorEx<const char*> AimTrigSettings = { "Basic##trig","Bind##trig" };
+		static VectorEx<const char*> AimTrigSettings = { lolc("Basic##trig"),  lolc("Bind##trig") };
 
 		TabsLabels(SubtabTrigMiscSelected, AimTrigSettings, Vec2(X1Gui().GetCurWindowSize().x - (X1Gui().GetStyle().wndPadding.x * 2), 0), false);
 
@@ -464,13 +464,7 @@ void CLegitAim::SubsectionsMenu()
 	{
 		static int tabOrderCs[] = { 0 , 1 , 2 , 3 };
 
-		string sub_name0 = lols("Rifles");
-		string sub_name1 = lols("Pistols");
-		string sub_name2 = lols("Shotguns");
-		string sub_name3 = lols("Snipers");
-
-		VectorEx<const char*>tabNamesCs = {
-			sub_name0.c_str(),sub_name1.c_str() ,sub_name2.c_str() ,sub_name3.c_str() };
+		VectorEx<const char*>tabNamesCs = { lolsc("Rifles"), lolsc("Pistols"), lolsc("Shotguns"), lolsc("Snipers") };
 
 		Vec2 Pos = Vec2(0, 0);
 

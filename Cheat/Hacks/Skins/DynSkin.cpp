@@ -139,7 +139,7 @@ namespace DynSkin
 				for ( ++start; start < size; ++start )
                 {
                     const auto& p = file->at( start );
-					if (file->GetStringAt(start, 37) == "SFUI_LoginPerfectWorld_AntiAddiction1")
+					if (file->GetStringAt(start, 37) == XorStr("SFUI_LoginPerfectWorld_AntiAddiction1"))
 					{
 						start += 600;
 					}
@@ -159,8 +159,8 @@ namespace DynSkin
 					{
 						if ( p == '{' )
 						{
-							vpos[0] = file->FindFirstOf( "\"" , start , 0 ) - 1;
-							vpos[1] = file->FindFirstOf( "\"" , vpos[0] , 0 );
+							vpos[0] = file->FindFirstOf(XorStr("\""), start , 0 ) - 1;
+							vpos[1] = file->FindFirstOf(XorStr("\""), vpos[0] , 0 );
 
 							// this is the main fix here:
 							// y3t made his map an unordered_map which only allows for 1 unique key per entry, so logically the latest paint_kit would be the unique key
@@ -193,7 +193,7 @@ namespace DynSkin
 
 			bool CConfig::Parse(void)
 			{
-				auto rstart = FindFirstOf("{", 0, 200);
+				auto rstart = FindFirstOf(XorStr("{"), 0, 200);
 				_level = new CLevel(rstart, _instance);
 
 				return !_level->GetSubLevels().empty();
@@ -218,11 +218,11 @@ namespace DynSkin
 			{
 				auto& pkid = pk.first;
 
-				if ( pkid == "9001" )
+				if ( pkid == XorStr("9001") )
 					continue;
 
-				auto& pkname = pk.second->GetVariables().at(  "name" );
-				auto& pkdesctag = string( pk.second->GetVariables().at( "description_tag" ) );
+				auto& pkname = pk.second->GetVariables().at(XorStr("name"));
+				auto& pkdesctag = string( pk.second->GetVariables().at(XorStr("description_tag")));
 
 				auto& res = vt.find( pkdesctag.substr( 1 , pkdesctag.size() + 1 ) );
 				if ( res == vt.end() )
@@ -234,12 +234,12 @@ namespace DynSkin
 				}
 
 				auto& skname = res->second;
-				if ( skname == "-" )
+				if ( skname == XorStr("-"))
 					continue;
 
 				for ( auto& wi : ai_wi )
 				{
-					auto& vip = wi.second->GetVariables().at( "icon_path" );
+					auto& vip = wi.second->GetVariables().at(XorStr("icon_path"));
 					if ( vip[vip.size() - 7] != '_' )
 						continue;
 
@@ -264,11 +264,11 @@ namespace DynSkin
 			Release();
 
 			_items_game = new File::Valve::CConfig();
-			if (!_items_game->Load(gamePath + "/scripts/items/items_game.txt", false))
+			if (!_items_game->Load(gamePath + XorStr("/scripts/items/items_game.txt"), false))
 				return false;
 
 			_csgo_english = new File::Valve::CConfig();
-			if (!_csgo_english->Load(gamePath + "/resource/" + gameShortName + "_english.txt", true))
+			if (!_csgo_english->Load(gamePath + XorStr("/resource/") + gameShortName + XorStr("_english.txt"), true))
 				return false;
 
 			// honestly this entire fix is so fucking ghetto kill me please
@@ -281,14 +281,14 @@ namespace DynSkin
 			} );
 
 			// ughgughu
-			auto& vt = fnFind( _csgo_english->GetLevel()->GetSubLevels() , "Tokens" )->GetVariables();
-			auto mhhh = fnFind( _items_game->GetLevel()->GetSubLevels() , "alternate_icons2" );
-			auto mhh = fnFind( mhhh->GetSubLevels() ,  "weapon_icons" );
+			auto& vt = fnFind( _csgo_english->GetLevel()->GetSubLevels() , XorStr("Tokens"))->GetVariables();
+			auto mhhh = fnFind( _items_game->GetLevel()->GetSubLevels() , XorStr("alternate_icons2"));
+			auto mhh = fnFind( mhhh->GetSubLevels() , XorStr("weapon_icons"));
 			auto& ai_wi = mhh->GetSubLevels();
 
 			for ( auto& wat : _items_game->GetLevel()->GetSubLevels() )
 			{
-				if ( wat.first.find( "paint_kits" ) != string::npos )
+				if ( wat.first.find(XorStr("paint_kits")) != string::npos )
 				{
 					// meh
 					DumpTable( wat.second->GetSubLevels() , vt , ai_wi );

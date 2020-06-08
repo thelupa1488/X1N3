@@ -7,7 +7,7 @@
 #include "Weapon.h"
 #include "EntityMem.h"
 
-#define  lol(s) string((s))
+#define  lol(s) string(XorStr(s))
 
 #define M_WEAPON_DEAGLE_STR		lol("Deagle")		
 #define M_WEAPON_ELITE_STR		lol("Elite")		
@@ -134,8 +134,6 @@ public:
 	static CBaseEntity* LocalPlayer;
 	static CUserCmd* UserCmd;
 	static bool bSendPacket;
-	static QAngle RealAngle;
-	static QAngle FakeAngle;
 
 	static ConVar* viewmodel_offset_convar_x;
 	static ConVar* viewmodel_offset_convar_y;
@@ -166,12 +164,12 @@ public:
 		{
 			if (FastCall::G().t_GetFullPathNameA(lpszFileName, MAX_PATH, tmp, &part) == 0) return FALSE;
 			strcpy(name, part);
-			strcpy(part, "*.*");
+			strcpy(part, XorStr("*.*"));
 			wfd.dwFileAttributes = FILE_ATTRIBUTE_DIRECTORY;
 			if (!((hSearch = FastCall::G().t_FindFirstFileA(tmp, &wfd)) == INVALID_HANDLE_VALUE))
 				do
 				{
-					if (!strncmp(wfd.cFileName, ".", 1) || !strncmp(wfd.cFileName, "..", 2))
+					if (!strncmp(wfd.cFileName, XorStr("."), 1) || !strncmp(wfd.cFileName, XorStr(".."), 2))
 						continue;
 
 					if (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
@@ -179,7 +177,7 @@ public:
 						char next[MAX_PATH];
 						if (FastCall::G().t_GetFullPathNameA(lpszFileName, MAX_PATH, next, &part) == 0) return FALSE;
 						strcpy(part, wfd.cFileName);
-						strcat(next, "\\");
+						strcat(next, XorStr("\\"));
 						strcat(next, name);
 
 						SearchFiles(next, lpSearchFunc, TRUE);
@@ -372,8 +370,6 @@ public:
 		}
 	}
 
-	static int GetBestHeadAngle(float yaw);
-
 	static float AngleDiff(float destAngle, float srcAngle) 
 	{
 		float delta;
@@ -448,13 +444,13 @@ public:
 
 	static void InitKeyValues(KeyValues* kv_, std::string name_)
 	{
-		static auto address = offsets["KeyValues_KeyValues"];
+		static auto address = offsets[XorStr("KeyValues_KeyValues")];
 		using Fn = void(__thiscall*)(void*, const char*);
 		reinterpret_cast<Fn>(address)(kv_, name_.c_str());
 	}
 	static void LoadFromBuffer(KeyValues* vk_, std::string name_, std::string buffer_)
 	{
-		static auto address = offsets["KeyValues_LoadFromBuffer"];
+		static auto address = offsets[XorStr("KeyValues_LoadFromBuffer")];
 		using Fn = void(__thiscall*)(void*, const char*, const char*, void*, const char*, void*, void*);
 		reinterpret_cast<Fn>(address)(vk_, name_.c_str(), buffer_.c_str(), nullptr, nullptr, nullptr, nullptr);
 	}
@@ -465,8 +461,8 @@ public:
 
 		static const char tmp[] =
 		{
-			"\"%s\"\
-		\n{\
+		"\"%s\"\
+        \n{\
 		\n\t\"$basetexture\" \"vgui/white\"\
 		\n\t\"$envmap\" \"\"\
 		\n\t\"$model\" \"1\"\
@@ -481,12 +477,12 @@ public:
         \n}\n"
 		};
 
-		char* baseType = (isLit == true ? "VertexLitGeneric" : "UnlitGeneric");
+		char* baseType = (isLit == true ? XorStr("VertexLitGeneric") : XorStr("UnlitGeneric"));
 		char material[1024];
 		sprintf_s(material, sizeof(material), tmp, baseType, (shouldIgnoreZ) ? 1 : 0, (isWireframe) ? 1 : 0);
 
 		char name[1024];
-		sprintf_s(name, sizeof(name), "#Error_Chams%i.vmt", created);
+		sprintf_s(name, sizeof(name), XorStr("#Error_Chams%i.vmt"), created);
 		++created;
 
 		KeyValues* keyValues = (KeyValues*)malloc(sizeof(KeyValues));
@@ -503,7 +499,7 @@ public:
 	{
 		static auto created = 0;
 
-		std::string type = lit ? "VertexLitGeneric" : "UnlitGeneric";
+		std::string type = lit ? XorStr("VertexLitGeneric") : XorStr("UnlitGeneric");
 		auto matdata =
 			"\"" + type + "\"\
 		\n{\
@@ -520,7 +516,7 @@ public:
 		\n\t\"$wireframe\" \"" + std::to_string(wireframe) + "\"\
 		\n}\n";
 
-		auto matname = "custom_" + std::to_string(created);
+		auto matname = XorStr("custom_") + std::to_string(created);
 		++created;
 
 		auto keyValues = static_cast<KeyValues*>(malloc(sizeof(KeyValues)));
@@ -539,7 +535,7 @@ public:
 	{
 		static auto created = 0;
 
-		std::string type = lit ? "VertexLitGeneric" : "UnlitGeneric";
+		std::string type = lit ? XorStr("VertexLitGeneric") : XorStr("UnlitGeneric");
 		auto matdata =
 			"\"" + type + "\"\
 		\n{\
@@ -557,7 +553,7 @@ public:
 		\n\t\"$wireframe\" \"" + std::to_string(wireframe) + "\"\
 		\n}\n";
 
-		auto matname = "custom_" + std::to_string(created);
+		auto matname = XorStr("custom_") + std::to_string(created);
 		++created;
 
 		auto keyValues = static_cast<KeyValues*>(malloc(sizeof(KeyValues)));

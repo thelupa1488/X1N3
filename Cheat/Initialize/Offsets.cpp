@@ -31,6 +31,11 @@ namespace Offsets
 	DWORD m_bBombDefused = 0;
 	DWORD m_nBombSite = 0;
 
+	DWORD m_bFreezePeriod = 0;
+	DWORD m_bIsValveDS = 0;
+	DWORD m_bBombPlanted = 0;
+	DWORD m_bBombDropped = 0;
+
 	DWORD m_bIsScoped = 0;
 
 	DWORD m_iGlowIndex = 0;

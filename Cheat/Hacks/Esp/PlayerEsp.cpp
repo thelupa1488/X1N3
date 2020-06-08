@@ -351,7 +351,7 @@ void CEsp::DrawPlayerEx(CEntityPlayer* Entity, CEntityPlayer* Local, bool IsDorm
 			if (Distance && MV_Distance)
 			{
 				char bufDist[246];
-				std::sprintf(bufDist, "%6.1lfm", Entity->Distance);
+				std::sprintf(bufDist, XorStr("%6.1lfm"), Entity->Distance);
 				string distm = bufDist;
 
 				Vec2 TextPos = ChangeSidePosText(MV_Distance, GP_Render->CalcTextSize(distm, GP_Render->SzFonts[TextDistanceSize]), Vec2(x, y), Width, Height);
@@ -453,9 +453,9 @@ void CEsp::DrawPlayerEx(CEntityPlayer* Entity, CEntityPlayer* Local, bool IsDorm
 
 				switch (AmmoStyle)
 				{
-				case 0:sprintf(ammo_format, "[%i]", Entity->Ammo1); break;
-				case 1:sprintf(ammo_format, "[%i\\%i]", Entity->Ammo1, Entity->Ammo2); break;
-				case 2:sprintf(ammo_format, "[%i]", Entity->Ammo1 + Entity->Ammo2); break;
+				case 0:sprintf(ammo_format, XorStr("[%i]"), Entity->Ammo1); break;
+				case 1:sprintf(ammo_format, XorStr("[%i\\%i]"), Entity->Ammo1, Entity->Ammo2); break;
+				case 2:sprintf(ammo_format, XorStr("[%i]"), Entity->Ammo1 + Entity->Ammo2); break;
 				default:
 					break;
 				}

@@ -271,11 +271,20 @@ namespace SDK
 	}
 	QAngle CalcAngle(Vector src, Vector dst)
 	{
-		QAngle angles;
-		Vector delta = src - dst;
-		VectorAngles(delta, angles);
-		delta.Normalized();
-		return angles;
+		QAngle vAngle;
+		Vector delta((src.x - dst.x), (src.y - dst.y), (src.z - dst.z));
+		double hyp = sqrt(delta.x * delta.x + delta.y * delta.y);
+
+		vAngle.x = float(atanf(float(delta.z / hyp)) * 57.295779513082f);
+		vAngle.y = float(atanf(float(delta.y / delta.x)) * 57.295779513082f);
+		vAngle.z = 0.0f;
+
+		if (delta.x >= 0.0)
+			vAngle.y += 180.0f;
+
+		FixAngles(vAngle);
+
+		return vAngle;
 	}
 
 	Vector gCalcAngle(Vector src, Vector dst)

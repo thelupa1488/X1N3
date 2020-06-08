@@ -115,7 +115,7 @@ void CSoundEsp::Draw(CEntityPlayer* Local)
 					if (GP_Esp->SoundEspDistance)
 					{
 						GP_Render->DrawString(GP_Esp->TextSoundSize, Vec2((int)ScreenPos.x, (int)ScreenPos.y),
-							GP_Esp->SoundDistanceColor, true, true, "%6.1lfm", Sounds[i].Pos.DistTo(Local->RenderOrigin) / 33);
+							GP_Esp->SoundDistanceColor, true, true, XorStr("%6.1lfm"), Sounds[i].Pos.DistTo(Local->RenderOrigin) / 33);
 					}
 				}
 			}
@@ -152,7 +152,7 @@ void CEsp::LoadVisuals(nlohmann::json &j)
 
 	if (!j[XorStr("Esp")].is_null())
 	{
-		if (!j[("Esp")][XorStr("CustomVisuals")].is_null())
+		if (!j[XorStr("Esp")][XorStr("CustomVisuals")].is_null())
 		{
 			for (int i(0); (MITypes)i < MI_MAX; i++)
 			{

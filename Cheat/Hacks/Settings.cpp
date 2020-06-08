@@ -39,12 +39,12 @@ void CGSettings::SaveEx(nlohmann::json &j)
 		GP_Skins->SaveSkins(j);
 	}
 
-#define MCC ("MainCheatConfig")
-#define SSS(a,b) j[MCC][(b)] = a;
+#define MCC XorStr("MainCheatConfig")
+#define SSS(a,b) j[MCC][XorStr(b)] = a;
 
 	SSS(MainSettings().MenuButton, "MenuButton");
 
-	CConfig Config = CConfig(("MainCheatConfig"));
+	CConfig Config = CConfig(XorStr("MainCheatConfig"));
 
 	RV(MainSettings().BackgroundColor, "BackgroundColor");
 	RV(MainSettings().TitleColor, "TitleColor");
@@ -85,12 +85,12 @@ void CGSettings::LoadEx(nlohmann::json &j)
 		GP_Skins->LoadSkins(j);
 	}
 
-#define MCC ("MainCheatConfig")
-#define SSS(a,b) if(!j[MCC][b].is_null()){ a = j[MCC][(b)];}
+#define MCC XorStr("MainCheatConfig")
+#define SSS(a,b) if(!j[MCC][XorStr(b)].is_null()){ a = j[MCC][XorStr(b)];}
 
 	SSS(MainSettings().MenuButton, "MenuButton");
 
-	CConfig Config = CConfig(("MainCheatConfig"));
+	CConfig Config = CConfig(XorStr("MainCheatConfig"));
 
 	RV(MainSettings().BackgroundColor, "BackgroundColor");
 	RV(MainSettings().TitleColor, "TitleColor");
@@ -127,7 +127,7 @@ bool CGSettings::Load()
 {
 	string JCont = readFile(config_name);
 
-	if (JCont == string(("Read Error")))
+	if (JCont == string(XorStr("Read Error")))
 		return false;
 
 	nlohmann::json JFile = nlohmann::json::parse(JCont);
@@ -219,11 +219,11 @@ void CGSettings::Menu()
 
 	float long_item_w = X1Gui().GetThis()->Info.Size.x - (X1Gui().GetStyle().wndPadding.x * 2);
 
-	if (X1Gui().ListBoxHeader(("##0"), Vec2(long_item_w, 250)))
+	if (X1Gui().ListBoxHeader(XorStr("##0"), Vec2(long_item_w, 250)))
 	{
 		X1Gui().Spacing();
 		X1Gui().Separator();
-		X1Gui().Text(("Name"));
+		X1Gui().Text(XorStr("Name"));
 		X1Gui().Separator();
 
 		for (int i = 0; i < (int)AllSettings.size(); i++)
@@ -242,13 +242,13 @@ void CGSettings::Menu()
 	X1Gui().Spacing();
 
 	X1Gui().PushItemWidth(300.f);
-	X1Gui().InputText(("##Name"), NewConfigName, 28);
+	X1Gui().InputText(XorStr("##Name"), NewConfigName, 28);
 	X1Gui().SameLine();
 
-	string SettignBaseDir = CGlobal::SystemDisk + ("X1N3\\Configurations\\");
-	string SettingsFormat = (".json");
+	string SettignBaseDir = CGlobal::SystemDisk + XorStr("X1N3\\Configurations\\");
+	string SettingsFormat = XorStr(".json");
 
-	if (X1Gui().Button(("Create & save new config")))
+	if (X1Gui().Button(XorStr("Create & save new config")))
 	{
 		if (!CheckRus(string(NewConfigName)))
 		{
@@ -256,15 +256,15 @@ void CGSettings::Menu()
 
 			if (ConfigFileName.size() < 1)
 			{
-				ConfigFileName = ("Settings");
+				ConfigFileName = XorStr("Settings");
 			}
 
 			SetName(SettignBaseDir + ConfigFileName + SettingsFormat);
 
 			if (Save(ConfigFileName + SettingsFormat))
-				Message::Get().Start(("Config saved"));
+				Message::Get().Start(XorStr("Config saved"));
 			else
-				Message::Get().Start(("Save error"));
+				Message::Get().Start(XorStr("Save error"));
 
 			UpdateList();
 			strcpy(NewConfigName, "");
@@ -274,29 +274,29 @@ void CGSettings::Menu()
 	X1Gui().Separator();
 	X1Gui().Spacing();
 
-	if (X1Gui().Button(("Update configs list"), Vec2(long_item_w, 0)))
+	if (X1Gui().Button(XorStr("Update configs list"), Vec2(long_item_w, 0)))
 	{
 		UpdateList();
-		Message::Get().Start(("List updated"));
+		Message::Get().Start(XorStr("List updated"));
 	}
 
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
 
-	if (X1Gui().Button(("Load config"), Vec2(long_item_w, 0)))
+	if (X1Gui().Button(XorStr("Load config"), Vec2(long_item_w, 0)))
 	{
 		if (ConfigSelect >= 0 && ConfigSelect < (int)AllSettings.size())
 		{
 			SetName(SettignBaseDir + AllSettings[ConfigSelect].name);
 			if (Load())
-				Message::Get().Start(("Config loaded"));
+				Message::Get().Start(XorStr("Config loaded"));
 			else
-				Message::Get().Start(("Load error"));
+				Message::Get().Start(XorStr("Load error"));
 		}
 	}
 	X1Gui().Spacing();
-	if (X1Gui().Button(("Save config"), Vec2(long_item_w, 0)))
+	if (X1Gui().Button(XorStr("Save config"), Vec2(long_item_w, 0)))
 	{
 		if (ConfigSelect >= 0 && ConfigSelect < (int)AllSettings.size())
 		{
@@ -304,16 +304,16 @@ void CGSettings::Menu()
 			if (Save(AllSettings[ConfigSelect].name))
 			{
 				UpdateList();
-				Message::Get().Start(("Config saved"));
+				Message::Get().Start(XorStr("Config saved"));
 			}
 			else
-				Message::Get().Start(("Save error"));
+				Message::Get().Start(XorStr("Save error"));
 		}
 	}
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
-	if (X1Gui().Button(("Delete config"), Vec2(long_item_w, 0)))
+	if (X1Gui().Button(XorStr("Delete config"), Vec2(long_item_w, 0)))
 	{
 		if (ConfigSelect >= 0 && ConfigSelect < (int)AllSettings.size())
 		{
@@ -322,7 +322,7 @@ void CGSettings::Menu()
 
 			};
 
-			DeleteBackup(("_delete_copy_"));
+			DeleteBackup(XorStr("_delete_copy_"));
 			string FulDel = SettignBaseDir + AllSettings[ConfigSelect].name;
 
 			if (AllSettings.size() > 0)
@@ -331,7 +331,7 @@ void CGSettings::Menu()
 			}
 
 			UpdateList();
-			Message::Get().Start(("Config deleted"));
+			Message::Get().Start(XorStr("Config deleted"));
 		}
 	}
 
@@ -344,7 +344,7 @@ string CGSettings::readFile(const string& fileName)
 {
 	ifstream f(fileName);
 	if (!f)
-		return (("Read error"));
+		return (XorStr("Read error"));
 	stringstream ss;
 	ss << f.rdbuf();
 	return ss.str();
@@ -369,19 +369,19 @@ void CConfig::Save(nlohmann::json &j)
 
 	for (auto &v : VecColor)
 	{
-		j[SectionName][v.Key][("R")] = v.Var.r();
-		j[SectionName][v.Key][("G")] = v.Var.g();
-		j[SectionName][v.Key][("B")] = v.Var.b();
-		j[SectionName][v.Key][("A")] = v.Var.a();
-		j[SectionName][v.Key][("Rainbow")] = v.Var.brainbow;
-		j[SectionName][v.Key][("flRainbow")] = v.Var.rainbow;
+		j[SectionName][v.Key][XorStr("R")] = v.Var.r();
+		j[SectionName][v.Key][XorStr("G")] = v.Var.g();
+		j[SectionName][v.Key][XorStr("B")] = v.Var.b();
+		j[SectionName][v.Key][XorStr("A")] = v.Var.a();
+		j[SectionName][v.Key][XorStr("Rainbow")] = v.Var.brainbow;
+		j[SectionName][v.Key][XorStr("flRainbow")] = v.Var.rainbow;
 	}
 
 	for (auto &v : VecBind)
 	{
-		j[SectionName][v.Key][("Enable")] = v.Var.Enable;
-		j[SectionName][v.Key][("Button")] = v.Var.Button;
-		j[SectionName][v.Key][("Hold")] = v.Var.Hold;
+		j[SectionName][v.Key][XorStr("Enable")] = v.Var.Enable;
+		j[SectionName][v.Key][XorStr("Button")] = v.Var.Button;
+		j[SectionName][v.Key][XorStr("Hold")] = v.Var.Hold;
 	}
 
 	ADD_LOG("Settings: %s Saved\n", SectionName.c_str());
@@ -415,23 +415,23 @@ void CConfig::Load(nlohmann::json j)
 		{
 			if (!j[SectionName][v.Key].is_null())
 			{
-				if (!j[SectionName][v.Key][("R")].is_null())
-					v.Var[0] = j[SectionName][v.Key][("R")];
+				if (!j[SectionName][v.Key][XorStr("R")].is_null())
+					v.Var[0] = j[SectionName][v.Key][XorStr("R")];
 
-				if (!j[SectionName][v.Key][("G")].is_null())
-					v.Var[1] = j[SectionName][v.Key][("G")];
+				if (!j[SectionName][v.Key][XorStr("G")].is_null())
+					v.Var[1] = j[SectionName][v.Key][XorStr("G")];
 
-				if (!j[SectionName][v.Key][("B")].is_null())
-					v.Var[2] = j[SectionName][v.Key][("B")];
+				if (!j[SectionName][v.Key][XorStr("B")].is_null())
+					v.Var[2] = j[SectionName][v.Key][XorStr("B")];
 
-				if (!j[SectionName][v.Key][("A")].is_null())
-					v.Var[3] = j[SectionName][v.Key][("A")];
+				if (!j[SectionName][v.Key][XorStr("A")].is_null())
+					v.Var[3] = j[SectionName][v.Key][XorStr("A")];
 
-				if (!j[SectionName][v.Key][("Rainbow")].is_null())
-					v.Var.brainbow = j[SectionName][v.Key][("Rainbow")];
+				if (!j[SectionName][v.Key][XorStr("Rainbow")].is_null())
+					v.Var.brainbow = j[SectionName][v.Key][XorStr("Rainbow")];
 
-				if (!j[SectionName][v.Key][("flRainbow")].is_null())
-					v.Var.rainbow = j[SectionName][v.Key][("flRainbow")];
+				if (!j[SectionName][v.Key][XorStr("flRainbow")].is_null())
+					v.Var.rainbow = j[SectionName][v.Key][XorStr("flRainbow")];
 			}
 		}
 
@@ -439,14 +439,14 @@ void CConfig::Load(nlohmann::json j)
 		{
 			if (!j[SectionName][v.Key].is_null())
 			{
-				if (!j[SectionName][v.Key][("Enable")].is_null())
-					v.Var.Enable = j[SectionName][v.Key][("Enable")];
+				if (!j[SectionName][v.Key][XorStr("Enable")].is_null())
+					v.Var.Enable = j[SectionName][v.Key][XorStr("Enable")];
 
-				if (!j[SectionName][v.Key][("Button")].is_null())
-					v.Var.Button = j[SectionName][v.Key][("Button")];
+				if (!j[SectionName][v.Key][XorStr("Button")].is_null())
+					v.Var.Button = j[SectionName][v.Key][XorStr("Button")];
 
-				if (!j[SectionName][v.Key][("Hold")].is_null())
-					v.Var.Hold = j[SectionName][v.Key][("Hold")];
+				if (!j[SectionName][v.Key][XorStr("Hold")].is_null())
+					v.Var.Hold = j[SectionName][v.Key][XorStr("Hold")];
 			}
 		}
 		ADD_LOG("Settings: %s Loaded\n", SectionName.c_str());

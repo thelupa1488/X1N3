@@ -17,8 +17,6 @@ vector<string> CGlobal::ConfigList;
 CBaseEntity* CGlobal::LocalPlayer;
 CUserCmd* CGlobal::UserCmd;
 bool CGlobal::bSendPacket;
-QAngle CGlobal::RealAngle;
-QAngle CGlobal::FakeAngle;
 
 ConVar* CGlobal::viewmodel_offset_convar_x = new ConVar();
 ConVar* CGlobal::viewmodel_offset_convar_y = new ConVar();
@@ -217,56 +215,4 @@ WEAPON_TYPE CGlobal::GetWeaponType(CBaseWeapon* pWeaponEntity)
 	default:
 		return WEAPON_TYPE_UNKNOWN;
 	}
-}
-
-int CGlobal::GetBestHeadAngle(float yaw)
-{
-	float Back, Right, Left;
-
-	Vector src3D, dst3D, forward, right, up, src, dst;
-	trace_t tr;
-	Ray_t ray, ray2, ray3, ray4, ray5;
-	CTraceFilter filter;
-
-	QAngle engineViewAngles;
-
-	engineViewAngles.x = 0;
-	engineViewAngles.y = yaw;
-
-	AngleVectors(engineViewAngles, forward, right, up);
-
-	filter.pSkip = CGlobal::LocalPlayer;
-	src3D = CGlobal::LocalPlayer->GetEyePosition();
-	dst3D = src3D + (forward * 384);
-
-	ray.Init(src3D, dst3D);
-
-	I::EngineTrace()->TraceRay(ray, MASK_SHOT, &filter, &tr);
-
-	Back = (tr.endpos - tr.startpos).Length();
-
-	ray2.Init(src3D + right * 35, dst3D + right * 35);
-
-	I::EngineTrace()->TraceRay(ray2, MASK_SHOT, &filter, &tr);
-
-	Right = (tr.endpos - tr.startpos).Length();
-
-	ray3.Init(src3D - right * 35, dst3D - right * 35);
-
-	I::EngineTrace()->TraceRay(ray3, MASK_SHOT, &filter, &tr);
-
-	Left = (tr.endpos - tr.startpos).Length();
-
-	static int result = 0;
-
-	if (Left > Right)
-	{
-		result = -1;
-	}
-	else if (Right > Left)
-	{
-		result = 1;
-	}
-
-	return result;
 }

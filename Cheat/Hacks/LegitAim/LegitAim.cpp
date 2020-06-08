@@ -1725,9 +1725,9 @@ bool __declspec(noinline) CLegitAim::CanFire(Vector mAngle, CUserCmd* pCmd, CBas
 			}
 		};
 
-		if (string(Trace.surface.name).find("glass") != string::npos ||
-			string(Trace.surface.name).find("GLASS") != string::npos ||
-			string(Trace.surface.name).find("Glass") != string::npos)
+		if (string(Trace.surface.name).find(XorStr("glass")) != string::npos ||
+			string(Trace.surface.name).find(XorStr("GLASS")) != string::npos ||
+			string(Trace.surface.name).find(XorStr("Glass")) != string::npos)
 		{
 
 			trace_t New_Trace;

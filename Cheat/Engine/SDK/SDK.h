@@ -128,7 +128,7 @@ namespace SDK
 		static IPrediction*         Prediction();
 		static IMoveHelper*         MoveHelper();
 		static IGameMovement*       GameMovement();
-		static IGameRules**         GameRules();
+		static IGameRules*          GameRules();
 	private:
 		static IVEngineClient*		g_pEngine;
 		static IBaseClientDLL*		g_pClient;
@@ -156,7 +156,7 @@ namespace SDK
 		static IPrediction*         g_pPrediction;
 		static IMoveHelper*         g_pMoveHelper;
 		static IGameMovement*       g_pGameMovement;
-		static IGameRules**         g_pGameRules;
+		static IGameRules*          g_pGameRules;
 	};
 
 	template <typename T>

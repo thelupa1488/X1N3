@@ -77,21 +77,21 @@ bool CGHelper::CheckOldDistance(Map* map, Vector pos)
 string CGHelper::GetGName(WEAPON_ID id)
 {
 	if (id == WEAPON_ID::WEAPON_INCGRENADE)
-		return "Molotov & Incendiary grenade";
+		return XorStr("Molotov & Incendiary grenade");
 	else if (id == WEAPON_ID::WEAPON_MOLOTOV)
-		return "Molotov & Incendiary grenade";
+		return XorStr("Molotov & Incendiary grenade");
 	else if (id == WEAPON_ID::WEAPON_HEGRENADE)
-		return "High explosive grenade";
+		return XorStr("High explosive grenade");
 	else if (id == WEAPON_ID::WEAPON_SMOKEGRENADE)
-		return "Smoke grenade";
+		return XorStr("Smoke grenade");
 	else if (id == WEAPON_ID::WEAPON_DECOY)
-		return "Decoy grenade";
+		return XorStr("Decoy grenade");
 	else if (id == WEAPON_ID::WEAPON_FLASHBANG)
-		return "Flashbang";
+		return XorStr("Flashbang");
 	else if (id == WEAPON_ID::WEAPON_NONE)
-		return "Unknown";
+		return XorStr("Unknown");
 	else
-		return "Unknown";
+		return XorStr("Unknown");
 }
 
 void CGHelper::AutoAddHelp(string _game_name)
@@ -126,7 +126,7 @@ void CGHelper::AutoAddHelp(string _game_name)
 			if (!pModelName)
 				continue;
 
-			if (string(pModelName).find("crosshair") != string::npos)
+			if (string(pModelName).find(XorStr("crosshair")) != string::npos)
 			{
 				float Fov = GP_LegitAim->CalcFOV(CGlobal::GViewAngle, MyEyePos, pEntity->GetRenderOrigin());
 
@@ -136,7 +136,7 @@ void CGHelper::AutoAddHelp(string _game_name)
 					BestCrosshair = pEntity->GetRenderOrigin();
 				}
 			}
-			if (string(pModelName).find("*") != string::npos)
+			if (string(pModelName).find(XorStr("*")) != string::npos)
 			{
 				float dist = pEntity->GetRenderOrigin().DistTo(MyEyePos);
 				if (dist < BestDistStart)
@@ -151,8 +151,8 @@ void CGHelper::AutoAddHelp(string _game_name)
 
 		entry.start_pos = BestStart;
 
-		entry.act = "throw";
-		entry.descn = "test_desc";
+		entry.act = XorStr("throw");
+		entry.descn = XorStr("test_desc");
 		entry.grenade = CGlobal::GWeaponID;
 
 		if (!CheckOldDistance(GetMapByGName(_game_name), entry.start_pos))
@@ -258,7 +258,7 @@ void CGHelper::Draw()
 					GP_Render->DrawString(16, Vec2(InfoPosScreen.x, InfoPosScreen.y), Color::White(), false, true, cur_map->helpers[i].name.c_str());
 
 				if (selected)
-					GP_Render->DrawString(16, Vec2(InfoPosScreen.x, InfoPosScreen.y - 40), Color::White(), false, true, "Selected");
+					GP_Render->DrawString(16, Vec2(InfoPosScreen.x, InfoPosScreen.y - 40), Color::White(), false, true, XorStr("Selected"));
 			}
 
 
@@ -356,7 +356,7 @@ void CGHelper::Draw()
 
 			if (ShowDiscp)
 			{
-				string name = BestInfo.name + " (" + BestGName + ")";
+				string name = BestInfo.name + XorStr(" (") + BestGName + XorStr(")");
 
 
 				Vec2 g_name_size = GP_Render->CalcTextSize(name.c_str(), GP_Render->SzFonts[13]);
@@ -415,7 +415,7 @@ Vector CGHelper::CalcHelpPos(Vector target)
 
 bool CGHelper::SaveMaps()
 {
-	std::ofstream o("C:\\X1N3\\GrenadeHelper");
+	std::ofstream o(XorStr("C:\\X1N3\\GrenadeHelper"));
 	nlohmann::json JO;
 
 	if (!maps.empty())
@@ -424,30 +424,30 @@ bool CGHelper::SaveMaps()
 		{
 			nlohmann::json jmap_buf;
 
-			jmap_buf["GameName"] = (const unsigned char *)v_map.game_name.c_str(), v_map.game_name.length();
+			jmap_buf[XorStr("GameName")] = (const unsigned char *)v_map.game_name.c_str(), v_map.game_name.length();
 
 			for (auto &v_help : v_map.helpers)
 			{
 				nlohmann::json jhelp_buf;
 
-				jhelp_buf["StartX"] = v_help.start_pos.x;
-				jhelp_buf["StartY"] = v_help.start_pos.y;
-				jhelp_buf["StartZ"] = v_help.start_pos.z;
+				jhelp_buf[XorStr("StartX")] = v_help.start_pos.x;
+				jhelp_buf[XorStr("StartY")] = v_help.start_pos.y;
+				jhelp_buf[XorStr("StartZ")] = v_help.start_pos.z;
 
-				jhelp_buf["HeadX"] = v_help.head_pos.x;
-				jhelp_buf["HeadY"] = v_help.head_pos.y;
-				jhelp_buf["HeadZ"] = v_help.head_pos.z;
+				jhelp_buf[XorStr("HeadX")] = v_help.head_pos.x;
+				jhelp_buf[XorStr("HeadY")] = v_help.head_pos.y;
+				jhelp_buf[XorStr("HeadZ")] = v_help.head_pos.z;
 
-				jhelp_buf["DirX"] = v_help.directn.x;
-				jhelp_buf["DirY"] = v_help.directn.y;
+				jhelp_buf[XorStr("DirX")] = v_help.directn.x;
+				jhelp_buf[XorStr("DirY")] = v_help.directn.y;
 
-				jhelp_buf["Name"] = (const unsigned char *)v_help.name.c_str(), v_help.name.length();
-				jhelp_buf["Grenade"] = (int)v_help.grenade;
-				jhelp_buf["Enable"] = v_help.enable;
+				jhelp_buf[XorStr("Name")] = (const unsigned char *)v_help.name.c_str(), v_help.name.length();
+				jhelp_buf[XorStr("Grenade")] = (int)v_help.grenade;
+				jhelp_buf[XorStr("Enable")] = v_help.enable;
 
-				jmap_buf["Helpers"].push_back(jhelp_buf);
+				jmap_buf[XorStr("Helpers")].push_back(jhelp_buf);
 			}
-			JO["Maps"].push_back(jmap_buf);
+			JO[XorStr("Maps")].push_back(jmap_buf);
 		}
 	}
 
@@ -471,7 +471,7 @@ string readFile(const string& fileName)
 
 bool CGHelper::LoadMaps()
 {
-	string JCont = readFile("C:\\X1N3\\GrenadeHelper");
+	string JCont = readFile(XorStr("C:\\X1N3\\GrenadeHelper"));
 
 	if (JCont == XorStr("Read Error"))
 		return false;
@@ -480,33 +480,33 @@ bool CGHelper::LoadMaps()
 
 	maps.clear();
 
-	if (!JI["Maps"].is_null())
+	if (!JI[XorStr("Maps")].is_null())
 	{
-		for (size_t i(0); i < JI["Maps"].size(); i++)
+		for (size_t i(0); i < JI[XorStr("Maps")].size(); i++)
 		{
 			Map map_e;
 
-			map_e.game_name = JI["Maps"].at(i)["GameName"].get<string>();
+			map_e.game_name = JI[XorStr("Maps")].at(i)[XorStr("GameName")].get<string>();
 
-			for (size_t j(0); j < JI["Maps"].at(i)["Helpers"].size(); j++)
+			for (size_t j(0); j < JI[XorStr("Maps")].at(i)[XorStr("Helpers")].size(); j++)
 			{
 				GHInfo info_e;
 
-				info_e.start_pos.x = JI["Maps"].at(i)["Helpers"].at(j)["StartX"];
-				info_e.start_pos.y = JI["Maps"].at(i)["Helpers"].at(j)["StartY"];
-				info_e.start_pos.z = JI["Maps"].at(i)["Helpers"].at(j)["StartZ"];
+				info_e.start_pos.x = JI[XorStr("Maps")].at(i)[XorStr("Helpers")].at(j)[XorStr("StartX")];
+				info_e.start_pos.y = JI[XorStr("Maps")].at(i)[XorStr("Helpers")].at(j)[XorStr("StartY")];
+				info_e.start_pos.z = JI[XorStr("Maps")].at(i)[XorStr("Helpers")].at(j)[XorStr("StartZ")];
 
-				info_e.head_pos.x = JI["Maps"].at(i)["Helpers"].at(j)["HeadX"];
-				info_e.head_pos.y = JI["Maps"].at(i)["Helpers"].at(j)["HeadY"];
-				info_e.head_pos.z = JI["Maps"].at(i)["Helpers"].at(j)["HeadZ"];
+				info_e.head_pos.x = JI[XorStr("Maps")].at(i)[XorStr("Helpers")].at(j)[XorStr("HeadX")];
+				info_e.head_pos.y = JI[XorStr("Maps")].at(i)[XorStr("Helpers")].at(j)[XorStr("HeadY")];
+				info_e.head_pos.z = JI[XorStr("Maps")].at(i)[XorStr("Helpers")].at(j)[XorStr("HeadZ")];
 
-				info_e.directn.x = JI["Maps"].at(i)["Helpers"].at(j)["DirX"];
-				info_e.directn.y = JI["Maps"].at(i)["Helpers"].at(j)["DirY"];
+				info_e.directn.x = JI[XorStr("Maps")].at(i)[XorStr("Helpers")].at(j)[XorStr("DirX")];
+				info_e.directn.y = JI[XorStr("Maps")].at(i)[XorStr("Helpers")].at(j)[XorStr("DirY")];
 
-				info_e.name = JI["Maps"].at(i)["Helpers"].at(j)["Name"].get<string>();
+				info_e.name = JI[XorStr("Maps")].at(i)[XorStr("Helpers")].at(j)[XorStr("Name")].get<string>();
 
-				info_e.grenade = (WEAPON_ID)JI["Maps"].at(i)["Helpers"].at(j)["Grenade"];
-				info_e.enable = JI["Maps"].at(i)["Helpers"].at(j)["Enable"];
+				info_e.grenade = (WEAPON_ID)JI[XorStr("Maps")].at(i)[XorStr("Helpers")].at(j)[XorStr("Grenade")];
+				info_e.enable = JI[XorStr("Maps")].at(i)[XorStr("Helpers")].at(j)[XorStr("Enable")];
 
 				map_e.helpers.push_back(info_e);
 			}

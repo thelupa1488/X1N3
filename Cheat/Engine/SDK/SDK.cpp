@@ -35,7 +35,7 @@ namespace SDK
 	IPrediction*        I::g_pPrediction = nullptr;
 	IMoveHelper*        I::g_pMoveHelper = nullptr;
 	IGameMovement*      I::g_pGameMovement = nullptr;
-	IGameRules**        I::g_pGameRules = nullptr;
+	IGameRules*         I::g_pGameRules = nullptr;
 
 	class InterfaceReg
 	{
@@ -92,21 +92,21 @@ namespace SDK
 		char PossibleInterfaceName[1024];
 		for (int i = 1; i < 100; i++)
 		{
-			sprintf(PossibleInterfaceName, "%s0%i", InterfaceName, i);
+			sprintf(PossibleInterfaceName, XorStr("%s0%i"), InterfaceName, i);
 			Interface = CreateInterface(PossibleInterfaceName, 0);
 			if (Interface)
 				break;
 
-			sprintf(PossibleInterfaceName, "%s00%i", InterfaceName, i);
+			sprintf(PossibleInterfaceName, XorStr("%s00%i"), InterfaceName, i);
 			Interface = CreateInterface(PossibleInterfaceName, 0);
 			if (Interface)
 				break;
 		}
 
 		if (!Interface)
-			std::cout << InterfaceName << " not found!" << std::endl;
+			std::cout << InterfaceName << XorStr(" not found!") << std::endl;
 		else
-			std::cout << InterfaceName << " 0x" << Interface << std::endl;
+			std::cout << InterfaceName << XorStr(" 0x") << Interface << std::endl;
 
 		return Interface;
 	}
@@ -390,11 +390,11 @@ namespace SDK
 		return g_pClientState;
 	}
 
-	IGameRules** I::GameRules()
+	IGameRules* I::GameRules()
 	{
 		if (!g_pGameRules)
 		{
-			g_pGameRules = *(IGameRules***)(CSX::Memory::FindPatternV2(clientFactory, XorStr("E8 ? ? ? ? A1 ? ? ? ? 85 C0 0F 84 ? ? ? ?")) + 6);
+			g_pGameRules = *(IGameRules**)(CSX::Memory::FindPatternV2(clientFactory, XorStr("8B 0D ?? ?? ?? ?? 85 C0 74 0A 8B 01 FF 50 78 83 C0 54")) + 2);
 			ADD_LOG("->GameRules -> %X\n", (DWORD)g_pGameRules);
 		}
 		return g_pGameRules;

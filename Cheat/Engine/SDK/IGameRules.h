@@ -1,4 +1,6 @@
 #pragma once
+#include "../../Initialize/Offsets.h"
+
 namespace SDK
 {
 	class IGameRules
@@ -6,16 +8,19 @@ namespace SDK
 	public:
 		bool IsFreezePeriod() {
 
-			return *(bool*)((unsigned int)this + 0x20);
+			return *(bool*)((uintptr_t)this + offsets[XorStr("m_bFreezePeriod")]);
 		}
 		bool IsValveDS() {
 
-			return *(bool*)((unsigned int)this + 0x75);
+			return *(bool*)((uintptr_t)this + offsets[XorStr("m_bIsValveDS")]);
 		}
 		bool IsBombPlanted() {
 
-			return *(bool*)((unsigned int)this + 0x8D1);
+			return *(bool*)((uintptr_t)this + offsets[XorStr("m_bBombDropped")]);
 		}
-
+		bool IsBombDropped()
+		{
+			return *(bool*)((uintptr_t)this + offsets[XorStr("m_bBombDropped")]);
+		}
 	};
 }

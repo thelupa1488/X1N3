@@ -53,7 +53,6 @@ public:
 class IMisc
 {
 protected:
-
 	virtual void GetViewModelFOV(float &Fov) = 0;
 //	virtual void PlaySound(const char* pszSoundName) = 0;
 	virtual void AutoAcceptEmit() = 0;
@@ -70,7 +69,12 @@ protected:
 	virtual int  LagCompBreak() = 0;
 	virtual void SetNewClan(string New, string Name) = 0;
 	virtual bool ChangeName(bool reconnect, const char* newName, float delay) = 0;
+	virtual int  GetBestHeadAngle(float yaw) = 0;
+	virtual void UpdateLBY(CCSGOPlayerAnimState* animstate) = 0;
+	virtual int  MaxChokeTicks() = 0;
+	virtual void RankReveal() = 0;
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd) = 0;
+	virtual void EnginePrediction(bool& bSendPacket, CUserCmd* pCmd) = 0;
 	virtual void OverrideView(CViewSetup* pSetup) = 0;
 };
 
@@ -92,7 +96,12 @@ public:
 	virtual int  LagCompBreak();
 	virtual void SetNewClan(string New, string Name);
 	virtual bool ChangeName(bool reconnect, const char* newName, float delay);
+	virtual int  GetBestHeadAngle(float yaw);
+	virtual void UpdateLBY(CCSGOPlayerAnimState* animstate);
+	virtual int  MaxChokeTicks();
+	virtual void RankReveal();
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd);
+	virtual void EnginePrediction(bool& bSendPacket, CUserCmd* pCmd);
 	virtual void OverrideView(CViewSetup* pSetup);
 	virtual void GetViewModelFOV(float &Fov);
 //	virtual void PlaySound(const char* pszSoundName);
@@ -105,6 +114,16 @@ public:
 	virtual void UpdateSoundList();
 	virtual void CustomWalls();
 	virtual void FrameStageNotify();
+
+	//////////////////////////////////
+	float side = 1.0f;
+	CCSGOPlayerAnimState g_AnimState;
+	bool broke_lby = false;
+	float next_lby = 0.0f;
+	QAngle vangle = QAngle();
+	float RealAngle = 0.f;
+	float FakeAngle = 0.f;
+	//////////////////////////////////
 
 	bool Enable = true;
 	bool BHop = false;
@@ -123,10 +142,11 @@ public:
 
 	bool Desync = false;
 	int  DesyncType = 0;
+	bool DesyncAd = false;
 	CBind DesyncBind = CBind(0, true);
 
 	bool DesyncArrows = false;
-	//bool AngleLines = false;
+	bool AngleLines = false;
 
 	bool FovChanger = false;
 	int FovView = 100;
@@ -266,7 +286,7 @@ public:
 		RV(DesyncType, "DesyncType");
 		RV(DesyncBind, "DesyncBind");
 		RV(DesyncArrows, "DesyncArrows");
-//		RV(AngleLines, "AngleLines");
+		RV(AngleLines, "AngleLines");
 		RV(FovChanger, "FovChanger");
 		RV(FovView, "FovView");
 		RV(FovModelChanger, "FovModelChanger");

@@ -35,6 +35,11 @@ namespace Offsets
 	extern DWORD m_bBombDefused;
 	extern DWORD m_nBombSite;
 
+	extern DWORD m_bFreezePeriod;
+	extern DWORD m_bIsValveDS;
+	extern DWORD m_bBombPlanted;
+	extern DWORD m_bBombDropped;
+
 	extern DWORD m_bIsScoped;
 
 	extern DWORD m_iGlowIndex;

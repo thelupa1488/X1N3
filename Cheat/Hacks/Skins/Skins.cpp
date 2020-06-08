@@ -2,28 +2,28 @@
 #include "../Setup.h"
 #include "DynSkin.h"
 
-string pszDefaultCtModel = string(("models/weapons/v_knife_default_ct.mdl"));
-string pszDefaultTtModel = string(("models/weapons/v_knife_default_t.mdl"));
+string pszDefaultCtModel = string(XorStr("models/weapons/v_knife_default_ct.mdl"));
+string pszDefaultTtModel = string(XorStr("models/weapons/v_knife_default_t.mdl"));
 
-string pszKnifeBayonet = string(("models/weapons/v_knife_bayonet.mdl"));
-string pszKnifeCSS = string(("models/weapons/v_knife_css.mdl"));
-string pszKnifeFlip = string(("models/weapons/v_knife_flip.mdl"));
-string pszKnifeGut = string(("models/weapons/v_knife_gut.mdl"));
-string pszKnifeKarambit = string(("models/weapons/v_knife_karam.mdl"));
-string pszKnifeM9Bay = string(("models/weapons/v_knife_m9_bay.mdl"));
-string pszKnifeHuntsman = string(("models/weapons/v_knife_tactical.mdl"));
-string pszKnifeFalchion = string(("models/weapons/v_knife_falchion_advanced.mdl"));
-string pszKnifeBowie = string(("models/weapons/v_knife_survival_bowie.mdl"));
-string pszKnifeButterfly = string(("models/weapons/v_knife_butterfly.mdl"));
-string pszKnifeShadow = string(("models/weapons/v_knife_push.mdl"));
-string pszKnifeCord = string(("models/weapons/v_knife_cord.mdl"));
-string pszKnifeCanis = string(("models/weapons/v_knife_canis.mdl"));
-string pszKnifeUrsus = string(("models/weapons/v_knife_ursus.mdl"));
-string pszKnifeNavaja = string(("models/weapons/v_knife_gypsy_jackknife.mdl"));
-string pszKnifeOutdoor = string(("models/weapons/v_knife_outdoor.mdl"));
-string pszKnifeStiletto = string(("models/weapons/v_knife_stiletto.mdl"));
-string pszKnifeTalon = string(("models/weapons/v_knife_widowmaker.mdl"));
-string pszKnifeSkeleton = string(("models/weapons/v_knife_skeleton.mdl"));
+string pszKnifeBayonet = string(XorStr("models/weapons/v_knife_bayonet.mdl"));
+string pszKnifeCSS = string(XorStr("models/weapons/v_knife_css.mdl"));
+string pszKnifeFlip = string(XorStr("models/weapons/v_knife_flip.mdl"));
+string pszKnifeGut = string(XorStr("models/weapons/v_knife_gut.mdl"));
+string pszKnifeKarambit = string(XorStr("models/weapons/v_knife_karam.mdl"));
+string pszKnifeM9Bay = string(XorStr("models/weapons/v_knife_m9_bay.mdl"));
+string pszKnifeHuntsman = string(XorStr("models/weapons/v_knife_tactical.mdl"));
+string pszKnifeFalchion = string(XorStr("models/weapons/v_knife_falchion_advanced.mdl"));
+string pszKnifeBowie = string(XorStr("models/weapons/v_knife_survival_bowie.mdl"));
+string pszKnifeButterfly = string(XorStr("models/weapons/v_knife_butterfly.mdl"));
+string pszKnifeShadow = string(XorStr("models/weapons/v_knife_push.mdl"));
+string pszKnifeCord = string(XorStr("models/weapons/v_knife_cord.mdl"));
+string pszKnifeCanis = string(XorStr("models/weapons/v_knife_canis.mdl"));
+string pszKnifeUrsus = string(XorStr("models/weapons/v_knife_ursus.mdl"));
+string pszKnifeNavaja = string(XorStr("models/weapons/v_knife_gypsy_jackknife.mdl"));
+string pszKnifeOutdoor = string(XorStr("models/weapons/v_knife_outdoor.mdl"));
+string pszKnifeStiletto = string(XorStr("models/weapons/v_knife_stiletto.mdl"));
+string pszKnifeTalon = string(XorStr("models/weapons/v_knife_widowmaker.mdl"));
+string pszKnifeSkeleton = string(XorStr("models/weapons/v_knife_skeleton.mdl"));
 
 string pszKnifeModels[19] =
 {
@@ -100,36 +100,36 @@ const weapon_info* get_weapon_info(int defindex)
 {
 	const static std::map<int, weapon_info> info =
 	{
-		{WEAPON_KNIFE,{"models/weapons/v_knife_default_ct.mdl", "knife_default_ct"}},
-		{WEAPON_KNIFE_T,{"models/weapons/v_knife_default_t.mdl", "knife_t"}},
-		{WEAPON_KNIFE_BAYONET, {"models/weapons/v_knife_bayonet.mdl", "bayonet"}},
-		{WEAPON_KNIFE_CSS, {"models/weapons/v_knife_css.mdl", "knife_css"}},
-		{WEAPON_KNIFE_FLIP, {"models/weapons/v_knife_flip.mdl", "knife_flip"}},
-		{WEAPON_KNIFE_GUT, {"models/weapons/v_knife_gut.mdl", "knife_gut"}},
-		{WEAPON_KNIFE_KARAMBIT, {"models/weapons/v_knife_karam.mdl", "knife_karambit"}},
-		{WEAPON_KNIFE_M9_BAYONET, {"models/weapons/v_knife_m9_bay.mdl", "knife_m9_bayonet"}},
-		{WEAPON_KNIFE_TACTICAL, {"models/weapons/v_knife_tactical.mdl", "knife_tactical"}},
-		{WEAPON_KNIFE_FALCHION, {"models/weapons/v_knife_falchion_advanced.mdl", "knife_falchion"}},
-		{WEAPON_KNIFE_SURVIVAL_BOWIE, {"models/weapons/v_knife_survival_bowie.mdl", "knife_survival_bowie"}},
-		{WEAPON_KNIFE_BUTTERFLY, {"models/weapons/v_knife_butterfly.mdl", "knife_butterfly"}},
-		{WEAPON_KNIFE_PUSH, {"models/weapons/v_knife_push.mdl", "knife_push"}},
-		{WEAPON_KNIFE_CORD, {"models/weapons/v_knife_cord.mdl", "knife_cord"}},
-		{WEAPON_KNIFE_CANIS, {"models/weapons/v_knife_canis.mdl", "knife_canis"}},
-		{WEAPON_KNIFE_URSUS,{"models/weapons/v_knife_ursus.mdl", "knife_ursus"}},
-		{WEAPON_KNIFE_GYPSY_JACKKNIFE,{"models/weapons/v_knife_gypsy_jackknife.mdl", "knife_gypsy_jackknife"}},
-		{WEAPON_KNIFE_OUTDOOR,{"models/weapons/v_knife_outdoor.mdl", "knife_outdoor"}},
-		{WEAPON_KNIFE_STILETTO,{"models/weapons/v_knife_stiletto.mdl", "knife_stiletto"}},
-		{WEAPON_KNIFE_WIDOWMAKER,{"models/weapons/v_knife_widowmaker.mdl", "knife_widowmaker"}},
-		{WEAPON_KNIFE_SKELETON,{"models/weapons/v_knife_skeleton.mdl", "knife_skeleton"}},
-		{GLOVE_STUDDED_BLOODHOUND,{"models/weapons/w_models/arms/w_glove_bloodhound.mdl"}},
-		{GLOVE_T_SIDE,{"models/weapons/w_models/arms/w_glove_fingerless.mdl"}},
-		{GLOVE_CT_SIDE,{"models/weapons/w_models/arms/w_glove_hardknuckle.mdl"}},
-		{GLOVE_SPORTY,{"models/weapons/w_models/arms/w_glove_sporty.mdl"}},
-		{GLOVE_SLICK,{"models/weapons/w_models/arms/w_glove_slick.mdl"}},
-		{GLOVE_LEATHER_WRAP,{"models/weapons/w_models/arms/w_glove_handwrap_leathery.mdl"}},
-		{GLOVE_MOTORCYCLE,{"models/weapons/w_models/arms/w_glove_motorcycle.mdl"}},
-		{GLOVE_SPECIALIST,{"models/weapons/w_models/arms/w_glove_specialist.mdl"}},
-		{GLOVE_HYDRA,{"models/weapons/w_models/arms/w_glove_bloodhound_hydra.mdl"}}
+		{WEAPON_KNIFE,{XorStr("models/weapons/v_knife_default_ct.mdl"), XorStr("knife_default_ct")}},
+		{WEAPON_KNIFE_T,{XorStr("models/weapons/v_knife_default_t.mdl"), XorStr("knife_t")}},
+		{WEAPON_KNIFE_BAYONET, {XorStr("models/weapons/v_knife_bayonet.mdl"), XorStr("bayonet")}},
+		{WEAPON_KNIFE_CSS, {XorStr("models/weapons/v_knife_css.mdl"), XorStr("knife_css")}},
+		{WEAPON_KNIFE_FLIP, {XorStr("models/weapons/v_knife_flip.mdl"), XorStr("knife_flip")}},
+		{WEAPON_KNIFE_GUT, {XorStr("models/weapons/v_knife_gut.mdl"), XorStr("knife_gut")}},
+		{WEAPON_KNIFE_KARAMBIT, {XorStr("models/weapons/v_knife_karam.mdl"), XorStr("knife_karambit")}},
+		{WEAPON_KNIFE_M9_BAYONET, {XorStr("models/weapons/v_knife_m9_bay.mdl"), XorStr("knife_m9_bayonet")}},
+		{WEAPON_KNIFE_TACTICAL, {XorStr("models/weapons/v_knife_tactical.mdl"), XorStr("knife_tactical")}},
+		{WEAPON_KNIFE_FALCHION, {XorStr("models/weapons/v_knife_falchion_advanced.mdl"), XorStr("knife_falchion")}},
+		{WEAPON_KNIFE_SURVIVAL_BOWIE, {XorStr("models/weapons/v_knife_survival_bowie.mdl"), XorStr("knife_survival_bowie")}},
+		{WEAPON_KNIFE_BUTTERFLY, {XorStr("models/weapons/v_knife_butterfly.mdl"), XorStr("knife_butterfly")}},
+		{WEAPON_KNIFE_PUSH, {XorStr("models/weapons/v_knife_push.mdl"), XorStr("knife_push")}},
+		{WEAPON_KNIFE_CORD, {XorStr("models/weapons/v_knife_cord.mdl"), XorStr("knife_cord")}},
+		{WEAPON_KNIFE_CANIS, {XorStr("models/weapons/v_knife_canis.mdl"), XorStr("knife_canis")}},
+		{WEAPON_KNIFE_URSUS,{XorStr("models/weapons/v_knife_ursus.mdl"), XorStr("knife_ursus")}},
+		{WEAPON_KNIFE_GYPSY_JACKKNIFE,{XorStr("models/weapons/v_knife_gypsy_jackknife.mdl"), XorStr("knife_gypsy_jackknife")}},
+		{WEAPON_KNIFE_OUTDOOR,{XorStr("models/weapons/v_knife_outdoor.mdl"), XorStr("knife_outdoor")}},
+		{WEAPON_KNIFE_STILETTO,{XorStr("models/weapons/v_knife_stiletto.mdl"), XorStr("knife_stiletto")}},
+		{WEAPON_KNIFE_WIDOWMAKER,{XorStr("models/weapons/v_knife_widowmaker.mdl"), XorStr("knife_widowmaker")}},
+		{WEAPON_KNIFE_SKELETON,{XorStr("models/weapons/v_knife_skeleton.mdl"), XorStr("knife_skeleton")}},
+		{GLOVE_STUDDED_BLOODHOUND,{XorStr("models/weapons/w_models/arms/w_glove_bloodhound.mdl")}},
+		{GLOVE_T_SIDE,{XorStr("models/weapons/w_models/arms/w_glove_fingerless.mdl")}},
+		{GLOVE_CT_SIDE,{XorStr("models/weapons/w_models/arms/w_glove_hardknuckle.mdl")}},
+		{GLOVE_SPORTY,{XorStr("models/weapons/w_models/arms/w_glove_sporty.mdl")}},
+		{GLOVE_SLICK,{XorStr("models/weapons/w_models/arms/w_glove_slick.mdl")}},
+		{GLOVE_LEATHER_WRAP,{XorStr("models/weapons/w_models/arms/w_glove_handwrap_leathery.mdl")}},
+		{GLOVE_MOTORCYCLE,{XorStr("models/weapons/w_models/arms/w_glove_motorcycle.mdl")}},
+		{GLOVE_SPECIALIST,{XorStr("models/weapons/w_models/arms/w_glove_specialist.mdl")}},
+		{GLOVE_HYDRA,{XorStr("models/weapons/w_models/arms/w_glove_bloodhound_hydra.mdl")}}
 	};
 
 	const auto entry = info.find(defindex);
@@ -141,28 +141,28 @@ void CSkins::RecvProxy_Viewmodel(CRecvProxyData *pData, void *pStruct, void *pOu
 	if (CGlobal::IsGameReady)
 	{
 		// Get the knife view model id's
-		int default_t = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_default_t.mdl");
-		int default_ct = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_default_ct.mdl");
-		int iBayonet = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_bayonet.mdl");
-		int iCSS = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_css.mdl");
-		int iButterfly = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_butterfly.mdl");
-		int iFlip = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_flip.mdl");
-		int iGut = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_gut.mdl");
-		int iKarambit = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_karam.mdl");
-		int iM9Bayonet = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_m9_bay.mdl");
-		int iHuntsman = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_tactical.mdl");
-		int iFalchion = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_falchion_advanced.mdl");
-		int iDagger = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_push.mdl");
-		int iCord = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_cord.mdl");
-		int iCanis = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_canis.mdl");
-		int iUrsus = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_ursus.mdl");
-		int iBowie = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_survival_bowie.mdl");
-		int iGunGame = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_gg.mdl");
-		int iNavaja = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_gypsy_jackknife.mdl");
-		int iOutdoor = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_outdoor.mdl");
-		int iStiletto = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_stiletto.mdl");
-		int iTalon = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_widowmaker.mdl");
-		int iSkeleton = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_skeleton.mdl");
+		int default_t = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_default_t.mdl"));
+		int default_ct = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_default_ct.mdl"));
+		int iBayonet = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_bayonet.mdl"));
+		int iCSS = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_css.mdl"));
+		int iButterfly = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_butterfly.mdl"));
+		int iFlip = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_flip.mdl"));
+		int iGut = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_gut.mdl"));
+		int iKarambit = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_karam.mdl"));
+		int iM9Bayonet = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_m9_bay.mdl"));
+		int iHuntsman = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_tactical.mdl"));
+		int iFalchion = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_falchion_advanced.mdl"));
+		int iDagger = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_push.mdl"));
+		int iCord = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_cord.mdl"));
+		int iCanis = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_canis.mdl"));
+		int iUrsus = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_ursus.mdl"));
+		int iBowie = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_survival_bowie.mdl"));
+		int iGunGame = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_gg.mdl"));
+		int iNavaja = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_gypsy_jackknife.mdl"));
+		int iOutdoor = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_outdoor.mdl"));
+		int iStiletto = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_stiletto.mdl"));
+		int iTalon = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_widowmaker.mdl"));
+		int iSkeleton = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_skeleton.mdl"));
 
 		if (CGlobal::LocalPlayer)
 		{
@@ -346,28 +346,28 @@ void CSkins::SetKillIconCfg()
 {
 	char* pszKnifeModelsIcon[19] =
 	{
-		"bayonet","knife_css","knife_flip","knife_gut","knife_karambit",
-		"knife_m9_bayonet","knife_tactical","knife_falchion",
-		"knife_survival_bowie","knife_butterfly","knife_push","knife_cord", "knife_canis","knife_ursus",
-		"knife_gypsy_jackknife","knife_outdoor","knife_stiletto","knife_widowmaker","knife_skeleton"
+		XorStr("bayonet"), XorStr("knife_css"), XorStr("knife_flip"), XorStr("knife_gut"), XorStr("knife_karambit"),
+		XorStr("knife_m9_bayonet"), XorStr("knife_tactical"), XorStr("knife_falchion"),
+		XorStr("knife_survival_bowie"), XorStr("knife_butterfly"), XorStr("knife_push"), XorStr("knife_cord"), XorStr("knife_canis"), XorStr("knife_ursus"),
+		XorStr("knife_gypsy_jackknife"), XorStr("knife_outdoor"), XorStr("knife_stiletto"), XorStr("knife_widowmaker"), XorStr("knife_skeleton")
 	};
 
 	if (SelectedKnifeModelCT)
 	{
-		g_KillIconCfg["knife"] = pszKnifeModelsIcon[SelectedKnifeModelCT - 1];
+		g_KillIconCfg[XorStr("knife")] = pszKnifeModelsIcon[SelectedKnifeModelCT - 1];
 	}
 	else
 	{
-		g_KillIconCfg["knife"] = "knife";
+		g_KillIconCfg[XorStr("knife")] = XorStr("knife");
 	}
 
 	if (SelectedKnifeModelTT)
 	{
-		g_KillIconCfg["knife_t"] = pszKnifeModelsIcon[SelectedKnifeModelTT - 1];
+		g_KillIconCfg[XorStr("knife_t")] = pszKnifeModelsIcon[SelectedKnifeModelTT - 1];
 	}
 	else
 	{
-		g_KillIconCfg["knife_t"] = "knife_t";
+		g_KillIconCfg[XorStr("knife_t")] = XorStr("knife_t");
 	}
 }
 
@@ -511,8 +511,8 @@ struct hud_weapons_t {
 template<class T>
 static T* FindHudElement(const char* name)
 {
-	static auto pThis = *reinterpret_cast<DWORD**>(CSX::Memory::FindPatternV2(clientFactory, ("B9 ? ? ? ? E8 ? ? ? ? 8B 5D 08")) + 1);
-	static auto find_hud_element = reinterpret_cast<DWORD(__thiscall*)(void*, const char*)>(CSX::Memory::FindPatternV2(clientFactory, ("55 8B EC 53 8B 5D 08 56 57 8B F9 33 F6 39 77 28")));
+	static auto pThis = *reinterpret_cast<DWORD**>(CSX::Memory::FindPatternV2(clientFactory, XorStr("B9 ? ? ? ? E8 ? ? ? ? 8B 5D 08")) + 1);
+	static auto find_hud_element = reinterpret_cast<DWORD(__thiscall*)(void*, const char*)>(CSX::Memory::FindPatternV2(clientFactory, XorStr("55 8B EC 53 8B 5D 08 56 57 8B F9 33 F6 39 77 28")));
 	return (T*)find_hud_element(pThis, name);
 }
 
@@ -533,8 +533,8 @@ void CSkins::UpdateSkins(bool reset)
 
 void CSkinListener::RegListener()
 {
-	I::GameEvent()->AddListener(this, ("player_death"), false);
-	I::GameEvent()->AddListener(this, ("player_spawn"), false);
+	I::GameEvent()->AddListener(this, XorStr("player_death"), false);
+	I::GameEvent()->AddListener(this, XorStr("player_spawn"), false);
 }
 
 void CSkinListener::UnRegListener()
@@ -555,15 +555,15 @@ void CSkinListener::FireGameEvent(IGameEvent *event)
 		if (!GP_Skins->SkinsEnable)
 			return;
 
-		if (!strcmp(event->GetName(), ("player_spawn")))
+		if (!strcmp(event->GetName(), XorStr("player_spawn")))
 		{
-			if (I::Engine()->GetPlayerForUserID(event->GetInt(("userid"))) == I::Engine()->GetLocalPlayer())
+			if (I::Engine()->GetPlayerForUserID(event->GetInt(XorStr("userid"))) == I::Engine()->GetLocalPlayer())
 				GP_Skins->UpdateGlove = false;
 		}
 
-		if (!strcmp(event->GetName(), ("player_death")))
+		if (!strcmp(event->GetName(), XorStr("player_death")))
 		{
-			int nUserID = event->GetInt(("attacker"));
+			int nUserID = event->GetInt(XorStr("attacker"));
 
 			if (!nUserID)
 				return;
@@ -601,18 +601,18 @@ void CSkinListener::FireGameEvent(IGameEvent *event)
 				}
 			}
 
-			const char* szWeapon = event->GetString(("weapon"));
+			const char* szWeapon = event->GetString(XorStr("weapon"));
 
 			for (auto ReplacementIcon : GP_Skins->g_KillIconCfg)
 			{
 				if (!strcmp(szWeapon, ReplacementIcon.first))
 				{
-					event->SetString(("weapon"), ReplacementIcon.second);
+					event->SetString(XorStr("weapon"), ReplacementIcon.second);
 					break;
 				}
 			}
 
-			szWeapon = event->GetString(("weapon"));
+			szWeapon = event->GetString(XorStr("weapon"));
 		}
 		return;
 	}
@@ -693,7 +693,7 @@ void CSkins::ApplyStickerHooks(CBaseAttributableItem* pItem)
 {
 //DT_BaseAttributableItem->m_Item
 	if (!dwEconItemInterfaceWrapper)
-		dwEconItemInterfaceWrapper = offsets["m_Item"] + 0xC;
+		dwEconItemInterfaceWrapper = offsets[XorStr("m_Item")] + 0xC;
 
 	void**& vmt = *reinterpret_cast<void***>(uintptr_t(pItem) + dwEconItemInterfaceWrapper);
 
@@ -729,7 +729,7 @@ int CSkins::StickWeaponByDefIndex(int DefIdx)
 
 void CSkins::SaveSkins(nlohmann::json &j)
 {
-#define SV(o,a,b) j[("Skins")][o][v.Name][a] = b;
+#define SV(o,a,b) j[XorStr("Skins")][o][v.Name][/*XorStr*/(a)] = b;
 
 	StickerSettings emptyEntryStricker;
 	SkinSettings emptyEntry;
@@ -740,112 +740,112 @@ void CSkins::SaveSkins(nlohmann::json &j)
 		{
 			if (emptyEntry == v.Skin)
 			{
-				SV(sname, ("Emp"), true);
+				SV(sname, XorStr("Emp"), true);
 				continue;
 			}
 
-			SV(sname, ("custom_name"), v.Skin.custom_name);
-			SV(sname, ("paint_kit_id"), v.Skin.paint_kit_id);
-			SV(sname, ("paint_kit_menu"), v.Skin.paint_kit_menu);
-			SV(sname, ("skins_mode"), v.Skin.skins_mode);
-			SV(sname, ("quality"), v.Skin.quality);
-			SV(sname, ("seed"), v.Skin.seed);
-			SV(sname, ("auto_stat_track"), v.Skin.auto_stat_track);
-			SV(sname, ("stat_track"), v.Skin.stat_track);
-			SV(sname, ("wear"), v.Skin.wear);
+			SV(sname, XorStr("custom_name"), v.Skin.custom_name);
+			SV(sname, XorStr("paint_kit_id"), v.Skin.paint_kit_id);
+			SV(sname, XorStr("paint_kit_menu"), v.Skin.paint_kit_menu);
+			SV(sname, XorStr("skins_mode"), v.Skin.skins_mode);
+			SV(sname, XorStr("quality"), v.Skin.quality);
+			SV(sname, XorStr("seed"), v.Skin.seed);
+			SV(sname, XorStr("auto_stat_track"), v.Skin.auto_stat_track);
+			SV(sname, XorStr("stat_track"), v.Skin.stat_track);
+			SV(sname, XorStr("wear"), v.Skin.wear);
 			if (SaveSticker)
 			{
 				for (int i(0); i < 5; i++)
 				{
 					if (emptyEntryStricker == v.Skin.Stickers[i])
 					{
-						SV(sname, string(("SRE") + to_string(i)), true);
+						SV(sname, string(XorStr("SRE") + to_string(i)), true);
 						continue;
 					}
 
-					SV(sname, string(("Stiker") + to_string(i) + ("kit")), v.Skin.Stickers[i].kit);
-					SV(sname, string(("Stiker") + to_string(i) + ("kit_menu_index")), v.Skin.Stickers[i].kit_menu_index);
-					SV(sname, string(("Stiker") + to_string(i) + ("rotation")), v.Skin.Stickers[i].rotation);
-					SV(sname, string(("Stiker") + to_string(i) + ("scale")), v.Skin.Stickers[i].scale);
-					SV(sname, string(("Stiker") + to_string(i) + ("wear")), v.Skin.Stickers[i].wear);
+					SV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("kit")), v.Skin.Stickers[i].kit);
+					SV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("kit_menu_index")), v.Skin.Stickers[i].kit_menu_index);
+					SV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("rotation")), v.Skin.Stickers[i].rotation);
+					SV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("scale")), v.Skin.Stickers[i].scale);
+					SV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("wear")), v.Skin.Stickers[i].wear);
 				}
 			}
 		}
 	};
 
-	SaveItem(("Weapons"), WeaponNames, true);
-	SaveItem(("KnifesCT"), KnifeNamesCT);
-	SaveItem(("KnifesTT"), KnifeNamesTT);
+	SaveItem(XorStr("Weapons"), WeaponNames, true);
+	SaveItem(XorStr("KnifesCT"), KnifeNamesCT);
+	SaveItem(XorStr("KnifesTT"), KnifeNamesTT);
 }
 
 void CSkins::LoadSkins(nlohmann::json &j)
 {
-#define LV(o,a,b) if(!j[("Skins")][o][v.Name][a].is_null()) {b = j[("Skins")][o][v.Name][a];}
+#define LV(o,a,b) if(!j[XorStr("Skins")][o][v.Name][/*XorStr*/(a)].is_null()) {b = j[XorStr("Skins")][o][v.Name][/*XorStr*/(a)];}
 
 	StickerSettings emptyEntryStricker;
 	SkinSettings emptyEntry;
 
 	auto LoadItem = [&](string sname, vector<ItemSettings> &It, bool LoadSticker = false) -> void
 	{
-		if (!j[("Skins")][sname].is_null())
+		if (!j[XorStr("Skins")][sname].is_null())
 		{
 			for (auto &v : It)
 			{
-				if (!j[("Skins")][sname][v.Name].is_null())
+				if (!j[XorStr("Skins")][sname][v.Name].is_null())
 				{
 					bool IsEmpty = false;
-					LV(sname, ("Emp"), IsEmpty);
+					LV(sname, XorStr("Emp"), IsEmpty);
 					if (IsEmpty)
 					{
 						v.Skin = emptyEntry;
 						continue;
 					}
 
-					if (!j[("Skins")][sname][v.Name][("custom_name")].is_null())
+					if (!j[XorStr("Skins")][sname][v.Name][XorStr("custom_name")].is_null())
 					{
-						string buf = j[("Skins")][sname][v.Name][("custom_name")].get<string>();
+						string buf = j[XorStr("Skins")][sname][v.Name][XorStr("custom_name")].get<string>();
 						for (int i(0); i < 32; i++)
 							v.Skin.custom_name[i] = '\0';
 						for (int i(0); i < (((int)buf.length() >= 32) ? 32 : (int)buf.length()); i++)
 							v.Skin.custom_name[i] = buf[i];
 					}
 
-					LV(sname, ("paint_kit_id"), v.Skin.paint_kit_id);
-					LV(sname, ("paint_kit_menu"), v.Skin.paint_kit_menu);
-					LV(sname, ("skins_mode"), v.Skin.skins_mode);
-					LV(sname, ("quality"), v.Skin.quality);
-					LV(sname, ("seed"), v.Skin.seed);
-					LV(sname, ("auto_stat_track"), v.Skin.auto_stat_track);
-					LV(sname, ("stat_track"), v.Skin.stat_track);
-					LV(sname, ("wear"), v.Skin.wear);
+					LV(sname, XorStr("paint_kit_id"), v.Skin.paint_kit_id);
+					LV(sname, XorStr("paint_kit_menu"), v.Skin.paint_kit_menu);
+					LV(sname, XorStr("skins_mode"), v.Skin.skins_mode);
+					LV(sname, XorStr("quality"), v.Skin.quality);
+					LV(sname, XorStr("seed"), v.Skin.seed);
+					LV(sname, XorStr("auto_stat_track"), v.Skin.auto_stat_track);
+					LV(sname, XorStr("stat_track"), v.Skin.stat_track);
+					LV(sname, XorStr("wear"), v.Skin.wear);
 					if (LoadSticker)
 					{
 						for (int i(0); i < 5; i++)
 						{
 							bool IsEmptyStick = false;
-							LV(sname, string(("SRE") + to_string(i)), IsEmptyStick);
+							LV(sname, string(XorStr("SRE") + to_string(i)), IsEmptyStick);
 							if (IsEmptyStick)
 							{
 								v.Skin.Stickers[i] = emptyEntryStricker;
 								continue;
 							}
 
-							LV(sname, string(("Stiker") + to_string(i) + ("kit")), v.Skin.Stickers[i].kit);
-							LV(sname, string(("Stiker") + to_string(i) + ("kit_menu_index")), v.Skin.Stickers[i].kit_menu_index);
-							LV(sname, string(("Stiker") + to_string(i) + ("rotation")), v.Skin.Stickers[i].rotation);
-							LV(sname, string(("Stiker") + to_string(i) + ("scale")), v.Skin.Stickers[i].scale);
-							LV(sname, string(("Stiker") + to_string(i) + ("wear")), v.Skin.Stickers[i].wear);
+							LV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("kit")), v.Skin.Stickers[i].kit);
+							LV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("kit_menu_index")), v.Skin.Stickers[i].kit_menu_index);
+							LV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("rotation")), v.Skin.Stickers[i].rotation);
+							LV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("scale")), v.Skin.Stickers[i].scale);
+							LV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("wear")), v.Skin.Stickers[i].wear);
 						}
 					}
 				}
 			}
 		}
 	};
-	if (!j[("Skins")].is_null())
+	if (!j[XorStr("Skins")].is_null())
 	{
-		LoadItem(("Weapons"), WeaponNames, true);
-		LoadItem(("KnifesCT"), KnifeNamesCT);
-		LoadItem(("KnifesTT"), KnifeNamesTT);
+		LoadItem(XorStr("Weapons"), WeaponNames, true);
+		LoadItem(XorStr("KnifesCT"), KnifeNamesCT);
+		LoadItem(XorStr("KnifesTT"), KnifeNamesTT);
 	}
 }
 
@@ -919,13 +919,13 @@ void CSkins::ParseSortedKits()
 		lol("Ursus Knife"), lol("Navaja Knife"), lol("Nomad"), lol("Stiletto Knife"), lol("Talon Knife"), lol("Skeleton")
 	};
 
-	string CsgoPatch = CSX::Utils::GetModuleBaseDir(0) + ("\\csgo");
+	string CsgoPatch = CSX::Utils::GetModuleBaseDir(0) + XorStr("\\csgo");
 
-	if (pSkins->Load(CsgoPatch, ("csgo")))
+	if (pSkins->Load(CsgoPatch, XorStr("csgo")))
 	{
 		for (int iWeaponIndex = 0; iWeaponIndex < sizeof(pWeaponData) / sizeof(*pWeaponData); iWeaponIndex++)
 		{
-			string WeaponSearch = ("weapon_") + string(pWeaponData[iWeaponIndex]);
+			string WeaponSearch = XorStr("weapon_") + string(pWeaponData[iWeaponIndex]);
 			DynSkin::Skins::vecSkinInfo SkinInfoWeapon = pSkins->GetSkinInfoByWeapon(WeaponSearch);
 
 			SortedWeapons_s WeaponEntry;
@@ -938,7 +938,7 @@ void CSkins::ParseSortedKits()
 				if (SkinInfoWeapon[iSkinWeaponIndex].nFallbackPaintKit >= 10000)
 					continue;
 
-				string DragonKing = ("Dragon King");
+				string DragonKing = XorStr("Dragon King");
 				string FullName = SkinInfoWeapon[iSkinWeaponIndex]._name;
 
 				if (SkinInfoWeapon[iSkinWeaponIndex].nFallbackPaintKit == 400 && SkinInfoWeapon[iSkinWeaponIndex]._name.find(DragonKing) != string::npos)
@@ -957,12 +957,12 @@ void CSkins::ParseSortedKits()
 
 		SortedWeapons_s DefKnifeEntry;
 
-		DefKnifeEntry.name = ("Default");
+		DefKnifeEntry.name = XorStr("Default");
 		DefKnifeEntry.kits.push_back(SortedKits_s());
 		SortedKnives.push_back(DefKnifeEntry);
 		for (int iKnifeIndex = 0; iKnifeIndex < sizeof(pKnifeData) / sizeof(*pKnifeData); iKnifeIndex++)
 		{
-			string KnifeSearch = ("weapon_") + string(pKnifeData[iKnifeIndex]);
+			string KnifeSearch = XorStr("weapon_") + string(pKnifeData[iKnifeIndex]);
 			DynSkin::Skins::vecSkinInfo SkinInfoKnife = pSkins->GetSkinInfoByWeapon(KnifeSearch);
 
 			SortedWeapons_s KnifeEntry;
@@ -1025,19 +1025,19 @@ void CSkins::PrepareSortedSkins()
 	}
 
 	SortedStickers_s SSEntry;
-	SSEntry.sub_name = ("2019");// 0
+	SSEntry.sub_name = XorStr("2019");// 0
 	SortedStickers.push_back(SSEntry);
-	SSEntry.sub_name = ("2018");// 1
+	SSEntry.sub_name = XorStr("2018");// 1
 	SortedStickers.push_back(SSEntry);
-	SSEntry.sub_name = ("2017");// 2
+	SSEntry.sub_name = XorStr("2017");// 2
 	SortedStickers.push_back(SSEntry);
-	SSEntry.sub_name = ("2016");// 3
+	SSEntry.sub_name = XorStr("2016");// 3
 	SortedStickers.push_back(SSEntry);
-	SSEntry.sub_name = ("2015");// 4
+	SSEntry.sub_name = XorStr("2015");// 4
 	SortedStickers.push_back(SSEntry);
-	SSEntry.sub_name = ("2014");// 5
+	SSEntry.sub_name = XorStr("2014");// 5
 	SortedStickers.push_back(SSEntry);
-	SSEntry.sub_name = ("Other");// 6
+	SSEntry.sub_name = XorStr("Other");// 6
 	SortedStickers.push_back(SSEntry);
 
 	for (size_t i(0); i < SortedStickers.size() - 1; i++)
@@ -1046,12 +1046,12 @@ void CSkins::PrepareSortedSkins()
 				SortedStickers[i].Stckers.push_back(sticker_kits[j]);
 
 	for (size_t j(0); j < sticker_kits.size(); j++)
-		if (sticker_kits[j].name.find(("2019")) == string::npos &&
-			sticker_kits[j].name.find(("2018")) == string::npos &&
-			sticker_kits[j].name.find(("2017")) == string::npos &&
-			sticker_kits[j].name.find(("2016")) == string::npos &&
-			sticker_kits[j].name.find(("2015")) == string::npos &&
-			sticker_kits[j].name.find(("2014")) == string::npos)
+		if (sticker_kits[j].name.find(XorStr("2019")) == string::npos &&
+			sticker_kits[j].name.find(XorStr("2018")) == string::npos &&
+			sticker_kits[j].name.find(XorStr("2017")) == string::npos &&
+			sticker_kits[j].name.find(XorStr("2016")) == string::npos &&
+			sticker_kits[j].name.find(XorStr("2015")) == string::npos &&
+			sticker_kits[j].name.find(XorStr("2014")) == string::npos)
 			SortedStickers.back().Stckers.push_back(sticker_kits[j]);
 
 	ADD_LOG("Setup: All skins sorted sucessful\n");

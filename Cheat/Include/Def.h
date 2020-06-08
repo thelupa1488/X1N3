@@ -14,11 +14,11 @@
 #define MAX_FONT_SIZE 30
 #define ENABLE_HOOK_CS_WND_PROC
 
-#define PATH_TO_CHEAT_SETTINGS "\\X1N3\\"
+#define PATH_TO_CHEAT_SETTINGS XorStr("\\X1N3\\")
 
 #define MAX_ENTITY_PLAYERS 64
 
-#define CHEAT_HEAD "X1N3"
+#define CHEAT_HEAD XorStr("X1N3")
 
 #ifdef ENABLE_CONSOLE_LOG
 #define ADD_LOG(m, ...) printf(m, __VA_ARGS__)
