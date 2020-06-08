@@ -22,6 +22,7 @@ public:
 
 	Vector RenderOrigin;
 	Vector EyeAngle;
+	Vector EyePosition;
 	string Name;
 	string WeaponName;
 

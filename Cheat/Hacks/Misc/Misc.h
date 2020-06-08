@@ -189,7 +189,7 @@ public:
 	bool NameStealer = false;
 	bool ClanTagChanger = false;
 	int ClanTagChangerStyle = 0;
-	string ClanTagChangerText = "";
+	string ClanTagChangerText = XorStr("X1N3");
 
 	bool ChatSpam = false;
 	bool ChatSpamStart = false;
@@ -228,11 +228,12 @@ public:
 	float ViewModelZ = 0;
 
 	bool FakeLag = false;
-	CBind FakeLagBind = CBind(0, false);
 	int FakeLagType = 0;
-	int FakeLagStandingAmount = 0;
-	int FakeLagMovingAmount = 0;
-	int FakeLagJumpingAmount = 0;
+	int FakeLagFactor = 0;
+	bool FakeLagStanding = false;
+	bool FakeLagMoving = false;
+	bool FakeLagUnducking = false;
+	CBind FakeLagBind = CBind(0, false);
 
 	int TextDamageInfo = 38;
 
@@ -348,9 +349,11 @@ public:
 		RV(ViewModelY, "ViewModelY");
 		RV(ViewModelZ, "ViewModelZ");
 		RV(FakeLag, "FakeLag");
-		RV(FakeLagStandingAmount, "FakeLagStandingAmount");
-		RV(FakeLagMovingAmount, "FakeLagMovingAmount");
-		RV(FakeLagJumpingAmount, "FakeLagJumpingAmount");
+		RV(FakeLagType, "FakeLagType");
+		RV(FakeLagFactor, "FakeLagFactor");
+		RV(FakeLagMoving, "FakeLagMoving");
+		RV(FakeLagStanding, "FakeLagStanding");
+		RV(FakeLagUnducking, "FakeLagUnducking");
 		RV(FakeLagBind, "FakeLagBind");
 
 		RV(TextDamageInfo, "TextDamageInfo");

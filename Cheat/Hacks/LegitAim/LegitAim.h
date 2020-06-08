@@ -298,7 +298,7 @@ public:
 		float TriggerDelay = 0;
 
 		bool Backtrack = false;
-		int BacktrackTicks = 12;
+		int BacktrackTicks = 0;
 
 		int SmoothMoveFactor = 0;
 

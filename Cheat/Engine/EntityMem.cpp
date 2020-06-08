@@ -39,6 +39,7 @@ void CEntityPlayers::Update()
 				EntityPlayer[EntIndex].HitBoxes[HITBOX_HEAD] = pEntity->GetHitboxPosition(HITBOX_HEAD);
 
 			EntityPlayer[EntIndex].EyeAngle = pEntity->GetEyeAngles();
+			EntityPlayer[EntIndex].EyePosition = pEntity->GetEyePosition();
 			EntityPlayer[EntIndex].BaseEntity = pEntity;
 			EntityPlayer[EntIndex].IsPlayer = true;
 			EntityPlayer[EntIndex].IsDead = pEntity->IsDead();

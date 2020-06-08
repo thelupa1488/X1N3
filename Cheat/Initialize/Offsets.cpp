@@ -53,6 +53,7 @@ namespace Offsets
 	DWORD m_viewPunchAngle = 0;
 
 	DWORD m_flSimulationTime = 0;
+	DWORD m_flDuckAmount = 0;
 
 	DWORD m_vecVelocity = 0;
 	DWORD m_vecViewOffset = 0;

@@ -56,6 +56,7 @@ namespace Offsets
 	extern DWORD m_viewPunchAngle;
 
 	extern DWORD m_flSimulationTime;
+	extern DWORD m_flDuckAmount;
 
 	extern DWORD m_vecVelocity;
 	extern DWORD m_vecViewOffset;

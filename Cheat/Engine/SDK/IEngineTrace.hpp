@@ -378,6 +378,25 @@ namespace SDK
 		}
 	};
 
+	class CTraceFilterSkipEntity : public ITraceFilter
+	{
+	public:
+		CTraceFilterSkipEntity(IHandleEntity* pEntityHandle)
+		{
+			pSkip = pEntityHandle;
+		}
+
+		bool ShouldHitEntity(IHandleEntity* pEntityHandle, int /*contentsMask*/)
+		{
+			return !(pEntityHandle == pSkip);
+		}
+		virtual TraceType GetTraceType() const
+		{
+			return TraceType::TRACE_EVERYTHING;
+		}
+		void* pSkip;
+	};
+
 
 	enum class DebugTraceCounterBehavior_t {
 		kTRACE_COUNTER_SET = 0,

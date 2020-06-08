@@ -412,6 +412,11 @@ namespace Engine
 		return *(float*)((DWORD)this + offsets[XorStr("m_flSimulationTime")]);
 	}
 
+	float CBaseEntity::GetDuckAmount()
+	{
+		return *(float*)((DWORD)this + offsets[XorStr("m_flDuckAmount")]);
+	}
+
 	Vector CBaseEntity::GetViewPunchAngle()
 	{
 		return *(Vector*)((DWORD)this + offsets[XorStr("m_viewPunchAngle")]);

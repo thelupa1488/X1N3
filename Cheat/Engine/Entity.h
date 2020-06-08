@@ -139,6 +139,7 @@ namespace Engine
 		int		GetArmor();
 		int		GetTeam();
 		float	GetSimTime();
+		float   GetDuckAmount();
 		int		GetShotsFired();
 		int		GetIsScoped();
 		int		GetGlowIndex();

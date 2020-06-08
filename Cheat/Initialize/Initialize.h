@@ -245,6 +245,7 @@ public:
 				offsets[XorStr("m_bSpotted")] = mGetOffset("DT_BaseEntity", "m_bSpotted");
 				offsets[XorStr("m_zoomLevel")] = mGetOffset("DT_WeaponAWP", "m_zoomLevel");
 				offsets[XorStr("m_flSimulationTime")] = mGetOffset("DT_BaseEntity", "m_flSimulationTime");
+				offsets[XorStr("m_flDuckAmount")] = mGetOffset("DT_BaseEntity", "m_flDuckAmount");
 				offsets[XorStr("m_hWeaponWorldModel")] = mGetOffset("DT_BaseCombatWeapon", "m_hWeaponWorldModel");
 				offsets[XorStr("m_iWorldModelIndex")] = mGetOffset("DT_BaseCombatWeapon", "m_iWorldModelIndex");
 				offsets[XorStr("m_Item")] = mGetOffset("DT_BaseAttributableItem", "m_Item");

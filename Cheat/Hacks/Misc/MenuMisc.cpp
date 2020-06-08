@@ -355,26 +355,29 @@ void CMisc::Menu()
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
-	DCheckBox("Fake lag", FakeLag);
+	DCheckBox("Fakelag", FakeLag);
 	if (FakeLag)
 	{
-		X1Gui().SameLine();
-		DCheckBox("Bind##FakeLag", FakeLagBind.Enable);
-		X1Gui().SameLine();
+		X1Gui().SameLine(SAME_LINE_1);
 		X1Gui().PushItemWidth(PUSH_1);
-		VectorEx<const char* >itemsCSS = { lolc("Factor") , lolc("Adaptive")};
+		VectorEx<const char* >itemsCSS = { "Factor", "Switch", "Adaptive", "Random", "Legit peek" };
 		DComboBox("Type##FakeLag", FakeLagType, itemsCSS);
+		DCheckBox("Standing", FakeLagStanding);
+		X1Gui().SameLine();
+		DCheckBox("Moving", FakeLagMoving);
+		X1Gui().SameLine();
+		DCheckBox("Unducking", FakeLagUnducking);
+		X1Gui().PushItemWidth(PUSH_2);
+		SliderInts("Factor", FakeLagFactor, 1, 15);
+		DCheckBox("Bind##FakeLag", FakeLagBind.Enable);
 		if (FakeLagBind.Enable)
 		{
+			X1Gui().SameLine();
 			X1Gui().PushItemWidth(PUSH_1);
 			HotsKey("Button##FakeLag", FakeLagBind.Button);
 			X1Gui().SameLine();
 			DCheckBox("Hold##FakeLag", FakeLagBind.Hold);
 		}
-		X1Gui().PushItemWidth(PUSH_2);
-		SliderInts("Standing Ticks##FakeLag", FakeLagStandingAmount, 1, 14);
-		SliderInts("Moving Ticks##FakeLag", FakeLagMovingAmount, 1, 14);
-		SliderInts("Jumping Ticks##FakeLag", FakeLagJumpingAmount, 1, 14);
 	}
 	X1Gui().Spacing();
 	X1Gui().Separator();
