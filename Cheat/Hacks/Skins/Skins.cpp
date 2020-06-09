@@ -346,28 +346,28 @@ void CSkins::SetKillIconCfg()
 {
 	char* pszKnifeModelsIcon[19] =
 	{
-		XorStr("bayonet"), XorStr("knife_css"), XorStr("knife_flip"), XorStr("knife_gut"), XorStr("knife_karambit"),
-		XorStr("knife_m9_bayonet"), XorStr("knife_tactical"), XorStr("knife_falchion"),
-		XorStr("knife_survival_bowie"), XorStr("knife_butterfly"), XorStr("knife_push"), XorStr("knife_cord"), XorStr("knife_canis"), XorStr("knife_ursus"),
-		XorStr("knife_gypsy_jackknife"), XorStr("knife_outdoor"), XorStr("knife_stiletto"), XorStr("knife_widowmaker"), XorStr("knife_skeleton")
+		"bayonet", "knife_css", "knife_flip", "knife_gut", "knife_karambit",
+		"knife_m9_bayonet", "knife_tactical", "knife_falchion",
+		"knife_survival_bowie", "knife_butterfly", "knife_push", "knife_cord", "knife_canis", "knife_ursus",
+		"knife_gypsy_jackknife", "knife_outdoor", "knife_stiletto", "knife_widowmaker", "knife_skeleton"
 	};
 
 	if (SelectedKnifeModelCT)
 	{
-		g_KillIconCfg[XorStr("knife")] = pszKnifeModelsIcon[SelectedKnifeModelCT - 1];
+		g_KillIconCfg["knife"] = pszKnifeModelsIcon[SelectedKnifeModelCT - 1];
 	}
 	else
 	{
-		g_KillIconCfg[XorStr("knife")] = XorStr("knife");
+		g_KillIconCfg["knife"] ="knife";
 	}
 
 	if (SelectedKnifeModelTT)
 	{
-		g_KillIconCfg[XorStr("knife_t")] = pszKnifeModelsIcon[SelectedKnifeModelTT - 1];
+		g_KillIconCfg["knife_t"] = pszKnifeModelsIcon[SelectedKnifeModelTT - 1];
 	}
 	else
 	{
-		g_KillIconCfg[XorStr("knife_t")] = XorStr("knife_t");
+		g_KillIconCfg["knife_t"] = "knife_t";
 	}
 }
 

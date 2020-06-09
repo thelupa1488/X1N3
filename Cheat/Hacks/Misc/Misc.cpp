@@ -243,17 +243,81 @@ void CMisc::Draw()
 	}
 }
 
-int CMisc::LagCompBreak()
+void CMisc::LegitPeek(CUserCmd* pCmd, bool& bSendPacket)
 {
-	if (!CGlobal::LocalPlayer || CGlobal::LocalPlayer->IsDead())
-		return 1;
+	int choke_factor = Desync ? min(MaxChokeTicks(), FakeLagFactor) : FakeLagFactor;
 
-	auto velocity = CGlobal::LocalPlayer->GetVelocity();
-	velocity.z = 0.f;
-	auto speed = velocity.Length();
-	auto distance_per_tick = speed * I::GlobalVars()->interval_per_tick;
-	int choked_ticks = ceilf(64.f / distance_per_tick);
-	return min<int>(choked_ticks, 14.f);
+	static bool m_bIsPeeking = false;
+	if (m_bIsPeeking)
+	{
+		bSendPacket = !(I::ClientState()->chokedcommands < choke_factor);
+		if (bSendPacket)
+			m_bIsPeeking = false;
+		return;
+	}
+
+	auto speed = CGlobal::LocalPlayer->GetVelocity().Length();
+	if (speed <= 70.0f)
+		return;
+
+	auto collidable = CGlobal::LocalPlayer->GetCollideable();
+
+	Vector min, max;
+	min = collidable->OBBMins();
+	max = collidable->OBBMaxs();
+
+	min += CGlobal::LocalPlayer->GetOrigin();
+	max += CGlobal::LocalPlayer->GetOrigin();
+
+	Vector center = (min + max) * 0.5f;
+
+	for (int i = 1; i <= I::Engine()->GetMaxClients(); ++i)
+	{
+		CEntityPlayer* player = GP_EntPlayers->GetByIdx(i);
+		CEntityPlayer* Local = GP_EntPlayers->EntityLocal;
+
+		if (!player || player->IsDead || player->IsDormant)
+			continue;
+		if (player == Local || Local->Team == player->Team)
+			continue;
+
+		auto weapon = (CBaseWeapon*)player->BaseEntity->GetActiveWeapon();
+		if (!weapon || weapon->GetWeaponAmmo() <= 0)
+			continue;
+
+		auto weapon_data = weapon->GetWeaponInfo();
+		if (!weapon_data || CGlobal::GWeaponType <= WEAPON_TYPE_KNIFE || CGlobal::GWeaponType >= WEAPON_TYPE_C4)
+			continue;
+
+		auto eye_pos = player->EyePosition;
+
+		Vector direction;
+		AngleVectors(player->EyeAngle, direction);
+		direction.NormalizeInPlace();
+
+		Vector hit_point;
+		bool hit = IntersectionBoundingBox(eye_pos, direction, min, max, &hit_point);
+		if (hit && eye_pos.DistTo(hit_point) <= weapon_data->m_WeaponRange)
+		{
+			Ray_t ray;
+			trace_t tr;
+			CTraceFilterSkipEntity filter((CBaseEntity*)player);
+			ray.Init(eye_pos, hit_point);
+
+			I::EngineTrace()->TraceRay(ray, MASK_SHOT_HULL | CONTENTS_HITBOX, &filter, &tr);
+			if (tr.contents & CONTENTS_WINDOW) // skip windows
+			{																					
+				filter.pSkip = tr.m_pEnt;// at this moment, we dont care about local player
+				ray.Init(tr.endpos, hit_point);
+				I::EngineTrace()->TraceRay(ray, MASK_SHOT_HULL | CONTENTS_HITBOX, &filter, &tr);
+			}
+			if (tr.fraction == 1.0f || tr.m_pEnt == CGlobal::LocalPlayer)
+			{
+				m_bIsPeeking = true;
+				break;
+			}
+		}
+	}
 }
 
 void CMisc::SetNewClan(string New, string Name)
@@ -793,134 +857,97 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 
 			if (FakeLag && FakeLagBind.Check())
 			{
-				int choke_amount = 0;
-				static int choked_amount = 0;
-
-				//auto net_channel = I::Engine->GetNetChannel();
-				if (/*!net_channel ||*/ !CGlobal::LocalPlayer || CGlobal::LocalPlayer->GetHealth() <= 0)
+				if (FakeLagUnducking && CGlobal::LocalPlayer->GetDuckAmount() > 0.05f && CGlobal::LocalPlayer->GetDuckAmount() < 0.95f)
 				{
-					bSendPacket = true;
+					bSendPacket = !(I::ClientState()->chokedcommands < MaxChokeTicks());
 					return;
 				}
 
-				if (pCmd->buttons & IN_ATTACK || pCmd->buttons & IN_ATTACK2 || (CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND && pCmd->buttons & IN_JUMP))
-				{
-					bSendPacket = true;
+				if (FakeLagFactor <= 0)
 					return;
-				}
 
-				if (!(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
-				{
-					switch (FakeLagType % 2)
-					{
-					case 0: choke_amount = FakeLagJumping; break;
-					case 1: choke_amount = LagCompBreak(); break;
-					}
-				}
-				else if (CGlobal::LocalPlayer->GetVelocity().Length2D() > 0)
-				{
-					switch (FakeLagType % 2)
-					{
-					case 0: choke_amount = FakeLagMoving; break;
-					case 1: choke_amount = LagCompBreak(); break;
-					}
-				}
-				else if (CGlobal::LocalPlayer->GetVelocity().Length2D() == 0)
-				{
-					switch (FakeLagType % 2)
-					{
-					case 0: choke_amount = FakeLagStanding; break;
-					case 1: choke_amount = LagCompBreak(); break;
-					}
-				}
-				else
-				{
-					bSendPacket = true;
+				int choke_factor = Desync ? min(MaxChokeTicks(), FakeLagFactor) : FakeLagFactor;
+
+				auto speed = CGlobal::LocalPlayer->GetVelocity().Length();
+				bool standing = speed <= 1.0f;
+
+				if (!FakeLagStanding && standing)
 					return;
+
+				if (!FakeLagMoving && !standing)
+					return;
+
+				enum FakelagMode
+				{
+					FakelagStatic = 0,
+					FakelagSwitch,
+					FakelagAdaptive,
+					FakelagRandom,
+					FakelagLegitPeek
+				};
+
+				float UnitsPerTick = 0.0f;
+
+				int WishTicks = 0;
+				int AdaptiveTicks = 2;
+				static int LastRandomNumber = 5;
+				static int randomSeed = 12345;
+
+				switch (FakeLagType)
+				{
+				case FakelagSwitch:
+					// apply same logic as static fakelag
+					if (pCmd->command_number % 30 > 15)
+						break;
+				case FakelagStatic:
+					bSendPacket = !(I::ClientState()->chokedcommands < choke_factor);
+					break;
+				case FakelagAdaptive:
+					if (standing) {
+						bSendPacket = !(I::ClientState()->chokedcommands < choke_factor);
+						break;
+					}
+
+					UnitsPerTick = CGlobal::LocalPlayer->GetVelocity().Length() * I::GlobalVars()->interval_per_tick;
+					while ((WishTicks * UnitsPerTick) <= 68.0f) {
+						if (((AdaptiveTicks - 1) * UnitsPerTick) > 68.0f) {
+							++WishTicks;
+							break;
+						}
+						if ((AdaptiveTicks * UnitsPerTick) > 68.0f) {
+							WishTicks += 2;
+							break;
+						}
+						if (((AdaptiveTicks + 1) * UnitsPerTick) > 68.0f) {
+							WishTicks += 3;
+							break;
+						}
+						if (((AdaptiveTicks + 2) * UnitsPerTick) > 68.0f) {
+							WishTicks += 4;
+							break;
+						}
+						AdaptiveTicks += 5;
+						WishTicks += 5;
+						if (AdaptiveTicks > 16)
+							break;
+					}
+
+					bSendPacket = !(I::ClientState()->chokedcommands < WishTicks);
+					break;
+				case FakelagRandom:
+					if (I::ClientState()->chokedcommands < LastRandomNumber) {
+						bSendPacket = false;
+					}
+					else {
+						randomSeed = 0x41C64E6D * randomSeed + 12345;
+						LastRandomNumber = (randomSeed / 0x10000 & 0x7FFFu) % choke_factor;
+						bSendPacket = true;
+					}
+					break;
+				case FakelagLegitPeek:
+					LegitPeek(pCmd, bSendPacket);
+					break;
 				}
-
-				bSendPacket = choked_amount >= min(14, choke_amount);
-
-				if (/*net_channel->m_nChokedPackets*/ bSendPacket)
-					choked_amount = 0;
-				else
-					++choked_amount;
-
-				//auto LegitPeek = [choke_amount](CUserCmd* cmd, bool& send_packet)
-				//{
-				//	static bool m_bIsPeeking = false;
-				//	if (m_bIsPeeking)
-				//	{
-				//		send_packet = !(I::ClientState()->chokedcommands < choke_amount);
-				//		if (send_packet)
-				//			m_bIsPeeking = false;
-				//		return;
-				//	}
-
-				//	auto speed = CGlobal::LocalPlayer->GetVelocity().Length();
-				//	if (speed <= 70.0f)
-				//		return;
-
-				//	auto collidable = CGlobal::LocalPlayer->GetCollideable();
-
-				//	Vector min, max;
-				//	min = collidable->OBBMins();
-				//	max = collidable->OBBMaxs();
-
-				//	min += CGlobal::LocalPlayer->GetOrigin();
-				//	max += CGlobal::LocalPlayer->GetOrigin();
-
-				//	Vector center = (min + max) * 0.5f;
-
-				//	for (int i = 1; i <= I::GlobalVars()->maxClients; ++i)
-				//	{
-				//		auto player = GP_EntPlayers->GetByIdx(i);
-				//		if (!player || player->IsDead || player->IsDormant)
-				//			continue;
-
-				//		if (player == (CEntityPlayer*)CGlobal::LocalPlayer || CGlobal::LocalPlayer->GetTeam() == player->Team)
-				//			continue;
-
-				//		auto weapon = (CBaseWeapon*)player->BaseEntity->GetActiveWeapon();
-
-				//		if (!weapon || weapon->GetWeaponAmmo() <= 0)
-				//			continue;
-
-				//		auto weapon_data = weapon->GetWeaponInfo();
-
-				//		if (CGlobal::GWeaponType <= WEAPON_TYPE_KNIFE || CGlobal::GWeaponType >= WEAPON_TYPE_C4)
-				//			continue;
-
-				//		auto eye_pos = player->EyePosition;
-
-				//		Vector direction;
-				//		AngleVectors(player->EyeAngle, direction);
-				//		direction.NormalizeInPlace();
-
-				//		Vector hit_point;
-				//		bool hit = IntersectionBoundingBox(eye_pos, direction, min, max, &hit_point);
-				//		if (hit && eye_pos.DistTo(hit_point) <= weapon_data->m_WeaponRange)
-				//		{
-				//			Ray_t ray;
-				//			trace_t tr;
-				//			CTraceFilterSkipEntity filter((CBaseEntity*)player);
-				//			ray.Init(eye_pos, hit_point);
-
-				//			I::EngineTrace()->TraceRay(ray, MASK_SHOT_HULL | CONTENTS_HITBOX, &filter, &tr);
-				//			if (tr.contents & CONTENTS_WINDOW) // skip windows
-				//			{
-				//				filter.pSkip = tr.m_pEnt; // at this moment, we dont care about local player
-				//				ray.Init(tr.endpos, hit_point);
-				//				I::EngineTrace()->TraceRay(ray, MASK_SHOT_HULL | CONTENTS_HITBOX, &filter, &tr);
-				//			}
-				//			if (tr.fraction == 1.0f || tr.m_pEnt == CGlobal::LocalPlayer)
-				//			{
-				//				m_bIsPeeking = true;
-				//				break;
-				//			}
-				//		}
-				//	}
-				//};
 			}
 
 			if (KnifeBot && KnifeBotBind.Check())
@@ -1035,66 +1062,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					}
 				}
 			}
-
-			//if (AutoZeus)
-			//{
-			//	for (int i = 0; i < MAX_ENTITY_PLAYERS; ++i)
-			//	{
-			//		CEntityPlayer* Entity = GP_EntPlayers->GetByIdx(i);
-			//		CEntityPlayer* Local = GP_EntPlayers->EntityLocal;
-
-			//		if (!Entity->IsUpdated)
-			//			continue;
-
-			//		if (Entity->IsLocal)
-			//			continue;
-
-			//		if (!Entity->IsPlayer)
-			//			continue;
-
-			//		if (Entity->IsDead)
-			//			continue;
-
-			//		if (AutoZeusFilter == 1)
-			//		{
-			//			if ((int)Entity->Team != CGlobal::LocalPlayer->GetTeam())
-			//				continue;
-			//		}
-			//		else if (AutoZeusFilter == 2)
-			//		{
-			//			if ((int)Entity->Team == CGlobal::LocalPlayer->GetTeam())
-			//				continue;
-			//		}
-
-			//		float dist = Entity->Distance * 33;
-
-			//		if (dist > 170.f) 
-			//			return;
-
-			//		Vector OrignWorld = Entity->RenderOrigin;
-			//		Vector OrignScreen;
-
-			//		if (!CGlobal::WorldToScreen(OrignWorld, OrignScreen))
-			//			continue;
-
-			//		Vector vecHitBox = Entity->BaseEntity->GetHitboxPosition(HITBOX_LOWER_CHEST);
-			//		QAngle dst = CalcAngle(CGlobal::LocalPlayer->GetEyePosition(), vecHitBox);
-			//		pCmd->viewangles = dst.Normalized();
-
-			//		static bool fired = false;
-
-			//		if (!fired)
-			//		{
-			//			pCmd->buttons |= IN_ATTACK;
-			//			fired = true;
-			//		}
-			//		else if (fired)
-			//		{
-			//			pCmd->buttons &= ~IN_ATTACK;
-			//			fired = false;
-			//		}
-			//	}
-			//}
 		}
 	}
 }

@@ -66,10 +66,6 @@ protected:
 	virtual void FrameStageNotify() = 0;
 	virtual void Menu() = 0;
 	virtual void Draw() = 0;
-	virtual int  LagCompBreak() = 0;
-	virtual void SetNewClan(string New, string Name) = 0;
-	virtual bool ChangeName(bool reconnect, const char* newName, float delay) = 0;
-	virtual int  GetBestHeadAngle(float yaw) = 0;
 	virtual void UpdateLBY(CCSGOPlayerAnimState* animstate) = 0;
 	virtual int  MaxChokeTicks() = 0;
 	virtual void RankReveal() = 0;
@@ -93,7 +89,7 @@ public:
 
 	virtual void Menu();
 	virtual void Draw();
-	virtual int  LagCompBreak();
+	virtual void LegitPeek(CUserCmd* pCmd, bool& bSendPacket);
 	virtual void SetNewClan(string New, string Name);
 	virtual bool ChangeName(bool reconnect, const char* newName, float delay);
 	virtual int  GetBestHeadAngle(float yaw);
@@ -228,10 +224,12 @@ public:
 	float ViewModelZ = 0;
 
 	bool FakeLag = false;
+	int FakeLagFactor = 0;
 	int FakeLagType = 0;
-	int FakeLagStanding = 0;
-	int FakeLagMoving = 0;
-	int FakeLagJumping = 0;
+	bool FakeLagStanding = false;
+	bool FakeLagMoving = false;
+	bool FakeLagUnducking = false;
+//	int FakeLagJumping = 0;
 	CBind FakeLagBind = CBind(0, false);
 
 	int TextDamageInfo = 38;
@@ -351,7 +349,8 @@ public:
 		RV(FakeLagType, "FakeLagType");
 		RV(FakeLagStanding, "FakeLagStanding");
 		RV(FakeLagMoving, "FakeLagMoving");
-		RV(FakeLagJumping, "FakeLagJumping");
+		RV(FakeLagUnducking, "FakeLagUnducking");
+//		RV(FakeLagJumping, "FakeLagJumping");
 		RV(FakeLagBind, "FakeLagBind");
 
 		RV(TextDamageInfo, "TextDamageInfo");
