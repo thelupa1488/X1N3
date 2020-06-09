@@ -158,7 +158,7 @@ void CLegitAim::Menu()
 			X1Gui().Spacing();
 			X1Gui().Separator();
 			X1Gui().Spacing();
-
+			SliderFloats("Sensivity", MouseSense, 0.f, 5.f, "%.2f")
 		//	X1Gui().Spacing();
 		//	DCheckBox("Debug", Debug);
 		}
@@ -349,7 +349,7 @@ void CLegitAim::Menu()
 	{
 		static int SubtabTrigMiscSelected = 0;
 
-		static VectorEx<const char*> AimTrigSettings = { lolc("Basic##trig"),  lolc("Bind##trig") };
+		static VectorEx<const char*> AimTrigSettings = { lolc("Basic##trigger"),  lolc("Bind##trigger") };
 
 		TabsLabels(SubtabTrigMiscSelected, AimTrigSettings, Vec2(X1Gui().GetCurWindowSize().x - (X1Gui().GetStyle().wndPadding.x * 2), 0), false);
 

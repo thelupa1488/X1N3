@@ -350,7 +350,6 @@ public:
 		RV(FakeLagStanding, "FakeLagStanding");
 		RV(FakeLagMoving, "FakeLagMoving");
 		RV(FakeLagUnducking, "FakeLagUnducking");
-//		RV(FakeLagJumping, "FakeLagJumping");
 		RV(FakeLagBind, "FakeLagBind");
 
 		RV(TextDamageInfo, "TextDamageInfo");

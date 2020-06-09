@@ -191,8 +191,8 @@ public:
 	bool ShowEntitysName = false;
 	string EntityTargetName = XorStr("<default>");
 
-	CBind AimBind = CBind(VK_LBUTTON);
-	CBind TriggerBind = CBind(VK_RBUTTON);
+	CBind AimBind = CBind(0);
+	CBind TriggerBind = CBind(0);
 
 //	bool Debug = false;
 
