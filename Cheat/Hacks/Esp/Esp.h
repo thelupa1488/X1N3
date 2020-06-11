@@ -54,6 +54,17 @@ public:
 
 class CEsp : public IEsp
 {
+private:
+	 IMaterial* HidTex = nullptr;
+	 IMaterial* VisTex = nullptr;
+	 IMaterial* HidFlat = nullptr;
+	 IMaterial* VisFlat = nullptr;
+	 IMaterial* HidFrame = nullptr;
+	 IMaterial* VisFrame = nullptr;
+	 IMaterial* HidMetallic = nullptr;
+	 IMaterial* VisMetallic = nullptr;
+	 IMaterial* HidVitality = nullptr;
+	 IMaterial* VisVitality = nullptr;
 public:
 	enum Sides
 	{
@@ -153,8 +164,8 @@ public:
 	virtual void DrawPlayerEx(CEntityPlayer* Entity, CEntityPlayer* Local, bool IsDormant);
 	virtual void DrawSkeletonLine(int point1, int point2, CEntityPlayer* Entity);
 	virtual void Draw3DBox(CEntityPlayer* Entity, Color color);
-	virtual void DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t &state, const ModelRenderInfo_t &pInfo, matrix3x4_t *pCustomBoneToWorld);
 	virtual void DrawGlow(CEntityPlayer* Entity, CEntityPlayer* Local);
+	virtual void DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld);
 
 	void PlaySound(Vector _Pos, int EntityIdx);
 	void Reset();
@@ -191,7 +202,7 @@ public:
 	bool Chams = false;
 	bool ChamsVisibleOnly = false;
 	int ChamsStyle = 0;
-	float MaterialFixColor = 10.0f;
+	float MaterialFixColorChams = 10.0f;
 	bool FillBox = false;
 	bool HeadEsp = false;
 	bool Line = false;
@@ -349,7 +360,7 @@ public:
 		RV(Chams, "Chams");
 		RV(ChamsVisibleOnly, "ChamsVisbleOnly");
 		RV(ChamsStyle, "ChamsStyle");
-		RV(MaterialFixColor, "MaterialFixColor");
+		RV(MaterialFixColorChams, "MaterialFixColorChams");
 		RV(FillBox, "FillBox");
 		RV(HeadEsp, "HeadEsp");
 		RV(Line, "Line");

@@ -181,4 +181,61 @@ namespace SDK
 		// the color meshes return from ComputeStaticLightingState has been issued
 		virtual void CleanupStaticLightingState(int nCount, DataCacheHandle_t* pColorMeshHandles) = 0;
 	};
+
+	template <class T>
+	static T GetFunctionTARDasshloe(void* instance, int index)
+	{
+		const auto vtable = *static_cast<void***>(instance);
+		return reinterpret_cast<T>(vtable[index]);
+	}
+	class IMaterialVar
+	{
+
+
+		void SetVectorInternal(const float x, const float y)
+		{
+			GetFunctionTARDasshloe<void(__thiscall*)(void*, float, float)>(this, 10)(this, x, y);
+		}
+
+		void SetVectorInternal(const float x, const float y, const float z)
+		{
+			GetFunctionTARDasshloe<void(__thiscall*)(void*, float, float, float)>(this, 11)(this, x, y, z);
+		}
+
+	public:
+		void SetFloat(const float val)
+		{
+			GetFunctionTARDasshloe<void(__thiscall*)(void*, float)>(this, 4)(this, val);
+		}
+
+		void SetInt(const int val)
+		{
+			GetFunctionTARDasshloe<void(__thiscall*)(void*, int)>(this, 5)(this, val);
+		}
+
+		void SetString(char const* val)
+		{
+			GetFunctionTARDasshloe<void(__thiscall*)(void*, char const*)>(this, 6)(this, val);
+		}
+
+		void SetMatrix(matrix3x4_t& matrix)
+		{
+			GetFunctionTARDasshloe<void(__thiscall*)(void*, matrix3x4_t&)>(this, 6)(this, matrix);
+		}
+
+		void SetVectorComponent(const float val, const int comp)
+		{
+			GetFunctionTARDasshloe<void(__thiscall*)(void*, float, int)>(this, 26)(this, val, comp);
+		}
+
+		void SetVector(const Vector2D vector)
+		{
+			SetVectorInternal(vector.x, vector.y);
+		}
+
+		void SetVector(const Vector vector)
+		{
+			SetVectorInternal(vector.x, vector.y, vector.z);
+		}
+	};
 }

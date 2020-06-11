@@ -98,7 +98,7 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDirect3DDevice9* pDevice, CONST RECT* pSour
 				if (CGlobal::IsGameReady)
 				{
 					if (GP_Esp)
-					    GP_Esp->Draw();
+						GP_Esp->Draw();
 
 					if (GP_Misc)
 						GP_Misc->Draw();

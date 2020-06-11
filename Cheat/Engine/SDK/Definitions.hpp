@@ -35,7 +35,6 @@ template< typename Function > Function GetMethod(PVOID Base, DWORD Index)
 	return (Function)(dwAddress);
 }
 
-
 typedef struct con_nprint_s
 {
 	int		index;			// Row #

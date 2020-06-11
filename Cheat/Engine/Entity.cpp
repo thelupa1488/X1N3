@@ -191,12 +191,12 @@ namespace Engine
 
 	void CBaseEntity::UpdateClientSideAnimation()
 	{
-	//	return call_vfunc<void(__thiscall*)(void*)>(this, 223)(this);
+		return call_vfunc<void(__thiscall*)(void*)>(this, 223)(this);
 	}
 
 	CCSGOPlayerAnimState* CBaseEntity::GetBasePlayerAnimState()
 	{
-		return *(CCSGOPlayerAnimState**)((DWORD)this + 0x3900);
+		return *(CCSGOPlayerAnimState**)((DWORD)this + 0x3914);
 	}
 
 	AnimationLayer* CBaseEntity::GetAnimOverlays()

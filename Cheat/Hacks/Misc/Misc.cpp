@@ -169,73 +169,73 @@ void CMisc::Draw()
 					}
 				}
 
-				if (Desync)
-				{
-					if (DesyncArrows)
-					{
-						auto client_viewangles = QAngle();
-						I::Engine()->GetViewAngles(client_viewangles);
-						const auto screen_center = Vector2D(CGlobal::iScreenWidth / 2, CGlobal::iScreenHeight / 2);
-
-						constexpr auto radius = 225.f;
-						auto DrawArrow = [&](float rot, Color color) -> void
-						{
-							vector<Vec2> vertices;
-							vertices.push_back((Vec2(screen_center.x + cosf(rot) * radius, screen_center.y + sinf(rot) * radius)));
-							vertices.push_back((Vec2(screen_center.x + cosf(rot + DEG2RAD(2)) * (radius - 6), screen_center.y + sinf(rot + DEG2RAD(2)) * (radius - 6)))); //25
-							vertices.push_back((Vec2(screen_center.x + cosf(rot - DEG2RAD(2)) * (radius - 6), screen_center.y + sinf(rot - DEG2RAD(2)) * (radius - 6)))); //25
-
-							GP_Render->RenderTriangle(vertices.at(0), vertices.at(1), vertices.at(2), ArrowsColor, 2.f);
-						};
-
-						static auto alpha = 0.f; 
-						static auto plus_or_minus = false;
-						if (alpha <= 0.f || alpha >= 255.f) plus_or_minus = !plus_or_minus;
-						alpha += plus_or_minus ? (255.f / 7 * 0.015) : -(255.f / 7 * 0.015); alpha = clamp(alpha, 0.f, 255.f);
-
-						const auto FakeRot = DEG2RAD((side < 0.0f ? 90 : -90) - 90);
-						DrawArrow(FakeRot, ArrowsColor);
-					}
-			
-					if (AngleLines && ThirdPersonBind.Check())
-					{
-						auto DrawAngleLines = [&](const Vector& origin, const Vector& w2sOrigin, const float& angle, const char* text, Color clr)
-						{
-							Vector forward;
-							AngleVectors(QAngle(0.f, angle, 0.f), forward);
-							float AngleLinesLength = 30.0f;
-
-							Vector w2sReal;
-							if (CGlobal::WorldToScreen(origin + forward * AngleLinesLength, w2sReal))
-							{
-								GP_Render->DrawLine(w2sOrigin.x, w2sOrigin.y, w2sReal.x, w2sReal.y, Color::White(), 1.0f);
-								GP_Render->DrawString(w2sReal.x, w2sReal.y /* - 5.0f, 14.f*/, clr, true, true, text);
-							}
-						};
-
-						if (!CGlobal::LocalPlayer || !CGlobal::LocalPlayer->GetBasePlayerAnimState())
-							return;
-
-						if (CGlobal::LocalPlayer->IsDead())
-							return;
-
-						Vector w2sOrigin;
-						if (CGlobal::WorldToScreen(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin))
-						{
-							static float view;
-							if (CGlobal::bSendPacket)
-								view = CGlobal::UserCmd->viewangles.y;
-
-							DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, FakeAngle, XorStr("fake"), Color::Orange());
-							DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, CGlobal::LocalPlayer->GetLowerBodyYawTarget(), XorStr("lby"), Color::Blue());
-							DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, RealAngle, XorStr("real"), Color::Green()); //need fix
-							DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, view, XorStr("view"), Color::Red());
-						}
-					}
-				}
-
 				Night();
 				CustomWalls();
+			}
+		}
+
+		if (Desync)
+		{
+			if (DesyncArrows)
+			{
+				auto client_viewangles = QAngle();
+				I::Engine()->GetViewAngles(client_viewangles);
+				const auto screen_center = Vector2D(CGlobal::iScreenWidth / 2, CGlobal::iScreenHeight / 2);
+
+				constexpr auto radius = 225.f;
+				auto DrawArrow = [&](float rot, Color color) -> void
+				{
+					vector<Vec2> vertices;
+					vertices.push_back((Vec2(screen_center.x + cosf(rot) * radius, screen_center.y + sinf(rot) * radius)));
+					vertices.push_back((Vec2(screen_center.x + cosf(rot + DEG2RAD(2)) * (radius - 6), screen_center.y + sinf(rot + DEG2RAD(2)) * (radius - 6)))); //25
+					vertices.push_back((Vec2(screen_center.x + cosf(rot - DEG2RAD(2)) * (radius - 6), screen_center.y + sinf(rot - DEG2RAD(2)) * (radius - 6)))); //25
+
+					GP_Render->RenderTriangle(vertices.at(0), vertices.at(1), vertices.at(2), ArrowsColor, 2.f);
+				};
+
+				static auto alpha = 0.f;
+				static auto plus_or_minus = false;
+				if (alpha <= 0.f || alpha >= 255.f) plus_or_minus = !plus_or_minus;
+				alpha += plus_or_minus ? (255.f / 7 * 0.015) : -(255.f / 7 * 0.015); alpha = clamp(alpha, 0.f, 255.f);
+
+				const auto FakeRot = DEG2RAD((CGlobal::side < 0.0f ? 90 : -90) - 90);
+				DrawArrow(FakeRot, ArrowsColor);
+			}
+
+			if (AngleLines && ThirdPersonBind.Check())
+			{
+				auto DrawAngleLines = [&](const Vector& origin, const Vector& w2sOrigin, const float& angle, const char* text, Color clr)
+				{
+					Vector forward;
+					AngleVectors(QAngle(0.f, angle, 0.f), forward);
+					float AngleLinesLength = 30.0f;
+
+					Vector w2sReal;
+					if (CGlobal::WorldToScreen(origin + forward * AngleLinesLength, w2sReal))
+					{
+						GP_Render->DrawLine(w2sOrigin.x, w2sOrigin.y, w2sReal.x, w2sReal.y, Color::White(), 1.0f);
+						GP_Render->DrawString(w2sReal.x, w2sReal.y /* - 5.0f, 14.f*/, clr, true, true, text);
+					}
+				};
+
+				if (!CGlobal::LocalPlayer || !CGlobal::LocalPlayer->GetBasePlayerAnimState())
+					return;
+
+				if (CGlobal::LocalPlayer->IsDead())
+					return;
+
+				Vector w2sOrigin;
+				if (CGlobal::WorldToScreen(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin))
+				{
+					static float view;
+					if (CGlobal::bSendPacket)
+						view = CGlobal::UserCmd->viewangles.y;
+
+					DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, CGlobal::LocalPlayer->GetBasePlayerAnimState()->m_flGoalFeetYaw, XorStr("fake"), Color::Orange());
+					DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, CGlobal::LocalPlayer->GetLowerBodyYawTarget(), XorStr("lby"), Color::Blue());
+					DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, CGlobal::RealAngle, XorStr("real"), Color::Green()); //need fix
+					DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, view, XorStr("view"), Color::Red());
+				}
 			}
 		}
 
@@ -421,12 +421,12 @@ void CMisc::UpdateLBY(CCSGOPlayerAnimState* animstate)
 {
 	if (animstate->speed_2d > 0.1f || fabsf(animstate->flUpVelocity))
 	{
-		next_lby = I::GlobalVars()->curtime + 0.22f;
+		CGlobal::next_lby = I::GlobalVars()->curtime + 0.22f;
 	}
-	else if (I::GlobalVars()->curtime > next_lby)
+	else if (I::GlobalVars()->curtime > CGlobal::next_lby)
 	{
 		if (fabsf(CGlobal::AngleDiff(animstate->m_flGoalFeetYaw, animstate->m_flEyeYaw)) > 35.0f) 
-			next_lby = I::GlobalVars()->curtime + 1.1f;
+			CGlobal::next_lby = I::GlobalVars()->curtime + 1.1f;
 	}
 }
 
@@ -1065,14 +1065,13 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 		}
 	}
 }
-
 void CMisc::EnginePrediction(bool& bSendPacket, CUserCmd* pCmd)
 {
 	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
 	{
 		if (CGlobal::LocalPlayer)
 		{
-			auto unpred_flags = CGlobal::LocalPlayer->GetFlags();
+			static int unpred_flags = CGlobal::LocalPlayer->GetFlags();
 			EnginePrediction::Begin(pCmd);
 			{
 				if (EdgeJump && EdgeJumpBind.Check())
@@ -1085,6 +1084,7 @@ void CMisc::EnginePrediction(bool& bSendPacket, CUserCmd* pCmd)
 						pCmd->buttons |= IN_JUMP;
 				}
 
+				QAngle angleold = pCmd->viewangles;
 				if (Desync)
 				{
 					if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
@@ -1121,27 +1121,28 @@ void CMisc::EnginePrediction(bool& bSendPacket, CUserCmd* pCmd)
 					if (fabsf(CGlobal::LocalPlayer->GetSpawnTime() - I::GlobalVars()->curtime) < 1.0f)
 						return;
 
-					QAngle angleold = pCmd->viewangles;
-					auto sideauto = GetBestHeadAngle(vangle.y);
+					static bool broke_lby = false;
+
+					auto sideauto = GetBestHeadAngle(CGlobal::vangle.y);
 
 					if (!DesyncAd)
 					{
 						if (DesyncBind.Check())
 						{
-							side = 1.0f;
+							CGlobal::side = 1.0f;
 						}
 						else
-							side = -1.0f;
+							CGlobal::side = -1.0f;
 					}
 					else
-						side = sideauto;
+						CGlobal::side = sideauto;
 
 					if (DesyncType == 1)
 					{
 						float minimal_move = CGlobal::LocalPlayer->GetFlags() & IN_DUCK ? 3.0f : 1.0f;
 
 						if (!bSendPacket)
-							pCmd->viewangles.y += 120.f * side;
+							pCmd->viewangles.y += 120.f * CGlobal::side;
 
 						static bool flip = 1;
 						flip = !flip;
@@ -1150,20 +1151,20 @@ void CMisc::EnginePrediction(bool& bSendPacket, CUserCmd* pCmd)
 					}
 					else if (DesyncType == 2)
 					{
-						if (next_lby >= I::GlobalVars()->curtime)
+						if (CGlobal::next_lby >= I::GlobalVars()->curtime)
 						{
 							if (!broke_lby && bSendPacket)
 								return;
 
 							broke_lby = false;
 							bSendPacket = false;
-							pCmd->viewangles.y += 120.0f * side;
+							pCmd->viewangles.y += 120.0f * CGlobal::side;
 						}
 						else
 						{
 							broke_lby = true;
 							bSendPacket = false;
-							pCmd->viewangles.y += 120.0f * -side;
+							pCmd->viewangles.y += 120.0f * -(CGlobal::side);
 						}
 					}
 					else if (DesyncType == 3)
@@ -1175,32 +1176,29 @@ void CMisc::EnginePrediction(bool& bSendPacket, CUserCmd* pCmd)
 							pCmd->viewangles.y += switchaa ? 180.f : 0.f;
 					}
 					FixAngles(pCmd->viewangles);
-
-					CGlobal::CorrectMouse(pCmd);
-
-					auto anim_state = CGlobal::LocalPlayer->GetBasePlayerAnimState();
-					if (anim_state)
-					{
-						CCSGOPlayerAnimState anim_state_backup = *anim_state;
-						*anim_state = g_AnimState;
-						CGlobal::LocalPlayer->GetVAngles() = pCmd->viewangles;
-						CGlobal::LocalPlayer->UpdateClientSideAnimation();
-
-						UpdateLBY(anim_state);
-
-						g_AnimState = *anim_state;
-						*anim_state = anim_state_backup;
-					}
-					if (bSendPacket)
-					{
-						RealAngle = g_AnimState.m_flGoalFeetYaw;
-						if (anim_state)
-							FakeAngle = anim_state->m_flGoalFeetYaw;
-						vangle = pCmd->viewangles;
-					}
-
-					FixMovement(pCmd, angleold);
 				}
+				CGlobal::CorrectMouse(pCmd);
+				auto anim_state = CGlobal::LocalPlayer->GetBasePlayerAnimState();
+				if (anim_state)
+				{
+					CCSGOPlayerAnimState anim_state_backup = *anim_state;
+					*anim_state = g_AnimState;
+					CGlobal::LocalPlayer->GetVAngles() = pCmd->viewangles;
+					CGlobal::LocalPlayer->UpdateClientSideAnimation();
+
+					GP_Misc->UpdateLBY(anim_state);
+
+					g_AnimState = *anim_state;
+					*anim_state = anim_state_backup;
+				}
+				if (CGlobal::bSendPacket)
+				{
+					CGlobal::RealAngle = g_AnimState.m_flGoalFeetYaw;
+					if (anim_state)
+						CGlobal::FakeAngle = anim_state->m_flGoalFeetYaw;
+					CGlobal::vangle = pCmd->viewangles;
+				}
+				FixMovement(pCmd, angleold);
 
 				if (AutoBlock && AutoBlockBind.Check())
 				{
@@ -1489,6 +1487,7 @@ void CMisc::AutoAcceptEmit()
 			FlashWindowEx(&flash);
 		}
 
+		CGlobal::AcceptMatchBeep = false;
 		//typedef void(__cdecl* accept_t)(void);
 		//static accept_t accept = (accept_t)CSX::Memory::FindPatternV2(clientFactory,
 		//	XorStr("55 8B EC 51 56 8B 35 ? ? ? ? 57 83 BE"));
@@ -1563,19 +1562,23 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 				{
 					I::RenderView()->SetColorModulation(HandColor);
 					I::RenderView()->SetBlend(HandChamsColor.G1A());
-
-					if (HandChamsStyle == 0)
-						I::ModelRender()->ForcedMaterialOverride(VisTex);
-					else if (HandChamsStyle == 1)
-						I::ModelRender()->ForcedMaterialOverride(VisFlat);
-					else if (HandChamsStyle == 2)
-						I::ModelRender()->ForcedMaterialOverride(VisFrame);
-					else if (HandChamsStyle == 3)
-						I::ModelRender()->ForcedMaterialOverride(VisMetallic);
-					else if (HandChamsStyle == 5)
+					switch (HandChamsStyle)
 					{
-						I::RenderView()->SetBlend(0.0f);
-						I::ModelRender()->ForcedMaterialOverride(VisFlat);
+					case 0: I::ModelRender()->ForcedMaterialOverride(VisTex); break;
+					case 1: I::ModelRender()->ForcedMaterialOverride(VisFlat); break;
+					case 2: I::ModelRender()->ForcedMaterialOverride(VisFrame); break;
+					case 3: I::ModelRender()->ForcedMaterialOverride(VisMetallic); break;
+					case 4: 
+			            if (MaterialFixColorHand > 1.f)
+							MaterialFixColorHand /= 100.f;
+						float FixColor = 100.01f - (99.f + MaterialFixColorHand);
+						HandColor[0] = HandColor[0] / FixColor;
+						HandColor[1] = HandColor[1] / FixColor;
+						HandColor[2] = HandColor[2] / FixColor; break;
+					case 5: 
+						I::RenderView()->SetBlend(0.0f); 
+						I::ModelRender()->ForcedMaterialOverride(VisFlat); break;
+					default: break;
 					}
 					HookTables::pDrawModelExecute->GetTrampoline()(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 				}

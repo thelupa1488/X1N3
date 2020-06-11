@@ -313,6 +313,12 @@ void CMisc::Menu()
 		X1Gui().PushItemWidth(PUSH_1);
 		VectorEx<const char* >itemsCS = { lolc("Textured"),lolc("Flat"), lolc("Wireframe"), lolc("Metallic"), lolc("Material"), lolc("Disable") };
 		DComboBox("Style##hand", HandChamsStyle, itemsCS);
+		if (HandChamsStyle == 4)
+		{
+			X1Gui().Spacing();
+			X1Gui().PushItemWidth(PUSH_2);
+			SliderFloats("Brightness##Hand", MaterialFixColorHand, 0.0000000001, 1);
+		}
 		DColorEdit("Color##hand", HandChamsColor);
 	}
 	X1Gui().Spacing();

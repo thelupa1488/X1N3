@@ -111,16 +111,6 @@ public:
 	virtual void CustomWalls();
 	virtual void FrameStageNotify();
 
-	//////////////////////////////////
-	float side = 1.0f;
-	CCSGOPlayerAnimState g_AnimState;
-	bool broke_lby = false;
-	float next_lby = 0.0f;
-	QAngle vangle = QAngle();
-	float RealAngle = 0.f;
-	float FakeAngle = 0.f;
-	//////////////////////////////////
-
 	bool Enable = true;
 	bool BHop = false;
 	int  BHopChance = 0;
@@ -207,6 +197,7 @@ public:
 
 	bool HandChams = false;
 	int HandChamsStyle = 0;
+	float MaterialFixColorHand = 10.0f;
 
 	bool DamageInfo = false;
 	int DamageInfoPosition = 1;
@@ -332,6 +323,7 @@ public:
 		RV(NightMode, "NightMode");
 		RV(HandChams, "HandChams");
 		RV(HandChamsStyle, "HandChamsStyle");
+		RV(MaterialFixColorHand, "MaterialFixColorHand");
 		RV(DamageInfo, "DamageInfo");
 		RV(DamageInfoPosition, "DamageInfoPosition");
 		RV(DamageInfoStyle, "DamageInfoStyle");

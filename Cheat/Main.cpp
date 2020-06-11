@@ -1,7 +1,19 @@
 #include "Main.h"
 #include "Initialize/Initialize.h"
 #include "GUI/Gui.h"
-//#include "X1API/ThreadInMemory.h"
+#include "X1API/ThreadInMemory.h"
+
+HMODULE Dll;
+
+class IIStart
+{
+public:
+	virtual class IStart
+	{
+	public:
+		virtual void Start(HMODULE hModule) = 0;
+	};
+};
 
 DWORD WINAPI SetupThread(LPVOID lpThreadParameter)
 {
@@ -15,36 +27,36 @@ DWORD WINAPI SetupThread(LPVOID lpThreadParameter)
 		pInit->Init();
 		DELETE_PTR(pInit);
 		ADD_LOG("2-1-2\n");
-		ADD_LOG("======================Setup: Successful\n");
+		ADD_LOG("======================Setup: Sucessful\n");
+		ADD_LOG("2-1-3\n");
+		FastCall::G().t_FreeLibrary(Dll);
 		return 0;
 	};
-	VMP_END;
+
 	return LSetupThread();
+	VMP_END;
 }
 
-void DllStart(HINSTANCE hInst)
+void Start()
 {
-	VMP_MUTATION("StartMain");
+	VMP_MUTATION("CStart_Start");
 	ADD_LOG("2-0\n");
 	auto LStatr = [&]() -> void
 	{
 		ADD_LOG("2-1\n");
-		FastCall::G().t_DisableThreadLibraryCalls(hInst);
-		ADD_LOG("2-2\n");
-		std::make_unique<CreateThread_>(reinterpret_cast<LPTHREAD_START_ROUTINE>(&SetupThread), hInst);
+		std::make_unique<CreateThread_>((LPTHREAD_START_ROUTINE)SetupThread, Dll);
 	};
-	ADD_LOG("2-3\n");
+	ADD_LOG("2-2\n");
 	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3"), NULL);
 	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Configurations"), NULL);
 	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources"), NULL);
 	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Images"), NULL);
 	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Sounds"), NULL);
-	ADD_LOG("2-4\n");
 	LStatr();
 	VMP_END;
 }
 
-BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
+INT WINAPI DllMain(HMODULE hModule, DWORD fdwReason, LPVOID lpReserved)
 {
 	if (fdwReason == DLL_PROCESS_ATTACH)
 	{
@@ -59,7 +71,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
 			ADD_LOG("DLL BUILD: %s | %s\n", __TIME__, __DATE__);
 #endif
 			ADD_LOG("1\n");
-			DllStart(hinstDLL);
+			Start();
 			ADD_LOG("2\n");
 		};
 		LDllMain();

@@ -135,6 +135,12 @@ public:
 	static CUserCmd* UserCmd;
 	static bool bSendPacket;
 
+	static QAngle vangle;
+	static float side;
+	static float next_lby;
+	static float RealAngle;
+	static float FakeAngle;
+
 	static ConVar* viewmodel_offset_convar_x;
 	static ConVar* viewmodel_offset_convar_y;
 	static ConVar* viewmodel_offset_convar_z;

@@ -14,6 +14,7 @@ namespace Engine
 	class CBaseWeapon;
 	class CBaseViewModel;
 	class AnimationLayer;
+	class CCSGOPlayerAnimState;
 
 	class AnimationLayer
 	{
@@ -87,6 +88,7 @@ namespace Engine
 		float m_flUnknown3;
 		char pad10[528];
 	}; //Size=0x344
+	static CCSGOPlayerAnimState g_AnimState;
 
 	class CBaseEntity : public IClientEntity
 	{

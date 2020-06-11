@@ -18,6 +18,12 @@ CBaseEntity* CGlobal::LocalPlayer;
 CUserCmd* CGlobal::UserCmd;
 bool CGlobal::bSendPacket;
 
+QAngle CGlobal::vangle = QAngle();
+float CGlobal::side = 1.0f;
+float CGlobal::next_lby = 0.0f;
+float CGlobal::RealAngle = 0.f;
+float CGlobal::FakeAngle = 0.f;
+
 ConVar* CGlobal::viewmodel_offset_convar_x = new ConVar();
 ConVar* CGlobal::viewmodel_offset_convar_y = new ConVar();
 ConVar* CGlobal::viewmodel_offset_convar_z = new ConVar();

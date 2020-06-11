@@ -55,7 +55,6 @@ bool __stdcall CreateMove(float flInputSampleTime, CUserCmd* pCmd)
 				CGlobal::bSendPacket = true;
 				pCmd->viewangles = I::ClientState()->viewangles;
 			}
-
 			GP_Misc->EnginePrediction(CGlobal::bSendPacket, pCmd);
 		}
 

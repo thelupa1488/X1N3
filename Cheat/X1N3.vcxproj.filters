@@ -670,6 +670,8 @@
       <Filter>Engine\SDK</Filter>
     </ClInclude>
     <ClInclude Include="Engine\EnginePrediction.h" />
+    <ClInclude Include="X1API\ThreadInMemory.h" />
+    <ClInclude Include="Engine\SDK\singleton.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="3DMenu">

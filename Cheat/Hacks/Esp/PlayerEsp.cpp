@@ -800,21 +800,6 @@ void CEsp::DrawBar(Orent O, float x, float y, float w, float h, float val, bool 
 
 void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld)
 {
-	static IMaterial* HidTex = nullptr;
-	static IMaterial* VisTex = nullptr;
-
-	static IMaterial* HidFlat = nullptr;
-	static IMaterial* VisFlat = nullptr;
-
-	static IMaterial* HidFrame = nullptr;
-	static IMaterial* VisFrame = nullptr;
-
-	static IMaterial* HidMetallic = nullptr;
-	static IMaterial* VisMetallic = nullptr;
-
-	static IMaterial* HidVitality = nullptr;
-	static IMaterial* VisVitality = nullptr;
-
 	if (Enable && Chams && BindEnable.Check())
 	{
 		if (!HidTex)
@@ -918,9 +903,9 @@ void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMod
 		{
 			float ArrVisbleColor[3] = { VisbleColor.G1R(), VisbleColor.G1G(), VisbleColor.G1B() };
 
-			if (MaterialFixColor > 1.f)
-				MaterialFixColor /= 100.f;
-			float FixColor = 100.01f - (99.f + MaterialFixColor);
+			if (MaterialFixColorChams > 1.f)
+				MaterialFixColorChams /= 100.f;
+			float FixColor = 100.01f - (99.f + MaterialFixColorChams);
 			ArrVisbleColor[0] = ArrVisbleColor[0] / FixColor;
 			ArrVisbleColor[1] = ArrVisbleColor[1] / FixColor;
 			ArrVisbleColor[2] = ArrVisbleColor[2] / FixColor;
@@ -944,6 +929,8 @@ void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMod
 		}
 	}
 }
+
+
 
 void CEsp::DrawGlow(CEntityPlayer* Entity, CEntityPlayer* Local)
 {

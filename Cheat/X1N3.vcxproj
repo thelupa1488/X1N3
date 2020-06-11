@@ -131,6 +131,7 @@
     <ClInclude Include="Engine\SDK\Recv.hpp" />
     <ClInclude Include="Engine\SDK\RecvCommon.hpp" />
     <ClInclude Include="Engine\SDK\SDK.h" />
+    <ClInclude Include="Engine\SDK\singleton.h" />
     <ClInclude Include="Engine\SDK\StartSoundParams.h" />
     <ClInclude Include="Engine\SDK\TextureGroupNames.h" />
     <ClInclude Include="Engine\SDK\Vector.hpp" />
@@ -225,6 +226,7 @@
     <ClInclude Include="X1API\MinHook\src\HDE\table64.h" />
     <ClInclude Include="X1API\MinHook\src\trampoline.h" />
     <ClInclude Include="X1API\ProtectDLL.h" />
+    <ClInclude Include="X1API\ThreadInMemory.h" />
     <ClInclude Include="X1API\VMP\VMProtectSDK.h" />
     <ClInclude Include="X1API\X1FastCall.h" />
     <ClInclude Include="X1API\X1Vector.h" />
