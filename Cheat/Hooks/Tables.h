@@ -11,6 +11,7 @@ namespace HookTables
 	using CreateMoveFn = bool(__stdcall*)(float, CUserCmd*);
 	using OverrideViewFn = bool(__stdcall*)(CViewSetup*);
 	using GetViewModelFOVFn = float(__stdcall*)();
+	using DoPostScreenEffectsFn = int(__thiscall*)(void*, int);
 	using FrameStageNotifyFn = void(__thiscall*)(void*, int);
 	using FireEventClientSideThinkFn = bool(__thiscall*)(void*, IGameEvent*);
 	using DrawModelExecuteFn = bool(__thiscall*)(void*, IMatRenderContext*, const DrawModelState_t&,
@@ -27,6 +28,7 @@ namespace HookTables
 	cDetour<CreateMoveFn>* pCreateMove;
 	cDetour<OverrideViewFn>* pOverrideView;
 	cDetour<GetViewModelFOVFn>* pGetViewModelFOV;
+	cDetour<DoPostScreenEffectsFn>* pDoPostScreenEffects;
 	cDetour<FrameStageNotifyFn>* pFrameStageNotify;
 	cDetour<FireEventClientSideThinkFn>* pFireEventClientSideThink;
 	cDetour<DrawModelExecuteFn>* pDrawModelExecute;

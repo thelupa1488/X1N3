@@ -10,6 +10,7 @@
 #include  "../Hooks/Sound.h"
 #include "../Hooks/FrameStageNotify.h"
 #include "../Hooks/DrawModelExecute.h"
+#include "../Hooks/Other.h"
 #include "../Hacks/Setup.h"
 #include "Offsets.h"
 
@@ -121,6 +122,12 @@ public:
 						&pCreateMove);
 					ADD_LOG("Hook: CreateMove\n");
 
+					pContext.ApplyDetour<DoPostScreenEffectsFn>(static_cast<DoPostScreenEffectsFn>(ClientModeTable[decod(DoPostScreenEffectsIdx)]),
+						reinterpret_cast<DoPostScreenEffectsFn>
+						(DoPostScreenEffects),
+						&pDoPostScreenEffects);
+					ADD_LOG("Hook: DoPostScreenEffects\n");
+
 					pContext.ApplyDetour<OverrideViewFn>(static_cast<OverrideViewFn>(ClientModeTable[decod(OverrideViewIdx)]),
 						reinterpret_cast<OverrideViewFn>
 						(OverrideView),
@@ -176,82 +183,82 @@ public:
 				ADD_LOG("2-1-9-0\n");
 				ADD_LOG("======================Init Offsets:\n");
 
-				offsets[XorStr("m_hMyWeapons")] =  mGetOffset("DT_BasePlayer", "m_hActiveWeapon") / 2;
-				offsets[XorStr("m_hMyWearables")] = mGetOffset("DT_BasePlayer", "m_hMyWearables");
-				offsets[XorStr("m_vecOrigin")] = mGetOffset("DT_BasePlayer", "m_vecOrigin");
-				offsets[XorStr("m_hViewModel")] = mGetOffset("DT_BasePlayer", "m_hViewModel[0]");
-				offsets[XorStr("m_nTickBase")] = mGetOffset("DT_BasePlayer", "m_nTickBase");
-				offsets[XorStr("m_iObserverMode")] = mGetOffset("DT_BasePlayer", "m_iObserverMode");
-				offsets[XorStr("m_hObserverTarget")] = mGetOffset("DT_BasePlayer", "m_hObserverTarget");
-				offsets[XorStr("deadflag")] = mGetOffset("DT_BasePlayer", "deadflag");
-				offsets[XorStr("m_bIsDefusing")] = mGetOffset("DT_CSPlayer", "m_bIsDefusing");
-				offsets[XorStr("m_iAccount")] = mGetOffset("DT_CSPlayer", "m_iAccount");
-				offsets[XorStr("m_lifeState")] = mGetOffset("DT_CSPlayer", "m_lifeState");
-				offsets[XorStr("m_flFlashDuration")] = mGetOffset("DT_CSPlayer", "m_flFlashDuration");
-				offsets[XorStr("m_flSpawnTime")] = mGetOffset("DT_CSPlayer", "m_flSpawnTime");
-				offsets[XorStr("m_flC4Blow")] = mGetOffset("DT_PlantedC4", "m_flC4Blow");
-				offsets[XorStr("m_flDefuseCountDown")] = mGetOffset("DT_PlantedC4", "m_flDefuseCountDown");
-				offsets[XorStr("m_hBombDefuser")] = mGetOffset("DT_PlantedC4", "m_hBombDefuser");
-				offsets[XorStr("m_bBombDefused")] = mGetOffset("DT_PlantedC4", "m_bBombDefused");
-				offsets[XorStr("m_nBombSite")] = mGetOffset("DT_PlantedC4", "m_nBombSite");
-				offsets[XorStr("m_bFreezePeriod")] = mGetOffset("DT_CSGameRulesProxy", "m_bFreezePeriod");
-				offsets[XorStr("m_bIsValveDS")] = mGetOffset("DT_CSGameRulesProxy", "m_bIsValveDS");
-				offsets[XorStr("m_bBombPlanted")] = mGetOffset("DT_CSGameRulesProxy", "m_bBombPlanted");
-				offsets[XorStr("m_bBombDropped")] = mGetOffset("DT_CSGameRulesProxy", "m_bBombDropped");
-				offsets[XorStr("m_flFlashMaxAlpha")] = mGetOffset("DT_CSPlayer", "m_flFlashMaxAlpha");
-				offsets[XorStr("m_bHasHelmet")] = mGetOffset("DT_CSPlayer", "m_bHasHelmet");
-				offsets[XorStr("m_bHasDefuser")] = mGetOffset("DT_CSPlayer", "m_bHasDefuser");
-				offsets[XorStr("m_bIsScoped")] = mGetOffset("DT_CSPlayer", "m_bIsScoped");
-				offsets[XorStr("m_iGlowIndex")] = mGetOffset("DT_CSPlayer", "m_iGlowIndex");
-				offsets[XorStr("m_iFOVStart")] = mGetOffset("DT_CSPlayer", "m_iFOVStart");
-				offsets[XorStr("m_fFlags")] = mGetOffset("DT_CSPlayer", "m_fFlags");
-				offsets[XorStr("m_hOwnerEntity")] = mGetOffset("DT_BaseEntity", "m_hOwnerEntity");
-				offsets[XorStr("m_iHealth")] = mGetOffset("DT_BasePlayer", "m_iHealth");
-				offsets[XorStr("m_ArmorValue")] = mGetOffset("DT_CSPlayer", "m_ArmorValue");
-				offsets[XorStr("m_iTeamNum")] = mGetOffset("DT_BasePlayer", "m_iTeamNum");
-				offsets[XorStr("m_iShotsFired")] = mGetOffset("DT_CSPlayer", "m_iShotsFired");
-				offsets[XorStr("m_aimPunchAngle")] = mGetOffset("DT_BasePlayer", "m_aimPunchAngle");
-				offsets[XorStr("m_viewPunchAngle")] = mGetOffset("DT_BasePlayer", "m_viewPunchAngle");
-				offsets[XorStr("m_vecVelocity")] = mGetOffset("DT_CSPlayer", "m_vecVelocity[0]");
-				offsets[XorStr("m_vecPunchAngles")] = mGetOffset("DT_BasePlayer", "m_aimPunchAngle");
-				offsets[XorStr("m_vecViewOffset")] = mGetOffset("DT_CSPlayer", "m_vecViewOffset[0]");
-				offsets[XorStr("m_angEyeAngles")] = mGetOffset("DT_CSPlayer", "m_angEyeAngles");
-				offsets[XorStr("m_hActiveWeapon")] = mGetOffset("DT_BasePlayer", "m_hActiveWeapon");
-				offsets[XorStr("m_iClip1")] = mGetOffset("DT_BaseCombatWeapon", "m_iClip1");
-				offsets[XorStr("m_iClip2")] = mGetOffset("DT_BaseCombatWeapon", "m_iPrimaryReserveAmmoCount");
-				offsets[XorStr("m_flNextPrimaryAttack")] = mGetOffset("DT_BaseCombatWeapon", "m_flNextPrimaryAttack");
-				offsets[XorStr("m_flLowerBodyYawTarget")] = mGetOffset("DT_CSPlayer", "m_flLowerBodyYawTarget");
-				offsets[XorStr("m_bCanReload")] = offsets[XorStr("m_flNextPrimaryAttack")] + 0x6D;
-				offsets[XorStr("m_bGunGameImmunity")] = mGetOffset("DT_CSPlayer", "m_bGunGameImmunity");
-				offsets[XorStr("m_bPinPulled")] = mGetOffset("DT_BaseCSGrenade", "m_bPinPulled");
-				offsets[XorStr("m_fThrowTime")] = mGetOffset("DT_BaseCSGrenade", "m_fThrowTime");
-				offsets[XorStr("m_iItemDefinitionIndex")] = mGetOffset("DT_BaseCombatWeapon", "m_iItemDefinitionIndex");
-				offsets[XorStr("m_bIsAutoaimTarget")] = mGetOffset("DT_BaseEntity", "m_bIsAutoaimTarget");
-				offsets[XorStr("m_iItemIDHigh")] = mGetOffset("DT_BaseAttributableItem", "m_iItemIDHigh");
-				offsets[XorStr("m_iAccountID")] = mGetOffset("DT_BaseAttributableItem", "m_iAccountID");
-				offsets[XorStr("m_iEntityQuality")] = mGetOffset("DT_BaseAttributableItem", "m_iEntityQuality");
-				offsets[XorStr("m_OriginalOwnerXuidLow")] = mGetOffset("DT_BaseAttributableItem", "m_OriginalOwnerXuidLow");
-				offsets[XorStr("m_OriginalOwnerXuidHigh")] = mGetOffset("DT_BaseAttributableItem", "m_OriginalOwnerXuidHigh");
-				offsets[XorStr("m_nFallbackPaintKit")] = mGetOffset("DT_BaseAttributableItem", "m_nFallbackPaintKit");
-				offsets[XorStr("m_flFallbackWear")] = mGetOffset("DT_BaseAttributableItem", "m_flFallbackWear");
-				offsets[XorStr("m_nFallbackSeed")] = mGetOffset("DT_BaseAttributableItem", "m_nFallbackSeed");
-				offsets[XorStr("m_szCustomName")] = mGetOffset("DT_BaseAttributableItem", "m_szCustomName");
-				offsets[XorStr("m_nFallbackStatTrak")] = mGetOffset("DT_BaseAttributableItem", "m_nFallbackStatTrak");
-				offsets[XorStr("m_nModelIndex")] = mGetOffset("DT_BaseViewModel", "m_nModelIndex");
-				offsets[XorStr("m_nSequence")] = mGetOffset("DT_BaseViewModel", "m_nSequence");
-				offsets[XorStr("m_iViewModelIndex")] = mGetOffset("DT_BaseCombatWeapon", "m_iViewModelIndex");
-				offsets[XorStr("m_hOwner")] = mGetOffset("DT_PredictedViewModel", "m_hOwner");
-				offsets[XorStr("m_hWeapon")] = mGetOffset("DT_BaseViewModel", "m_hWeapon");
-				offsets[XorStr("m_bSpotted")] = mGetOffset("DT_BaseEntity", "m_bSpotted");
-				offsets[XorStr("m_zoomLevel")] = mGetOffset("DT_WeaponAWP", "m_zoomLevel");
-				offsets[XorStr("m_flSimulationTime")] = mGetOffset("DT_BaseEntity", "m_flSimulationTime");
-				offsets[XorStr("m_flDuckAmount")] = mGetOffset("DT_BaseEntity", "m_flDuckAmount");
-				offsets[XorStr("m_hWeaponWorldModel")] = mGetOffset("DT_BaseCombatWeapon", "m_hWeaponWorldModel");
-				offsets[XorStr("m_iWorldModelIndex")] = mGetOffset("DT_BaseCombatWeapon", "m_iWorldModelIndex");
-				offsets[XorStr("m_Item")] = mGetOffset("DT_BaseAttributableItem", "m_Item");
+				offsets["m_hMyWeapons"] =  mGetOffset("DT_BasePlayer", "m_hActiveWeapon") / 2;
+				offsets["m_hMyWearables"] = mGetOffset("DT_BasePlayer", "m_hMyWearables");
+				offsets["m_vecOrigin"] = mGetOffset("DT_BasePlayer", "m_vecOrigin");
+				offsets["m_hViewModel"] = mGetOffset("DT_BasePlayer", "m_hViewModel[0]");
+				offsets["m_nTickBase"] = mGetOffset("DT_BasePlayer", "m_nTickBase");
+				offsets["m_iObserverMode"] = mGetOffset("DT_BasePlayer", "m_iObserverMode");
+				offsets["m_hObserverTarget"] = mGetOffset("DT_BasePlayer", "m_hObserverTarget");
+				offsets["deadflag"] = mGetOffset("DT_BasePlayer", "deadflag");
+				offsets["m_bIsDefusing"] = mGetOffset("DT_CSPlayer", "m_bIsDefusing");
+				offsets["m_iAccount"] = mGetOffset("DT_CSPlayer", "m_iAccount");
+				offsets["m_lifeState"] = mGetOffset("DT_CSPlayer", "m_lifeState");
+				offsets["m_flFlashDuration"] = mGetOffset("DT_CSPlayer", "m_flFlashDuration");
+				offsets["m_flSpawnTime"] = mGetOffset("DT_CSPlayer", "m_flSpawnTime");
+				offsets["m_flC4Blow"] = mGetOffset("DT_PlantedC4", "m_flC4Blow");
+				offsets["m_flDefuseCountDown"] = mGetOffset("DT_PlantedC4", "m_flDefuseCountDown");
+				offsets["m_hBombDefuser"] = mGetOffset("DT_PlantedC4", "m_hBombDefuser");
+				offsets["m_bBombDefused"] = mGetOffset("DT_PlantedC4", "m_bBombDefused");
+				offsets["m_nBombSite"] = mGetOffset("DT_PlantedC4", "m_nBombSite");
+				offsets["m_bFreezePeriod"] = mGetOffset("DT_CSGameRulesProxy", "m_bFreezePeriod");
+				offsets["m_bIsValveDS"] = mGetOffset("DT_CSGameRulesProxy", "m_bIsValveDS");
+				offsets["m_bBombPlanted"] = mGetOffset("DT_CSGameRulesProxy", "m_bBombPlanted");
+				offsets["m_bBombDropped"] = mGetOffset("DT_CSGameRulesProxy", "m_bBombDropped");
+				offsets["m_flFlashMaxAlpha"] = mGetOffset("DT_CSPlayer", "m_flFlashMaxAlpha");
+				offsets["m_bHasHelmet"] = mGetOffset("DT_CSPlayer", "m_bHasHelmet");
+				offsets["m_bHasDefuser"] = mGetOffset("DT_CSPlayer", "m_bHasDefuser");
+				offsets["m_bIsScoped"] = mGetOffset("DT_CSPlayer", "m_bIsScoped");
+				offsets["m_iGlowIndex"] = mGetOffset("DT_CSPlayer", "m_iGlowIndex");
+				offsets["m_iFOVStart"] = mGetOffset("DT_CSPlayer", "m_iFOVStart");
+				offsets["m_fFlags"] = mGetOffset("DT_CSPlayer", "m_fFlags");
+				offsets["m_hOwnerEntity"] = mGetOffset("DT_BaseEntity", "m_hOwnerEntity");
+				offsets["m_iHealth"] = mGetOffset("DT_BasePlayer", "m_iHealth");
+				offsets["m_ArmorValue"] = mGetOffset("DT_CSPlayer", "m_ArmorValue");
+				offsets["m_iTeamNum"] = mGetOffset("DT_BasePlayer", "m_iTeamNum");
+				offsets["m_iShotsFired"] = mGetOffset("DT_CSPlayer", "m_iShotsFired");
+				offsets["m_aimPunchAngle"] = mGetOffset("DT_BasePlayer", "m_aimPunchAngle");
+				offsets["m_viewPunchAngle"] = mGetOffset("DT_BasePlayer", "m_viewPunchAngle");
+				offsets["m_vecVelocity"] = mGetOffset("DT_CSPlayer", "m_vecVelocity[0]");
+				offsets["m_vecPunchAngles"] = mGetOffset("DT_BasePlayer", "m_aimPunchAngle");
+				offsets["m_vecViewOffset"] = mGetOffset("DT_CSPlayer", "m_vecViewOffset[0]");
+				offsets["m_angEyeAngles"] = mGetOffset("DT_CSPlayer", "m_angEyeAngles");
+				offsets["m_hActiveWeapon"] = mGetOffset("DT_BasePlayer", "m_hActiveWeapon");
+				offsets["m_iClip1"] = mGetOffset("DT_BaseCombatWeapon", "m_iClip1");
+				offsets["m_iClip2"] = mGetOffset("DT_BaseCombatWeapon", "m_iPrimaryReserveAmmoCount");
+				offsets["m_flNextPrimaryAttack"] = mGetOffset("DT_BaseCombatWeapon", "m_flNextPrimaryAttack");
+				offsets["m_flLowerBodyYawTarget"] = mGetOffset("DT_CSPlayer", "m_flLowerBodyYawTarget");
+				offsets["m_bCanReload"] = offsets["m_flNextPrimaryAttack"] + 0x6D;
+				offsets["m_bGunGameImmunity"] = mGetOffset("DT_CSPlayer", "m_bGunGameImmunity");
+				offsets["m_bPinPulled"] = mGetOffset("DT_BaseCSGrenade", "m_bPinPulled");
+				offsets["m_fThrowTime"] = mGetOffset("DT_BaseCSGrenade", "m_fThrowTime");
+				offsets["m_iItemDefinitionIndex"] = mGetOffset("DT_BaseCombatWeapon", "m_iItemDefinitionIndex");
+				offsets["m_bIsAutoaimTarget"] = mGetOffset("DT_BaseEntity", "m_bIsAutoaimTarget");
+				offsets["m_iItemIDHigh"] = mGetOffset("DT_BaseAttributableItem", "m_iItemIDHigh");
+				offsets["m_iAccountID"] = mGetOffset("DT_BaseAttributableItem", "m_iAccountID");
+				offsets["m_iEntityQuality"] = mGetOffset("DT_BaseAttributableItem", "m_iEntityQuality");
+				offsets["m_OriginalOwnerXuidLow"] = mGetOffset("DT_BaseAttributableItem", "m_OriginalOwnerXuidLow");
+				offsets["m_OriginalOwnerXuidHigh"] = mGetOffset("DT_BaseAttributableItem", "m_OriginalOwnerXuidHigh");
+				offsets["m_nFallbackPaintKit"] = mGetOffset("DT_BaseAttributableItem", "m_nFallbackPaintKit");
+				offsets["m_flFallbackWear"] = mGetOffset("DT_BaseAttributableItem", "m_flFallbackWear");
+				offsets["m_nFallbackSeed"] = mGetOffset("DT_BaseAttributableItem", "m_nFallbackSeed");
+				offsets["m_szCustomName"] = mGetOffset("DT_BaseAttributableItem", "m_szCustomName");
+				offsets["m_nFallbackStatTrak"] = mGetOffset("DT_BaseAttributableItem", "m_nFallbackStatTrak");
+				offsets["m_nModelIndex"] = mGetOffset("DT_BaseViewModel", "m_nModelIndex");
+				offsets["m_nSequence"] = mGetOffset("DT_BaseViewModel", "m_nSequence");
+				offsets["m_iViewModelIndex"] = mGetOffset("DT_BaseCombatWeapon", "m_iViewModelIndex");
+				offsets["m_hOwner"] = mGetOffset("DT_PredictedViewModel", "m_hOwner");
+				offsets["m_hWeapon"] = mGetOffset("DT_BaseViewModel", "m_hWeapon");
+				offsets["m_bSpotted"] = mGetOffset("DT_BaseEntity", "m_bSpotted");
+				offsets["m_zoomLevel"] = mGetOffset("DT_WeaponAWP", "m_zoomLevel");
+				offsets["m_flSimulationTime"] = mGetOffset("DT_BaseEntity", "m_flSimulationTime");
+				offsets["m_flDuckAmount"] = mGetOffset("DT_BaseEntity", "m_flDuckAmount");
+				offsets["m_hWeaponWorldModel"] = mGetOffset("DT_BaseCombatWeapon", "m_hWeaponWorldModel");
+				offsets["m_iWorldModelIndex"] = mGetOffset("DT_BaseCombatWeapon", "m_iWorldModelIndex");
+				offsets["m_Item"] = mGetOffset("DT_BaseAttributableItem", "m_Item");
 				ADD_LOG("2-1-9-1\n");
-				offsets[XorStr("KeyValues_KeyValues")] = CSX::Memory::FindPatternV2(clientFactory, KEY_VALUES_MASK);
-				offsets[XorStr("KeyValues_LoadFromBuffer")] = CSX::Memory::FindPatternV2(clientFactory, KEY_VALUES_LOAD_FROM_BUFFER_MASK);
+				offsets["KeyValues_KeyValues"] = CSX::Memory::FindPatternV2(clientFactory, KEY_VALUES_MASK);
+				offsets["KeyValues_LoadFromBuffer"] = CSX::Memory::FindPatternV2(clientFactory, KEY_VALUES_LOAD_FROM_BUFFER_MASK);
 				ADD_LOG("All Offsets sucessful\n");
 				ADD_LOG("2-1-9-2\n");
 	 		};

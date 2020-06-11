@@ -271,28 +271,30 @@ void CMisc::LegitPeek(CUserCmd* pCmd, bool& bSendPacket)
 
 	Vector center = (min + max) * 0.5f;
 
-	for (int i = 1; i <= I::Engine()->GetMaxClients(); ++i)
+	for (int i = 1; i <= I::GlobalVars()->maxClients; ++i)
 	{
-		CEntityPlayer* player = GP_EntPlayers->GetByIdx(i);
+		CEntityPlayer* Entity = GP_EntPlayers->GetByIdx(i);
 		CEntityPlayer* Local = GP_EntPlayers->EntityLocal;
 
-		if (!player || player->IsDead || player->IsDormant)
-			continue;
-		if (player == Local || Local->Team == player->Team)
+		if (!Entity || Entity->IsDead || Entity->IsDormant)
 			continue;
 
-		auto weapon = (CBaseWeapon*)player->BaseEntity->GetActiveWeapon();
-		if (!weapon || weapon->GetWeaponAmmo() <= 0)
+		if (Entity == Local || Local->Team == Entity->Team)
 			continue;
 
-		auto weapon_data = weapon->GetWeaponInfo();
+		auto weapon = (CBaseWeapon*)Entity->BaseEntity->GetBaseWeapon();
+
+		if (!weapon || Entity->Ammo1 <= 0)
+			continue;
+
+	    auto weapon_data = Entity->Weaponinfo; //need fix
 		if (!weapon_data || CGlobal::GWeaponType <= WEAPON_TYPE_KNIFE || CGlobal::GWeaponType >= WEAPON_TYPE_C4)
 			continue;
 
-		auto eye_pos = player->EyePosition;
+		auto eye_pos = Entity->EyePosition;
 
 		Vector direction;
-		AngleVectors(player->EyeAngle, direction);
+		AngleVectors(Entity->EyeAngle, direction);
 		direction.NormalizeInPlace();
 
 		Vector hit_point;
@@ -301,7 +303,7 @@ void CMisc::LegitPeek(CUserCmd* pCmd, bool& bSendPacket)
 		{
 			Ray_t ray;
 			trace_t tr;
-			CTraceFilterSkipEntity filter((CBaseEntity*)player);
+			CTraceFilterSkipEntity filter((CBaseEntity*)Entity);
 			ray.Init(eye_pos, hit_point);
 
 			I::EngineTrace()->TraceRay(ray, MASK_SHOT_HULL | CONTENTS_HITBOX, &filter, &tr);
@@ -1564,22 +1566,27 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 					I::RenderView()->SetBlend(HandChamsColor.G1A());
 					switch (HandChamsStyle)
 					{
-					case 0: I::ModelRender()->ForcedMaterialOverride(VisTex); break;
-					case 1: I::ModelRender()->ForcedMaterialOverride(VisFlat); break;
-					case 2: I::ModelRender()->ForcedMaterialOverride(VisFrame); break;
-					case 3: I::ModelRender()->ForcedMaterialOverride(VisMetallic); break;
-					case 4: 
-			            if (MaterialFixColorHand > 1.f)
+					case 0: I::ModelRender()->ForcedMaterialOverride(VisTex); break; //tex
+					case 1: I::ModelRender()->ForcedMaterialOverride(VisFlat); break; //flat
+					case 2: I::ModelRender()->ForcedMaterialOverride(VisFrame); break; //frame
+					case 3: I::ModelRender()->ForcedMaterialOverride(VisMetallic); break; //metallic		
+					case 5: I::RenderView()->SetBlend(0.0f); I::ModelRender()->ForcedMaterialOverride(VisFlat); break; //disable
+					default: break;
+					}
+
+					if (HandChamsStyle == 4) //material
+					{
+						if (MaterialFixColorHand > 1.f)
 							MaterialFixColorHand /= 100.f;
 						float FixColor = 100.01f - (99.f + MaterialFixColorHand);
 						HandColor[0] = HandColor[0] / FixColor;
 						HandColor[1] = HandColor[1] / FixColor;
-						HandColor[2] = HandColor[2] / FixColor; break;
-					case 5: 
-						I::RenderView()->SetBlend(0.0f); 
-						I::ModelRender()->ForcedMaterialOverride(VisFlat); break;
-					default: break;
+						HandColor[2] = HandColor[2] / FixColor;
+
+						I::RenderView()->SetColorModulation(HandColor);
+						I::RenderView()->SetBlend(HandChamsColor.G1A());
 					}
+
 					HookTables::pDrawModelExecute->GetTrampoline()(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 				}
 			}

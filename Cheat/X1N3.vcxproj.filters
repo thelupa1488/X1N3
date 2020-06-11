@@ -671,7 +671,7 @@
     </ClInclude>
     <ClInclude Include="Engine\EnginePrediction.h" />
     <ClInclude Include="X1API\ThreadInMemory.h" />
-    <ClInclude Include="Engine\SDK\singleton.h" />
+    <ClInclude Include="Hooks\Other.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="3DMenu">

@@ -131,7 +131,6 @@
     <ClInclude Include="Engine\SDK\Recv.hpp" />
     <ClInclude Include="Engine\SDK\RecvCommon.hpp" />
     <ClInclude Include="Engine\SDK\SDK.h" />
-    <ClInclude Include="Engine\SDK\singleton.h" />
     <ClInclude Include="Engine\SDK\StartSoundParams.h" />
     <ClInclude Include="Engine\SDK\TextureGroupNames.h" />
     <ClInclude Include="Engine\SDK\Vector.hpp" />
@@ -154,6 +153,7 @@
     <ClInclude Include="Hooks\CreateMove.h" />
     <ClInclude Include="Hooks\DrawModelExecute.h" />
     <ClInclude Include="Hooks\FrameStageNotify.h" />
+    <ClInclude Include="Hooks\Other.h" />
     <ClInclude Include="Hooks\Sound.h" />
     <ClInclude Include="Hooks\Tables.h" />
     <ClInclude Include="Hooks\Views.h" />

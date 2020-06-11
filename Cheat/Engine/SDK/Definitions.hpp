@@ -109,6 +109,14 @@ public:
 	char pad_0x01F4[0x638]; //0x01F4
 };
 
+class IWeaponSystem
+{
+	virtual void unused0() = 0;
+	virtual void unused1() = 0;
+public:
+	virtual CWeaponInfo* GetWpnData(unsigned ItemDefinitionIndex) = 0;
+};
+
 class input {
 public:
 	char pad_0x00[0x0C]; // 0x00

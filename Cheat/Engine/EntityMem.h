@@ -42,6 +42,8 @@ public:
 	int Ammo1;
 	int Ammo2;
 
+	CWeaponInfo* Weaponinfo;
+
 	int WeaponIdx;
 
 	float Distance;

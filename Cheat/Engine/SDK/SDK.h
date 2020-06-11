@@ -129,6 +129,7 @@ namespace SDK
 		static IMoveHelper*         MoveHelper();
 		static IGameMovement*       GameMovement();
 		static IGameRules*          GameRules();
+		static IWeaponSystem*       WeaponSystem();
 	private:
 		static IVEngineClient*		g_pEngine;
 		static IBaseClientDLL*		g_pClient;
@@ -157,6 +158,7 @@ namespace SDK
 		static IMoveHelper*         g_pMoveHelper;
 		static IGameMovement*       g_pGameMovement;
 		static IGameRules*          g_pGameRules;
+		static IWeaponSystem*       g_pWeaponSystem;
 	};
 
 	template <typename T>

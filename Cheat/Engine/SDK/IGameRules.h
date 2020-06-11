@@ -8,19 +8,19 @@ namespace SDK
 	public:
 		bool IsFreezePeriod() {
 
-			return *(bool*)((uintptr_t)this + offsets[XorStr("m_bFreezePeriod")]);
+			return *(bool*)((uintptr_t)this + offsets["m_bFreezePeriod"]);
 		}
 		bool IsValveDS() {
 
-			return *(bool*)((uintptr_t)this + offsets[XorStr("m_bIsValveDS")]);
+			return *(bool*)((uintptr_t)this + offsets["m_bIsValveDS"]);
 		}
 		bool IsBombPlanted() {
 
-			return *(bool*)((uintptr_t)this + offsets[XorStr("m_bBombDropped")]);
+			return *(bool*)((uintptr_t)this + offsets["m_bBombDropped"]);
 		}
 		bool IsBombDropped()
 		{
-			return *(bool*)((uintptr_t)this + offsets[XorStr("m_bBombDropped")]);
+			return *(bool*)((uintptr_t)this + offsets["m_bBombDropped"]);
 		}
 	};
 }

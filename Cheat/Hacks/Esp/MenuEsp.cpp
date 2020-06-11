@@ -172,12 +172,12 @@ void CEsp::Menu()
 			X1Gui().Separator();
 			X1Gui().Spacing();
 
-			/*DCheckBox("Glow", Glow)
+			DCheckBox("Glow", Glow)
 			if (Glow)
 			{
 				X1Gui().SameLine(SAME_LINE_1);
 				X1Gui().PushItemWidth(PUSH_1);
-				VectorEx<const char*>itemsCS = { lolc("Default"), lolc("Pulse"), lolc("Outline"), lolc("Outline Pulse") };
+				VectorEx<const char*>itemsCS = { lolc("Default"), lolc("Pulsing"), lolc("Outline"), lolc("Outline Pulsing") };
 				DComboBox("Style##Glow", GlowStyle, itemsCS);
 				X1Gui().SameLine(SAME_LINE_1 + PUSH_1 + 40);
 				DCheckBox("Visible only##Glow", GlowVisibleOnly);
@@ -193,7 +193,7 @@ void CEsp::Menu()
 
 			X1Gui().Spacing();
 			X1Gui().Separator();
-			X1Gui().Spacing();*/
+			X1Gui().Spacing();
 
 			DCheckBox("Chams", Chams);
 			if (Chams)
@@ -208,7 +208,7 @@ void CEsp::Menu()
 				{
 					X1Gui().Spacing();
 					X1Gui().PushItemWidth(PUSH_2);
-					SliderFloats("Brightness", MaterialFixColor, 0.0000000001, 1);
+					SliderFloats("Brightness##Chams", MaterialFixColorChams, 0.0000000001, 1);
 					X1Gui().Spacing();
 				}
 
