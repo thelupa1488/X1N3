@@ -930,7 +930,7 @@ void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMod
 	}
 }
 
-void CEsp::DrawGlow()
+void CEsp::DrawGlow() //fix chams enable, visible
 {
 	if (Enable && Glow && BindEnable.Check())
 	{

@@ -3,18 +3,6 @@
 #include "GUI/Gui.h"
 #include "X1API/ThreadInMemory.h"
 
-HMODULE Dll;
-
-class IIStart
-{
-public:
-	virtual class IStart
-	{
-	public:
-		virtual void Start(HMODULE hModule) = 0;
-	};
-};
-
 DWORD WINAPI SetupThread(LPVOID lpThreadParameter)
 {
 	VMP_MUTATION("SetupThread");
@@ -29,61 +17,40 @@ DWORD WINAPI SetupThread(LPVOID lpThreadParameter)
 		ADD_LOG("2-1-2\n");
 		ADD_LOG("======================Setup: Sucessful\n");
 		ADD_LOG("2-1-3\n");
-		FastCall::G().t_FreeLibrary(Dll);
-		return 0;
+		return FALSE;
 	};
 
 	return LSetupThread();
 	VMP_END;
 }
 
-void Start()
+INT WINAPI DllMain(_In_ HINSTANCE hinstDll, _In_ DWORD fdwReason, _In_opt_ LPVOID lpvReserved)
 {
-	VMP_MUTATION("CStart_Start");
-	ADD_LOG("2-0\n");
-	auto LStatr = [&]() -> void
+	VMP_MUTATION("SetupThread");
+	switch (fdwReason)
 	{
-		ADD_LOG("2-1\n");
-		std::make_unique<CreateThread_>((LPTHREAD_START_ROUTINE)SetupThread, Dll);
-	};
-	ADD_LOG("2-2\n");
-	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3"), NULL);
-	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Configurations"), NULL);
-	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources"), NULL);
-	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Images"), NULL);
-	FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Sounds"), NULL);
-	LStatr();
-	VMP_END;
-}
-
-INT WINAPI DllMain(HMODULE hModule, DWORD fdwReason, LPVOID lpReserved)
-{
-	if (fdwReason == DLL_PROCESS_ATTACH)
-	{
-		auto LDllMain = [&]() -> void
-		{
+	case DLL_PROCESS_ATTACH:
 #ifdef ENABLE_CONSOLE_LOG
-			AllocConsole();
-			AttachConsole(FastCall::G().t_GetCurrentProcessId());
-			freopen("CONOUT$", "w", stdout);
+		AllocConsole();
+		AttachConsole(FastCall::G().t_GetCurrentProcessId());
+		freopen("CONOUT$", "w", stdout);
 
-			ADD_LOG("DLL ATTACH\n");
-			ADD_LOG("DLL BUILD: %s | %s\n", __TIME__, __DATE__);
+		ADD_LOG("DLL ATTACH\n");
+		ADD_LOG("DLL BUILD: %s | %s\n", __TIME__, __DATE__);
 #endif
-			ADD_LOG("1\n");
-			Start();
-			ADD_LOG("2\n");
-		};
-		LDllMain();
-	}
-	else if (fdwReason == DLL_PROCESS_DETACH)
-	{
+		ADD_LOG("1\n");
+		FastCall::G().t_DisableThreadLibraryCalls(hinstDll);
+		std::make_unique<CreateThread_>((LPTHREAD_START_ROUTINE)SetupThread, hinstDll);
+		ADD_LOG("2\n");
+		return TRUE;
+	case DLL_PROCESS_DETACH:
 		GP_Setup->Shutdown();
 		DELETE_PTR(GP_Setup);
-
 		ADD_LOG("DLL DETACH\n");
+	default:
+		return TRUE;
 	}
-	return TRUE;
+	VMP_END;
 }
 
 CMain& MainSettings()

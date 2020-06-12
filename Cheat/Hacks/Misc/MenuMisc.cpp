@@ -61,7 +61,7 @@ void CMisc::Menu()
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
-	DCheckBox("Desync", Desync);
+	DCheckBox("Desync [Beta]", Desync);
 	if (Desync)
 	{
 		X1Gui().SameLine(SAME_LINE_1);
