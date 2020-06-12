@@ -957,66 +957,47 @@ void CEsp::DrawGlow()
 				return;
 
 			Color GlowColor = Color::White();
-			int ClassId = Entity->GetClientClass()->m_ClassID;
-			switch (ClassId)
+			if (strstr(pModelName, XorStr("models/player")))
 			{
-			    case CCSPlayer:
+				if (Entity->IsDead())
+					continue;
+
+				if (!Team && (PLAYER_TEAM)Entity->GetTeam() == (PLAYER_TEAM)Local->GetTeam())
+					continue;
+
+				if (!Enemy && (PLAYER_TEAM)Entity->GetTeam() != (PLAYER_TEAM)Local->GetTeam())
+					continue;
+
+				if (GlowVisibleOnly && !Entity->IsVisible(Local))
+					continue;
+
+				if (Entity->IsVisible(Local))
 				{
-					if (Entity->IsDead())
-						continue;
-
-					if (!Team && (PLAYER_TEAM)Entity->GetTeam() == (PLAYER_TEAM)Local->GetTeam())
-						continue;
-
-					if (!Enemy && (PLAYER_TEAM)Entity->GetTeam() != (PLAYER_TEAM)Local->GetTeam())
-						continue;
-
-					if (GlowVisibleOnly && !Entity->IsVisible(Local))
-						continue;
-
-					if (Entity->IsVisible(Local))
+					switch ((PLAYER_TEAM)Entity->GetTeam())
 					{
-						switch ((PLAYER_TEAM)Entity->GetTeam())
-						{
-						case PLAYER_TEAM::TEAM_CT: GlowColor = GlowVisibleCT; break;
-						case PLAYER_TEAM::TEAM_TT: GlowColor = GlowVisibleTT; break;
-						default: break;
-						}
+					case PLAYER_TEAM::TEAM_CT: GlowColor = GlowVisibleCT; break;
+					case PLAYER_TEAM::TEAM_TT: GlowColor = GlowVisibleTT; break;
+					default: break;
 					}
-					else
+				}
+				else
+				{
+					switch ((PLAYER_TEAM)Entity->GetTeam())
 					{
-						switch ((PLAYER_TEAM)Entity->GetTeam())
-						{
-						case PLAYER_TEAM::TEAM_CT: GlowColor = GlowCT; break;
-						case PLAYER_TEAM::TEAM_TT: GlowColor = GlowTT; break;
-						default: break;
-						}
+					case PLAYER_TEAM::TEAM_CT: GlowColor = GlowCT; break;
+					case PLAYER_TEAM::TEAM_TT: GlowColor = GlowTT; break;
+					default: break;
 					}
+				}
 
-					break;
-				}
-				case CChicken:
-				{
-					//...//
-					break;
-				}
-				case CWeaponWorldModel:
-				{
-					//...//
-					break;
-				}
-				default: 
-				{
-
-				}
+				glowObject.m_flRed = GlowColor.G1R();
+				glowObject.m_flGreen = GlowColor.G1G();
+				glowObject.m_flBlue = GlowColor.G1B();
+				glowObject.m_flAlpha = GlowColor.a();
+				glowObject.m_nGlowStyle = GlowStyle;
+				glowObject.m_bRenderWhenOccluded = true;
+				glowObject.m_bRenderWhenUnoccluded = false;
 			}
-			glowObject.m_flRed = GlowColor.G1R();
-			glowObject.m_flGreen = GlowColor.G1G();
-			glowObject.m_flBlue = GlowColor.G1B();
-			glowObject.m_flAlpha = GlowColor.a();
-			glowObject.m_nGlowStyle = GlowStyle;
-			glowObject.m_bRenderWhenOccluded = true;
-			glowObject.m_bRenderWhenUnoccluded = false;
 		}
 	}
 }
