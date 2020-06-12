@@ -946,58 +946,48 @@ void CEsp::DrawGlow()
 			if (!Entity || Entity->IsDormant())
 				continue;
 
-			const model_t* pModel = Entity->GetModel();
-
-			if (!pModel)
+			if (Entity->IsDead() || Entity->GetHealth() <= 0)
 				continue;
 
-			const char* pModelName = I::ModelInfo()->GetModelName(pModel);
+			if (Entity->GetClientClass()->m_ClassID != CCSPlayer)
+				continue;
 
-			if (!pModelName)
-				return;
+			if (!Team && (PLAYER_TEAM)Entity->GetTeam() == (PLAYER_TEAM)Local->GetTeam())
+				continue;
+
+			if (!Enemy && (PLAYER_TEAM)Entity->GetTeam() != (PLAYER_TEAM)Local->GetTeam())
+				continue;
+
+			if (GlowVisibleOnly && !Entity->IsVisible(Local))
+				continue;
 
 			Color GlowColor = Color::White();
-			if (strstr(pModelName, XorStr("models/player")))
+			if (Entity->IsVisible(Local))
 			{
-				if (Entity->IsDead())
-					continue;
-
-				if (!Team && (PLAYER_TEAM)Entity->GetTeam() == (PLAYER_TEAM)Local->GetTeam())
-					continue;
-
-				if (!Enemy && (PLAYER_TEAM)Entity->GetTeam() != (PLAYER_TEAM)Local->GetTeam())
-					continue;
-
-				if (GlowVisibleOnly && !Entity->IsVisible(Local))
-					continue;
-
-				if (Entity->IsVisible(Local))
+				switch ((PLAYER_TEAM)Entity->GetTeam())
 				{
-					switch ((PLAYER_TEAM)Entity->GetTeam())
-					{
-					case PLAYER_TEAM::TEAM_CT: GlowColor = GlowVisibleCT; break;
-					case PLAYER_TEAM::TEAM_TT: GlowColor = GlowVisibleTT; break;
-					default: break;
-					}
+				case PLAYER_TEAM::TEAM_CT: GlowColor = GlowVisibleCT; break;
+				case PLAYER_TEAM::TEAM_TT: GlowColor = GlowVisibleTT; break;
+				default: break;
 				}
-				else
-				{
-					switch ((PLAYER_TEAM)Entity->GetTeam())
-					{
-					case PLAYER_TEAM::TEAM_CT: GlowColor = GlowCT; break;
-					case PLAYER_TEAM::TEAM_TT: GlowColor = GlowTT; break;
-					default: break;
-					}
-				}
-
-				glowObject.m_flRed = GlowColor.G1R();
-				glowObject.m_flGreen = GlowColor.G1G();
-				glowObject.m_flBlue = GlowColor.G1B();
-				glowObject.m_flAlpha = GlowColor.a();
-				glowObject.m_nGlowStyle = GlowStyle;
-				glowObject.m_bRenderWhenOccluded = true;
-				glowObject.m_bRenderWhenUnoccluded = false;
 			}
+			else
+			{
+				switch ((PLAYER_TEAM)Entity->GetTeam())
+				{
+				case PLAYER_TEAM::TEAM_CT: GlowColor = GlowCT; break;
+				case PLAYER_TEAM::TEAM_TT: GlowColor = GlowTT; break;
+				default: break;
+				}
+			}
+
+			glowObject.m_nGlowStyle = GlowStyle;
+			glowObject.m_flRed = GlowColor.G1R();
+			glowObject.m_flGreen = GlowColor.G1G();
+			glowObject.m_flBlue = GlowColor.G1B();
+			glowObject.m_flAlpha = GlowColor.a();
+			glowObject.m_bRenderWhenOccluded = true;
+			glowObject.m_bRenderWhenUnoccluded = false;
 		}
 	}
 }
