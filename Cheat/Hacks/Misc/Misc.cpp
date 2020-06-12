@@ -271,7 +271,7 @@ void CMisc::LegitPeek(CUserCmd* pCmd, bool& bSendPacket)
 
 	Vector center = (min + max) * 0.5f;
 
-	for (int EntIndex = 1; EntIndex <= I::GlobalVars()->maxClients; ++EntIndex)
+	for (int EntIndex = 1; EntIndex <= I::Engine()->GetMaxClients(); ++EntIndex)
 	{
 		CBaseEntity* Entity = (CBaseEntity*)I::EntityList()->GetClientEntity(EntIndex);
 
@@ -658,9 +658,9 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 			if (NameStealer)
 			{
 				static std::vector<int> stolenIds;
-				for (int i = 1; i <= I::GlobalVars()->maxClients; ++i) 
+				for (int EntIndex = 1; EntIndex <= I::Engine()->GetMaxClients(); ++EntIndex)
 				{
-					const auto entity = I::ClientEntityList()->GetClientEntity(i);
+					const auto entity = I::ClientEntityList()->GetClientEntity(EntIndex);
 
 					if (!entity || entity == CGlobal::LocalPlayer)
 						continue;
