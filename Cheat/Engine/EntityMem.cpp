@@ -8,7 +8,7 @@ void CEntityPlayers::Update()
 	{
 		for (int EntIndex = 0; EntIndex < MAX_ENTITY_PLAYERS; EntIndex++)
 		{
-			CBaseEntity* pEntity = (CBaseEntity*)I::ClientEntityList()->GetClientEntity(EntIndex);
+			CBaseEntity* pEntity = (CBaseEntity*)I::EntityList()->GetClientEntity(EntIndex);
 
 			if (!pEntity)
 			{
@@ -60,7 +60,6 @@ void CEntityPlayers::Update()
 			EntityPlayer[EntIndex].Health = pEntity->GetHealth();
 			EntityPlayer[EntIndex].Armor = pEntity->GetArmor();
 			EntityPlayer[EntIndex].IsFlashed = pEntity->IsFlashed();
-			
 
 			CBaseWeapon* pWeaponEntity = pEntity->GetBaseWeapon();
 

@@ -152,7 +152,7 @@ public:
 				ADD_LOG("2-1-11-7\n");
 				if (ClientStateTable)
 				{
-
+					//...//
 				}
 				ADD_LOG("2-1-11-8\n");
 				if (ModelRenderTable)

@@ -52,7 +52,7 @@ namespace Engine
 		return GetMethod<IsPlayerFn>(this, 157)(this); //156
 	}
 
-	bool CBaseEntity::m_bIsDefusing()
+	bool CBaseEntity::IsDefusing()
 	{
 
 		return *(bool*)((DWORD)this + offsets["m_bIsDefusing"]);

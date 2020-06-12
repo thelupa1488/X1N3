@@ -107,19 +107,19 @@ void CEsp::Menu()
 		else if (VisType == 0)
 		{
 
-			DCheckBox("Enemy", Enemy);
+			DCheckBox("Enemy##Esp", Enemy);
 			X1Gui().SameLine(SAME_LINE_1);
-			DCheckBox("Team", Team);
+			DCheckBox("Team##Esp", Team);
 			X1Gui().SameLine(SAME_LINE_2);
-			DCheckBox("Visible only", BoxVisibleOnly);
+			DCheckBox("Visible only##Esp", BoxVisibleOnly);
 			X1Gui().PushItemWidth(100);
-			DCheckBox("Bind", BindEnable.Enable);
+			DCheckBox("Bind##Esp", BindEnable.Enable);
 			if (BindEnable.Enable)
 			{
 				X1Gui().SameLine(SAME_LINE_1);
-				DCheckBox("Hold", BindEnable.Hold);
+				DCheckBox("Hold##Esp", BindEnable.Hold);
 				X1Gui().SameLine(SAME_LINE_2);
-				HotsKey("Button", BindEnable.Button);
+				HotsKey("Button##Esp", BindEnable.Button);
 			}
 
 			X1Gui().Spacing();
@@ -134,27 +134,27 @@ void CEsp::Menu()
 				X1Gui().SameLine(SAME_LINE_1);
 				X1Gui().PushItemWidth(PUSH_1);
 				VectorEx<const char*>itemsBS = { lolc("Full") , lolc("Angular"), lolc("3D"), lolc("Circled") };
-				DComboBox("Style##box", BoxStyle, itemsBS);
+				DComboBox("Style##Box", BoxStyle, itemsBS);
 				if (BoxStyle != 2)
 				{
 					X1Gui().Spacing();
 					X1Gui().PushItemWidth(PUSH_2);
-					SliderInts("Size##box", BoxSize, 1, 20);
+					SliderInts("Size##Box", BoxSize, 1, 20);
 				}
 				X1Gui().PushItemWidth(PUSH_1);
 				X1Gui().Spacing();
-				DCheckBox("Outline##box", BoxOutline);
+				DCheckBox("Outline##Box", BoxOutline);
 				X1Gui().Spacing();
 
-				DColorEdit("CT color", BoxCT);
+				DColorEdit("CT color##Box", BoxCT);
 				X1Gui().SameLine(100);
-				DColorEdit("T color", BoxTT);
+				DColorEdit("T color##Box", BoxTT);
 
 				X1Gui().SameLine(200);
 
-				DColorEdit("Visible CT color", BoxVisibleCT);
+				DColorEdit("Visible CT color##Box", BoxVisibleCT);
 				X1Gui().SameLine(340);
-				DColorEdit("Visible T color", BoxVisibleTT);
+				DColorEdit("Visible T color##Box", BoxVisibleTT);
 			}
 
 			X1Gui().Spacing();
@@ -201,9 +201,9 @@ void CEsp::Menu()
 				X1Gui().SameLine(SAME_LINE_1);
 				X1Gui().PushItemWidth(PUSH_1);
 				VectorEx<const char*>itemsCS = { lolc("Textured"), lolc("Flat"), lolc("Wireframe"), lolc("Metallic"), lolc("Material") };
-				DComboBox("Style##chams", ChamsStyle, itemsCS);
+				DComboBox("Style##Chams", ChamsStyle, itemsCS);
 				X1Gui().SameLine(SAME_LINE_1 + PUSH_1 + 40);
-				DCheckBox("Visible only##chams", ChamsVisibleOnly);
+				DCheckBox("Visible only##Chams", ChamsVisibleOnly);
 				if (ChamsStyle == 4)
 				{
 					X1Gui().Spacing();
@@ -212,13 +212,13 @@ void CEsp::Menu()
 					X1Gui().Spacing();
 				}
 
-				DColorEdit("CT color##chams", ChamsCT);
+				DColorEdit("CT color##Chams", ChamsCT);
 				X1Gui().SameLine(100);
-				DColorEdit("T color##chams", ChamsTT);
+				DColorEdit("T color##Chams", ChamsTT);
 				X1Gui().SameLine(200);
-				DColorEdit("Visible CT color##chams", ChamsVisibleCT);
+				DColorEdit("Visible CT color##Chams", ChamsVisibleCT);
 				X1Gui().SameLine(340);
-				DColorEdit("Visible T color##chams", ChamsVisibleTT);
+				DColorEdit("Visible T color##Chams", ChamsVisibleTT);
 			}
 
 			X1Gui().Spacing();

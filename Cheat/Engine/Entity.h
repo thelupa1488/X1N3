@@ -96,7 +96,7 @@ namespace Engine
 		//[swap_lines]
 		int     GetSequenceActivity(int sequence);
 		char*	GetPlayerName();
-		bool    m_bIsDefusing();
+		bool    IsDefusing();
 
 		bool	IsPlayer();
 		bool	IsValid();

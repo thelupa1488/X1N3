@@ -108,45 +108,44 @@ void CEsp::WorldEsp()
 						{
 							if (CGlobal::WorldToScreen(pEntity->GetRenderOrigin(), EntityScreen))
 							{
-#define Lol(s) s
 								string WeaponName = pModelName + 17;
 								WeaponName[WeaponName.size() - 12] = '\0';
 								if (WorldWeaponsStyle == 0)
 								{
-									if (strstr(WeaponName.c_str(), XorStr("rif_ak47"))) WeaponName = Lol(M_WEAPON_AK47_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("rif_aug"))) WeaponName = Lol(M_WEAPON_AUG_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("rif_famas")))WeaponName = Lol(M_WEAPON_FAMAS_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("rif_galilar"))) WeaponName = Lol(M_WEAPON_GALILAR_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("rif_m4a1_s"))) WeaponName = Lol(M_WEAPON_M4A1_S_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("rif_m4a1"))) WeaponName = Lol(M_WEAPON_M4A4_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("rif_sg556"))) WeaponName = Lol(M_WEAPON_SG553_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("pist_223"))) WeaponName = Lol(M_WEAPON_USP_S_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("pist_revolver"))) WeaponName = Lol(M_WEAPON_REVOLVER_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("pist_cz_75"))) WeaponName = Lol(M_WEAPON_CZ75A_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("pist_deagle"))) WeaponName = Lol(M_WEAPON_DEAGLE_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("pist_elite"))) WeaponName = Lol(M_WEAPON_ELITE_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("pist_fiveseven"))) WeaponName = Lol(M_WEAPON_FIVESEVEN_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("pist_glock18"))) WeaponName = Lol(M_WEAPON_GLOCK_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("pist_hkp2000"))) WeaponName = Lol(M_WEAPON_HKP2000_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("pist_p250"))) WeaponName = Lol(M_WEAPON_P250_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("pist_tec9"))) WeaponName = Lol(M_WEAPON_TEC9_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("snip_awp"))) WeaponName = Lol(M_WEAPON_AWP_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("snip_g3sg1"))) WeaponName = Lol(M_WEAPON_G3SG1_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("snip_scar20"))) WeaponName = Lol(M_WEAPON_SCAR20_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("snip_ssg08"))) WeaponName = Lol(M_WEAPON_SSG08_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("smg_mac10"))) WeaponName = Lol(M_WEAPON_MAC10_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("smg_mp7"))) WeaponName = Lol(M_WEAPON_MP7_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("smg_mp9"))) WeaponName = Lol(M_WEAPON_MP9_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("smg_ump45"))) WeaponName = Lol(M_WEAPON_UMP45_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("smg_mp5sd"))) WeaponName = Lol(M_WEAPON_MP5_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("smg_p90"))) WeaponName = Lol(M_WEAPON_P90_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("shot_mag7"))) WeaponName = Lol(M_WEAPON_MAG7_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("smg_bizon"))) WeaponName = Lol(M_WEAPON_BIZON_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("shot_nova"))) WeaponName = Lol(M_WEAPON_NOVA_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("shot_sawedoff"))) WeaponName = Lol(M_WEAPON_SAWEDOFF_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("shot_xm1014"))) WeaponName = Lol(M_WEAPON_XM1014_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("mach_m249"))) WeaponName = Lol(M_WEAPON_M249_STR);
-									else if (strstr(WeaponName.c_str(), XorStr("mach_negev"))) WeaponName = Lol(M_WEAPON_NEGEV_STR);
+									if (strstr(WeaponName.c_str(), XorStr("rif_ak47"))) WeaponName = M_WEAPON_AK47_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("rif_aug"))) WeaponName = M_WEAPON_AUG_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("rif_famas")))WeaponName = M_WEAPON_FAMAS_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("rif_galilar"))) WeaponName = M_WEAPON_GALILAR_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("rif_m4a1_s"))) WeaponName = M_WEAPON_M4A1_S_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("rif_m4a1"))) WeaponName = M_WEAPON_M4A4_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("rif_sg556"))) WeaponName = M_WEAPON_SG553_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("pist_223"))) WeaponName = M_WEAPON_USP_S_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("pist_revolver"))) WeaponName = M_WEAPON_REVOLVER_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("pist_cz_75"))) WeaponName = M_WEAPON_CZ75A_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("pist_deagle"))) WeaponName = M_WEAPON_DEAGLE_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("pist_elite"))) WeaponName = M_WEAPON_ELITE_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("pist_fiveseven"))) WeaponName = M_WEAPON_FIVESEVEN_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("pist_glock18"))) WeaponName = M_WEAPON_GLOCK_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("pist_hkp2000"))) WeaponName = M_WEAPON_HKP2000_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("pist_p250"))) WeaponName = M_WEAPON_P250_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("pist_tec9"))) WeaponName = M_WEAPON_TEC9_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("snip_awp"))) WeaponName = M_WEAPON_AWP_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("snip_g3sg1"))) WeaponName = M_WEAPON_G3SG1_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("snip_scar20"))) WeaponName = M_WEAPON_SCAR20_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("snip_ssg08"))) WeaponName = M_WEAPON_SSG08_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("smg_mac10"))) WeaponName = M_WEAPON_MAC10_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("smg_mp7"))) WeaponName = M_WEAPON_MP7_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("smg_mp9"))) WeaponName = M_WEAPON_MP9_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("smg_ump45"))) WeaponName = M_WEAPON_UMP45_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("smg_mp5sd"))) WeaponName = M_WEAPON_MP5_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("smg_p90"))) WeaponName = M_WEAPON_P90_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("shot_mag7"))) WeaponName = M_WEAPON_MAG7_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("smg_bizon"))) WeaponName = M_WEAPON_BIZON_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("shot_nova"))) WeaponName = M_WEAPON_NOVA_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("shot_sawedoff"))) WeaponName = M_WEAPON_SAWEDOFF_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("shot_xm1014"))) WeaponName = M_WEAPON_XM1014_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("mach_m249"))) WeaponName = M_WEAPON_M249_STR;
+									else if (strstr(WeaponName.c_str(), XorStr("mach_negev"))) WeaponName = M_WEAPON_NEGEV_STR;
 									else WeaponName = WeaponName;
 
 									GP_Render->DrawString(TextWorldWeaponSize, Vec2((int)EntityScreen.x, (int)EntityScreen.y), WorldWeaponsColor, true, true, WeaponName.c_str());

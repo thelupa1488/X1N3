@@ -271,35 +271,35 @@ void CMisc::LegitPeek(CUserCmd* pCmd, bool& bSendPacket)
 
 	Vector center = (min + max) * 0.5f;
 
-	for (int i = 1; i <= I::GlobalVars()->maxClients; ++i)
+	for (int EntIndex = 1; EntIndex <= I::GlobalVars()->maxClients; ++EntIndex)
 	{
-		CEntityPlayer* Entity = GP_EntPlayers->GetByIdx(i);
-		CEntityPlayer* Local = GP_EntPlayers->EntityLocal;
+		CBaseEntity* Entity = (CBaseEntity*)I::EntityList()->GetClientEntity(EntIndex);
 
-		if (!Entity || Entity->IsDead || Entity->IsDormant)
+		if (!Entity || Entity->IsDead() || Entity->IsDormant())
 			continue;
 
-		if (Entity == Local || Local->Team == Entity->Team)
+		if (Entity == CGlobal::LocalPlayer || (PLAYER_TEAM)CGlobal::LocalPlayer->GetTeam() == (PLAYER_TEAM)Entity->GetTeam())
 			continue;
 
-		auto weapon = (CBaseWeapon*)Entity->BaseEntity->GetBaseWeapon();
-
-		if (!weapon || Entity->Ammo1 <= 0)
+		CBaseWeapon* WeaponEntity = Entity->GetBaseWeapon();
+		if (!WeaponEntity || WeaponEntity->GetWeaponAmmo() <= 0)
 			continue;
 
-	    auto weapon_data = Entity->Weaponinfo; //need fix
-		if (!weapon_data || CGlobal::GWeaponType <= WEAPON_TYPE_KNIFE || CGlobal::GWeaponType >= WEAPON_TYPE_C4)
+		auto WeaponDataEntity = WeaponEntity->GetWeaponInfo();
+		auto WeaponTypeEntity = CGlobal::GetWeaponType(WeaponEntity);
+
+		if (!WeaponDataEntity || WeaponTypeEntity <= WEAPON_TYPE_KNIFE || WeaponTypeEntity >= WEAPON_TYPE_C4)
 			continue;
 
-		auto eye_pos = Entity->EyePosition;
+		auto eye_pos = Entity->GetEyePosition();
 
 		Vector direction;
-		AngleVectors(Entity->EyeAngle, direction);
+		AngleVectors(Entity->GetEyeAngles(), direction);
 		direction.NormalizeInPlace();
 
 		Vector hit_point;
 		bool hit = IntersectionBoundingBox(eye_pos, direction, min, max, &hit_point);
-		if (hit && eye_pos.DistTo(hit_point) <= weapon_data->m_WeaponRange)
+		if (hit && eye_pos.DistTo(hit_point) <= WeaponDataEntity->m_WeaponRange)
 		{
 			Ray_t ray;
 			trace_t tr;

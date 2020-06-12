@@ -121,7 +121,6 @@ namespace SDK
             return false;
         }
 
-
         CUtlVector<GlowObjectDefinition_t> m_GlowObjectDefinitions; //0x0000
         int m_nFirstFreeSlot;                                       //0x000C
     };

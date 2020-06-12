@@ -4,7 +4,7 @@ int __fastcall DoPostScreenEffects(void* ecx, int edx, int a1)
 {
 	static auto oDoPostScreenEffects = HookTables::pDoPostScreenEffects->GetTrampoline();
 
-	if (GP_Esp && CGlobal::IsGameReady)
+	if (GP_Esp && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
 		GP_Esp->DrawGlow();
 
 	return oDoPostScreenEffects(ecx, a1);
