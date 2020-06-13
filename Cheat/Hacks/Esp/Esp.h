@@ -308,10 +308,10 @@ public:
 		RV(BoxTT, "BoxTT");
 		RV(BoxVisibleCT, "BoxVisibleCT");
 		RV(BoxVisibleTT, "BoxVisibleTT");
-		//RV(GlowCT, "GlowCT");
-		//RV(GlowTT, "GlowTT");
-		//RV(GlowVisibleCT, "GlowVisbleCT");
-		//RV(GlowVisibleTT, "GlowVisbleTT");
+		RV(GlowCT, "GlowCT");
+		RV(GlowTT, "GlowTT");
+		RV(GlowVisibleCT, "GlowVisbleCT");
+		RV(GlowVisibleTT, "GlowVisbleTT");
 		RV(ChamsCT, "ChamsCT");
 		RV(ChamsTT, "ChamsTT");
 		RV(ChamsVisibleCT, "ChamsVisibleCT");
@@ -354,9 +354,9 @@ public:
 		RV(BoxStyle, "BoxStyle");
 		RV(BoxSize, "BoxSize");
 		RV(BoxOutline, "BoxOutline");
-		//RV(Glow, "Glow");
-		//RV(GlowVisibleOnly, "GlowVisibleOnly");
-		//RV(GlowStyle, "GlowStyle");
+		RV(Glow, "Glow");
+		RV(GlowVisibleOnly, "GlowVisibleOnly");
+		RV(GlowStyle, "GlowStyle");
 		RV(Chams, "Chams");
 		RV(ChamsVisibleOnly, "ChamsVisbleOnly");
 		RV(ChamsStyle, "ChamsStyle");
