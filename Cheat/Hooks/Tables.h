@@ -14,7 +14,7 @@ namespace HookTables
 	using DoPostScreenEffectsFn = int(__thiscall*)(void*, int);
 	using FrameStageNotifyFn = void(__thiscall*)(void*, int);
 	using FireEventClientSideThinkFn = bool(__thiscall*)(void*, IGameEvent*);
-	using DrawModelExecuteFn = bool(__thiscall*)(void*, IMatRenderContext*, const DrawModelState_t&,
+	using DrawModelExecuteFn = void(__thiscall*)(void*, IMatRenderContext*, const DrawModelState_t&,
 		const ModelRenderInfo_t&, matrix3x4_t*);
 	using PlaySoundFn = bool(__thiscall*)(void*, const char*);
 	using LockCursorFn = bool(__thiscall*)(void*);

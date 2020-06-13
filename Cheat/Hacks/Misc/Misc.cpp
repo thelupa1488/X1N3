@@ -245,6 +245,9 @@ void CMisc::Draw()
 
 void CMisc::LegitPeek(CUserCmd* pCmd, bool& bSendPacket)
 {
+	if (!CGlobal::IsGameReady)
+		return;
+
 	int choke_factor = Desync ? min(MaxChokeTicks(), FakeLagFactor) : FakeLagFactor;
 
 	static bool m_bIsPeeking = false;
@@ -1086,7 +1089,7 @@ void CMisc::EnginePrediction(bool& bSendPacket, CUserCmd* pCmd)
 						pCmd->buttons |= IN_JUMP;
 				}
 
-				QAngle angleold = pCmd->viewangles;
+				/*QAngle angleold = pCmd->viewangles;
 				if (Desync)
 				{
 					if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
@@ -1094,10 +1097,11 @@ void CMisc::EnginePrediction(bool& bSendPacket, CUserCmd* pCmd)
 						|| CGlobal::LocalPlayer->IsDead())
 						return;
 
-					//if (I::GameRules() && I::GameRules()->IsFreezePeriod())
-					//	return;
+					if (I::GameRules() && I::GameRules()->IsFreezePeriod())
+						return;
 
-					auto weapon = (CBaseWeapon*)CGlobal::LocalPlayer->GetActiveWeapon();
+					CBaseWeapon* weapon = CGlobal::LocalPlayer->GetBaseWeapon();
+
 					if (!weapon)
 						return;
 
@@ -1200,7 +1204,7 @@ void CMisc::EnginePrediction(bool& bSendPacket, CUserCmd* pCmd)
 						CGlobal::FakeAngle = anim_state->m_flGoalFeetYaw;
 					CGlobal::vangle = pCmd->viewangles;
 				}
-				FixMovement(pCmd, angleold);
+				FixMovement(pCmd, angleold);*/
 
 				if (AutoBlock && AutoBlockBind.Check())
 				{

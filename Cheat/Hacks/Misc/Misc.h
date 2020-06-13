@@ -6,7 +6,7 @@
 
 namespace HookTables
 {
-	using DrawModelExecuteFn = bool(__thiscall*)(void*, IMatRenderContext* ctx, const DrawModelState_t &state,
+	using DrawModelExecuteFn = void(__thiscall*)(void*, IMatRenderContext* ctx, const DrawModelState_t &state,
 		const ModelRenderInfo_t &pInfo, matrix3x4_t *pCustomBoneToWorld);
 	extern cDetour<DrawModelExecuteFn>* pDrawModelExecute;
 

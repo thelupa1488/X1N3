@@ -172,7 +172,7 @@ void CEsp::Menu()
 			X1Gui().Separator();
 			X1Gui().Spacing();
 
-			DCheckBox("Glow [Beta]", Glow)
+			DCheckBox("Glow", Glow)
 			if (Glow)
 			{
 				X1Gui().SameLine(SAME_LINE_1);

@@ -840,7 +840,6 @@ void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMod
 
 		CEntityPlayer* Entity = GP_EntPlayers->GetByIdx(pInfo.entity_index);
 		CEntityPlayer* Local = GP_EntPlayers->EntityLocal;
-		bool bShadowDepth = (pInfo.flags & STUDIO_SHADOWDEPTHTEXTURE) != 0;
 
 		if (!Entity || !Local)
 			return;
@@ -855,9 +854,6 @@ void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMod
 			return;
 
 		if (!Enemy && Entity->Team != Local->Team)
-			return;
-
-		if (bShadowDepth)
 			return;
 
 		Color ChamsInvisColor = (Entity->Team == PLAYER_TEAM::TEAM_CT) ? ChamsCT : ChamsTT;
@@ -930,7 +926,7 @@ void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMod
 	}
 }
 
-void CEsp::DrawGlow() //fix chams enable, visible
+void CEsp::DrawGlow() //fix chams enable, visible, style
 {
 	if (Enable && Glow && BindEnable.Check())
 	{
@@ -981,11 +977,11 @@ void CEsp::DrawGlow() //fix chams enable, visible
 				}
 			}
 
-			glowObject.m_nGlowStyle = GlowStyle;
 			glowObject.m_flRed = GlowColor.G1R();
 			glowObject.m_flGreen = GlowColor.G1G();
 			glowObject.m_flBlue = GlowColor.G1B();
 			glowObject.m_flAlpha = GlowColor.a();
+			glowObject.m_nGlowStyle = GlowStyle;
 			glowObject.m_bRenderWhenOccluded = true;
 			glowObject.m_bRenderWhenUnoccluded = false;
 		}
