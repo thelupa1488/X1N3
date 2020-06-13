@@ -1097,7 +1097,7 @@ void CMisc::EnginePrediction(bool& bSendPacket, CUserCmd* pCmd)
 						|| CGlobal::LocalPlayer->IsDead())
 						return;
 
-					if (I::GameRules() && I::GameRules()->IsFreezePeriod())
+					if (I::GameRules() && I::GameRules()->IsFreezePeriod()) //need fix
 						return;
 
 					CBaseWeapon* weapon = CGlobal::LocalPlayer->GetBaseWeapon();
@@ -1563,7 +1563,6 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 			{
 				float HandColor[3] = { HandChamsColor.G1R(), HandChamsColor.G1G(), HandChamsColor.G1B() };
 				const char* ModelName = I::ModelInfo()->GetModelName((model_t*)pInfo.pModel);
-
 				if (strstr(ModelName, XorStr("arms")))
 				{
 					I::RenderView()->SetColorModulation(HandColor);

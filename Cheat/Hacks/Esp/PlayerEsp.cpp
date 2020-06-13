@@ -926,7 +926,7 @@ void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMod
 	}
 }
 
-void CEsp::DrawGlow() //fix chams enable, visible, style
+void CEsp::DrawGlow()
 {
 	if (Enable && Glow && BindEnable.Check())
 	{
@@ -980,10 +980,10 @@ void CEsp::DrawGlow() //fix chams enable, visible, style
 			glowObject.m_flRed = GlowColor.G1R();
 			glowObject.m_flGreen = GlowColor.G1G();
 			glowObject.m_flBlue = GlowColor.G1B();
-			glowObject.m_flAlpha = GlowColor.a();
-			glowObject.m_nGlowStyle = GlowStyle;
+			glowObject.m_flAlpha = GlowColor.G1A();
 			glowObject.m_bRenderWhenOccluded = true;
 			glowObject.m_bRenderWhenUnoccluded = false;
+			glowObject.m_nGlowStyle = GlowStyle;
 		}
 	}
 }
