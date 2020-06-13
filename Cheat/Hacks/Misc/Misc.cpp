@@ -333,6 +333,11 @@ void CMisc::SetNewClan(string New, string Name)
 		pSetClanTag(New.c_str(), Name.c_str());
 }
 
+float CMisc::GetFullLatency() 
+{
+	return I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_INCOMING) + I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING);
+}
+
 bool CMisc::ChangeName(bool reconnect, const char* newName, float delay)
 {
 	static auto exploitInitialized = false;
@@ -683,9 +688,10 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				stolenIds.clear();
 			}
 
+			static bool ClanTagReset = false;
 			if (ClanTagChanger)
 			{
-				static std::string old_tag = "";
+				static string old_tag = "";
 				static int oldvalue = 0;
 				static int old_setting_mode = -1;
 				string tag = ClanTagChangerText;
@@ -742,7 +748,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 						SetNewClan(tag.c_str(), " ");
 						oldvalue = value;
 					}
-
 					break;
 				}
 				case 3:
@@ -806,6 +811,11 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				default:
 					break;
 				}
+			}
+			if (!ClanTagChanger && ClanTagReset)
+			{
+				SetNewClan("", "");
+				ClanTagReset = false;
 			}
 
 			if (ChatSpam && ChatSpamStart)

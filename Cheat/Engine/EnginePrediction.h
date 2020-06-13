@@ -31,8 +31,7 @@ namespace EnginePrediction
 		if (_prediction_seed)
 			*_prediction_seed = MD5_PseudoRandom(pCmd->command_number) & 0x7FFFFFFF;
 
-		if (_prediction_player)
-			**_prediction_player = CGlobal::LocalPlayer;
+		if (_prediction_player)			**_prediction_player = CGlobal::LocalPlayer;
 
 		CGlobal::LocalPlayer->GetCurrentCommand() = pCmd;
 

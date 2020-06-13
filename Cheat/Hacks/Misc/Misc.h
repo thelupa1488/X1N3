@@ -91,6 +91,7 @@ public:
 	virtual void Draw();
 	virtual void LegitPeek(CUserCmd* pCmd, bool& bSendPacket);
 	virtual void SetNewClan(string New, string Name);
+	virtual float GetFullLatency();
 	virtual bool ChangeName(bool reconnect, const char* newName, float delay);
 	virtual int  GetBestHeadAngle(float yaw);
 	virtual void UpdateLBY(CCSGOPlayerAnimState* animstate);
@@ -220,7 +221,6 @@ public:
 	bool FakeLagStanding = false;
 	bool FakeLagMoving = false;
 	bool FakeLagUnducking = false;
-//	int FakeLagJumping = 0;
 	CBind FakeLagBind = CBind(0, false);
 
 	int TextDamageInfo = 38;
@@ -233,8 +233,6 @@ public:
 	int KnifeBotFilter = 0;
 	int KnifeBotMode = 0;
 	CBind KnifeBotBind = CBind(0);
-	//bool AutoZeus = false;
-	//int  AutoZeusFilter = 0;
 	bool AutoBlock = false;
 	CBind AutoBlockBind = CBind(0);
 
