@@ -976,10 +976,9 @@ void CEsp::DrawGlow()
 				default: break;
 				}
 			}
+			float ArrColor[3] = { GlowColor.G1R(), GlowColor.G1G(), GlowColor.G1B() };
 
-			glowObject.m_flRed = GlowColor.G1R();
-			glowObject.m_flGreen = GlowColor.G1G();
-			glowObject.m_flBlue = GlowColor.G1B();
+			glowObject.m_vGlowColor = ArrColor;
 			glowObject.m_flAlpha = GlowColor.G1A();
 			glowObject.m_bRenderWhenOccluded = true;
 			glowObject.m_bRenderWhenUnoccluded = false;
