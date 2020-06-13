@@ -309,17 +309,25 @@ void CMisc::Menu()
 	DCheckBox("Hand chams", HandChams);
 	if (HandChams)
 	{
-		X1Gui().SameLine(SAME_LINE_1);
+		X1Gui().SameLine();
+		DColorEdit("Color##Hand", HandChamsColor);
+		X1Gui().SameLine();
 		X1Gui().PushItemWidth(PUSH_1);
-		VectorEx<const char* >itemsCS = { lolc("Textured"),lolc("Flat"), lolc("Wireframe"), lolc("Metallic"), lolc("Material"), lolc("Disable") };
-		DComboBox("Style##hand", HandChamsStyle, itemsCS);
-		if (HandChamsStyle == 4)
-		{
-			X1Gui().Spacing();
-			X1Gui().PushItemWidth(PUSH_2);
-			SliderFloats("Brightness##Hand", MaterialFixColorHand, 0.0000000001, 1);
-		}
-		DColorEdit("Color##hand", HandChamsColor);
+		VectorEx<const char* >itemsCS = { lolc("Textured"),lolc("Flat"), lolc("Wireframe"), lolc("Metallic"), lolc("Disable") };
+		DComboBox("Style##Hand", HandChamsStyle, itemsCS);
+	}
+	X1Gui().Spacing();
+	X1Gui().Separator();
+	X1Gui().Spacing();
+	DCheckBox("Weapon chams", WeaponChams);
+	if (WeaponChams)
+	{
+		X1Gui().SameLine();
+		DColorEdit("Color##Weapon", WeaponChamsColor);
+		X1Gui().SameLine();
+		X1Gui().PushItemWidth(PUSH_1);
+		VectorEx<const char* >itemsCS = { lolc("Textured"),lolc("Flat"), lolc("Wireframe"), lolc("Metallic"), lolc("Disable") };
+		DComboBox("Style##Weapon", WeaponChamsStyle, itemsCS);
 	}
 	X1Gui().Spacing();
 	X1Gui().Separator();

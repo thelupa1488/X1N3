@@ -76,6 +76,11 @@ protected:
 
 class CMisc : public IMisc
 {
+private:
+	IMaterial* VisTex = nullptr;
+	IMaterial* VisFlat = nullptr;
+	IMaterial* VisFrame = nullptr;
+	IMaterial* VisMetallic = nullptr;
 public:
 	CConfig Config = CConfig(XorStr("Misc"));
 
@@ -198,7 +203,9 @@ public:
 
 	bool HandChams = false;
 	int HandChamsStyle = 0;
-	float MaterialFixColorHand = 10.0f;
+
+	bool WeaponChams = false;
+	int WeaponChamsStyle = 0;
 
 	bool DamageInfo = false;
 	int DamageInfoPosition = 1;
@@ -241,6 +248,7 @@ public:
 	Color SpreadColor = Color(255, 255, 50, 255);
 	Color HitMarkerColor = Color(255, 0, 0, 255);
 	Color HandChamsColor = Color(255, 198, 0, 255);
+	Color WeaponChamsColor = Color(255, 198, 0, 255);
 	Color DamageInfoColor = Color(255, 100, 100, 255);
 	Color ColoredWallsColor = Color(255, 100, 100, 255);
 	Color ArrowsColor = Color(255, 0, 0, 255);
@@ -254,6 +262,7 @@ public:
 		RV(SpreadColor, "SpreadColor");
 		RV(HitMarkerColor, "HitMarkerColor");
 		RV(HandChamsColor, "HandChamsColor");
+		RV(WeaponChamsColor, "WeaponChamsColor");
 		RV(DamageInfoColor, "DamageInfoColor");
 		RV(ColoredWallsColor, "ColoredWallsColor");
 		RV(ArrowsColor, "ArrowsColor");
@@ -321,7 +330,8 @@ public:
 		RV(NightMode, "NightMode");
 		RV(HandChams, "HandChams");
 		RV(HandChamsStyle, "HandChamsStyle");
-		RV(MaterialFixColorHand, "MaterialFixColorHand");
+		RV(WeaponChams, "WeaponChams");
+		RV(WeaponChamsStyle, "WeaponChamsStyle");
 		RV(DamageInfo, "DamageInfo");
 		RV(DamageInfoPosition, "DamageInfoPosition");
 		RV(DamageInfoStyle, "DamageInfoStyle");
