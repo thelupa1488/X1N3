@@ -939,7 +939,7 @@ void CEsp::DrawGlow()
 			if (glowObject.IsUnused())
 				continue;
 
-			if (!Entity || Entity->IsDormant())
+			if (!Entity || !Local || Entity->IsDormant())
 				continue;
 
 			if (Entity->IsDead() || Entity->GetHealth() <= 0)

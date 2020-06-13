@@ -301,16 +301,10 @@ public:
 				InitOffsets();
 				ADD_LOG("2-1-4\n");
 #endif 
-				FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3"), NULL);
-				FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Configurations"), NULL);
-				FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources"), NULL);
-				FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Images"), NULL);
-				FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Sounds"), NULL);
 				InitHooks();
 				return true;
 			};
 			return LInit();
-
 			VMP_END;
 		}
 	};

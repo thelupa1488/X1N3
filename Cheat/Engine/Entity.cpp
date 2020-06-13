@@ -102,13 +102,14 @@ namespace Engine
 		if (vSrcOrigin.IsZero() || !vSrcOrigin.IsValid())
 			return false;
 
-		BYTE bHitBoxCheckVisible[6] = {
+		BYTE bHitBoxCheckVisible[6] = 
+		{
 			HITBOX_HEAD,
 			HITBOX_LOWER_CHEST,
 			HITBOX_RIGHT_FOOT,
 			HITBOX_LEFT_FOOT,
 			HITBOX_RIGHT_HAND,
-			HITBOX_LEFT_HAND,
+			HITBOX_LEFT_HAND
 		};
 
 		CTraceFilter filter;
