@@ -712,105 +712,108 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				}
 
 				int ServerTime = (float)I::Engine()->GetServerTick() * I::GlobalVars()->interval_per_tick;
-
-				switch (setting_mode)
+				if (tag.c_str() && tag.c_str()[0])
 				{
-				case 0:
-				{
-					if (old_tag != tag)
+					switch (setting_mode)
 					{
-						old_tag = tag;
-						SetNewClan("", " ");
-					}
-
-					break;
-				}
-				case 1:
-				{
-					if (old_tag != tag)
+					case 0:
 					{
-						old_tag = tag;
-						SetNewClan(tag.c_str(), " ");
-					}
-
-					break;
-				}
-				case 2:
-				{
-					int value = (ServerTime % (str_size * 2)) + 1;
-
-					if (oldvalue != value)
-					{
-						if (value > str_size)
-							value = str_size - (value - str_size);
-
-						tag.erase(value);
-						SetNewClan(tag.c_str(), " ");
-						oldvalue = value;
-					}
-					break;
-				}
-				case 3:
-				{
-					int value = ServerTime % str_size + 1;
-
-					if (oldvalue != value)
-					{
-						std::string tag_now = "";
-
-						tag_now.append(tag, value);
-
-						tag.erase(value);
-						tag_now += tag;
-
-						SetNewClan(tag_now.c_str(), " ");
-						oldvalue = value;
-					}
-
-					break;
-				}
-				case 4:
-				{
-					int value = str_size - (ServerTime % str_size + 1);
-
-					if (oldvalue != value)
-					{
-						std::string tag_now = "";
-
-						tag_now.append(tag, value);
-
-						tag.erase(value);
-						tag_now += tag;
-
-						SetNewClan(tag_now.c_str(), " ");
-						oldvalue = value;
-					}
-
-					break;
-				}
-				case 5:
-				{
-					int value = (ServerTime % (str_size * 2)) + 1;
-
-					if (oldvalue != value)
-					{
-						if (value > str_size)
+						if (old_tag != tag)
 						{
-							value -= str_size;
-							tag.erase(0, value);
+							old_tag = tag;
+							SetNewClan("", " ");
 						}
-						else
-							tag.erase(value);
 
-						SetNewClan(tag.c_str(), " ");
-						oldvalue = value;
+						break;
 					}
+					case 1:
+					{
+						if (old_tag != tag)
+						{
+							old_tag = tag;
+							SetNewClan(tag.c_str(), " ");
+						}
 
-					break;
+						break;
+					}
+					case 2:
+					{
+						int value = (ServerTime % (str_size * 2)) + 1;
+
+						if (oldvalue != value)
+						{
+							if (value > str_size)
+								value = str_size - (value - str_size);
+
+							tag.erase(value);
+							SetNewClan(tag.c_str(), " ");
+							oldvalue = value;
+						}
+						break;
+					}
+					case 3:
+					{
+						int value = ServerTime % str_size + 1;
+
+						if (oldvalue != value)
+						{
+							std::string tag_now = "";
+
+							tag_now.append(tag, value);
+
+							tag.erase(value);
+							tag_now += tag;
+
+							SetNewClan(tag_now.c_str(), " ");
+							oldvalue = value;
+						}
+
+						break;
+					}
+					case 4:
+					{
+						int value = str_size - (ServerTime % str_size + 1);
+
+						if (oldvalue != value)
+						{
+							std::string tag_now = "";
+
+							tag_now.append(tag, value);
+
+							tag.erase(value);
+							tag_now += tag;
+
+							SetNewClan(tag_now.c_str(), " ");
+							oldvalue = value;
+						}
+
+						break;
+					}
+					case 5:
+					{
+						int value = (ServerTime % (str_size * 2)) + 1;
+
+						if (oldvalue != value)
+						{
+							if (value > str_size)
+							{
+								value -= str_size;
+								tag.erase(0, value);
+							}
+							else
+								tag.erase(value);
+
+							SetNewClan(tag.c_str(), " ");
+							oldvalue = value;
+						}
+
+						break;
+					}
+					default:
+						break;
+					}
 				}
-				default:
-					break;
-				}
+				ClanTagReset = true;
 			}
 			if (!ClanTagChanger && ClanTagReset)
 			{
