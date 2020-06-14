@@ -63,7 +63,7 @@ public:
 	public:
 		virtual void InitHooks()
 		{
-			VMP_MUTATION("InitHooks");
+//			VMP_MUTATION("InitHooks");
 			auto LInitHooks = [&]() -> void
 			{
 				ADD_LOG("======================Init hooks:\n");
@@ -173,7 +173,7 @@ public:
 			LInitHooks();
 			ADD_LOG("2-1-11-11\n");
 
-			VMP_END;
+//			VMP_END;
 		}
 		virtual void InitOffsets()
 		{

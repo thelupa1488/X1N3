@@ -24,7 +24,7 @@ IMaterial* Materials::material_dogtag;
 
 void Materials::InitializationMaterials()
 {
-	std::ofstream("csgo/materials/glowOverlay.vmt") << (R"#("VertexLitGeneric" {
+	std::ofstream(XorStr("csgo/materials/glowOverlay.vmt")) << (R"#("VertexLitGeneric" {
     	"$additive" "1"
     	"$envmap" "models/effects/cube_white"
 		"$model"        "1"
@@ -33,7 +33,7 @@ void Materials::InitializationMaterials()
     	"$envmapfresnelminmaxexp" "[0 1 2]"
     	"$alpha" "0.8"
     })#");
-	std::ofstream("csgo\\materials\\textured.vmt") << (R"#("VertexLitGeneric"
+	std::ofstream(XorStr("csgo\\materials\\textured.vmt")) << (R"#("VertexLitGeneric"
 {
   "$basetexture" "vgui/white"
   "$ignorez"      "0"
@@ -47,7 +47,7 @@ void Materials::InitializationMaterials()
   "$flat"         "1"
 }
 )#");
-	std::ofstream("csgo\\materials\\textured_ignorez.vmt") << (R"#("VertexLitGeneric"
+	std::ofstream(XorStr("csgo\\materials\\textured_ignorez.vmt")) << (R"#("VertexLitGeneric"
 {
   "$basetexture" "vgui/white"
   "$ignorez"      "1"
@@ -61,7 +61,7 @@ void Materials::InitializationMaterials()
   "$flat"         "1"
 }
 )#");
-	std::ofstream("csgo\\materials\\flat.vmt") << (R"#("UnlitGeneric"
+	std::ofstream(XorStr("csgo\\materials\\flat.vmt")) << (R"#("UnlitGeneric"
 {
   "$basetexture" "vgui/white"
   "$ignorez"      "0"
@@ -75,7 +75,7 @@ void Materials::InitializationMaterials()
   "$flat"         "1"
 }
 )#");
-	std::ofstream("csgo\\materials\\flat_ignorez.vmt") << (R"#("UnlitGeneric"
+	std::ofstream(XorStr("csgo\\materials\\flat_ignorez.vmt")) << (R"#("UnlitGeneric"
 {
   "$basetexture" "vgui/white"
   "$ignorez"      "1"
@@ -89,10 +89,10 @@ void Materials::InitializationMaterials()
   "$flat"         "1"
 }
 )#");
-	std::ofstream{ "csgo\\materials\\chamsAnimated.vmt" } <<
+	std::ofstream{ XorStr("csgo\\materials\\chamsAnimated.vmt") } <<
 		"VertexLitGeneric { $envmap editor/cube_vertigo $envmapcontrast 1 $envmaptint \"[.7 .7 .7]\" $basetexture dev/zone_warning proxies { texturescroll { texturescrollvar $basetexturetransform texturescrollrate 0.6 texturescrollangle 90 } } }";
 
-	std::ofstream("csgo\\materials\\metallic_plus.vmt") << (R"#("VertexLitGeneric" 
+	std::ofstream(XorStr("csgo\\materials\\metallic_plus.vmt")) << (R"#("VertexLitGeneric" 
 {
 		"$basetexture" "vgui/white"
 		"$bumpmap" "de_nuke/hr_nuke/pool_water_normals_002"
@@ -127,7 +127,7 @@ void Materials::InitializationMaterials()
 	}
 )#");
 
-	std::ofstream("csgo\\materials\\metallic_plus_ignorez.vmt") << (R"#("VertexLitGeneric" 
+	std::ofstream(XorStr("csgo\\materials\\metallic_plus_ignorez.vmt")) << (R"#("VertexLitGeneric" 
 {
 		"$basetexture" "vgui/white"
 		"$bumpmap" "de_nuke/hr_nuke/pool_water_normals_002"
@@ -162,7 +162,7 @@ void Materials::InitializationMaterials()
 	}
 )#");
 
-	std::ofstream("csgo\\materials\\wireframe.vmt") << R"#("VertexLitGeneric" 
+	std::ofstream(XorStr("csgo\\materials\\wireframe.vmt")) << R"#("VertexLitGeneric" 
 { 
 "$basetexture" "vgui/white" 
 "$ignorez" "0" 
@@ -178,7 +178,7 @@ void Materials::InitializationMaterials()
 } 
 )#";
 
-	std::ofstream("csgo\\materials\\wireframe_ignorez.vmt") << R"#("VertexLitGeneric" 
+	std::ofstream(XorStr("csgo\\materials\\wireframe_ignorez.vmt")) << R"#("VertexLitGeneric" 
 { 
 "$basetexture" "vgui/white" 
 "$ignorez" "1" 
@@ -194,7 +194,7 @@ void Materials::InitializationMaterials()
 } 
 )#";
 
-	std::ofstream("csgo\\materials\\metallic.vmt") << R"#("VertexLitGeneric"
+	std::ofstream(XorStr("csgo\\materials\\metallic.vmt")) << R"#("VertexLitGeneric"
 { 
 "$basetexture" "vgui/white_additive"
 "$ignorez"      "0"
@@ -210,7 +210,7 @@ void Materials::InitializationMaterials()
 "$flat"         "1"
 } 
 )#";
-	std::ofstream("csgo\\materials\\metallic_ignorez.vmt") << R"#("VertexLitGeneric"
+	std::ofstream(XorStr("csgo\\materials\\metallic_ignorez.vmt")) << R"#("VertexLitGeneric"
 { 
 "$basetexture" "vgui/white_additive"
 "$ignorez"      "1"
