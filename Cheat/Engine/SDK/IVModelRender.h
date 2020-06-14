@@ -190,6 +190,8 @@ namespace SDK
 	}
 	class IMaterialVar
 	{
+
+
 		void SetVectorInternal(const float x, const float y)
 		{
 			GetFunctionTARDasshloe<void(__thiscall*)(void*, float, float)>(this, 10)(this, x, y);

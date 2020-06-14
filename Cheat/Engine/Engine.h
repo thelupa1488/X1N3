@@ -117,6 +117,7 @@ void ReadConfigs(LPCTSTR lpszFileName);
 class CGlobal
 {
 public:
+
 	static WEAPON_TYPE GWeaponType;
 	static WEAPON_ID GWeaponID;
 	static bool IsGuiVisble;
@@ -447,60 +448,178 @@ public:
 		return LWorldToScreen();
 	}
 
-	//static string FindSkinURl(string paintName, string weapon)
-	//{
-	//	ifstream inFile;
-	//	inFile.open(XorStr(".\\csgo\\scripts\\items\\items_game_cdn.txt"));
-	//	string line;
+	static void InitKeyValues(KeyValues* kv_, std::string name_)
+	{
+		static auto address = offsets["InitKeyValuesEx"];
+		using Fn = void(__thiscall*)(void*, const char*);
+		reinterpret_cast<Fn>(address)(kv_, name_.c_str());
 
-	//	unsigned int curLine = 0;
-	//	string search = paintName.append("=");
+		//DWORD dwFunction = (DWORD)offsets["InitKeyValuesEx"];
+		//if (dwFunction)
+		//{
+		//	__asm
+		//	{
+		//		push name_
+		//		mov ecx, kv_
+		//		call dwFunction
+		//	}
+		//}
+	}
 
-	//	while (getline(inFile, line)) {
-	//		curLine++;
-	//		if (line.find(search, 0) != string::npos) {
-	//			if (line.find(weapon, 0) != string::npos)
-	//			{
-	//				return line.substr(line.find(search)).erase(0, search.length());
-	//			}
-	//		}
-	//	}
-	//	return XorStr("nf");
-	//}
+	static void LoadFromBuffer(KeyValues* vk_, std::string name_, std::string buffer_)
+	{
+		static auto address = offsets["LoadFromBufferEx"];
+		using Fn = void(__thiscall*)(void*, const char*, const char*, void*, const char*, void*, void*);
+		reinterpret_cast<Fn>(address)(vk_, name_.c_str(), buffer_.c_str(), nullptr, nullptr, nullptr, nullptr);
 
-	//static string DownloadSkinBytes(const char* const szUrl)
-	//{
-	//	HINTERNET hOpen = NULL;
-	//	HINTERNET hFile = NULL;
-	//	char* lpBuffer = NULL;
-	//	DWORD dwBytesRead = 0;
-	//	//Pointer to dynamic buffer.
-	//	char* data = 0;
-	//	//Dynamic data size.
-	//	DWORD dataSize = 0;
+		//DWORD dwFunction = (DWORD)offsets["LoadFromBufferEx"];
+		//if (dwFunction)
+		//{
+		//	__asm
+		//	{
+		//		push 0
+		//		push 0
+		//		push 0
+		//		push 0
+		//		push buffer_
+		//		push name_
+		//		mov ecx, vk_
+		//		call dwFunction
+		//	}
+		//}
+	}
 
-	//	hOpen = InternetOpenA("", NULL, NULL, NULL, NULL);
-	//	if (!hOpen)
-	//		return (char*)"";
+	static IMaterial* CreateMaterialBasic(bool ignorez, bool lit = true, bool wireframe = false)
+	{
+		static auto created = 0;
 
-	//	hFile = InternetOpenUrlA(hOpen, szUrl, NULL, NULL, INTERNET_FLAG_RELOAD | INTERNET_FLAG_DONT_CACHE, NULL);
+		std::string type = lit ? XorStr("VertexLitGeneric") : XorStr("UnlitGeneric");
+		auto matdata =
+			"\"" + type + "\"\
+		\n{\
+		\n\t\"$basetexture\" \"vgui/white\"\
+		\n\t\"$envmap\" \"\"\
+		\n\t\"$model\" \"1\"\
+		\n\t\"$flat\" \"1\"\
+		\n\t\"$nocull\" \"0\"\
+		\n\t\"$selfillum\" \"1\"\
+		\n\t\"$halflambert\" \"1\"\
+		\n\t\"$nofog\" \"0\"\
+		\n\t\"$ignorez\" \"" + std::to_string(ignorez) + "\"\
+		\n\t\"$znearer\" \"0\"\
+		\n\t\"$wireframe\" \"" + std::to_string(wireframe) + "\"\
+		\n}\n";
 
-	//	if (!hFile) {
-	//		InternetCloseHandle(hOpen);
-	//		return (char*)"";
-	//	}
 
-	//	string output;
-	//	do {
-	//		char buffer[2000];
-	//		InternetReadFile(hFile, (LPVOID)buffer, _countof(buffer), &dwBytesRead);
-	//		output.append(buffer, dwBytesRead);
-	//	} while (dwBytesRead);
+		auto matname = XorStr("custom_") + std::to_string(created);
+		++created;
 
-	//	InternetCloseHandle(hFile);
-	//	InternetCloseHandle(hOpen);
+		auto keyValues = static_cast<KeyValues*>(malloc(sizeof(KeyValues)));
 
-	//	return output;
-	//}
+		InitKeyValues(keyValues, type.c_str());
+		LoadFromBuffer(keyValues, matname, matdata);
+
+		auto material =
+			I::MaterialSystem()->CreateMaterial(matname.c_str(), keyValues);
+
+		material->IncrementReferenceCount();
+		return material;
+	}
+
+	static IMaterial* CreateMaterialMetallic(bool ignorez)
+	{
+		static auto created = 0;
+
+		std::string type = XorStr("VertexLitGeneric");
+		auto matdata =
+			"\"" + type + "\"\
+		\n{\
+		\n\t\"$basetexture\" \"vgui/white\"\
+		\n\t\"$envmap\" \"env_cubemap\"\
+		\n\t\"$normalmapalphaenvmapmask\" \"1\"\
+		\n\t\"$envmapcontrast\" \"1\"\
+		\n\t\"$ignorez\" \"" + std::to_string(ignorez) + "\"\
+		\n\t\"$model\" \"1\"\
+		\n\t\"$flat\" \"1\"\
+		\n\t\"$nocull\" \"0\"\
+		\n\t\"$selfillum\" \"1\"\
+		\n\t\"$halflambert\" \"1\"\
+		\n\t\"$nofog\" \"1\"\
+		\n\t\"$znearer\" \"0\"\
+		\n\t\"$rimlight\" \"1\"\
+		\n\t\"$rimlightexponent\" \"2\"\
+		\n\t\"$rimlightboost\" \"0.2\"\
+		\n\t\"$rimlightboost\" \"[ 1 1 1 ]\"\
+		\n}\n";
+
+		auto matname = XorStr("custom_") + std::to_string(created);
+		++created;
+
+		auto keyValues = static_cast<KeyValues*>(malloc(sizeof(KeyValues)));
+
+		InitKeyValues(keyValues, type.c_str());
+		LoadFromBuffer(keyValues, matname, matdata);
+
+		auto material =
+			I::MaterialSystem()->CreateMaterial(matname.c_str(), keyValues);
+
+		material->IncrementReferenceCount();
+		return material;
+	}
+
+	static IMaterial* CreateMaterialMetallicPlus(bool ignorez)
+	{
+		static auto created = 0;
+
+		std::string type = XorStr("VertexLitGeneric");
+		auto matdata =
+			"\"" + type + "\"\
+		\n{\
+		\n\t\"$basetexture\" \"vgui/white\"\
+        \n\t\"$bumpmap\" \"de_nuke/hr_nuke/pool_water_normals_002\"\
+        \n\t\"$bumptransform\" \"center 0.5 0.5 scale 0.25 0.25 rotate 0.0 translate 0.0 0.0\"\
+		\n\t\"$ignorez\" \"" + std::to_string(ignorez) + "\"\
+		\n\t\"$nofog\" \"0\"\
+		\n\t\"$model\" \"1\"\
+        \n\t\"$color2\" \"[1.0, 1.0, 1.0]\"\
+		\n\t\"$envmap\" \"env_cubemap\"\
+		\n\t\"$normalmapalphaenvmapmask\" \"1\"\
+		\n\t\"$envmapcontrast\" \"1\"\
+		\n\t\"$envmaptint\" \"[0.1 0.1 0.1]\"\
+		\n\t\"$envmapfresnel\" \"1.0\"\
+		\n\t\"$envmapfresnelminmaxexp\" \"[1.0, 1.0, 1.0]\"\
+		\n\t\"$phong\" \"1\"\
+		\n\t\"$phongexponent\" \"1024\"\
+		\n\t\"$phongboost\" \"4.0\"\
+		\n\t\"$phongfresnelranges\" \"[1.0, 1.0, 1.0]\"\
+		\n\t\"$rimlight\" \"1\"\
+		\n\t\"$rimlightexponent\" \"4.0\"\
+		\n\t\"$rimlightboost\" \"2.0\"\
+		\n\t\"$pearlescent\" \"1\"\
+		\n\t\"Proxies\"\
+		\n\{\
+			\n\"TextureScroll\"\
+			\n\{\
+				\n\t\"textureScrollVar\" \"$bumptransform\"\
+					\n\t\"textureScrollRate\" \"0.25\"\
+					\n\t\"textureScrollAngle\" \"0.0\"\
+			\n\}\
+		\n\}\
+		\n}\n";
+
+		auto matname = XorStr("custom_") + std::to_string(created);
+		++created;
+
+		auto keyValues = static_cast<KeyValues*>(malloc(sizeof(KeyValues)));
+
+		InitKeyValues(keyValues, type.c_str());
+		LoadFromBuffer(keyValues, matname, matdata);
+
+		auto material =
+			I::MaterialSystem()->CreateMaterial(matname.c_str(), keyValues);
+
+		material->IncrementReferenceCount();
+		return material;
+	}
 };
 

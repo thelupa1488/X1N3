@@ -1,7 +1,5 @@
 #include "Esp.h"
 #include "../Setup.h"
-//#include "../../Hooks/Tables.h"
-#include "../../Engine/Materials.h"
 
 void CEsp::DrawPlayerEx(CEntityPlayer* Entity, CEntityPlayer* Local, bool IsDormant)
 {
@@ -819,40 +817,34 @@ void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMod
 	if (Enable && Chams && BindEnable.Check())
 	{
 		if (!HidTex)
-			HidTex = Materials::material_texture_ignorez;
+			HidTex = CGlobal::CreateMaterialBasic(true);
 
 		if (!VisTex)
-			VisTex = Materials::material_texture;
+			VisTex = CGlobal::CreateMaterialBasic(false);
 
 		if (!HidFlat)
-			HidFlat = Materials::material_flat_ignorez;
+			HidFlat = CGlobal::CreateMaterialBasic(true, false);
 
 		if (!VisFlat)
-			VisFlat = Materials::material_flat;
+			VisFlat = CGlobal::CreateMaterialBasic(false, false);
 
 		if (!HidFrame)
-			HidFrame = Materials::material_wireframe_ignorez;
+			HidFrame = CGlobal::CreateMaterialBasic(true, true, true);
 
 		if (!VisFrame)
-			VisFrame = Materials::material_wireframe;
+			VisFrame = CGlobal::CreateMaterialBasic(false, true, true);
 
 		if (!HidMetallic)
-			HidMetallic = Materials::material_metallic_ignorez;
+			HidMetallic = CGlobal::CreateMaterialMetallic(true);
 
 		if (!VisMetallic)
-			VisMetallic = Materials::material_metallic;
-
-		if (!HidMetallic)
-			HidMetallic = Materials::material_metallic_ignorez;
-
-		if (!VisMetallic)
-			VisMetallic = Materials::material_metallic;
+			VisMetallic = CGlobal::CreateMaterialMetallic(false);
 
 		if (!HidMetallicPlus)
-			HidMetallicPlus = Materials::material_metallic_plus_ignorez;
+			HidMetallicPlus = CGlobal::CreateMaterialMetallicPlus(true);
 
 		if (!VisMetallicPlus)
-			VisMetallicPlus = Materials::material_metallic_plus;
+			VisMetallicPlus = CGlobal::CreateMaterialMetallicPlus(false);
 
 		if (!HidTex || !VisTex || !HidFlat || !VisFlat ||!HidFrame || 
 			!VisFrame || !HidMetallic || !VisMetallic || !HidMetallicPlus || !HidMetallicPlus)
@@ -903,6 +895,7 @@ void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMod
 			case 4: I::ModelRender()->ForcedMaterialOverride(HidMetallicPlus); break;
 			default: break;
 			}
+
 			HookTables::pDrawModelExecute->GetTrampoline()(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 		}
 

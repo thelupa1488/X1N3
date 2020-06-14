@@ -693,7 +693,7 @@ void CSkins::ApplyStickerHooks(CBaseAttributableItem* pItem)
 {
 //DT_BaseAttributableItem->m_Item
 	if (!dwEconItemInterfaceWrapper)
-		dwEconItemInterfaceWrapper = offsets[XorStr("m_Item")] + 0xC;
+		dwEconItemInterfaceWrapper = offsets["m_Item"] + 0xC;
 
 	void**& vmt = *reinterpret_cast<void***>(uintptr_t(pItem) + dwEconItemInterfaceWrapper);
 

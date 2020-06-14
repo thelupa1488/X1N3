@@ -48,7 +48,6 @@
 #include "IPredition.hpp"
 #include "checksum_md5.hpp"
 #include "IGameRules.h"
-#include "IPredition.hpp"
 #include "CUserCmd.hpp"
 #include "IInputSystem.hpp"
 #include "KeyValues.h"
@@ -76,6 +75,9 @@
 #define d3d9Factory XorStr("d3d9.dll")
 #define shaderapidx9Factory XorStr("shaderapidx9.dll")
 #define gameoverlayrenderFactory XorStr("GameOverlayRenderer.dll")
+
+#define KEY_VALUES_MASK  XorStr("55 8B EC 51 33 C0 C7 45")
+#define KEY_VALUES_LOAD_FROM_BUFFER_MASK  XorStr("55 8B EC 83 E4 F8 83 EC 34 53 8B 5D 0C 89 4C 24 04")
 
 #define d3d9_mask XorStr("x????xxxxxx")
 #define gmor_mask XorStr("x????x????xxxx????xxxxxxx")
@@ -126,7 +128,6 @@ namespace SDK
 		static IMoveHelper*         MoveHelper();
 		static IGameMovement*       GameMovement();
 		static IGameRules*          GameRules();
-		static IWeaponSystem*       WeaponSystem();
 	private:
 		static IVEngineClient*		g_pEngine;
 		static IBaseClientDLL*		g_pClient;
@@ -155,7 +156,6 @@ namespace SDK
 		static IMoveHelper*         g_pMoveHelper;
 		static IGameMovement*       g_pGameMovement;
 		static IGameRules*          g_pGameRules;
-		static IWeaponSystem*       g_pWeaponSystem;
 	};
 
 	template <typename T>

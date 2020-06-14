@@ -2,7 +2,6 @@
 #include  "../Setup.h"
 #include "../../GUI/Gui.h"
 #include "../../Engine/EnginePrediction.h"
-#include "../../Engine/Materials.h"
 
 //#define KEY_DOWN(VK_NNM) ((FastCall::G().t_GetAsyncKeyState(VK_NNM) & 0x8000) ? 1:0)
 #define KEY_DOWN(VK_NNM) (I::InputSystem()->IsButtonDown(VK_NNM))
@@ -303,7 +302,7 @@ void CMisc::LegitPeek(CUserCmd* pCmd, bool& bSendPacket)
 
 		Vector hit_point;
 		bool hit = IntersectionBoundingBox(eye_pos, direction, min, max, &hit_point);
-		if (hit && eye_pos.DistTo(hit_point) <= WeaponDataEntity->m_WeaponRange)
+		if (hit && eye_pos.DistTo(hit_point) <= WeaponDataEntity->m_flRange)
 		{
 			Ray_t ray;
 			trace_t tr;
@@ -1557,23 +1556,24 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 	static IMaterial* VisFrame = nullptr;
 	static IMaterial* VisMetallic = nullptr;
 	static IMaterial* VisMetallicPlus = nullptr;
+	static IMaterial* VisGlowOverlay = nullptr;
 
 	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
 	{
 		if (!VisTex)
-			VisTex = Materials::material_texture;
+			VisTex = CGlobal::CreateMaterialBasic(false);
 
 		if (!VisFlat)
-			VisFlat = Materials::material_flat;
+			VisFlat = CGlobal::CreateMaterialBasic(false, false);
 
 		if (!VisFrame)
-			VisFrame = Materials::material_wireframe;
+			VisFrame = CGlobal::CreateMaterialBasic(false, false, true);
 
 		if (!VisMetallic)
-			VisMetallic = Materials::material_metallic;
+			VisMetallic = CGlobal::CreateMaterialMetallic(false);
 
 		if (!VisMetallicPlus)
-			VisMetallicPlus = Materials::material_metallic_plus;
+			VisMetallicPlus = CGlobal::CreateMaterialMetallicPlus(false);
 
 		if (!VisTex && !VisFlat && !VisFrame && !VisMetallic && !VisMetallicPlus)
 			return;
@@ -1599,7 +1599,7 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 				case 1: I::ModelRender()->ForcedMaterialOverride(VisFlat); break; //flat
 				case 2: I::ModelRender()->ForcedMaterialOverride(VisFrame); break; //wireframe
 				case 3: I::ModelRender()->ForcedMaterialOverride(VisMetallic); break; //metallic
-				case 4: I::ModelRender()->ForcedMaterialOverride(VisMetallicPlus); break; //metallicPlus
+				case 4: I::ModelRender()->ForcedMaterialOverride(VisMetallicPlus); break; //metallicplus
 				case 5: I::RenderView()->SetBlend(0.0f); I::ModelRender()->ForcedMaterialOverride(VisFlat); break; //disable
 				default: break;
 				}
@@ -1621,7 +1621,7 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 				case 1: I::ModelRender()->ForcedMaterialOverride(VisFlat); break; //flat
 				case 2: I::ModelRender()->ForcedMaterialOverride(VisFrame); break; //wireframe
 				case 3: I::ModelRender()->ForcedMaterialOverride(VisMetallic); break; //metallic
-				case 4: I::ModelRender()->ForcedMaterialOverride(VisMetallicPlus); break; //metallicPlus
+				case 4: I::ModelRender()->ForcedMaterialOverride(VisMetallicPlus); break; //metallicplus
 				case 5: I::RenderView()->SetBlend(0.0f); I::ModelRender()->ForcedMaterialOverride(VisFlat); break; //disable
 				default: break;
 				}

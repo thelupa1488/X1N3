@@ -63,7 +63,7 @@ public:
 	public:
 		virtual void InitHooks()
 		{
-//			VMP_MUTATION("InitHooks");
+			VMP_MUTATION("InitHooks");
 			auto LInitHooks = [&]() -> void
 			{
 				ADD_LOG("======================Init hooks:\n");
@@ -173,7 +173,7 @@ public:
 			LInitHooks();
 			ADD_LOG("2-1-11-11\n");
 
-//			VMP_END;
+			VMP_END;
 		}
 		virtual void InitOffsets()
 		{
@@ -256,6 +256,8 @@ public:
 				offsets["m_hWeaponWorldModel"] = mGetOffset("DT_BaseCombatWeapon", "m_hWeaponWorldModel");
 				offsets["m_iWorldModelIndex"] = mGetOffset("DT_BaseCombatWeapon", "m_iWorldModelIndex");
 				offsets["m_Item"] = mGetOffset("DT_BaseAttributableItem", "m_Item");
+				offsets["LoadFromBufferEx"] = CSX::Memory::FindPatternV2(clientFactory, KEY_VALUES_LOAD_FROM_BUFFER_MASK);
+				offsets["InitKeyValuesEx"] = CSX::Memory::FindPatternV2(clientFactory, KEY_VALUES_MASK);
 				ADD_LOG("All Offsets sucessful\n");
 				ADD_LOG("2-1-9-1\n");
 	 		};

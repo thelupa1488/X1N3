@@ -36,7 +36,6 @@ namespace SDK
 	IMoveHelper*        I::g_pMoveHelper = nullptr;
 	IGameMovement*      I::g_pGameMovement = nullptr;
 	IGameRules*         I::g_pGameRules = nullptr;
-	IWeaponSystem*      I::g_pWeaponSystem = nullptr;
 
 	class InterfaceReg
 	{
@@ -389,16 +388,6 @@ namespace SDK
 		}
 
 		return g_pClientState;
-	}
-
-	IWeaponSystem* I::WeaponSystem()
-	{
-		if (!g_pWeaponSystem)
-		{
-			g_pWeaponSystem = *(IWeaponSystem**)(CSX::Memory::FindPatternV2(clientFactory, XorStr("8B 35 ? ? ? ? FF 10 0F B7 C0")) + 2);
-			ADD_LOG("->WeaponSystem -> %X\n", (DWORD)g_pWeaponSystem);
-		}
-		return g_pWeaponSystem;
 	}
 
 	IGameRules* I::GameRules()

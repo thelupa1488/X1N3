@@ -145,6 +145,7 @@
     <ClCompile Include="Engine\CSX\CSX_Memory.cpp" />
     <ClCompile Include="Engine\CSX\CSX_Utils.cpp" />
     <ClCompile Include="Engine\SDK\CRC.cpp" />
+    <ClCompile Include="Engine\SDK\KeyValues.cpp" />
     <ClCompile Include="Engine\SDK\SDK.cpp" />
     <ClCompile Include="Engine\SDK\Vector.cpp" />
     <ClCompile Include="Engine\SDK\Vector2D.cpp" />
@@ -197,7 +198,6 @@
     <ClCompile Include="Engine\SDK\Math.cpp" />
     <ClCompile Include="Engine\SDK\checksum_md5.cpp" />
     <ClCompile Include="X1API\cHide.cpp" />
-    <ClCompile Include="Engine\Materials.cpp" />
     <ClCompile Include="Engine\SDK\KeyValues.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -667,7 +667,6 @@
     <ClInclude Include="Engine\EnginePrediction.h" />
     <ClInclude Include="X1API\ThreadInMemory.h" />
     <ClInclude Include="Hooks\Other.h" />
-    <ClInclude Include="Engine\Materials.h" />
     <ClInclude Include="Engine\SDK\KeyValues.h" />
   </ItemGroup>
   <ItemGroup>
