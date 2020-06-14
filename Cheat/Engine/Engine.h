@@ -450,6 +450,7 @@ public:
 
 	static void InitKeyValues(KeyValues* kv_, std::string name_)
 	{
+		VMP_MUTATION("InitKeyValues");
 		static auto address = offsets["InitKeyValuesEx"];
 		using Fn = void(__thiscall*)(void*, const char*);
 		reinterpret_cast<Fn>(address)(kv_, name_.c_str());
@@ -464,10 +465,12 @@ public:
 		//		call dwFunction
 		//	}
 		//}
+		VMP_END;
 	}
 
 	static void LoadFromBuffer(KeyValues* vk_, std::string name_, std::string buffer_)
 	{
+		VMP_MUTATION("LoadFromBuffer");
 		static auto address = offsets["LoadFromBufferEx"];
 		using Fn = void(__thiscall*)(void*, const char*, const char*, void*, const char*, void*, void*);
 		reinterpret_cast<Fn>(address)(vk_, name_.c_str(), buffer_.c_str(), nullptr, nullptr, nullptr, nullptr);
@@ -487,10 +490,12 @@ public:
 		//		call dwFunction
 		//	}
 		//}
+		VMP_END;
 	}
 
 	static IMaterial* CreateMaterialBasic(bool ignorez, bool lit = true, bool wireframe = false)
 	{
+		VMP_MUTATION("CreateMaterialBasic");
 		static auto created = 0;
 
 		std::string type = lit ? XorStr("VertexLitGeneric") : XorStr("UnlitGeneric");
@@ -523,11 +528,13 @@ public:
 			I::MaterialSystem()->CreateMaterial(matname.c_str(), keyValues);
 
 		material->IncrementReferenceCount();
+		VMP_END;
 		return material;
 	}
 
 	static IMaterial* CreateMaterialMetallic(bool ignorez)
 	{
+		VMP_MUTATION("CreateMaterialMetallic");
 		static auto created = 0;
 
 		std::string type = XorStr("VertexLitGeneric");
@@ -564,11 +571,13 @@ public:
 			I::MaterialSystem()->CreateMaterial(matname.c_str(), keyValues);
 
 		material->IncrementReferenceCount();
+		VMP_END;
 		return material;
 	}
 
 	static IMaterial* CreateMaterialMetallicPlus(bool ignorez)
 	{
+		VMP_MUTATION("CreateMaterialMetallicPlus");
 		static auto created = 0;
 
 		std::string type = XorStr("VertexLitGeneric");
@@ -619,6 +628,7 @@ public:
 			I::MaterialSystem()->CreateMaterial(matname.c_str(), keyValues);
 
 		material->IncrementReferenceCount();
+		VMP_END;
 		return material;
 	}
 };
