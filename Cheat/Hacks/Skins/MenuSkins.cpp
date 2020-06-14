@@ -86,7 +86,7 @@ void CSkins::ItemsList(const vector<ItemSettings> &Items, int &var, const Vec2 S
 		for (int i = 0; i < (int)Items.size(); i++)
 		{
 			bool selected = i == var;
-			if (X1Gui().SelectLabel((string(Items[i].Name) + "##" + to_string(i)).c_str(), selected))
+			if (X1Gui().SelectLabel((string(Items[i].Name) + XorStr("##") + to_string(i)).c_str(), selected))
 				var = i;
 		}
 	}
@@ -103,10 +103,10 @@ void CSkins::SkinsList(const vector<paint_kit> &Skins, int &var, const Vec2 Size
 
 			bool selected = i == var;
 
-			if (X1Gui().SelectLabel(((true ? Skins[i].name_eng : Skins[i].name) + "##" + to_string(i)).c_str(), selected, Vec2(151, 0)))
+			if (X1Gui().SelectLabel(((true ? Skins[i].name_eng : Skins[i].name) + XorStr("##") + to_string(i)).c_str(), selected, Vec2(151, 0)))
 				var = i;
 			X1Gui().SameLine(149);
-			if (X1Gui().SelectLabel(("| " + to_string(Skins[i].id)).c_str(), selected, Vec2(75, 0)))
+			if (X1Gui().SelectLabel((XorStr("| ") + to_string(Skins[i].id)).c_str(), selected, Vec2(75, 0)))
 				var = i;
 
 		}
@@ -124,10 +124,10 @@ void CSkins::SortSkinsList(const vector<SortedKits_s> &Skins, int &var, const Ve
 
 			bool selected = i == var;
 
-			if (X1Gui().SelectLabel(((true ? Skins[i].name : Skins[i].name_rus) + "##" + to_string(i)).c_str(), selected, Vec2(151, 0)))
+			if (X1Gui().SelectLabel(((true ? Skins[i].name : Skins[i].name_rus) + XorStr("##") + to_string(i)).c_str(), selected, Vec2(151, 0)))
 				var = i;
 			X1Gui().SameLine(149);
-			if (X1Gui().SelectLabel(("| " + to_string(Skins[i].kit)).c_str(), selected, Vec2(75, 0)))
+			if (X1Gui().SelectLabel((XorStr("| ") + to_string(Skins[i].kit)).c_str(), selected, Vec2(75, 0)))
 				var = i;
 
 		}
@@ -156,7 +156,7 @@ void CSkins::Menu()
 	{
 		X1Gui().PushItemWidth(360);
 		SliderFloats("Seed", Item.seed, 0.f, 2.f);
-		SliderFloats("Wear", Item.wear, 0.f, 1.f, "%.9f");
+		SliderFloats("Wear", Item.wear, 0.f, 1.f, XorStr("%.9f"));
 		X1Gui().PushItemWidth(230);
 		SliderInts("StatTrak", Item.stat_track, 0, 5000);
 		X1Gui().SameLine();
@@ -266,13 +266,13 @@ void CSkins::Menu()
 			static int iSlot = 0;
 
 			VectorEx<const char*> Slots = { lolc("1"),lolc("2"), lolc("3"), lolc("4"), lolc("5") };
-			DComboBox("Slot##ss", iSlot, Slots, Slots);
+			DComboBox("Slot##Stickers", iSlot, Slots, Slots);
 
 			static int StikersMode = 1;
 			static int SortSelectedS = 0;
 
 			VectorEx<const char*> itemssm = { lolc("All") ,lolc("Distributed") };
-			DComboBox("Stickers##vod65657", StikersMode, itemssm);
+			DComboBox("Stickers##vodStickers", StikersMode, itemssm);
 			static char FindBuf[128] = { 0 };
 			static string FindSticker = "";
 
@@ -439,7 +439,7 @@ void CSkins::Menu()
 				{
 					if (AllSkinsLoaded)
 					{
-						SortSkinsList(SortedKnives[SelectedKnifeModelTT].kits, WItem->Skin.paint_kit_menu, Vec2(KITS_LIST_X, KITS_LIST_Y), ("##AllKnifSkins"), FindSkin);
+						SortSkinsList(SortedKnives[SelectedKnifeModelTT].kits, WItem->Skin.paint_kit_menu, Vec2(KITS_LIST_X, KITS_LIST_Y), XorStr("##AllKnifSkins"), FindSkin);
 						if (WItem->Skin.paint_kit_menu < (int)SortedKnives[SelectedKnifeModelTT].kits.size())
 						{
 							WItem->Skin.paint_kit_id = SortedKnives[SelectedKnifeModelTT].kits[WItem->Skin.paint_kit_menu].kit;
@@ -500,7 +500,7 @@ void CSkins::Menu()
 				WeaponPreview = GlovesSkin_Array[SelectedGloveCT - 1].Url;
 			}
 			X1Gui().PushItemWidth(400);
-			SliderFloats("Wear", GloveCTWear, 0.f, 1.f, "%.9f");
+			SliderFloats("Wear", GloveCTWear, 0.f, 1.f, XorStr("%.9f"));
 		}
 		
 		else if (glvTeamSettingsMode == 1)
@@ -520,7 +520,7 @@ void CSkins::Menu()
 				WeaponPreview = GlovesSkin_Array[SelectedGloveTT - 1].Url;
 			}
 			X1Gui().PushItemWidth(400);
-			SliderFloats("Wear", GloveTTWear, 0.f, 1.f, "%.9f");
+			SliderFloats("Wear", GloveTTWear, 0.f, 1.f, XorStr("%.9f"));
 		}
 		
 	}

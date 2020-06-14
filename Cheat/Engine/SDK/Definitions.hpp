@@ -202,4 +202,5 @@ namespace SDK
 		OBS_MODE_CHASE = 5,
 		OBS_MODE_ROAMING = 6
 	};
+
 }

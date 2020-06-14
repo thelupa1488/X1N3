@@ -20,13 +20,13 @@ public:
 		VirtualProtect(adr, size, OldProtection, &OldProtection);
 	}
 
-	struct ThreadData
-	{
-		DWORD  Adress;
-		void*  func;
-		DWORD  JumpAdress;
-	};
-	static std::vector<ThreadData*> adress_list;
+	//struct ThreadData
+	//{
+	//	DWORD  Adress;
+	//	void * func;
+	//	DWORD  JumpAdress;
+	//};
+	//static std::vector<ThreadData*> adress_list;
 
 
 	static BOOL CompareMem(const BYTE* pData, const BYTE* bMask, const char* szMask)
@@ -115,18 +115,20 @@ public:
 					//ñ
 					CHAR ByteCode[] = "\xFF\x15\x00\x00\x00\x00\xC3";
 
-					ThreadData * threadData = new ThreadData();
+					//ThreadData * threadData = new ThreadData();
 
-					threadData->Adress = adress;
-					threadData->func = adress_func;
+					//threadData->Adress = adress;
+					//threadData->func = adress_func;
 					DWORD JumpAdress = (DWORD)(adress_func);
 
-					*(DWORD*)(&ByteCode[2]) = (DWORD)(&threadData->JumpAdress);
+					//ReadMemory((void*)adress, (void*)ByteCodeOld, 7);
+
+					*(DWORD*)(&ByteCode[2]) = (DWORD)(&JumpAdress);
 
 					WriteMemory((void*)adress, &ByteCode[0], 7);
 
-					adress_list.push_back(threadData);
-					return FastCall::G().t_CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)adress, 0, 0, 0);
+					//adress_list.push_back(threadData);
+					return CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)adress, 0, 0, 0);
 				}
 				else
 				{

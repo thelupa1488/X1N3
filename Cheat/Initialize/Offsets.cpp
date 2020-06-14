@@ -100,9 +100,6 @@ namespace Offsets
 
 	DWORD m_zoomLevel = 0;
 
-	DWORD KeyValues_KeyValues = 0;
-	DWORD KeyValues_LoadFromBuffer = 0;
-
 	DWORD m_CollisionGroup = 0;
 	DWORD m_rgflCoordinateFrame = 0;
 
@@ -110,4 +107,7 @@ namespace Offsets
 	DWORD m_vecMaxs = 0;
 
 	DWORD m_Item = 0;
+
+	DWORD LoadFromBufferEx = 0;
+	DWORD InitKeyValuesEx = 0;
 }

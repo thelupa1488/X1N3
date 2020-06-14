@@ -19,9 +19,11 @@
     <ClCompile Include="Engine\Entity.cpp" />
     <ClCompile Include="Engine\EntityMem.cpp" />
     <ClCompile Include="Engine\GrenadePrediction.cpp" />
+    <ClCompile Include="Engine\Materials.cpp" />
     <ClCompile Include="Engine\NetVar.cpp" />
     <ClCompile Include="Engine\SDK\checksum_md5.cpp" />
     <ClCompile Include="Engine\SDK\CRC.cpp" />
+    <ClCompile Include="Engine\SDK\IMaterialSystem.cpp" />
     <ClCompile Include="Engine\SDK\KeyValues.cpp" />
     <ClCompile Include="Engine\SDK\Math.cpp" />
     <ClCompile Include="Engine\SDK\SDK.cpp" />
@@ -77,6 +79,7 @@
     <ClInclude Include="Engine\Entity.h" />
     <ClInclude Include="Engine\EntityMem.h" />
     <ClInclude Include="Engine\GrenadePrediction.h" />
+    <ClInclude Include="Engine\Materials.h" />
     <ClInclude Include="Engine\NetVar.h" />
     <ClInclude Include="Engine\SDK\BaseTypes.h" />
     <ClInclude Include="Engine\SDK\ButtonCode.h" />

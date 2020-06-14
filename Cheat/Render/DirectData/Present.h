@@ -77,7 +77,7 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDirect3DDevice9* pDevice, CONST RECT* pSour
 			X1Gui().Start();
 			ADD_LOG("2-1-11-7-3-7-8\n");
 
-			Message::Get().Start("Injected");
+			Message::Get().Start(XorStr("Injected"));
 			ADD_LOG("2-1-11-7-3-7-9\n");
 			CreateRender = true;
 		}

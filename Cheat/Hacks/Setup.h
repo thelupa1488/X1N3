@@ -10,7 +10,7 @@
 #include "../Engine/GrenadePrediction.h"
 #include "../Engine/SDK/SDK.h"
 #include "../Main.h"
-
+#include "../../Engine/Materials.h"
 
 #define DELETE_PTR(name) delete name; name = nullptr
 
@@ -55,6 +55,7 @@ public:
 			GP_Skins =		new CSkins();
 			GP_GHelper =	new CGHelper();
 			ADD_LOG("2-1-11-7-1\n");
+			Materials::InitializationMaterials();
 			CGSettings::G().UpdateList();
 			GP_Misc->UpdateSoundList();
 			ADD_LOG("2-1-11-7-2\n");
@@ -76,6 +77,7 @@ public:
 		}
 		virtual void Shutdown()
 		{
+			Materials::DeleteMaterials();
 			GP_Misc->HitWorker.UnRegListener();
 			GP_Skins->FireEvent.UnRegListener();
 

@@ -76,11 +76,6 @@ protected:
 
 class CMisc : public IMisc
 {
-private:
-	IMaterial* VisTex = nullptr;
-	IMaterial* VisFlat = nullptr;
-	IMaterial* VisFrame = nullptr;
-	IMaterial* VisMetallic = nullptr;
 public:
 	CConfig Config = CConfig(XorStr("Misc"));
 

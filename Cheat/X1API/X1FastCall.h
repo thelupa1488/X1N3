@@ -37,161 +37,161 @@ private:
 
 	std::map<std::string, FARPROC> lpAddrList
 	{
-		{ "CreateThread", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "CreateThread") },
-		{ "TerminateThread", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "TerminateThread") },
-	    { "FreeLibraryAndExitThread", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "FreeLibraryAndExitThread") },
-		{ "DisableThreadLibraryCalls", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "DisableThreadLibraryCalls") },
-		{ "CloseHandle", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "CloseHandle") },
-		{ "MessageBoxA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()), "MessageBoxA") },
-		{ "FindWindowA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()), "FindWindowA") },
-		{ "PlaySoundA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Winmm.dll").c_str()), "PlaySoundA") },
-		{ "mouse_event", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()), "mouse_event") },
-		{ "GetFileAttributesA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetFileAttributesA") },
-		{ "GetThreadContext", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetThreadContext") },
-		{ "GetClientRect", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()), "GetClientRect") },
-		{ "SetCursor", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()), "SetCursor") },
-		{ "ImmGetContext", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Imm32.dll").c_str()), "ImmGetContext") },
-		{ "ImmSetCompositionWindow", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Imm32.dll").c_str()), "ImmSetCompositionWindow") },
-		{ "WaitForSingleObject", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "WaitForSingleObject") },
-		{ "MultiByteToWideChar", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "MultiByteToWideChar") },
-		{ "GetTickCount64", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetTickCount64") },
-		{ "GetLastError", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetLastError") },
-		{ "CreateEventA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "CreateEventA") },
-		{ "VirtualQuery", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "VirtualQuery") },
-		{ "FindFirstFileA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "FindFirstFileA") },
-		{ "FindNextFileA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "FindNextFileA") },
-		{ "GetFullPathNameA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetFullPathNameA") },
-		{ "FindClose", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "FindClose") },
-		{ "lstrcmpiA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "lstrcmpiA") },
-		{ "Sleep", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "Sleep") },
-		{ "GetProcAddress", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetProcAddress") },
-		{ "IsBadCodePtr", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "IsBadCodePtr") },
-		{ "IsBadReadPtr", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "IsBadReadPtr") },
-		{ "GetFileAttributesA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetFileAttributesA") },
-		{ "DeleteFileA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "DeleteFileA") },
-		{ "GlobalAlloc", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GlobalAlloc") },
-		{ "GetLocalTime", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetLocalTime") },
-		{ "GlobalLock", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GlobalLock") },
-		{ "WideCharToMultiByte", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "WideCharToMultiByte") },
-		{ "CreateDirectoryA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "CreateDirectoryA") },
-		{ "GlobalUnlock", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GlobalUnlock") },
-		{ "AddVectoredExceptionHandler", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "AddVectoredExceptionHandler") },
-		{ "Beep", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "Beep") },
-		{ "GetCurrentThread", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetCurrentThread") },
-		{ "GetModuleHandleW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetModuleHandleW") },
-		{ "QueryPerformanceFrequency", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "QueryPerformanceFrequency") },
-		{ "QueryPerformanceCounter", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "QueryPerformanceCounter") },
-		{ "TerminateProcess", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "TerminateProcess") },
-		{ "SetEndOfFile", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "SetEndOfFile") },
-		{ "WriteConsoleW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "WriteConsoleW") },
-		{ "HeapSize", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "HeapSize") },
-		{ "CreateFileW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "CreateFileW") },
-		{ "SetStdHandle", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "SetStdHandle") },
-		{ "SetEnvironmentVariableW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "SetEnvironmentVariableW") },
-		{ "GetModuleFileNameA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetModuleFileNameA") },
-		{ "GetEnvironmentStringsW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetEnvironmentStringsW") },
-		{ "GetCommandLineW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetCommandLineW") },
-		{ "GetCommandLineA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetCommandLineA") },
-		{ "GetOEMCP", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetOEMCP") },
-		{ "GetACP", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetACP") },
-		{ "IsValidCodePage", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "IsValidCodePage") },
-		{ "FindNextFileW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "FindNextFileW") },
-		{ "K32GetModuleInformation", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "K32GetModuleInformation") },
-		{ "GetModuleHandleA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetModuleHandleA") },
-		{ "lstrlenA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "lstrlenA") },
-		{ "GetCurrentProcess", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetCurrentProcess") },
-		{ "GetProcessHeap", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetProcessHeap") },
-		{ "HeapAlloc", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "HeapAlloc") },
-		{ "FindFirstFileExW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "FindFirstFileExW") },
-		{ "HeapReAlloc", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "HeapReAlloc") },
-		{ "SetFilePointerEx", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "SetFilePointerEx") },
-		{ "FlushFileBuffers", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "FlushFileBuffers") },
-		{ "EnumSystemLocalesW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "EnumSystemLocalesW") },
-		{ "GetUserDefaultLCID", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetUserDefaultLCID") },
-		{ "IsValidLocale", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "IsValidLocale") },
-		{ "GetFileType", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetFileType") },
-		{ "GetStdHandle", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetStdHandle") },
-		{ "HeapFree", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "HeapFree") },
-		{ "GetConsoleCP", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetConsoleCP") },
-		{ "WriteFile", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "WriteFile") },
-		{ "ReadConsoleW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "ReadConsoleW") },
-		{ "GetConsoleMode", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetConsoleMode") },
-		{ "GetModuleFileNameW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetModuleFileNameW") },
-		{ "GetModuleHandleExW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetModuleHandleExW") },
-		{ "ExitProcess", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "ExitProcess") },
-		{ "ReadFile", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "ReadFile") },
-		{ "LoadLibraryExW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "LoadLibraryExW") },
-		{ "FreeLibrary", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "FreeLibrary") },
-		{ "InterlockedFlushSList", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "InterlockedFlushSList") },
-		{ "RaiseException", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "RaiseException") },
-		{ "RtlUnwind", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "RtlUnwind") },
-		{ "InitializeSListHead", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "InitializeSListHead") },
-		{ "GetCurrentThreadId", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetCurrentThreadId") },
-		{ "FreeEnvironmentStringsW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "FreeEnvironmentStringsW") },
-		{ "EnterCriticalSection", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "EnterCriticalSection") },
-		{ "LeaveCriticalSection", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "LeaveCriticalSection") },
-		{ "DeleteCriticalSection", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "DeleteCriticalSection") },
-		{ "SetLastError", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "SetLastError") },
-		{ "InitializeCriticalSectionAndSpinCount", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "InitializeCriticalSectionAndSpinCount") },
-		{ "CreateEventW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "CreateEventW") },
-		{ "SwitchToThread", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "SwitchToThread") },
-		{ "TlsAlloc", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "TlsAlloc") },
-		{ "TlsGetValue", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "TlsGetValue") },
-		{ "TlsSetValue", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "TlsSetValue") },
-		{ "TlsFree", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "TlsFree") },
-		{ "GetSystemTimeAsFileTime", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetSystemTimeAsFileTime") },
-		{ "EncodePointer", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "EncodePointer") },
-		{ "DecodePointer", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "DecodePointer") },
-		{ "GetStringTypeW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetStringTypeW") },
-		{ "CompareStringW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "CompareStringW") },
-		{ "LCMapStringW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "LCMapStringW") },
-		{ "GetLocaleInfoW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetLocaleInfoW") },
-		{ "GetCPInfo", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetCPInfo") },
-		{ "InitializeCriticalSection", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "InitializeCriticalSection") },
-		{ "SetEvent", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "SetEvent") },
-		{ "ResetEvent", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "ResetEvent") },
-		{ "WaitForSingleObjectEx", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "WaitForSingleObjectEx") },
-		{ "UnhandledExceptionFilter", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "UnhandledExceptionFilter") },
-		{ "SetUnhandledExceptionFilter", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "SetUnhandledExceptionFilter") },
-		{ "IsProcessorFeaturePresent", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "IsProcessorFeaturePresent") },
-		{ "IsDebuggerPresent", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "IsDebuggerPresent") },
-		{ "GetStartupInfoW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetStartupInfoW") },
-		{ "GetCurrentProcessId", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "GetCurrentProcessId") },
-		{ "SetWindowLongA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()), "SetWindowLongA") },
-		{ "GetKeyState", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()), "GetKeyState") },
-		{ "GetClipboardData", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()), "GetClipboardData") },
-		{ "OpenClipboard", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()), "OpenClipboard") },
-		{ "CloseClipboard", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()), "CloseClipboard") },
-		{ "GetAsyncKeyState", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()), "GetAsyncKeyState") },
-		{ "GetCursorPos", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()), "GetCursorPos") },
-		{ "SetClipboardData", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()), "SetClipboardData") },
-		{ "EmptyClipboard", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()), "EmptyClipboard") },
-		{ "CallWindowProcA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()), "CallWindowProcA") },
-		//{ "VMProtectBeginVirtualization", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("VMProtectSDK32.dll").c_str()), "VMProtectBeginVirtualization") },
-		//{ "VMProtectBeginMutation", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("VMProtectSDK32.dll").c_str()), "VMProtectBeginMutation") },
-		//{ "VMProtectBeginUltra", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("VMProtectSDK32.dll").c_str()), "VMProtectBeginUltra") },
-		//{ "VMProtectBegin", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("VMProtectSDK32.dll").c_str()), "VMProtectBegin") },
-		//{ "VMProtectEnd", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("VMProtectSDK32.dll").c_str()), "VMProtectEnd") },
-		{ "WinHttpOpenRequest", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Winhttp.dll").c_str()), "WinHttpOpenRequest") },
-		{ "WinHttpConnect", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Winhttp.dll").c_str()), "WinHttpConnect") },
-		{ "WinHttpOpen", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Winhttp.dll").c_str()), "WinHttpOpen") },
-		{ "WinHttpReadData", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Winhttp.dll").c_str()), "WinHttpReadData") },
-		{ "WinHttpQueryHeaders", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Winhttp.dll").c_str()), "WinHttpQueryHeaders") },
-		{ "WinHttpCloseHandle", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Winhttp.dll").c_str()), "WinHttpCloseHandle") },
-		{ "WinHttpSendRequest", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Winhttp.dll").c_str()), "WinHttpSendRequest") },
-		{ "WinHttpReceiveResponse", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Winhttp.dll").c_str()), "WinHttpReceiveResponse") },
-		{ "WinHttpQueryDataAvailable", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Winhttp.dll").c_str()), "WinHttpQueryDataAvailable") },
-		{ "InternetCloseHandle", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Wininet.dll").c_str()), "InternetCloseHandle") },
-		{ "InternetReadFile", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Wininet.dll").c_str()), "InternetReadFile") },
-		{ "HttpOpenRequestA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Wininet.dll").c_str()), "HttpOpenRequestA") },
-		{ "InternetConnectA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Wininet.dll").c_str()), "InternetConnectA") },
-		{ "InternetOpenA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Wininet.dll").c_str()), "InternetOpenA") },
-		{ "HttpSendRequestA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Wininet.dll").c_str()), "HttpSendRequestA") },
-		{ "InternetOpenUrlA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Wininet.dll").c_str()), "InternetOpenUrlA") },
-		{ "D3DXCreateTextureFromFileInMemoryEx", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("d3dx9_43.dll").c_str()), "D3DXCreateTextureFromFileInMemoryEx") },
-		{ "D3DXCreateTextureFromFileExA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("d3dx9_43.dll").c_str()), "D3DXCreateTextureFromFileExA") },
-		{ "CreateDXGIFactory1", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("dxgi.dll").c_str()), "CreateDXGIFactory1") },
-		{ "DestroyWindow", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()), "DestroyWindow") },
+		{XorStr("CreateThread"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("CreateThread"))},
+		{XorStr("TerminateThread"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("TerminateThread"))},
+	    {XorStr("FreeLibraryAndExitThread"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("FreeLibraryAndExitThread"))},
+		{XorStr("DisableThreadLibraryCalls"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("DisableThreadLibraryCalls"))},
+		{XorStr("CloseHandle"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("CloseHandle"))},
+		{XorStr("MessageBoxA"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),XorStr("MessageBoxA"))},
+		{XorStr("FindWindowA"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),XorStr("FindWindowA"))},
+		{XorStr("PlaySoundA"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Winmm.dll").c_str()),XorStr("PlaySoundA"))},
+		{XorStr("mouse_event"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),XorStr("mouse_event"))},
+		{XorStr("GetFileAttributesA"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetFileAttributesA"))},
+		{XorStr("GetThreadContext"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetThreadContext"))},
+		{XorStr("GetClientRect"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),XorStr("GetClientRect"))},
+		{XorStr("SetCursor"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),XorStr("SetCursor"))},
+		{XorStr("ImmGetContext"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Imm32.dll").c_str()),XorStr("ImmGetContext"))},
+		{XorStr("ImmSetCompositionWindow"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Imm32.dll").c_str()),XorStr("ImmSetCompositionWindow"))},
+		{XorStr("WaitForSingleObject"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("WaitForSingleObject"))},
+		{XorStr("MultiByteToWideChar"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("MultiByteToWideChar"))},
+		{XorStr("GetTickCount64"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetTickCount64"))},
+		{XorStr("GetLastError"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetLastError"))},
+		{XorStr("CreateEventA"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("CreateEventA"))},
+		{XorStr("VirtualQuery"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("VirtualQuery"))},
+		{XorStr("FindFirstFileA"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("FindFirstFileA"))},
+		{XorStr("FindNextFileA"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("FindNextFileA"))},
+		{XorStr("GetFullPathNameA"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetFullPathNameA"))},
+		{XorStr("FindClose"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("FindClose"))},
+		{XorStr("lstrcmpiA"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("lstrcmpiA"))},
+		{XorStr("Sleep"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("Sleep"))},
+		{XorStr("GetProcAddress"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetProcAddress"))},
+		{XorStr("IsBadCodePtr"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("IsBadCodePtr"))},
+		{XorStr("IsBadReadPtr"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("IsBadReadPtr"))},
+		{XorStr("GetFileAttributesA"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetFileAttributesA"))},
+		{XorStr("DeleteFileA"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("DeleteFileA"))},
+		{XorStr("GlobalAlloc"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GlobalAlloc"))},
+		{XorStr("GetLocalTime"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetLocalTime"))},
+		{XorStr("GlobalLock"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GlobalLock"))},
+		{XorStr("WideCharToMultiByte"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("WideCharToMultiByte"))},
+		{XorStr("CreateDirectoryA"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("CreateDirectoryA"))},
+		{XorStr("GlobalUnlock"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GlobalUnlock"))},
+		{XorStr("AddVectoredExceptionHandler"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("AddVectoredExceptionHandler"))},
+		{XorStr("Beep"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("Beep"))},
+		{XorStr("GetCurrentThread"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetCurrentThread"))},
+		{XorStr("GetModuleHandleW"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetModuleHandleW"))},
+		{XorStr("QueryPerformanceFrequency"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("QueryPerformanceFrequency"))},
+		{XorStr("QueryPerformanceCounter"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("QueryPerformanceCounter"))},
+		{XorStr("TerminateProcess"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("TerminateProcess"))},
+		{XorStr("SetEndOfFile"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("SetEndOfFile"))},
+		{XorStr("WriteConsoleW"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("WriteConsoleW"))},
+		{XorStr("HeapSize"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("HeapSize"))},
+		{XorStr("CreateFileW"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("CreateFileW"))},
+		{XorStr("SetStdHandle"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("SetStdHandle"))},
+		{XorStr("SetEnvironmentVariableW"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("SetEnvironmentVariableW"))},
+		{XorStr("GetModuleFileNameA"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetModuleFileNameA"))},
+		{XorStr("GetEnvironmentStringsW"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetEnvironmentStringsW"))},
+		{XorStr("GetCommandLineW"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetCommandLineW"))},
+		{XorStr("GetCommandLineA"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetCommandLineA"))},
+		{XorStr("GetOEMCP"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetOEMCP"))},
+		{XorStr("GetACP"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetACP"))},
+		{XorStr("IsValidCodePage"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("IsValidCodePage"))},
+		{XorStr("FindNextFileW"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("FindNextFileW"))},
+		{XorStr("K32GetModuleInformation"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("K32GetModuleInformation"))},
+		{XorStr("GetModuleHandleA"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetModuleHandleA"))},
+		{XorStr("lstrlenA"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("lstrlenA"))},
+		{XorStr("GetCurrentProcess"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetCurrentProcess"))},
+		{XorStr("GetProcessHeap"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetProcessHeap"))},
+		{XorStr("HeapAlloc"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("HeapAlloc"))},
+		{XorStr("FindFirstFileExW"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("FindFirstFileExW"))},
+		{XorStr("HeapReAlloc"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("HeapReAlloc"))},
+		{XorStr("SetFilePointerEx"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("SetFilePointerEx"))},
+		{XorStr("FlushFileBuffers"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("FlushFileBuffers"))},
+		{XorStr("EnumSystemLocalesW"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("EnumSystemLocalesW"))},
+		{XorStr("GetUserDefaultLCID"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetUserDefaultLCID"))},
+		{XorStr("IsValidLocale"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("IsValidLocale"))},
+		{XorStr("GetFileType"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetFileType"))},
+		{XorStr("GetStdHandle"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetStdHandle"))},
+		{XorStr("HeapFree"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("HeapFree"))},
+		{XorStr("GetConsoleCP"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetConsoleCP"))},
+		{XorStr("WriteFile"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("WriteFile"))},
+		{XorStr("ReadConsoleW"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("ReadConsoleW"))},
+		{XorStr("GetConsoleMode"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetConsoleMode"))},
+		{XorStr("GetModuleFileNameW"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetModuleFileNameW"))},
+		{XorStr("GetModuleHandleExW"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetModuleHandleExW"))},
+		{XorStr("ExitProcess"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("ExitProcess"))},
+		{XorStr("ReadFile"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("ReadFile"))},
+		{XorStr("LoadLibraryExW"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("LoadLibraryExW"))},
+		{XorStr("FreeLibrary"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("FreeLibrary"))},
+		{XorStr("InterlockedFlushSList"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("InterlockedFlushSList"))},
+		{XorStr("RaiseException"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("RaiseException"))},
+		{XorStr("RtlUnwind"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("RtlUnwind"))},
+		{XorStr("InitializeSListHead"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("InitializeSListHead"))},
+		{XorStr("GetCurrentThreadId"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetCurrentThreadId"))},
+		{XorStr("FreeEnvironmentStringsW"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("FreeEnvironmentStringsW"))},
+		{XorStr("EnterCriticalSection"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("EnterCriticalSection"))},
+		{XorStr("LeaveCriticalSection"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("LeaveCriticalSection"))},
+		{XorStr("DeleteCriticalSection"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("DeleteCriticalSection"))},
+		{XorStr("SetLastError"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("SetLastError"))},
+		{XorStr("InitializeCriticalSectionAndSpinCount"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("InitializeCriticalSectionAndSpinCount"))},
+		{XorStr("CreateEventW"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("CreateEventW"))},
+		{XorStr("SwitchToThread"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("SwitchToThread"))},
+		{XorStr("TlsAlloc"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("TlsAlloc"))},
+		{XorStr("TlsGetValue"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("TlsGetValue"))},
+		{XorStr("TlsSetValue"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("TlsSetValue"))},
+		{XorStr("TlsFree"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("TlsFree"))},
+		{XorStr("GetSystemTimeAsFileTime"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetSystemTimeAsFileTime"))},
+		{XorStr("EncodePointer"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("EncodePointer"))},
+		{XorStr("DecodePointer"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("DecodePointer"))},
+		{XorStr("GetStringTypeW"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetStringTypeW"))},
+		{XorStr("CompareStringW"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("CompareStringW"))},
+		{XorStr("LCMapStringW"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("LCMapStringW"))},
+		{XorStr("GetLocaleInfoW"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetLocaleInfoW"))},
+		{XorStr("GetCPInfo"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetCPInfo"))},
+		{XorStr("InitializeCriticalSection"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("InitializeCriticalSection"))},
+		{XorStr("SetEvent"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("SetEvent"))},
+		{XorStr("ResetEvent"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("ResetEvent"))},
+		{XorStr("WaitForSingleObjectEx"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("WaitForSingleObjectEx"))},
+		{XorStr("UnhandledExceptionFilter"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("UnhandledExceptionFilter"))},
+		{XorStr("SetUnhandledExceptionFilter"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("SetUnhandledExceptionFilter"))},
+		{XorStr("IsProcessorFeaturePresent"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("IsProcessorFeaturePresent"))},
+		{XorStr("IsDebuggerPresent"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("IsDebuggerPresent"))},
+		{XorStr("GetStartupInfoW"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetStartupInfoW"))},
+		{XorStr("GetCurrentProcessId"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),XorStr("GetCurrentProcessId"))},
+		{XorStr("SetWindowLongA"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),XorStr("SetWindowLongA"))},
+		{XorStr("GetKeyState"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),XorStr("GetKeyState"))},
+		{XorStr("GetClipboardData"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),XorStr("GetClipboardData"))},
+		{XorStr("OpenClipboard"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),XorStr("OpenClipboard"))},
+		{XorStr("CloseClipboard"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),XorStr("CloseClipboard"))},
+		{XorStr("GetAsyncKeyState"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),XorStr("GetAsyncKeyState"))},
+		{XorStr("GetCursorPos"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),XorStr("GetCursorPos"))},
+		{XorStr("SetClipboardData"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),XorStr("SetClipboardData"))},
+		{XorStr("EmptyClipboard"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),XorStr("EmptyClipboard"))},
+		{XorStr("CallWindowProcA"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),XorStr("CallWindowProcA"))},
+		//{XorStr("VMProtectBeginVirtualization"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("VMProtectSDK32.dll").c_str()),XorStr("VMProtectBeginVirtualization"))},
+		//{XorStr("VMProtectBeginMutation"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("VMProtectSDK32.dll").c_str()),XorStr("VMProtectBeginMutation"))},
+		//{XorStr("VMProtectBeginUltra"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("VMProtectSDK32.dll").c_str()),XorStr("VMProtectBeginUltra"))},
+		//{XorStr("VMProtectBegin"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("VMProtectSDK32.dll").c_str()),XorStr("VMProtectBegin"))},
+		//{XorStr("VMProtectEnd"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("VMProtectSDK32.dll").c_str()),XorStr("VMProtectEnd"))},
+		{XorStr("WinHttpOpenRequest"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Winhttp.dll").c_str()),XorStr("WinHttpOpenRequest"))},
+		{XorStr("WinHttpConnect"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Winhttp.dll").c_str()),XorStr("WinHttpConnect"))},
+		{XorStr("WinHttpOpen"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Winhttp.dll").c_str()),XorStr("WinHttpOpen"))},
+		{XorStr("WinHttpReadData"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Winhttp.dll").c_str()),XorStr("WinHttpReadData"))},
+		{XorStr("WinHttpQueryHeaders"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Winhttp.dll").c_str()),XorStr("WinHttpQueryHeaders"))},
+		{XorStr("WinHttpCloseHandle"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Winhttp.dll").c_str()),XorStr("WinHttpCloseHandle"))},
+		{XorStr("WinHttpSendRequest"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Winhttp.dll").c_str()),XorStr("WinHttpSendRequest"))},
+		{XorStr("WinHttpReceiveResponse"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Winhttp.dll").c_str()),XorStr("WinHttpReceiveResponse"))},
+		{XorStr("WinHttpQueryDataAvailable"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Winhttp.dll").c_str()),XorStr("WinHttpQueryDataAvailable"))},
+		{XorStr("InternetCloseHandle"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Wininet.dll").c_str()),XorStr("InternetCloseHandle"))},
+		{XorStr("InternetReadFile"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Wininet.dll").c_str()),XorStr("InternetReadFile"))},
+		{XorStr("HttpOpenRequestA"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Wininet.dll").c_str()),XorStr("HttpOpenRequestA"))},
+		{XorStr("InternetConnectA"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Wininet.dll").c_str()),XorStr("InternetConnectA"))},
+		{XorStr("InternetOpenA"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Wininet.dll").c_str()),XorStr("InternetOpenA"))},
+		{XorStr("HttpSendRequestA"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Wininet.dll").c_str()),XorStr("HttpSendRequestA"))},
+		{XorStr("InternetOpenUrlA"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("Wininet.dll").c_str()),XorStr("InternetOpenUrlA"))},
+		{XorStr("D3DXCreateTextureFromFileInMemoryEx"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("d3dx9_43.dll").c_str()),XorStr("D3DXCreateTextureFromFileInMemoryEx"))},
+		{XorStr("D3DXCreateTextureFromFileExA"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("d3dx9_43.dll").c_str()),XorStr("D3DXCreateTextureFromFileExA"))},
+		{XorStr("CreateDXGIFactory1"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("dxgi.dll").c_str()),XorStr("CreateDXGIFactory1"))},
+		{XorStr("DestroyWindow"), pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),XorStr("DestroyWindow"))},
 	};
 public:
 
@@ -199,8 +199,8 @@ public:
 	{
 		for (auto it = lpAddrList.begin(); it != lpAddrList.end(); ++it)
 		{
-			printf(": %s ", it->first.c_str());
-			printf("add: %X\n",DWORD(it->second));
+			printf(XorStr(": %s "), it->first.c_str());
+			printf(XorStr("add: %X\n"),DWORD(it->second));
 			//it->second
 		}
 	}
@@ -212,7 +212,7 @@ public:
 	return reinterpret_cast<t_##name>(lpAddrList[name_str])(args3); \
 	}
 
-	CREATE_CALL(ALL_A(_Ret_maybenull_ HANDLE), WINAPI, _CreateThread, "CreateThread",
+	CREATE_CALL(ALL_A(_Ret_maybenull_ HANDLE), WINAPI, _CreateThread, XorStr("CreateThread"),
 		ALL_A(_In_opt_ LPSECURITY_ATTRIBUTES lpThreadAttributes,
 			_In_ SIZE_T dwStackSize,
 			_In_ LPTHREAD_START_ROUTINE lpStartAddress,
@@ -235,7 +235,7 @@ public:
 			_Out_opt_ lpThreadId
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _TerminateThread, "TerminateThread",
+	CREATE_CALL(BOOL, WINAPI, _TerminateThread, XorStr("TerminateThread"),
 		ALL_A(_In_opt_ HANDLE hThread,
 			_In_ DWORD  dwExitCode
 		),
@@ -246,7 +246,7 @@ public:
 			_In_     dwExitCode
 		));
 
-	CREATE_CALL(VOID, WINAPI, _FreeLibraryAndExitThread, "FreeLibraryAndExitThread",
+	CREATE_CALL(VOID, WINAPI, _FreeLibraryAndExitThread, XorStr("FreeLibraryAndExitThread"),
 		ALL_A(_In_opt_ HMODULE hLibModule,
 			_In_     DWORD   dwExitCode
 		),
@@ -257,7 +257,7 @@ public:
 			_In_     dwExitCode
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _DisableThreadLibraryCalls, "DisableThreadLibraryCalls",
+	CREATE_CALL(BOOL, WINAPI, _DisableThreadLibraryCalls, XorStr("DisableThreadLibraryCalls"),
 		ALL_A(_In_opt_ HMODULE hLibModule
 		),
 		ALL_A(_In_opt_ HMODULE
@@ -265,7 +265,7 @@ public:
 		ALL_A(_In_opt_ hLibModule
 		));
 
-	CREATE_CALL(VOID, WINAPI, _mouse_event, "mouse_event",
+	CREATE_CALL(VOID, WINAPI, _mouse_event, XorStr("mouse_event"),
 		ALL_A(_In_ DWORD dwFlags,
 			_In_ DWORD dx,
 			_In_ DWORD dy,
@@ -285,7 +285,7 @@ public:
 			_In_ dwExtraInfo
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _CloseHandle, "CloseHandle",
+	CREATE_CALL(BOOL, WINAPI, _CloseHandle, XorStr("CloseHandle"),
 		ALL_A(_In_ HANDLE hObject
 		),
 		ALL_A(_In_ HANDLE
@@ -293,7 +293,7 @@ public:
 		ALL_A(_In_ hObject
 		));
 
-	CREATE_CALL(INT, WINAPI, _MessageBoxA, "MessageBoxA",
+	CREATE_CALL(INT, WINAPI, _MessageBoxA, XorStr("MessageBoxA"),
 		ALL_A(_In_opt_ HWND hWnd,
 			_In_opt_ LPCSTR lpText,
 			_In_opt_ LPCSTR lpCaption,
@@ -310,7 +310,7 @@ public:
 			_In_ uType
 		));
 
-	CREATE_CALL(HWND, WINAPI, _FindWindowA, "FindWindowA",
+	CREATE_CALL(HWND, WINAPI, _FindWindowA, XorStr("FindWindowA"),
 		ALL_A(_In_opt_ LPCSTR lpClassName,
 			_In_opt_ LPCSTR lpWindowName
 		),
@@ -321,7 +321,7 @@ public:
 			_In_opt_ lpWindowName
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _PlaySoundA, "PlaySoundA",
+	CREATE_CALL(BOOL, WINAPI, _PlaySoundA, XorStr("PlaySoundA"),
 		ALL_A(_In_opt_ LPCSTR pszSound,
 			_In_opt_ HMODULE hmod,
 			_In_ DWORD fdwSound
@@ -335,7 +335,7 @@ public:
 			_In_ fdwSound
 		));
 
-	CREATE_CALL(DWORD, WINAPI, _GetFileAttributesA, "GetFileAttributesA",
+	CREATE_CALL(DWORD, WINAPI, _GetFileAttributesA, XorStr("GetFileAttributesA"),
 		ALL_A(_In_ LPCSTR lpFileName
 		),
 		ALL_A(_In_ LPCSTR
@@ -343,7 +343,7 @@ public:
 		ALL_A(_In_ lpFileName
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _GetThreadContext, "GetThreadContext",
+	CREATE_CALL(BOOL, WINAPI, _GetThreadContext, XorStr("GetThreadContext"),
 		ALL_A(_In_ HANDLE hThread,
 			_Inout_ LPCONTEXT lpContext
 		),
@@ -354,7 +354,7 @@ public:
 			_Inout_ lpContext
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _GetClientRect, "GetClientRect",
+	CREATE_CALL(BOOL, WINAPI, _GetClientRect, XorStr("GetClientRect"),
 		ALL_A(_In_ HWND hWnd,
 			_Out_ LPRECT lpRect
 		),
@@ -365,7 +365,7 @@ public:
 			_Out_ lpRect
 		));
 
-	CREATE_CALL(HCURSOR, WINAPI, _SetCursor, "SetCursor",
+	CREATE_CALL(HCURSOR, WINAPI, _SetCursor, XorStr("SetCursor"),
 		ALL_A(_In_opt_ HCURSOR hCursor
 		),
 		ALL_A(_In_opt_ HCURSOR
@@ -373,7 +373,7 @@ public:
 		ALL_A(_In_opt_ hCursor
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _ImmSetCompositionWindow, "ImmSetCompositionWindow",
+	CREATE_CALL(BOOL, WINAPI, _ImmSetCompositionWindow, XorStr("ImmSetCompositionWindow"),
 		ALL_A(IN HIMC hm, _In_ LPCOMPOSITIONFORM lpCompForm
 		),
 		ALL_A(IN HIMC, _In_ LPCOMPOSITIONFORM
@@ -381,7 +381,7 @@ public:
 		ALL_A(IN hm, _In_ lpCompForm
 		));
 
-	CREATE_CALL(HIMC, WINAPI, _ImmGetContext, "ImmGetContext",
+	CREATE_CALL(HIMC, WINAPI, _ImmGetContext, XorStr("ImmGetContext"),
 		ALL_A(IN HWND hw
 		),
 		ALL_A(IN HWND
@@ -389,7 +389,7 @@ public:
 		ALL_A(IN hw
 		));
 
-	CREATE_CALL(HIMC, WINAPI, _WaitForSingleObject, "WaitForSingleObject",
+	CREATE_CALL(HIMC, WINAPI, _WaitForSingleObject, XorStr("WaitForSingleObject"),
 		ALL_A(_In_ HANDLE hHandle,
 			_In_ DWORD dwMilliseconds
 		),
@@ -400,7 +400,7 @@ public:
 			_In_ dwMilliseconds
 		));
 
-	CREATE_CALL(INT, WINAPI, _MultiByteToWideChar, "MultiByteToWideChar",
+	CREATE_CALL(INT, WINAPI, _MultiByteToWideChar, XorStr("MultiByteToWideChar"),
 		ALL_A(_In_ UINT CodePage,
 			_In_ DWORD dwFlags,
 			_In_NLS_string_(cbMultiByte) LPCCH lpMultiByteStr,
@@ -423,7 +423,7 @@ public:
 			_In_ cchWideChar
 		));
 
-	CREATE_CALL(ULONGLONG, WINAPI, _GetTickCount64, "GetTickCount64",
+	CREATE_CALL(ULONGLONG, WINAPI, _GetTickCount64, XorStr("GetTickCount64"),
 		ALL_A(
 		),
 		ALL_A(
@@ -431,7 +431,7 @@ public:
 		ALL_A(
 		));
 
-	CREATE_CALL(DWORD, WINAPI, _GetLastError, "GetLastError",
+	CREATE_CALL(DWORD, WINAPI, _GetLastError, XorStr("GetLastError"),
 		ALL_A(
 		),
 		ALL_A(
@@ -440,7 +440,7 @@ public:
 		));
 
 	_Ret_maybenull_
-		CREATE_CALL(HANDLE, WINAPI, _CreateEventA, "CreateEventA",
+		CREATE_CALL(HANDLE, WINAPI, _CreateEventA, XorStr("CreateEventA"),
 			ALL_A(_In_opt_ LPSECURITY_ATTRIBUTES lpEventAttributes,
 				_In_ BOOL bManualReset,
 				_In_ BOOL bInitialState,
@@ -458,7 +458,7 @@ public:
 				_In_opt_ lpName
 			));
 
-	CREATE_CALL(SIZE_T, WINAPI, _VirtualQuery, "VirtualQuery",
+	CREATE_CALL(SIZE_T, WINAPI, _VirtualQuery, XorStr("VirtualQuery"),
 		ALL_A(_In_opt_ LPCVOID lpAddress,
 			_Out_writes_bytes_to_(dwLength, return) PMEMORY_BASIC_INFORMATION lpBuffer,
 			_In_ SIZE_T dwLength
@@ -472,7 +472,7 @@ public:
 			_In_ dwLength
 		));
 
-	CREATE_CALL(HANDLE, WINAPI, _FindFirstFileA, "FindFirstFileA",
+	CREATE_CALL(HANDLE, WINAPI, _FindFirstFileA, XorStr("FindFirstFileA"),
 		ALL_A(_In_ LPCSTR lpFileName,
 			_Out_ LPWIN32_FIND_DATAA lpFindFileData
 		),
@@ -483,7 +483,7 @@ public:
 			_Out_ lpFindFileData
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _FindNextFileA, "FindNextFileA",
+	CREATE_CALL(BOOL, WINAPI, _FindNextFileA, XorStr("FindNextFileA"),
 		ALL_A(_In_ HANDLE hFindFile,
 			_Out_ LPWIN32_FIND_DATAA lpFindFileData
 		),
@@ -496,7 +496,7 @@ public:
 
 
 
-	CREATE_CALL(VOID, WINAPI, _GetLocalTime, "GetLocalTime",
+	CREATE_CALL(VOID, WINAPI, _GetLocalTime, XorStr("GetLocalTime"),
 		ALL_A(_Out_ LPSYSTEMTIME lpSystemTime
 		),
 		ALL_A(_Out_ LPSYSTEMTIME
@@ -504,7 +504,7 @@ public:
 		ALL_A(_Out_ lpSystemTime
 		));
 
-	CREATE_CALL(VOID, WINAPI, _GetSystemTimeAsFileTime, "GetSystemTimeAsFileTime",
+	CREATE_CALL(VOID, WINAPI, _GetSystemTimeAsFileTime, XorStr("GetSystemTimeAsFileTime"),
 		ALL_A(_Out_ LPFILETIME lpSystemTimeAsFileTime
 		),
 		ALL_A(_Out_ LPFILETIME
@@ -514,7 +514,7 @@ public:
 
 	//=========================
 
-	CREATE_CALL(DWORD, WINAPI, _GetFullPathNameA, "GetFullPathNameA",
+	CREATE_CALL(DWORD, WINAPI, _GetFullPathNameA, XorStr("GetFullPathNameA"),
 		ALL_A(_In_ LPCSTR lpFileName,
 			_In_ DWORD nBufferLength,
 			_Out_writes_to_opt_(nBufferLength, return +1) LPSTR lpBuffer,
@@ -531,7 +531,7 @@ public:
 			_Outptr_opt_ lpFilePart
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _FindClose, "FindClose",
+	CREATE_CALL(BOOL, WINAPI, _FindClose, XorStr("FindClose"),
 		ALL_A(_Inout_ HANDLE hFindFile
 		),
 		ALL_A(_Inout_ HANDLE
@@ -540,7 +540,7 @@ public:
 		));
 
 
-	CREATE_CALL(BOOL, WINAPI, _DeleteFileA, "DeleteFileA",
+	CREATE_CALL(BOOL, WINAPI, _DeleteFileA, XorStr("DeleteFileA"),
 		ALL_A(_In_ LPCSTR lpFileName
 		),
 		ALL_A(_In_ LPCSTR
@@ -548,7 +548,7 @@ public:
 		ALL_A(_In_ lpFileName
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _CreateDirectoryA, "CreateDirectoryA",
+	CREATE_CALL(BOOL, WINAPI, _CreateDirectoryA, XorStr("CreateDirectoryA"),
 		ALL_A(_In_ LPCSTR lpPathName,
 			_In_opt_ LPSECURITY_ATTRIBUTES lpSecurityAttributes
 		),
@@ -559,7 +559,7 @@ public:
 			_In_opt_ lpSecurityAttributes
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _SetEndOfFile, "SetEndOfFile",
+	CREATE_CALL(BOOL, WINAPI, _SetEndOfFile, XorStr("SetEndOfFile"),
 		ALL_A(_In_ HANDLE hFile
 		),
 		ALL_A(_In_ HANDLE
@@ -567,7 +567,7 @@ public:
 		ALL_A(_In_ hFile
 		));
 
-	CREATE_CALL(HANDLE, WINAPI, _CreateFileW, "CreateFileW",
+	CREATE_CALL(HANDLE, WINAPI, _CreateFileW, XorStr("CreateFileW"),
 		ALL_A(_In_ LPCWSTR lpFileName,
 			_In_ DWORD dwDesiredAccess,
 			_In_ DWORD dwShareMode,
@@ -593,7 +593,7 @@ public:
 			_In_opt_ hTemplateFile
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _FindNextFileW, "FindNextFileW",
+	CREATE_CALL(BOOL, WINAPI, _FindNextFileW, XorStr("FindNextFileW"),
 		ALL_A(_In_ HANDLE hFindFile,
 			_Out_ LPWIN32_FIND_DATAW lpFindFileData
 		),
@@ -604,7 +604,7 @@ public:
 			_Out_ lpFindFileData
 		));
 
-	CREATE_CALL(HANDLE, WINAPI, _FindFirstFileExW, "FindFirstFileExW",
+	CREATE_CALL(HANDLE, WINAPI, _FindFirstFileExW, XorStr("FindFirstFileExW"),
 		ALL_A(_In_ LPCWSTR lpFileName,
 			_In_ FINDEX_INFO_LEVELS fInfoLevelId,
 			_Out_writes_bytes_(sizeof(WIN32_FIND_DATAW)) LPVOID lpFindFileData,
@@ -627,7 +627,7 @@ public:
 			_In_ dwAdditionalFlags
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _SetFilePointerEx, "SetFilePointerEx",
+	CREATE_CALL(BOOL, WINAPI, _SetFilePointerEx, XorStr("SetFilePointerEx"),
 		ALL_A(_In_ HANDLE hFile,
 			_In_ LARGE_INTEGER liDistanceToMove,
 			_Out_opt_ PLARGE_INTEGER lpNewFilePointer,
@@ -644,7 +644,7 @@ public:
 			_In_ dwMoveMethod
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _FlushFileBuffers, "FlushFileBuffers",
+	CREATE_CALL(BOOL, WINAPI, _FlushFileBuffers, XorStr("FlushFileBuffers"),
 		ALL_A(_In_ HANDLE hFile
 		),
 		ALL_A(_In_ HANDLE
@@ -652,7 +652,7 @@ public:
 		ALL_A(_In_ hFile
 		));
 
-	CREATE_CALL(DWORD, WINAPI, _GetFileType, "GetFileType",
+	CREATE_CALL(DWORD, WINAPI, _GetFileType, XorStr("GetFileType"),
 		ALL_A(_In_ HANDLE hFile
 		),
 		ALL_A(_In_ HANDLE
@@ -660,7 +660,7 @@ public:
 		ALL_A(_In_ hFile
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _WriteFile, "WriteFile",
+	CREATE_CALL(BOOL, WINAPI, _WriteFile, XorStr("WriteFile"),
 		ALL_A(_In_ HANDLE hFile,
 			_In_reads_bytes_opt_(nNumberOfBytesToWrite) LPCVOID lpBuffer,
 			_In_ DWORD nNumberOfBytesToWrite,
@@ -680,7 +680,7 @@ public:
 			_Inout_opt_ lpOverlapped
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _ReadFile, "ReadFile",
+	CREATE_CALL(BOOL, WINAPI, _ReadFile, XorStr("ReadFile"),
 		ALL_A(_In_ HANDLE hFile,
 			_Out_writes_bytes_to_opt_(nNumberOfBytesToRead, *lpNumberOfBytesRead) __out_data_source(FILE) LPVOID lpBuffer,
 			_In_ DWORD nNumberOfBytesToRead,
@@ -700,7 +700,7 @@ public:
 			_Inout_opt_ lpOverlapped
 		));
 
-	CREATE_CALL(INT, WINAPI, _lstrcmpiA, "lstrcmpiA",
+	CREATE_CALL(INT, WINAPI, _lstrcmpiA, XorStr("lstrcmpiA"),
 		ALL_A(_In_ LPCSTR lpString1,
 			_In_ LPCSTR lpString2
 		),
@@ -722,7 +722,7 @@ public:
 
 	}
 
-	CREATE_CALL(VOID, WINAPI, _Sleep, "Sleep",
+	CREATE_CALL(VOID, WINAPI, _Sleep, XorStr("Sleep"),
 		ALL_A(_In_ DWORD dwMilliseconds
 		),
 		ALL_A(_In_ DWORD
@@ -730,7 +730,7 @@ public:
 		ALL_A(_In_ dwMilliseconds
 		));
 
-	CREATE_CALL(VOID, WINAPI, _EnterCriticalSection, "EnterCriticalSection",
+	CREATE_CALL(VOID, WINAPI, _EnterCriticalSection, XorStr("EnterCriticalSection"),
 		ALL_A(_Inout_ LPCRITICAL_SECTION lpCriticalSection
 		),
 		ALL_A(_Inout_ LPCRITICAL_SECTION
@@ -738,7 +738,7 @@ public:
 		ALL_A(_Inout_ lpCriticalSection
 		));
 
-	CREATE_CALL(VOID, WINAPI, _LeaveCriticalSection, "LeaveCriticalSection",
+	CREATE_CALL(VOID, WINAPI, _LeaveCriticalSection, XorStr("LeaveCriticalSection"),
 		ALL_A(_Inout_ LPCRITICAL_SECTION lpCriticalSection
 		),
 		ALL_A(_Inout_ LPCRITICAL_SECTION
@@ -746,7 +746,7 @@ public:
 		ALL_A(_Inout_ lpCriticalSection
 		));
 
-	CREATE_CALL(VOID, WINAPI, _DeleteCriticalSection, "DeleteCriticalSection",
+	CREATE_CALL(VOID, WINAPI, _DeleteCriticalSection, XorStr("DeleteCriticalSection"),
 		ALL_A(_Inout_ LPCRITICAL_SECTION lpCriticalSection
 		),
 		ALL_A(_Inout_ LPCRITICAL_SECTION
@@ -754,7 +754,7 @@ public:
 		ALL_A(_Inout_ lpCriticalSection
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _InitializeCriticalSectionAndSpinCount, "InitializeCriticalSectionAndSpinCount",
+	CREATE_CALL(BOOL, WINAPI, _InitializeCriticalSectionAndSpinCount, XorStr("InitializeCriticalSectionAndSpinCount"),
 		ALL_A(_Out_ LPCRITICAL_SECTION lpCriticalSection,
 			_In_ DWORD dwSpinCount
 		),
@@ -765,7 +765,7 @@ public:
 			_In_ dwSpinCount
 		));
 
-	CREATE_CALL(HANDLE, WINAPI, _CreateEventW, "CreateEventW",
+	CREATE_CALL(HANDLE, WINAPI, _CreateEventW, XorStr("CreateEventW"),
 		ALL_A(_In_opt_ LPSECURITY_ATTRIBUTES lpEventAttributes,
 			_In_ BOOL bManualReset,
 			_In_ BOOL bInitialState,
@@ -782,7 +782,7 @@ public:
 			_In_opt_ lpName
 		));
 
-	CREATE_CALL(VOID, WINAPI, _InitializeCriticalSection, "InitializeCriticalSection",
+	CREATE_CALL(VOID, WINAPI, _InitializeCriticalSection, XorStr("InitializeCriticalSection"),
 		ALL_A(_Out_ LPCRITICAL_SECTION lpCriticalSection
 		),
 		ALL_A(_Out_ LPCRITICAL_SECTION
@@ -790,7 +790,7 @@ public:
 		ALL_A(_Out_ lpCriticalSection
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _SetEvent, "SetEvent",
+	CREATE_CALL(BOOL, WINAPI, _SetEvent, XorStr("SetEvent"),
 		ALL_A(_In_ HANDLE hEvent
 		),
 		ALL_A(_In_ HANDLE
@@ -798,7 +798,7 @@ public:
 		ALL_A(_In_ hEvent
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _ResetEvent, "ResetEvent",
+	CREATE_CALL(BOOL, WINAPI, _ResetEvent, XorStr("ResetEvent"),
 		ALL_A(_In_ HANDLE hEvent
 		),
 		ALL_A(_In_ HANDLE
@@ -806,7 +806,7 @@ public:
 		ALL_A(_In_ hEvent
 		));
 
-	CREATE_CALL(DWORD, WINAPI, _WaitForSingleObjectEx, "WaitForSingleObjectEx",
+	CREATE_CALL(DWORD, WINAPI, _WaitForSingleObjectEx, XorStr("WaitForSingleObjectEx"),
 		ALL_A(_In_ HANDLE hHandle,
 			_In_ DWORD dwMilliseconds,
 			_In_ BOOL bAlertable
@@ -824,7 +824,7 @@ public:
 
 	//===========================================
 
-	CREATE_CALL(FARPROC, WINAPI, _GetProcAddress, "GetProcAddress",
+	CREATE_CALL(FARPROC, WINAPI, _GetProcAddress, XorStr("GetProcAddress"),
 		ALL_A(_In_ HMODULE hModule,
 			_In_ LPCSTR lpProcName
 		),
@@ -835,7 +835,7 @@ public:
 			_In_ lpProcName
 		));
 
-	CREATE_CALL(HMODULE, WINAPI, _GetModuleHandleW, "GetModuleHandleW",
+	CREATE_CALL(HMODULE, WINAPI, _GetModuleHandleW, XorStr("GetModuleHandleW"),
 		ALL_A(_In_opt_ LPCWSTR lpModuleName
 		),
 		ALL_A(_In_opt_ LPCWSTR
@@ -843,7 +843,7 @@ public:
 		ALL_A(_In_opt_ lpModuleName
 		));
 
-	CREATE_CALL(DWORD, WINAPI, _GetModuleFileNameA, "GetModuleFileNameA",
+	CREATE_CALL(DWORD, WINAPI, _GetModuleFileNameA, XorStr("GetModuleFileNameA"),
 		ALL_A(_In_opt_ HMODULE hModule,
 			_Out_writes_to_(nSize, ((return < nSize) ? (return +1) : nSize)) LPSTR lpFilename,
 			_In_ DWORD nSize
@@ -857,7 +857,7 @@ public:
 			_In_ nSize
 		));
 
-	CREATE_CALL(HMODULE, WINAPI, _GetModuleHandleA, "GetModuleHandleA",
+	CREATE_CALL(HMODULE, WINAPI, _GetModuleHandleA, XorStr("GetModuleHandleA"),
 		ALL_A(_In_opt_ LPCSTR lpModuleName
 		),
 		ALL_A(_In_opt_ LPCSTR
@@ -865,7 +865,7 @@ public:
 		ALL_A(_In_opt_ lpModuleName
 		));
 
-	CREATE_CALL(DWORD, WINAPI, _GetModuleFileNameW, "GetModuleFileNameW",
+	CREATE_CALL(DWORD, WINAPI, _GetModuleFileNameW, XorStr("GetModuleFileNameW"),
 		ALL_A(_In_opt_ HMODULE hModule,
 			_Out_writes_to_(nSize, ((return < nSize) ? (return +1) : nSize)) LPWSTR lpFilename,
 			_In_ DWORD nSize
@@ -879,7 +879,7 @@ public:
 			_In_ nSize
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _GetModuleHandleExW, "GetModuleHandleExW",
+	CREATE_CALL(BOOL, WINAPI, _GetModuleHandleExW, XorStr("GetModuleHandleExW"),
 		ALL_A(_In_ DWORD dwFlags,
 			_In_opt_ LPCWSTR lpModuleName,
 			_Out_ HMODULE* phModule
@@ -893,7 +893,7 @@ public:
 			_Out_ phModule
 		));
 
-	CREATE_CALL(HMODULE, WINAPI, _LoadLibraryExW, "LoadLibraryExW",
+	CREATE_CALL(HMODULE, WINAPI, _LoadLibraryExW, XorStr("LoadLibraryExW"),
 		ALL_A(_In_ LPCWSTR lpLibFileName,
 			_Reserved_ HANDLE hFile,
 			_In_ DWORD dwFlags
@@ -907,7 +907,7 @@ public:
 			_In_ dwFlags
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _FreeLibrary, "FreeLibrary",
+	CREATE_CALL(BOOL, WINAPI, _FreeLibrary, XorStr("FreeLibrary"),
 		ALL_A(_In_ HMODULE hLibModule
 		),
 		ALL_A(_In_ HMODULE
@@ -915,7 +915,7 @@ public:
 		ALL_A(_In_ hLibModule
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _IsBadCodePtr, "IsBadCodePtr",
+	CREATE_CALL(BOOL, WINAPI, _IsBadCodePtr, XorStr("IsBadCodePtr"),
 		ALL_A(_In_opt_ FARPROC lpfn
 		),
 		ALL_A(_In_opt_ FARPROC
@@ -923,7 +923,7 @@ public:
 		ALL_A(_In_opt_ lpfn
 		));
 
-	//CREATE_CALL(BOOL, WINAPI, _IsBadReadPtr, "IsBadReadPtr",
+	//CREATE_CALL(BOOL, WINAPI, _IsBadReadPtr, XorStr("IsBadReadPtr"),
 	//    ALL_A(_In_opt_ CONST VOID *lp,
 	//	    _In_ UINT_PTR ucb
 	//    ),
@@ -934,7 +934,7 @@ public:
 	//	    _In_ ucb
 	//    ));
 
-	CREATE_CALL(HGLOBAL, WINAPI, _GlobalAlloc, "GlobalAlloc",
+	CREATE_CALL(HGLOBAL, WINAPI, _GlobalAlloc, XorStr("GlobalAlloc"),
 		ALL_A(_In_ UINT uFlags,
 			_In_ SIZE_T dwBytes
 		),
@@ -945,7 +945,7 @@ public:
 			_In_ dwBytes
 		));
 
-	CREATE_CALL(LPVOID, WINAPI, _GlobalLock, "GlobalLock",
+	CREATE_CALL(LPVOID, WINAPI, _GlobalLock, XorStr("GlobalLock"),
 		ALL_A(_In_ HGLOBAL hMem
 		),
 		ALL_A(_In_ HGLOBAL
@@ -953,7 +953,7 @@ public:
 		ALL_A(_In_ hMem
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _GlobalUnlock, "GlobalUnlock",
+	CREATE_CALL(BOOL, WINAPI, _GlobalUnlock, XorStr("GlobalUnlock"),
 		ALL_A(_In_ HGLOBAL hMem
 		),
 		ALL_A(_In_ HGLOBAL
@@ -961,7 +961,7 @@ public:
 		ALL_A(_In_ hMem
 		));
 
-	CREATE_CALL(INT, WINAPI, _lstrlenA, "lstrlenA",
+	CREATE_CALL(INT, WINAPI, _lstrlenA, XorStr("lstrlenA"),
 		ALL_A(_In_ LPCSTR lpString
 		),
 		ALL_A(_In_ LPCSTR
@@ -969,7 +969,7 @@ public:
 		ALL_A(_In_ lpString
 		));
 
-	CREATE_CALL(INT, WINAPI, _WideCharToMultiByte, "WideCharToMultiByte",
+	CREATE_CALL(INT, WINAPI, _WideCharToMultiByte, XorStr("WideCharToMultiByte"),
 		ALL_A(_In_ UINT CodePage,
 			_In_ DWORD dwFlags,
 			_In_NLS_string_(cchWideChar) LPCWCH lpWideCharStr,
@@ -998,7 +998,7 @@ public:
 			_Out_opt_ lpUsedDefaultChar
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _GetStringTypeW, "GetStringTypeW",
+	CREATE_CALL(BOOL, WINAPI, _GetStringTypeW, XorStr("GetStringTypeW"),
 		ALL_A(_In_ DWORD dwInfoType,
 			_In_NLS_string_(cchSrc) LPCWCH lpSrcStr,
 			_In_ int cchSrc,
@@ -1015,7 +1015,7 @@ public:
 			_Out_ lpCharType
 		));
 
-	CREATE_CALL(INT, WINAPI, _CompareStringW, "CompareStringW",
+	CREATE_CALL(INT, WINAPI, _CompareStringW, XorStr("CompareStringW"),
 		ALL_A(_In_ LCID Locale,
 			_In_ DWORD dwCmpFlags,
 			_In_NLS_string_(cchCount1) PCNZWCH lpString1,
@@ -1039,7 +1039,7 @@ public:
 		));
 
 
-	CREATE_CALL(PVOID, WINAPI, _AddVectoredExceptionHandler, "AddVectoredExceptionHandler",
+	CREATE_CALL(PVOID, WINAPI, _AddVectoredExceptionHandler, XorStr("AddVectoredExceptionHandler"),
 		ALL_A(_In_ ULONG First,
 			_In_ PVECTORED_EXCEPTION_HANDLER Handler
 		),
@@ -1050,7 +1050,7 @@ public:
 			_In_ Handler
 		));
 
-	/*CREATE_CALL(VOID, WINAPI, _RaiseException, "RaiseException",
+	/*CREATE_CALL(VOID, WINAPI, _RaiseException, XorStr("RaiseException"),
 		ALL_A(_In_ DWORD dwExceptionCode,
 			_In_ DWORD dwExceptionFlags,
 			_In_ DWORD nNumberOfArguments,
@@ -1067,7 +1067,7 @@ public:
 			_In_reads_opt_(nNumberOfArguments) CONST lpArguments
 		));*/
 
-	CREATE_CALL(VOID, WINAPI, _SetLastError, "SetLastError",
+	CREATE_CALL(VOID, WINAPI, _SetLastError, XorStr("SetLastError"),
 		ALL_A(_In_ DWORD dwErrCode
 		),
 		ALL_A(_In_ DWORD
@@ -1075,7 +1075,7 @@ public:
 		ALL_A(_In_ dwErrCode
 		));
 
-	//CREATE_CALL(LONG, WINAPI, _UnhandledExceptionFilter, "UnhandledExceptionFilter",
+	//CREATE_CALL(LONG, WINAPI, _UnhandledExceptionFilter, XorStr("UnhandledExceptionFilter"),
 	//	ALL_A(_In_ struct _EXCEPTION_POINTERS* ExceptionInfo
 	//	),
 	//	ALL_A(_In_ struct _EXCEPTION_POINTERS*
@@ -1083,7 +1083,7 @@ public:
 	//	ALL_A(_In_ struct ExceptionInfo
 	//	));
 
-	//CREATE_CALL(RETLIF_NOITP, WINAPI, _SetUnhandledExceptionFilter, "SetUnhandledExceptionFilter",
+	//CREATE_CALL(RETLIF_NOITP, WINAPI, _SetUnhandledExceptionFilter, XorStr("SetUnhandledExceptionFilter"),
 	//	ALL_A(_In_opt_ LPTOP_LEVEL_EXCEPTION_FILTER lpTopLevelExceptionFilter
 	//	),
 	//	ALL_A(_In_opt_ LPTOP_LEVEL_EXCEPTION_FILTER
@@ -1091,7 +1091,7 @@ public:
 	//	ALL_A(_In_opt_ lpTopLevelExceptionFilter
 	//	));
 
-	CREATE_CALL(BOOL, WINAPI, _Beep, "Beep",
+	CREATE_CALL(BOOL, WINAPI, _Beep, XorStr("Beep"),
 		ALL_A(_In_ DWORD dwFreq,
 			_In_ DWORD dwDuration
 		),
@@ -1102,7 +1102,7 @@ public:
 			_In_ dwDuration
 		));
 
-	CREATE_CALL(PVOID, WINAPI, _EncodePointer, "EncodePointer",
+	CREATE_CALL(PVOID, WINAPI, _EncodePointer, XorStr("EncodePointer"),
 		ALL_A(_In_opt_ PVOID Ptr
 		),
 		ALL_A(_In_opt_ PVOID
@@ -1110,7 +1110,7 @@ public:
 		ALL_A(_In_opt_ Ptr
 		));
 
-	CREATE_CALL(PVOID, WINAPI, _DecodePointer, "DecodePointer",
+	CREATE_CALL(PVOID, WINAPI, _DecodePointer, XorStr("DecodePointer"),
 		ALL_A(_In_opt_ PVOID Ptr
 		),
 		ALL_A(_In_opt_ PVOID
@@ -1119,7 +1119,7 @@ public:
 		));
 
 
-	CREATE_CALL(HANDLE, WINAPI, _GetCurrentThread, "GetCurrentThread",
+	CREATE_CALL(HANDLE, WINAPI, _GetCurrentThread, XorStr("GetCurrentThread"),
 		ALL_A(
 		),
 		ALL_A(
@@ -1127,7 +1127,7 @@ public:
 		ALL_A(
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _TerminateProcess, "TerminateProcess",
+	CREATE_CALL(BOOL, WINAPI, _TerminateProcess, XorStr("TerminateProcess"),
 		ALL_A(_In_ HANDLE hProcess,
 			_In_ UINT uExitCode
 		),
@@ -1138,7 +1138,7 @@ public:
 			_In_ uExitCode
 		));
 
-	CREATE_CALL(HANDLE, WINAPI, _GetCurrentProcess, "GetCurrentProcess",
+	CREATE_CALL(HANDLE, WINAPI, _GetCurrentProcess, XorStr("GetCurrentProcess"),
 		ALL_A(
 		),
 		ALL_A(
@@ -1146,7 +1146,7 @@ public:
 		ALL_A(
 		));
 
-	CREATE_CALL(VOID, WINAPI, _ExitProcess, "ExitProcess",
+	CREATE_CALL(VOID, WINAPI, _ExitProcess, XorStr("ExitProcess"),
 		ALL_A(_In_ UINT uExitCode
 		),
 		ALL_A(_In_ UINT
@@ -1154,7 +1154,7 @@ public:
 		ALL_A(_In_ uExitCode
 		));
 
-	CREATE_CALL(DWORD, WINAPI, _GetCurrentThreadId, "GetCurrentThreadId",
+	CREATE_CALL(DWORD, WINAPI, _GetCurrentThreadId, XorStr("GetCurrentThreadId"),
 		ALL_A(
 		),
 		ALL_A(
@@ -1162,7 +1162,7 @@ public:
 		ALL_A(
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _SwitchToThread, "SwitchToThread",
+	CREATE_CALL(BOOL, WINAPI, _SwitchToThread, XorStr("SwitchToThread"),
 		ALL_A(
 		),
 		ALL_A(
@@ -1170,7 +1170,7 @@ public:
 		ALL_A(
 		));
 
-	CREATE_CALL(DWORD, WINAPI, _TlsAlloc, "TlsAlloc",
+	CREATE_CALL(DWORD, WINAPI, _TlsAlloc, XorStr("TlsAlloc"),
 		ALL_A(
 		),
 		ALL_A(
@@ -1178,7 +1178,7 @@ public:
 		ALL_A(
 		));
 
-	CREATE_CALL(LPVOID, WINAPI, _TlsGetValue, "TlsGetValue",
+	CREATE_CALL(LPVOID, WINAPI, _TlsGetValue, XorStr("TlsGetValue"),
 		ALL_A(_In_ DWORD dwTlsIndex
 		),
 		ALL_A(_In_ DWORD
@@ -1186,7 +1186,7 @@ public:
 		ALL_A(_In_ dwTlsIndex
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _TlsSetValue, "TlsSetValue",
+	CREATE_CALL(BOOL, WINAPI, _TlsSetValue, XorStr("TlsSetValue"),
 		ALL_A(_In_ DWORD dwTlsIndex,
 			_In_opt_ LPVOID lpTlsValue
 		),
@@ -1197,7 +1197,7 @@ public:
 			_In_opt_ lpTlsValue
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _TlsFree, "TlsFree",
+	CREATE_CALL(BOOL, WINAPI, _TlsFree, XorStr("TlsFree"),
 		ALL_A(_In_ DWORD dwTlsIndex
 		),
 		ALL_A(_In_ DWORD
@@ -1205,7 +1205,7 @@ public:
 		ALL_A(_In_ dwTlsIndex
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _IsProcessorFeaturePresent, "IsProcessorFeaturePresent",
+	CREATE_CALL(BOOL, WINAPI, _IsProcessorFeaturePresent, XorStr("IsProcessorFeaturePresent"),
 		ALL_A(_In_ DWORD ProcessorFeature
 		),
 		ALL_A(_In_ DWORD
@@ -1213,7 +1213,7 @@ public:
 		ALL_A(_In_ ProcessorFeature
 		));
 
-	CREATE_CALL(VOID, WINAPI, _GetStartupInfoW, "GetStartupInfoW",
+	CREATE_CALL(VOID, WINAPI, _GetStartupInfoW, XorStr("GetStartupInfoW"),
 		ALL_A(_Out_ LPSTARTUPINFOW lpStartupInfo
 		),
 		ALL_A(_Out_ LPSTARTUPINFOW
@@ -1221,7 +1221,7 @@ public:
 		ALL_A(_Out_ lpStartupInfo
 		));
 
-	CREATE_CALL(DWORD, WINAPI, _GetCurrentProcessId, "GetCurrentProcessId",
+	CREATE_CALL(DWORD, WINAPI, _GetCurrentProcessId, XorStr("GetCurrentProcessId"),
 		ALL_A(
 		),
 		ALL_A(
@@ -1230,7 +1230,7 @@ public:
 		));
 
 
-	CREATE_CALL(BOOL, WINAPI, _QueryPerformanceFrequency, "QueryPerformanceFrequency",
+	CREATE_CALL(BOOL, WINAPI, _QueryPerformanceFrequency, XorStr("QueryPerformanceFrequency"),
 		ALL_A(_Out_ LARGE_INTEGER* lpFrequency
 		),
 		ALL_A(_Out_ LARGE_INTEGER*
@@ -1238,7 +1238,7 @@ public:
 		ALL_A(_Out_ lpFrequency
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _QueryPerformanceCounter, "QueryPerformanceCounter",
+	CREATE_CALL(BOOL, WINAPI, _QueryPerformanceCounter, XorStr("QueryPerformanceCounter"),
 		ALL_A(_Out_ LARGE_INTEGER* lpPerformanceCount
 		),
 		ALL_A(_Out_ LARGE_INTEGER*
@@ -1247,7 +1247,7 @@ public:
 		));
 
 
-	CREATE_CALL(SIZE_T, WINAPI, _HeapSize, "HeapSize",
+	CREATE_CALL(SIZE_T, WINAPI, _HeapSize, XorStr("HeapSize"),
 		ALL_A(_In_ HANDLE hHeap,
 			_In_ DWORD dwFlags,
 			_In_ LPCVOID lpMem
@@ -1261,7 +1261,7 @@ public:
 			_In_ lpMem
 		));
 
-	CREATE_CALL(HANDLE, WINAPI, _GetProcessHeap, "GetProcessHeap",
+	CREATE_CALL(HANDLE, WINAPI, _GetProcessHeap, XorStr("GetProcessHeap"),
 		ALL_A(
 		),
 		ALL_A(
@@ -1269,7 +1269,7 @@ public:
 		ALL_A(
 		));
 
-	CREATE_CALL(LPVOID, WINAPI, _HeapAlloc, "HeapAlloc",
+	CREATE_CALL(LPVOID, WINAPI, _HeapAlloc, XorStr("HeapAlloc"),
 		ALL_A(_In_ HANDLE hHeap,
 			_In_ DWORD dwFlags,
 			_In_ SIZE_T dwBytes
@@ -1283,7 +1283,7 @@ public:
 			_In_ dwBytes
 		));
 
-	CREATE_CALL(LPVOID, WINAPI, _HeapReAlloc, "HeapReAlloc",
+	CREATE_CALL(LPVOID, WINAPI, _HeapReAlloc, XorStr("HeapReAlloc"),
 		ALL_A(_Inout_ HANDLE hHeap,
 			_In_ DWORD dwFlags,
 			_Frees_ptr_opt_ LPVOID lpMem,
@@ -1300,7 +1300,7 @@ public:
 			_In_ dwBytes
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _HeapFree, "HeapFree",
+	CREATE_CALL(BOOL, WINAPI, _HeapFree, XorStr("HeapFree"),
 		ALL_A(_Inout_ HANDLE hHeap,
 			_In_ DWORD dwFlags,
 			__drv_freesMem(Mem) _Frees_ptr_opt_ LPVOID lpMem
@@ -1315,7 +1315,7 @@ public:
 		));
 
 
-	CREATE_CALL(LONG, WINAPI, _SetWindowLongA, "SetWindowLongA",
+	CREATE_CALL(LONG, WINAPI, _SetWindowLongA, XorStr("SetWindowLongA"),
 		ALL_A(_In_ HWND hWnd,
 			_In_ int nIndex,
 			_In_ LONG dwNewLong
@@ -1329,7 +1329,7 @@ public:
 			_In_ dwNewLong
 		));
 
-	CREATE_CALL(SHORT, WINAPI, _GetKeyState, "GetKeyState",
+	CREATE_CALL(SHORT, WINAPI, _GetKeyState, XorStr("GetKeyState"),
 		ALL_A(_In_ int nVirtKey
 		),
 		ALL_A(_In_ int
@@ -1337,7 +1337,7 @@ public:
 		ALL_A(_In_ nVirtKey
 		));
 
-	CREATE_CALL(HANDLE, WINAPI, _GetClipboardData, "GetClipboardData",
+	CREATE_CALL(HANDLE, WINAPI, _GetClipboardData, XorStr("GetClipboardData"),
 		ALL_A(_In_ UINT uFormat
 		),
 		ALL_A(_In_ UINT
@@ -1345,7 +1345,7 @@ public:
 		ALL_A(_In_ uFormat
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _OpenClipboard, "OpenClipboard",
+	CREATE_CALL(BOOL, WINAPI, _OpenClipboard, XorStr("OpenClipboard"),
 		ALL_A(_In_opt_ HWND hWndNewOwner
 		),
 		ALL_A(_In_opt_ HWND
@@ -1353,7 +1353,7 @@ public:
 		ALL_A(_In_opt_ hWndNewOwner
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _CloseClipboard, "CloseClipboard",
+	CREATE_CALL(BOOL, WINAPI, _CloseClipboard, XorStr("CloseClipboard"),
 		ALL_A(
 		),
 		ALL_A(
@@ -1361,7 +1361,7 @@ public:
 		ALL_A(
 		));
 
-	CREATE_CALL(SHORT, WINAPI, _GetAsyncKeyState, "GetAsyncKeyState",
+	CREATE_CALL(SHORT, WINAPI, _GetAsyncKeyState, XorStr("GetAsyncKeyState"),
 		ALL_A(_In_ int vKey
 		),
 		ALL_A(_In_ int
@@ -1369,7 +1369,7 @@ public:
 		ALL_A(_In_ vKey
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _GetCursorPos, "GetCursorPos",
+	CREATE_CALL(BOOL, WINAPI, _GetCursorPos, XorStr("GetCursorPos"),
 		ALL_A(_Out_ LPPOINT lpPoint
 		),
 		ALL_A(_Out_ LPPOINT
@@ -1377,7 +1377,7 @@ public:
 		ALL_A(_Out_ lpPoint
 		));
 
-	CREATE_CALL(HANDLE, WINAPI, _SetClipboardData, "SetClipboardData",
+	CREATE_CALL(HANDLE, WINAPI, _SetClipboardData, XorStr("SetClipboardData"),
 		ALL_A(_In_ UINT uFormat,
 			_In_opt_ HANDLE hMem
 		),
@@ -1388,7 +1388,7 @@ public:
 			_In_opt_ hMem
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _EmptyClipboard, "EmptyClipboard",
+	CREATE_CALL(BOOL, WINAPI, _EmptyClipboard, XorStr("EmptyClipboard"),
 		ALL_A(
 		),
 		ALL_A(
@@ -1396,7 +1396,7 @@ public:
 		ALL_A(
 		));
 
-	CREATE_CALL(LRESULT, WINAPI, _CallWindowProcA, "CallWindowProcA",
+	CREATE_CALL(LRESULT, WINAPI, _CallWindowProcA, XorStr("CallWindowProcA"),
 		ALL_A(_In_ WNDPROC lpPrevWndFunc,
 			_In_ HWND hWnd,
 			_In_ UINT Msg,
@@ -1416,7 +1416,7 @@ public:
 			_In_ lParam
 		));
 
-	CREATE_CALL(BOOL, WINAPI, _DestroyWindow, "DestroyWindow",
+	CREATE_CALL(BOOL, WINAPI, _DestroyWindow, XorStr("DestroyWindow"),
 		ALL_A(_In_ HWND hWnd
 		),
 		ALL_A(_In_ HWND 

@@ -147,7 +147,7 @@ void CGHelper::Menu()
 	static int Mode = 1;
 	static GHInfo InfoProt;
 
-	if (X1Gui().ListBoxHeader("##GHelpList", Vec2(long_item_w, 268)))
+	if (X1Gui().ListBoxHeader(XorStr("##GHelpList"), Vec2(long_item_w, 268)))
 	{
 		GuiStyle& style = X1Gui().GetStyle();
 

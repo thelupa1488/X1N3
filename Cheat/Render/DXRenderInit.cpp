@@ -37,9 +37,9 @@ void CRender::IRender::DX_Init(DWORD* table)
 	LPDIRECT3DDEVICE9 pd3dDevice = NULL;
 	do
 	{
-		WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, MsgProc, 0L, 0L, FastCall::G().t_GetModuleHandleA(NULL), NULL, NULL, NULL, NULL, "SEGUARD_Window", NULL };
+		WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, MsgProc, 0L, 0L, FastCall::G().t_GetModuleHandleA(NULL), NULL, NULL, NULL, NULL, XorStr("SEGUARD_Window"), NULL };
 		RegisterClassEx(&wc);
-		HWND hWnd = CreateWindowA("SEGUARD_Window", NULL, WS_OVERLAPPEDWINDOW, 100, 100, 300, 300, GetDesktopWindow(), NULL, wc.hInstance, NULL);
+		HWND hWnd = CreateWindowA(XorStr("SEGUARD_Window"), NULL, WS_OVERLAPPEDWINDOW, 100, 100, 300, 300, GetDesktopWindow(), NULL, wc.hInstance, NULL);
 		LPDIRECT3D9 pD3D = Direct3DCreate9(D3D_SDK_VERSION);
 		D3DPRESENT_PARAMETERS d3dpp;
 		ZeroMemory(&d3dpp, sizeof(d3dpp));
@@ -132,7 +132,7 @@ void CRender::IRender::Initialize()
 		{
 			ADD_LOG("2-1-11-7-3-10\n");
 			ADD_LOG("Setup: InitTable Device Error\n");
-			FastCall::G().t_MessageBoxA(0, "InitTable error", "Error!", 0);
+			FastCall::G().t_MessageBoxA(0, XorStr("InitTable error"), XorStr("Error!"), 0);
 		}
 		ADD_LOG("2-1-11-7-3-11\n");
 	}

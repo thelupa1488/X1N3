@@ -125,9 +125,6 @@
     <ClCompile Include="Engine\SDK\CRC.cpp">
       <Filter>Engine\SDK</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\SDK\KeyValues.cpp">
-      <Filter>Engine\SDK</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\SDK\SDK.cpp">
       <Filter>Engine\SDK</Filter>
     </ClCompile>
@@ -201,6 +198,9 @@
     <ClCompile Include="Engine\SDK\Math.cpp" />
     <ClCompile Include="Engine\SDK\checksum_md5.cpp" />
     <ClCompile Include="X1API\cHide.cpp" />
+    <ClCompile Include="Engine\Materials.cpp" />
+    <ClCompile Include="Engine\SDK\KeyValues.cpp" />
+    <ClCompile Include="Engine\SDK\IMaterialSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
@@ -459,9 +459,6 @@
     <ClInclude Include="Engine\SDK\IVRenderView.h">
       <Filter>Engine\SDK</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\SDK\KeyValues.h">
-      <Filter>Engine\SDK</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\SDK\Vplane.h">
       <Filter>Engine\SDK</Filter>
     </ClInclude>
@@ -672,6 +669,8 @@
     <ClInclude Include="Engine\EnginePrediction.h" />
     <ClInclude Include="X1API\ThreadInMemory.h" />
     <ClInclude Include="Hooks\Other.h" />
+    <ClInclude Include="Engine\Materials.h" />
+    <ClInclude Include="Engine\SDK\KeyValues.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="3DMenu">

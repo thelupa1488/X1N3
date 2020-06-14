@@ -202,7 +202,7 @@ void CGSettings::UpdateList()
 
 bool CheckRus(string& check)
 {
-	string alph_rus = "АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЪъЫыЬьЭэЮюЯя";
+	string alph_rus = XorStr("АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЪъЫыЬьЭэЮюЯя");
 
 	for (auto& v_check : check)
 		for (auto& v_rus : alph_rus)

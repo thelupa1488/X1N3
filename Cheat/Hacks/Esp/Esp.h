@@ -54,17 +54,6 @@ public:
 
 class CEsp : public IEsp
 {
-private:
-	 IMaterial* HidTex = nullptr;
-	 IMaterial* VisTex = nullptr;
-	 IMaterial* HidFlat = nullptr;
-	 IMaterial* VisFlat = nullptr;
-	 IMaterial* HidFrame = nullptr;
-	 IMaterial* VisFrame = nullptr;
-	 IMaterial* HidMetallic = nullptr;
-	 IMaterial* VisMetallic = nullptr;
-	 IMaterial* HidVitality = nullptr;
-	 IMaterial* VisVitality = nullptr;
 public:
 	enum Sides
 	{
@@ -201,7 +190,7 @@ public:
 	int GlowStyle = 0;
 	bool Chams = false;
 	bool ChamsVisibleOnly = false;
-	int ChamsStyle = 0;
+	int  ChamsStyle = 0;
 	float MaterialFixColorChams = 10.0f;
 	bool FillBox = false;
 	bool HeadEsp = false;

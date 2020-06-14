@@ -2,6 +2,7 @@
 #include  "../Setup.h"
 #include "../../GUI/Gui.h"
 #include "../../Engine/EnginePrediction.h"
+#include "../../Engine/Materials.h"
 
 //#define KEY_DOWN(VK_NNM) ((FastCall::G().t_GetAsyncKeyState(VK_NNM) & 0x8000) ? 1:0)
 #define KEY_DOWN(VK_NNM) (I::InputSystem()->IsButtonDown(VK_NNM))
@@ -1551,21 +1552,30 @@ void CMisc::AutoAcceptEmit()
 
 void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld)
 {
+	static IMaterial* VisTex = nullptr;
+	static IMaterial* VisFlat = nullptr;
+	static IMaterial* VisFrame = nullptr;
+	static IMaterial* VisMetallic = nullptr;
+	static IMaterial* VisMetallicPlus = nullptr;
+
 	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
 	{
 		if (!VisTex)
-			VisTex = CGlobal::CreateMaterialBasic(false, true, false);
+			VisTex = Materials::material_texture;
 
 		if (!VisFlat)
-			VisFlat = CGlobal::CreateMaterialBasic(false, false, false);
+			VisFlat = Materials::material_flat;
 
 		if (!VisFrame)
-			VisFrame = CGlobal::CreateMaterialBasic(false, true, true);
+			VisFrame = Materials::material_wireframe;
 
 		if (!VisMetallic)
-			VisMetallic = CGlobal::CreateMaterialMetallic(false, true);
+			VisMetallic = Materials::material_metallic;
 
-		if (!VisTex || !VisFlat || !VisFrame || !VisMetallic)
+		if (!VisMetallicPlus)
+			VisMetallicPlus = Materials::material_metallic_plus;
+
+		if (!VisTex && !VisFlat && !VisFrame && !VisMetallic && !VisMetallicPlus)
 			return;
 
 		const char* ModelName = I::ModelInfo()->GetModelName((model_t*)pInfo.pModel);
@@ -1577,9 +1587,9 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 
 		if (HandChams)
 		{
-			float HandColor[3] = { HandChamsColor.G1R(), HandChamsColor.G1G(), HandChamsColor.G1B() };
 			if (strstr(ModelName, XorStr("arms")))
 			{
+				float HandColor[3] = { HandChamsColor.G1R(), HandChamsColor.G1G(), HandChamsColor.G1B() };
 				I::RenderView()->SetColorModulation(HandColor);
 				I::RenderView()->SetBlend(HandChamsColor.G1A());
 
@@ -1589,7 +1599,8 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 				case 1: I::ModelRender()->ForcedMaterialOverride(VisFlat); break; //flat
 				case 2: I::ModelRender()->ForcedMaterialOverride(VisFrame); break; //wireframe
 				case 3: I::ModelRender()->ForcedMaterialOverride(VisMetallic); break; //metallic
-				case 4: I::RenderView()->SetBlend(0.0f); I::ModelRender()->ForcedMaterialOverride(VisFlat); break; //disable
+				case 4: I::ModelRender()->ForcedMaterialOverride(VisMetallicPlus); break; //metallicPlus
+				case 5: I::RenderView()->SetBlend(0.0f); I::ModelRender()->ForcedMaterialOverride(VisFlat); break; //disable
 				default: break;
 				}
 
@@ -1598,9 +1609,9 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 		}
 		if (WeaponChams)
 		{
-			float WeaponColor[3] = { WeaponChamsColor.G1R(), WeaponChamsColor.G1G(), WeaponChamsColor.G1B() };
 			if (strstr(ModelName, XorStr("models/weapons/v_")) && !strstr(ModelName, XorStr("arms")))
 			{
+				float WeaponColor[3] = { WeaponChamsColor.G1R(), WeaponChamsColor.G1G(), WeaponChamsColor.G1B() };
 				I::RenderView()->SetColorModulation(WeaponColor);
 				I::RenderView()->SetBlend(WeaponChamsColor.G1A());
 
@@ -1610,7 +1621,8 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 				case 1: I::ModelRender()->ForcedMaterialOverride(VisFlat); break; //flat
 				case 2: I::ModelRender()->ForcedMaterialOverride(VisFrame); break; //wireframe
 				case 3: I::ModelRender()->ForcedMaterialOverride(VisMetallic); break; //metallic
-				case 4: I::RenderView()->SetBlend(0.0f); I::ModelRender()->ForcedMaterialOverride(VisFlat); break; //disable
+				case 4: I::ModelRender()->ForcedMaterialOverride(VisMetallicPlus); break; //metallicPlus
+				case 5: I::RenderView()->SetBlend(0.0f); I::ModelRender()->ForcedMaterialOverride(VisFlat); break; //disable
 				default: break;
 				}
 
@@ -1890,15 +1902,6 @@ void CMisc::CustomWalls()
 {
 	static bool reset = false;
 
-	static KeyValues* KeyValTex;
-	static KeyValues* KeyValFlat;
-
-	if (!KeyValTex)
-		KeyValTex = CGlobal::KeyValNew(false);
-
-	if (!KeyValFlat)
-		KeyValFlat = CGlobal::KeyValNew(false, false);
-
 	if (ColoredWalls && CGlobal::IsGameReady)
 	{
 		static float old_r = ColoredWallsColor.G1R();
@@ -1927,16 +1930,6 @@ void CMisc::CustomWalls()
 					strstr(pMaterial->GetTextureGroupName(), XorStr("StaticProp")) ||
 					strstr(pMaterial->GetTextureGroupName(), XorStr("SkyBox")))
 				{
-					/*if (ColoredWallsStyle == 1)
-					{
-						if (KeyValTex)
-							pMaterial->SetShaderAndParams(KeyValTex);
-					}
-					else if (ColoredWallsStyle == 2)
-					{
-						if (KeyValFlat)
-							pMaterial->SetShaderAndParams(KeyValFlat);
-					}*/
 
 					pMaterial->AlphaModulate(ColoredWallsColor.G1A());
 					pMaterial->ColorModulate(ColoredWallsColor.G1R(), ColoredWallsColor.G1G(), ColoredWallsColor.G1B());

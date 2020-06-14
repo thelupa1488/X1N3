@@ -37,7 +37,6 @@
 #include "IVRenderView.h"
 #include "IMaterial.h"
 #include "IMaterialSystem.h"
-#include "KeyValues.h"
 #include "ISurface.h"
 #include "IGameEvent.h"
 #include "TextureGroupNames.h"
@@ -52,6 +51,7 @@
 #include "IPredition.hpp"
 #include "CUserCmd.hpp"
 #include "IInputSystem.hpp"
+#include "KeyValues.h"
 //#include "memalloc.h"
 
 #include <Windows.h>
@@ -77,6 +77,9 @@
 #define shaderapidx9Factory XorStr("shaderapidx9.dll")
 #define gameoverlayrenderFactory XorStr("GameOverlayRenderer.dll")
 
+#define KEY_VALUES_MASK  XorStr("02 7E 4E")
+#define KEY_VALUES_LOAD_FROM_BUFFER_MASK  XorStr("55 8B EC 51 33 C0 C7 45")
+
 #define d3d9_mask XorStr("x????xxxxxx")
 #define gmor_mask XorStr("x????x????xxxx????xxxxxxx")
 
@@ -85,9 +88,6 @@
 
 #define gmor_pattern XorStr("\xA3\x00\x00\x00\x00\x68\x00\x00\x00\x00\xFF\x76\x54\xE8\x00\x00\x00\x00\x83\xC4\x08\x84\xC0\x75\x17")
 #define smok_pattern XorStr("\x55\x8B\xEC\x83\xEC\x08\x8B\x15\x00\x00\x00\x00\x0F\x57\xC0")
-
-#define KEY_VALUES_MASK  XorStr("55 8B EC 51 33 C0 C7 45")
-#define KEY_VALUES_LOAD_FROM_BUFFER_MASK  XorStr("55 8B EC 83 E4 F8 83 EC 34 53 8B 5D 0C 89 4C 24 04")
 
 #define CLIENT_MODE_PATTERN XorStr("\xB9\x00\x00\x00\x00\x83\x38\x02\x75\x0D\xFF\xB0\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x5D\xC3")
 #define CLIENT_MODE_MASK XorStr("x????xxxxxxx????x????xx")

@@ -1,8 +1,7 @@
 #pragma once
-
 #include "SDK.h"
-typedef unsigned short MaterialHandle_t;
 
+typedef unsigned short MaterialHandle_t;
 
 namespace SDK
 {
@@ -74,13 +73,13 @@ namespace SDK
 		TESSELLATION_MODE_ACC_PATCHES_REG
 	};
 
-	enum MaterialPropertyTypes_t
-	{
-		MATERIAL_PROPERTY_NEEDS_LIGHTMAP = 0,					// bool
-		MATERIAL_PROPERTY_OPACITY,								// int (enum MaterialPropertyOpacityTypes_t)
-		MATERIAL_PROPERTY_REFLECTIVITY,							// vec3_t
-		MATERIAL_PROPERTY_NEEDS_BUMPED_LIGHTMAPS				// bool
-	};
+	//enum MaterialPropertyTypes_t
+	//{
+	//	MATERIAL_PROPERTY_NEEDS_LIGHTMAP = 0,					// bool
+	//	MATERIAL_PROPERTY_OPACITY,								// int (enum MaterialPropertyOpacityTypes_t)
+	//	MATERIAL_PROPERTY_REFLECTIVITY,							// vec3_t
+	//	MATERIAL_PROPERTY_NEEDS_BUMPED_LIGHTMAPS				// bool
+	//};
 
 	// acceptable property values for MATERIAL_PROPERTY_OPACITY
 	enum MaterialPropertyOpacityTypes_t
@@ -269,7 +268,6 @@ namespace SDK
 		int iExcludeInformation;
 	};
 
-
 	struct ApplicationPerformanceCountersInfo_t
 	{
 		float msMain;
@@ -285,68 +283,13 @@ namespace SDK
 		uint m_nDeferredWordsAllocated;
 	};
 
-
 	class IMaterialSystem
 	{
 	public:
-		/*MaterialHandle_t FirstMaterial(){
-			typedef MaterialHandle_t(__thiscall* FirstMaterialFn)(void*);
-			return GetVFunc<FirstMaterialFn>(this, 86)(this);
-		}
-
-		MaterialHandle_t InvalidMaterial(){
-			typedef MaterialHandle_t(__thiscall* InvalidMaterialFn)(void*);
-			return GetVFunc<InvalidMaterialFn>(this, 88)(this);
-		}
-
-		MaterialHandle_t NextMaterial(MaterialHandle_t h){
-			typedef MaterialHandle_t(__thiscall* NextMaterialFn)(void*, MaterialHandle_t);
-			return GetVFunc<NextMaterialFn>(this, 87)(this, h);
-		}
-
-		IMaterial* GetMaterial(MaterialHandle_t h){
-			typedef IMaterial*(__thiscall* GetMaterialFn)(void*, MaterialHandle_t);
-			return GetVFunc<GetMaterialFn>(this, 89)(this, h);
-		}
-
-		IMaterial*	CreateMaterialName(const char *pMaterialName, KeyValues *pVMTKeyValues){
-			typedef IMaterial* (__thiscall* oCreateMaterial)(PVOID, const char *, KeyValues*);
-			return GetVFunc<oCreateMaterial>(this, 83)(this, pMaterialName, pVMTKeyValues);
-		}*/
-
-
-		/*MaterialHandle_t NextMaterial(MaterialHandle_t h) {
-			typedef MaterialHandle_t(__thiscall* NextMaterialFn)(void*, MaterialHandle_t);
-			return GetVFunc<NextMaterialFn>(this, 87)(this, h);
-		}
-
-		MaterialHandle_t FirstMaterial() {
-			typedef MaterialHandle_t(__thiscall* FirstMaterialFn)(void*);
-			return GetVFunc<FirstMaterialFn>(this, 86)(this);
-		}
-
-		IMaterial* GetMaterial(MaterialHandle_t h) {
-			typedef IMaterial*(__thiscall* GetMaterialFn)(void*, MaterialHandle_t);
-			return GetVFunc<GetMaterialFn>(this, 89)(this, h);
-		}*/
-
-		//IMaterial* CreateMaterialOld(const char* pMaterialName, KeyValues* pVMTKeyValues)
-		//{
-		//	VirtualFn(IMaterial*)(PVOID, const char*, KeyValues*);
-		//	return GetMethod< OriginalFn >(this, 83)(this, pMaterialName, pVMTKeyValues);
-		//}
-
-		IMaterial* CreateMaterial(const char* pMaterialName, KeyValues* pVMTKeyValues)
-		{
-			typedef IMaterial* (__thiscall* oCreateMaterial)(PVOID, const char*, KeyValues*);
-			return call_vfunc<oCreateMaterial>(this, 83)(this, pMaterialName, pVMTKeyValues);
-		}
-
-		IMaterial* FindMaterial(const char* pMaterialName, const char* pTextureGroupName, bool complain = true, const char* pComplainPrefix = 0)
-		{
-			VirtualFn(IMaterial*)(PVOID, const char*, const char*, bool, const char*);
-			return GetMethod< OriginalFn >(this, 84)(this, pMaterialName, pTextureGroupName, complain, pComplainPrefix);
-		}
+		void LoadFromBuffer(KeyValues* pKeyValues, const char* resourceName, const char* pBuffer, void* pFileSystem = nullptr, const char* pPathID = NULL, void* pfnEvaluateSymbolProc = nullptr);
+		void InitKeyValues(KeyValues* pKeyValues, const char* Name);
+		IMaterial* CreateMaterial(bool flat, bool ignorez, bool wireframed);
+		IMaterial* FindMaterial(char const* pMaterialName, const char* pTextureGroupName, bool complain = true, const char* pComplainPrefix = NULL);
 
 		MaterialHandle_t FirstMaterial()
 		{

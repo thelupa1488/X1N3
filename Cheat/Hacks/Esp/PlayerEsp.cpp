@@ -1,6 +1,7 @@
 #include "Esp.h"
 #include "../Setup.h"
 //#include "../../Hooks/Tables.h"
+#include "../../Engine/Materials.h"
 
 void CEsp::DrawPlayerEx(CEntityPlayer* Entity, CEntityPlayer* Local, bool IsDormant)
 {
@@ -800,34 +801,61 @@ void CEsp::DrawBar(Orent O, float x, float y, float w, float h, float val, bool 
 
 void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld)
 {
+	static IMaterial* HidTex = nullptr;
+	static IMaterial* VisTex = nullptr;
+
+	static IMaterial* HidFlat = nullptr;
+	static IMaterial* VisFlat = nullptr;
+
+	static IMaterial* HidFrame = nullptr;
+	static IMaterial* VisFrame = nullptr;
+
+	static IMaterial* HidMetallic = nullptr;
+	static IMaterial* VisMetallic = nullptr;
+
+	static IMaterial* HidMetallicPlus = nullptr;
+	static IMaterial* VisMetallicPlus = nullptr;
+
 	if (Enable && Chams && BindEnable.Check())
 	{
 		if (!HidTex)
-			HidTex = CGlobal::CreateMaterialBasic(true);
+			HidTex = Materials::material_texture_ignorez;
 
 		if (!VisTex)
-			VisTex = CGlobal::CreateMaterialBasic(false);
+			VisTex = Materials::material_texture;
 
 		if (!HidFlat)
-			HidFlat = CGlobal::CreateMaterialBasic(true, false);
+			HidFlat = Materials::material_flat_ignorez;
 
 		if (!VisFlat)
-			VisFlat = CGlobal::CreateMaterialBasic(false, false);
+			VisFlat = Materials::material_flat;
 
 		if (!HidFrame)
-			HidFrame = CGlobal::CreateMaterialBasic(true, true, true);
+			HidFrame = Materials::material_wireframe_ignorez;
 
 		if (!VisFrame)
-			VisFrame = CGlobal::CreateMaterialBasic(false, true, true);
+			VisFrame = Materials::material_wireframe;
 
 		if (!HidMetallic)
-			HidMetallic = CGlobal::CreateMaterialMetallic(true, true);
+			HidMetallic = Materials::material_metallic_ignorez;
 
 		if (!VisMetallic)
-			VisMetallic = CGlobal::CreateMaterialMetallic(false, true);
+			VisMetallic = Materials::material_metallic;
 
-		if (!HidTex || !VisTex || !HidFlat || !VisFlat ||
-			!HidFrame || !VisFrame || !HidMetallic || !VisMetallic)
+		if (!HidMetallic)
+			HidMetallic = Materials::material_metallic_ignorez;
+
+		if (!VisMetallic)
+			VisMetallic = Materials::material_metallic;
+
+		if (!HidMetallicPlus)
+			HidMetallicPlus = Materials::material_metallic_plus_ignorez;
+
+		if (!VisMetallicPlus)
+			VisMetallicPlus = Materials::material_metallic_plus;
+
+		if (!HidTex || !VisTex || !HidFlat || !VisFlat ||!HidFrame || 
+			!VisFrame || !HidMetallic || !VisMetallic || !HidMetallicPlus || !HidMetallicPlus)
 			return;
 
 		const char* ModelName = I::ModelInfo()->GetModelName((model_t*)pInfo.pModel);
@@ -872,12 +900,13 @@ void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMod
 			case 1: I::ModelRender()->ForcedMaterialOverride(HidFlat); break;
 			case 2: I::ModelRender()->ForcedMaterialOverride(HidFrame); break;
 			case 3: I::ModelRender()->ForcedMaterialOverride(HidMetallic); break;
+			case 4: I::ModelRender()->ForcedMaterialOverride(HidMetallicPlus); break;
 			default: break;
 			}
 			HookTables::pDrawModelExecute->GetTrampoline()(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 		}
 
-		if (ChamsStyle <= 3)
+		if (ChamsStyle <= 4)
 		{
 			float ArrColor[3] = { ChamsVisbleColor.G1R(), ChamsVisbleColor.G1G(), ChamsVisbleColor.G1B() };
 
@@ -890,12 +919,13 @@ void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMod
 			case 1: I::ModelRender()->ForcedMaterialOverride(VisFlat); break;
 			case 2: I::ModelRender()->ForcedMaterialOverride(VisFrame); break;
 			case 3: I::ModelRender()->ForcedMaterialOverride(VisMetallic); break;
+			case 4: I::ModelRender()->ForcedMaterialOverride(VisMetallicPlus); break;
 			default: break;
 			}
 			HookTables::pDrawModelExecute->GetTrampoline()(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 		}
 
-		if (ChamsStyle == 4)
+		if (ChamsStyle == 5)
 		{
 			float ArrVisbleColor[3] = { ChamsVisbleColor.G1R(), ChamsVisbleColor.G1G(), ChamsVisbleColor.G1B() };
 
@@ -911,7 +941,7 @@ void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMod
 			HookTables::pDrawModelExecute->GetTrampoline()(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 		}
 
-		if (ChamsStyle == 4 && !ChamsVisibleOnly)
+		if (ChamsStyle == 5 && !ChamsVisibleOnly)
 		{
 			if (!Entity->IsVisble)
 			{

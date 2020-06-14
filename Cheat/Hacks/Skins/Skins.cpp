@@ -461,7 +461,7 @@ void CSkins::SetSkin(CBaseAttributableItem* pWeapon, SkinSettings *SkinParam, in
 		*pWeapon->GetFallbackSeed() = SkinParam->seed;
 
 	if (SkinParam->custom_name)
-		snprintf(pWeapon->GetCustomName(), 32, "%s", SkinParam->custom_name);
+		snprintf(pWeapon->GetCustomName(), 32, XorStr("%s"), SkinParam->custom_name);
 
 	if (*pWeapon->GetItemDefinitionIndex() != id)
 	{

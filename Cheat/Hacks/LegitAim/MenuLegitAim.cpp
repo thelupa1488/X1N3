@@ -64,17 +64,17 @@ void CLegitAim::Menu()
 		if (SubtabAimMiscSelected == 0)
 		{
 			X1Gui().Spacing();
-			DCheckBox("Aim at teammates", Deathmatch);
+			DCheckBox("Aim at teammates##LegitAim", Deathmatch);
 
 			X1Gui().SameLine(246);
-			DCheckBox("Automatic fire", AutoFire);
-			DCheckBox("Flash check", FlashCheck);
+			DCheckBox("Automatic fire##LegitAim", AutoFire);
+			DCheckBox("Flash check##LegitAim", FlashCheck);
 
 			X1Gui().SameLine(246);
-			DCheckBox("Jump check##5677", JumpCheck);
-			DCheckBox("Smoke check##343434", SmokeCheck);
+			DCheckBox("Jump check##LegitAim", JumpCheck);
+			DCheckBox("Smoke check##LegitAim", SmokeCheck);
 			X1Gui().SameLine(246);
-			DCheckBox("Enemy jump check", JumpEnemyCheck);
+			DCheckBox("Enemy jump check##LegitAim", JumpEnemyCheck);
 
 			X1Gui().Spacing();
 			X1Gui().Spacing();
@@ -403,12 +403,12 @@ void CLegitAim::Menu()
 			}
 			X1Gui().EndGroup(true);
 
-			DCheckBox("Flash check", TriggerFlashCheck);
+			DCheckBox("Flash check##Trigger", TriggerFlashCheck);
 			X1Gui().SameLine(163);
-			DCheckBox("Smoke check", TriggerSmokeCheck);
-			DCheckBox("Jump check", TriggerJumpCheck);
+			DCheckBox("Smoke check##Trigger", TriggerSmokeCheck);
+			DCheckBox("Jump check##Trigger", TriggerJumpCheck);
 			X1Gui().SameLine(163);
-			DCheckBox("Enemy jump check", TriggerJumpEnemyCheck);
+			DCheckBox("Enemy jump check##Trigger", TriggerJumpEnemyCheck);
 
 			X1Gui().Spacing();
 
@@ -443,7 +443,7 @@ void CLegitAim::SubsectionsMenu()
 			SelectedWeapon = 0;
 
 		static int selectedItem = SelectedWeapon;
-		if (X1Gui().ListBoxHeader("##0", Vec2(154, 665 - 7)))
+		if (X1Gui().ListBoxHeader(XorStr("##0"), Vec2(154, 665 - 7)))
 		{
 			for (int i = 0; i < (sizeof(CGlobal::WeaponNames) / sizeof(*CGlobal::WeaponNames)); i++)
 			{
@@ -491,7 +491,7 @@ void CLegitAim::SubsectionsMenu()
 				CustomSub  CustomEntry;
 				CustomEntry.Idx = Weapons.size();
 				CustomEntry.Name = NewSubName;
-				CustomEntry.Name += "##" + to_string(CustomEntry.Idx);
+				CustomEntry.Name += XorStr("##") + to_string(CustomEntry.Idx);
 
 				WeaponSettings WeaponEntry;
 				WeaponEntry.WeaponName = CustomEntry.Name;

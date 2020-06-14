@@ -100,9 +100,6 @@ namespace Offsets
 
 	extern DWORD m_zoomLevel;
 
-	extern DWORD KeyValues_KeyValues;
-	extern DWORD KeyValues_LoadFromBuffer;
-
 	extern DWORD m_CollisionGroup;
 	extern DWORD m_rgflCoordinateFrame;
 
@@ -110,6 +107,9 @@ namespace Offsets
 	extern DWORD m_vecMaxs;
 
 	extern DWORD m_Item;
+
+	extern DWORD LoadFromBufferEx;
+	extern DWORD InitKeyValuesEx;
 
 //	extern float* FindW2Matrix();
 }

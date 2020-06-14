@@ -13,7 +13,7 @@ CGui& X1Gui() {
 bool CGui::Begin(string Name, GuiWindowFlags Flags, Vec2 Size, Vec2 Pos, CGui* old, color_t* back)
 {
 	if (X1Gui().G_Enable3D)
-		Name += "##3D";
+		Name += XorStr("##3D");
 
 	map<string, CGui>* cur_map = &X1Gui().G_WindowList;
 
@@ -585,39 +585,39 @@ bool CGui::IsMouseHover(Vec2 Min, Vec2 Max)
 
 void CGui::ShowMetrics()
 {
-	Begin("Metrics");
+	Begin(XorStr("Metrics"));
 	{
 		int idx = 0;
 
 		//IO.G_DeltaTime
-		Text("DeltaTime: %f", GetIO().G_DeltaTime);
+		Text(XorStr("DeltaTime: %f"), GetIO().G_DeltaTime);
 		for (auto it = X1Gui().G_WindowList.begin(); it != X1Gui().G_WindowList.end(); ++it)
 		{
-			Text("%i: Window name: %s Pos(%i, %i) Size(%i, %i)",
+			Text(XorStr("%i: Window name: %s Pos(%i, %i) Size(%i, %i)"),
 				idx, it->second.Info.Name.c_str(),
 				(int)it->second.Info.Pos.x, (int)it->second.Info.Pos.y,
 				(int)it->second.Info.Size.x, (int)it->second.Info.Size.y);
 			
-			Text("\t VTX: %i", it->second.Overlay.VtxBuffer.size());
-			Text("\t IDX: %i", it->second.Overlay.IdxBuffer.size());
-			Text("\t CMD: %i", it->second.Overlay.CmdBuffer.size());
+			Text(XorStr("\t VTX: %i"), it->second.Overlay.VtxBuffer.size());
+			Text(XorStr("\t IDX: %i"), it->second.Overlay.IdxBuffer.size());
+			Text(XorStr("\t CMD: %i"), it->second.Overlay.CmdBuffer.size());
 			for (int i(0); i < it->second.Overlay.CmdBuffer.size(); i++)
 			{
 				Vec4 rec = it->second.Overlay.CmdBuffer[i].ClipRect;
-				Text("\t\t Size: %f, %f, %f, %f", rec.x, rec.y, rec.z, rec.w);
+				Text(XorStr("\t\t Size: %f, %f, %f, %f"), rec.x, rec.y, rec.z, rec.w);
 			}
-			Text("\t ActivID: %X", it->second.ActivItemId);
+			Text(XorStr("\t ActivID: %X"), it->second.ActivItemId);
 
 			idx++;
 		}
-		Text("Total VTX: %i", GP_Render->TotalVtxCount);
-		Text("Total IDX: %i", GP_Render->TotalIdxCount);
+		Text(XorStr("Total VTX: %i"), GP_Render->TotalVtxCount);
+		Text(XorStr("Total IDX: %i"), GP_Render->TotalIdxCount);
 
 
 		Text(" ");
-		Text("MousePos X: %i, Y: %i", (int)X1Gui().G_IO.MousePos.x, (int)X1Gui().G_IO.MousePos.y);
-		Text("LeftMouse: %i", (int)X1Gui().G_IO.LMPress);
-		Text("X1Gui().G_IO.ActivWindowName: %s", X1Gui().G_IO.ActivWindowName.c_str());
+		Text(XorStr("MousePos X: %i, Y: %i"), (int)X1Gui().G_IO.MousePos.x, (int)X1Gui().G_IO.MousePos.y);
+		Text(XorStr("LeftMouse: %i"), (int)X1Gui().G_IO.LMPress);
+		Text(XorStr("X1Gui().G_IO.ActivWindowName: %s"), X1Gui().G_IO.ActivWindowName.c_str());
 
 		//X1Gui().G_IO.ActivWindowName
 
@@ -625,7 +625,7 @@ void CGui::ShowMetrics()
 		if (X1Gui().G_IO.LMClicked)
 			ct++;
 
-		Text("LeftMouseClick: %i (%i)", (int)X1Gui().G_IO.LMClicked, ct);
+		Text(XorStr("LeftMouseClick: %i (%i)"), (int)X1Gui().G_IO.LMClicked, ct);
 	}
 	End();
 }
@@ -1002,7 +1002,7 @@ bool CGui::SliderFloat(string Label, float *var, float min, float max, const cha
 bool CGui::SliderInt(string Label, int *var, int min, int max)
 {
 	float buf = (float)(*var);
-	bool change = SliderFloat(Label, &buf, (float)min, (float)max, "%6.0lf");
+	bool change = SliderFloat(Label, &buf, (float)min, (float)max, XorStr("%6.0lf"));
 	*var = (int)buf;
 
 	return change;
@@ -1011,7 +1011,7 @@ bool CGui::SliderInt(string Label, int *var, int min, int max)
 bool CGui::SliderIntProc(string Label, int *var, int min, int max)
 {
 	float buf = (float)(*var);
-	bool change = SliderFloat(Label, &buf, (float)min, (float)max, "%.0f%%");
+	bool change = SliderFloat(Label, &buf, (float)min, (float)max, XorStr("%.0f%%"));
 	*var = (int)buf;
 
 	return change;
@@ -1340,11 +1340,11 @@ bool CGui::ColorEdit2(string Label, SDK::Color *var, Vec2 Size)
 			Spacing();
 			Separator();
 			Spacing();
-			ColorEdit(Label + "##pick_2", var, Vec2(popup_size.x - (style.itmInPadding.x*2) , 0));
+			ColorEdit(Label + XorStr("##pick_2"), var, Vec2(popup_size.x - (style.itmInPadding.x*2) , 0));
 			Spacing();
 			Separator();
 			Spacing();
-			CheckBox("Rainbow", &var->brainbow);
+			CheckBox(XorStr("Rainbow"), &var->brainbow);
 		}
 		EndIntenrnalWin();
 
@@ -1772,7 +1772,8 @@ void CGui::TabLabels(int *var, Vec2 Size, VectorEx<const char*> &items, bool ver
 		button_size.x + style.itmPadding.x);
 }
 
-const char* const KeyNames[] = { "Unknown","LBUTTON","RBUTTON","CANCEL","MBUTTON","XBUTTON1","XBUTTON2","Unknown","BACK","TAB","Unknown","Unknown","CLEAR","RETURN","Unknown","Unknown","SHIFT",
+const char* const KeyNames[] = 
+{   "Unknown","LBUTTON","RBUTTON","CANCEL","MBUTTON","XBUTTON1","XBUTTON2","Unknown","BACK","TAB","Unknown","Unknown","CLEAR","RETURN","Unknown","Unknown","SHIFT",
 	"CONTROL","MENU","PAUSE","CAPITAL","KANA","Unknown","JUNJA","FINAL","KANJI","Unknown","ESCAPE","CONVERT","NONCONVERT","ACCEPT","MODECHANGE","SPACE","PRIOR","NEXT","END","HOME","LEFT","UP",
 	"RIGHT","DOWN","SELECT","PRINT","EXECUTE","SNAPSHOT","INSERT","DELETE","HELP","0","1","2","3","4","5","6","7","8","9","Unknown","Unknown","Unknown","Unknown","Unknown","Unknown","Unknown",
 	"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","LWIN","RWIN","APPS","Unknown","SLEEP","NUMPAD0","NUMPAD1","NUMPAD2","NUMPAD3","NUMPAD4",
@@ -1865,7 +1866,7 @@ bool CGui::HotKey(string Label, int *var)
 			}
 		}
 		*var = key;
-		strcpy(buf_display, "<Press a key>");
+		strcpy(buf_display, XorStr("<Press a key>"));
 	}
 	else if (pThis->UsingItemId != id && *var != 0)
 		strcpy(buf_display, KeyNames[*var]);

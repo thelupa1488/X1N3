@@ -14,8 +14,6 @@ void CEsp::Menu()
 		static int VisType = 0;
 
 		VectorEx<const char*>VisArr = { lolc("Player ESP"), lolc("Other ESP") };
-
-
 		TabsLabels(VisType, VisArr, Vec2(320, 19), false);
 
 		X1Gui().SameLine(325);
@@ -200,11 +198,11 @@ void CEsp::Menu()
 			{
 				X1Gui().SameLine(SAME_LINE_1);
 				X1Gui().PushItemWidth(PUSH_1);
-				VectorEx<const char*>itemsCS = { lolc("Textured"), lolc("Flat"), lolc("Wireframe"), lolc("Metallic"), lolc("Material") };
-				DComboBox("Style##Chams", ChamsStyle, itemsCS);
+				VectorEx<const char*>itemsCSVis = { lolc("Textured"), lolc("Flat"), lolc("Wireframe"), lolc("Metallic"), lolc("Metallic Plus"), lolc("Material") };
+				DComboBox("Style##Chams", ChamsStyle, itemsCSVis);
 				X1Gui().SameLine(SAME_LINE_1 + PUSH_1 + 40);
 				DCheckBox("Visible only##Chams", ChamsVisibleOnly);
-				if (ChamsStyle == 4)
+				if (ChamsStyle == 5)
 				{
 					X1Gui().Spacing();
 					X1Gui().PushItemWidth(PUSH_2);
