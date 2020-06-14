@@ -209,7 +209,5 @@ namespace SDK
 		// Functions to get external access to whichever of the above functions we're going to call.
 		static int CallGetSymbolForString(const char* name, bool bCreate = true) { return s_pfGetSymbolForString(name, bCreate); }
 		static const char* CallGetStringForSymbol(int symbol) { return s_pfGetStringForSymbol(symbol); }
-
-		bool LoadFromBuffer(KeyValues* pThis, const char* pszFirst, const char* pszSecond, PVOID pSomething = 0, PVOID pAnother = 0, PVOID pLast = 0);
 	};
 }

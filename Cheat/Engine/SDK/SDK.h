@@ -77,9 +77,6 @@
 #define shaderapidx9Factory XorStr("shaderapidx9.dll")
 #define gameoverlayrenderFactory XorStr("GameOverlayRenderer.dll")
 
-#define KEY_VALUES_MASK  XorStr("02 7E 4E")
-#define KEY_VALUES_LOAD_FROM_BUFFER_MASK  XorStr("55 8B EC 51 33 C0 C7 45")
-
 #define d3d9_mask XorStr("x????xxxxxx")
 #define gmor_mask XorStr("x????x????xxxx????xxxxxxx")
 

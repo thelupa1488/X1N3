@@ -5,7 +5,6 @@
 
 namespace SDK
 {
-	class ImageFormat;
 	class IMaterialVar;
 
 	typedef uint64 VertexFormat_t;
@@ -286,7 +285,7 @@ namespace SDK
 		// Gets material reflectivity
 		virtual void			GetReflectivity(Vector& reflect) = 0;
 		// Gets material property flags
-//		virtual bool			GetPropertyFlag(MaterialPropertyTypes_t type) = 0;
+		virtual bool			GetPropertyFlag(MaterialPropertyTypes_t type) = 0;
 		// Is the material visible from both sides?
 		virtual bool			IsTwoSided() = 0;
 		// Sets the shader associated with the material

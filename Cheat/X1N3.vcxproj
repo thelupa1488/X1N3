@@ -23,8 +23,6 @@
     <ClCompile Include="Engine\NetVar.cpp" />
     <ClCompile Include="Engine\SDK\checksum_md5.cpp" />
     <ClCompile Include="Engine\SDK\CRC.cpp" />
-    <ClCompile Include="Engine\SDK\IMaterialSystem.cpp" />
-    <ClCompile Include="Engine\SDK\KeyValues.cpp" />
     <ClCompile Include="Engine\SDK\Math.cpp" />
     <ClCompile Include="Engine\SDK\SDK.cpp" />
     <ClCompile Include="Engine\SDK\Vector.cpp" />

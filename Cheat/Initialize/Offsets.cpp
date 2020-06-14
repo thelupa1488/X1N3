@@ -107,7 +107,4 @@ namespace Offsets
 	DWORD m_vecMaxs = 0;
 
 	DWORD m_Item = 0;
-
-	DWORD LoadFromBufferEx = 0;
-	DWORD InitKeyValuesEx = 0;
 }

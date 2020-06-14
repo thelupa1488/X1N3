@@ -117,7 +117,6 @@ void ReadConfigs(LPCTSTR lpszFileName);
 class CGlobal
 {
 public:
-
 	static WEAPON_TYPE GWeaponType;
 	static WEAPON_ID GWeaponID;
 	static bool IsGuiVisble;

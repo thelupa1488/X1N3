@@ -73,14 +73,6 @@ namespace SDK
 		TESSELLATION_MODE_ACC_PATCHES_REG
 	};
 
-	//enum MaterialPropertyTypes_t
-	//{
-	//	MATERIAL_PROPERTY_NEEDS_LIGHTMAP = 0,					// bool
-	//	MATERIAL_PROPERTY_OPACITY,								// int (enum MaterialPropertyOpacityTypes_t)
-	//	MATERIAL_PROPERTY_REFLECTIVITY,							// vec3_t
-	//	MATERIAL_PROPERTY_NEEDS_BUMPED_LIGHTMAPS				// bool
-	//};
-
 	// acceptable property values for MATERIAL_PROPERTY_OPACITY
 	enum MaterialPropertyOpacityTypes_t
 	{
@@ -286,10 +278,11 @@ namespace SDK
 	class IMaterialSystem
 	{
 	public:
-		void LoadFromBuffer(KeyValues* pKeyValues, const char* resourceName, const char* pBuffer, void* pFileSystem = nullptr, const char* pPathID = NULL, void* pfnEvaluateSymbolProc = nullptr);
-		void InitKeyValues(KeyValues* pKeyValues, const char* Name);
-		IMaterial* CreateMaterial(bool flat, bool ignorez, bool wireframed);
-		IMaterial* FindMaterial(char const* pMaterialName, const char* pTextureGroupName, bool complain = true, const char* pComplainPrefix = NULL);
+		IMaterial* CreateMaterial(const char* pMaterialName, KeyValues* pVMTKeyValues)
+		{
+			typedef IMaterial* (*oCreateMaterial)(void*, const char*, KeyValues*);
+			return GetMethod<oCreateMaterial>(this, 83)(this, pMaterialName, pVMTKeyValues);
+		}
 
 		MaterialHandle_t FirstMaterial()
 		{
@@ -313,6 +306,12 @@ namespace SDK
 		{
 			typedef IMaterial* (__thiscall* GetMaterialFn)(void*, MaterialHandle_t);
 			return GetMethod <GetMaterialFn>(this, 89)(this, h);
+		}
+
+		IMaterial* FindMaterial(char const* pMaterialName, const char* pTextureGroupName, bool complain = true, const char* pComplainPrefix = NULL)
+		{
+			typedef IMaterial* (__thiscall* OriginalFn)(void*, char const* pMaterialName, const char* pTextureGroupName, bool complain, const char* pComplainPrefix);
+			return GetMethod< OriginalFn >(this, 84)(this, pMaterialName, pTextureGroupName, complain, pComplainPrefix);
 		}
 	};
 }
