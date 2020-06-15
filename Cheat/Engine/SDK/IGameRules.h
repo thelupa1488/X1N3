@@ -6,16 +6,16 @@ namespace SDK
 	class IGameRules
 	{
 	public:
-		bool IsFreezePeriod() {
-
+		bool IsFreezePeriod() 
+		{
 			return *(bool*)((uintptr_t)this + offsets["m_bFreezePeriod"]);
 		}
-		bool IsValveDS() {
-
+		bool IsValveDS() 
+		{
 			return *(bool*)((uintptr_t)this + offsets["m_bIsValveDS"]);
 		}
-		bool IsBombPlanted() {
-
+		bool IsBombPlanted() 
+		{
 			return *(bool*)((uintptr_t)this + offsets["m_bBombDropped"]);
 		}
 		bool IsBombDropped()

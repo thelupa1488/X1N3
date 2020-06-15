@@ -299,7 +299,7 @@ void CMisc::LegitPeek(CUserCmd* pCmd, bool& bSendPacket)
 
 		Vector hit_point;
 		bool hit = IntersectionBoundingBox(eye_pos, direction, min, max, &hit_point);
-		if (hit && eye_pos.DistTo(hit_point) <= WeaponDataEntity->m_flRange)
+		if (hit && eye_pos.DistTo(hit_point) <= WeaponDataEntity->m_WeaponRange)
 		{
 			Ray_t ray;
 			trace_t tr;
@@ -1099,7 +1099,7 @@ void CMisc::EnginePrediction(bool& bSendPacket, CUserCmd* pCmd)
 						pCmd->buttons |= IN_JUMP;
 				}
 
-				/*QAngle angleold = pCmd->viewangles;
+				QAngle angleold = pCmd->viewangles;
 				if (Desync)
 				{
 					if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
@@ -1214,7 +1214,7 @@ void CMisc::EnginePrediction(bool& bSendPacket, CUserCmd* pCmd)
 						CGlobal::FakeAngle = anim_state->m_flGoalFeetYaw;
 					CGlobal::vangle = pCmd->viewangles;
 				}
-				FixMovement(pCmd, angleold);*/
+				FixMovement(pCmd, angleold);
 
 				if (AutoBlock && AutoBlockBind.Check())
 				{
@@ -1350,18 +1350,16 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 
 			if (ThirdPerson)
 			{
-				if (!CGlobal::LocalPlayer)
-					return;
-
 				static bool enable;
 
 				if (ThirdPersonBind.Check())
-					enable = I::Input()->m_fCameraInThirdPerson = true;
+					enable = true;
 				else
-					enable = I::Input()->m_fCameraInThirdPerson = false;
+					enable = false;
 
 				if (enable && !CGlobal::LocalPlayer->IsDead())
 				{
+					I::Input()->m_fCameraInThirdPerson = enable;
 					auto GetCorrectDistance = [](float ideal_distance) -> float
 					{
 						/* vector for the inverse angles */
@@ -1398,8 +1396,10 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 					angles.z = GetCorrectDistance(ThirdPersonDistance); // 150 is better distance
 					I::Input()->m_vecCameraOffset = Vector(angles.x, angles.y, angles.z);
 				}
+				else 
+					I::Input()->m_fCameraInThirdPerson = false;
 			}
-			if (!ThirdPerson)
+			else
 				I::Input()->m_fCameraInThirdPerson = false;
 
 		}

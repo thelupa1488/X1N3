@@ -24,7 +24,7 @@ DWORD WINAPI SetupThread(_In_ LPVOID lpThreadParameter)
 	VMP_END;
 }
 
-INT WINAPI DllMain(_In_ HINSTANCE hinstDll, _In_ DWORD fdwReason, _In_opt_ LPVOID lpvReserved)
+BOOL WINAPI DllMain(_In_ HINSTANCE hinstDll, _In_ DWORD fdwReason, _In_opt_ LPVOID lpvReserved)
 {
 	VMP_MUTATION("SetupThread");
 	switch (fdwReason)

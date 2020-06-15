@@ -115,9 +115,9 @@ namespace Engine
 		return *(float*)((DWORD)this + offsets["m_fThrowTime"]);
 	}
 
-	CWeaponInfo* CBaseWeapon::GetWeaponInfo()
+	CCSWeaponInfo* CBaseWeapon::GetWeaponInfo()
 	{
-		typedef CWeaponInfo*(__thiscall* GetWeaponDataFn)(void*);
+		typedef CCSWeaponInfo*(__thiscall* GetWeaponDataFn)(void*);
 		return GetMethod< GetWeaponDataFn >(this, 460)(this);  //459
 	}
 

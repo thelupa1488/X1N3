@@ -34,7 +34,7 @@ namespace Engine
 		short*          fixskins();
 		int*            OwnerXuidLow();
 		int*            OwnerXuidHigh();
-		CWeaponInfo*    GetWeaponInfo();
+		CCSWeaponInfo*  GetWeaponInfo();
 		CBaseAttributableItem* GeteAttributableItem();
 		int*            GetEntityQuality();
 
