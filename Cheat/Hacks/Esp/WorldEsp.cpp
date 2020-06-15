@@ -248,18 +248,23 @@ void CEsp::DrawBombInfo(CBaseEntity* entity, CBaseEntity* Local)
 	if (!(entity->GetClientClass()->m_ClassID == (int)CLIENT_CLASS_ID::CPlantedC4))
 		return;
 
-	static bool IsDefusing = false;
 	static bool GetDamage = false;
+	static bool IsDefusing = false;
 
 	Color Back1(94, 102, 107, 229);
 	Color Back2(15, 12, 17, 220);
 	Color Back3(0, 0, 0, 0);
+
 	int w_b = 5;
 	int h_b = 20;
+
 	if (GetDamage)
 		h_b += 20;
+
 	if (IsDefusing)
 		h_b += 20;
+
+	int Defus = GetDamage ? 40 : 20;
 
 	GP_Render->DrawFilledBox(0, CGlobal::iScreenHeight / 2 + h_b / 2, w_b, h_b, Back1);
 	GP_Render->DrawFilledBox(w_b, CGlobal::iScreenHeight / 2 + h_b / 2, 150, h_b, Back2);
@@ -286,10 +291,12 @@ void CEsp::DrawBombInfo(CBaseEntity* entity, CBaseEntity* Local)
 
 	float damage = float((std::max)((int)ceilf(Calc_Armor(flDamage, Local->GetArmor())), 0));
 	Color EndHp;
-	if (lifetime > -2.f)
+
+	if (lifetime > -2.f && !CGlobal::LocalPlayer->IsDead())
 	{
 		if (damage >= Local->GetHealth() && !CGlobal::LocalPlayer->IsDead())
 			GP_Render->DrawString(15, Vec2(w_b + 4, CGlobal::iScreenHeight / 2 + h_b / 2 + 20), NameColor, true, false, XorStr("You will die"));
+				
 		else if (Local->GetHealth() > damage && !CGlobal::LocalPlayer->IsDead())
 		{
 			if (Local->GetHealth() - damage > 10)
@@ -326,7 +333,7 @@ void CEsp::DrawBombInfo(CBaseEntity* entity, CBaseEntity* Local)
 			else
 				EndDefuse = Color::White();
 
-			GP_Render->DrawString(15, Vec2(w_b + 4, CGlobal::iScreenHeight / 2 + h_b / 2 + 40), EndDefuse, true, false, XorStr("Defuse time: %.1f"), countdown);
+			GP_Render->DrawString(15, Vec2(w_b + 4, CGlobal::iScreenHeight / 2 + h_b / 2 + Defus), EndDefuse, true, false, XorStr("Defuse time: %.1f"), countdown);
 
 			IsDefusing = true;
 		}
