@@ -245,9 +245,6 @@ void CMisc::Draw()
 
 void CMisc::LegitPeek(CUserCmd* pCmd, bool& bSendPacket)
 {
-	if (!CGlobal::IsGameReady)
-		return;
-
 	int choke_factor = Desync ? min(MaxChokeTicks(), FakeLagFactor) : FakeLagFactor;
 
 	static bool m_bIsPeeking = false;
@@ -1353,6 +1350,9 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 
 			if (ThirdPerson)
 			{
+				if (!CGlobal::LocalPlayer)
+					return;
+
 				static bool enable;
 
 				if (ThirdPersonBind.Check())
