@@ -299,7 +299,7 @@ void CMisc::LegitPeek(CUserCmd* pCmd, bool& bSendPacket)
 
 		Vector hit_point;
 		bool hit = IntersectionBoundingBox(eye_pos, direction, min, max, &hit_point);
-		if (hit && eye_pos.DistTo(hit_point) <= WeaponDataEntity->m_WeaponRange)
+		if (hit && eye_pos.DistTo(hit_point) <= WeaponDataEntity->flRange)
 		{
 			Ray_t ray;
 			trace_t tr;
