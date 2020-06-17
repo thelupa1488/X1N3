@@ -211,8 +211,10 @@ void CLegitAim::Draw()
 			PlayerInfo pinfo;
 			if (entity == nullptr || !CGlobal::LocalPlayer)
 				continue;
+
 			if (entity == CGlobal::LocalPlayer)
 				continue;
+
 			if (entity->IsDormant())
 				continue;
 

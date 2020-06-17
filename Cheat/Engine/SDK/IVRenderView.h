@@ -125,14 +125,6 @@ namespace SDK
 	class IVRenderView
 	{
 	public:
-
-		void ForcedMaterialOverride(IMaterial* material, OverrideType_t type = OVERRIDE_NORMAL, int idk = NULL)
-		{
-			typedef void(__thiscall* Fn)(void*, IMaterial*, OverrideType_t, int);
-			return call_vfunc<Fn>(this, 1)(this, material, type, idk);
-		}
-		
-
 		// Draw normal brush model.
 		// If pMaterialOverride is non-null, then all the faces of the bmodel will
 		// set this material rather than their regular material.

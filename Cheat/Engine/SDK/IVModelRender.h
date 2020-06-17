@@ -115,14 +115,7 @@ namespace SDK
 		virtual int	DrawModel(int flags, IClientRenderable* pRenderable, ModelInstanceHandle_t instance, int entity_index, const model_t* model, Vector const& origin, QAngle const& angles, int skin, int body, int hitboxset, const matrix3x4_t* modelToWorld = NULL, const matrix3x4_t* pLightingOffset = NULL) = 0;
 		// This causes a material to be used when rendering the model instead 
 		// of the materials the model was compiled with
-
-		void ForcedMaterialOverride2(IMaterial* material, OverrideType_t type = OVERRIDE_NORMAL, int idk = NULL)
-		{
-			typedef void(__thiscall* Fn)(void*, IMaterial*, OverrideType_t, int);
-			return call_vfunc<Fn>(this, 1)(this, material, type, idk);
-		}
-
-		virtual void	ForcedMaterialOverride(IMaterial* newMaterial, OverrideType_t nOverrideType = OVERRIDE_NORMAL, int iUnknown = 0) = 0;
+		virtual void    ForcedMaterialOverride(IMaterial* newMaterial, OverrideType_t nOverrideType = OverrideType_t::OVERRIDE_NORMAL, int a = NULL) = 0;
 		virtual bool	IsForcedMaterialOverride(void) = 0;
 		virtual void	SetViewTarget(const CStudioHdr* pStudioHdr, int nBodyIndex, const Vector& target) = 0;
 		// Creates, destroys instance data to be associated with the model

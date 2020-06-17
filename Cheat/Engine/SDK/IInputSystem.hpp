@@ -11,37 +11,37 @@ namespace SDK
 		void EnableInput(bool bEnable)
 		{
 			typedef void(__thiscall* OriginalFn)(void*, bool);
-			return call_vfunc< OriginalFn >(this, 11)(this, bEnable);
+			return GetMethod< OriginalFn >(this, 11)(this, bEnable);
 		}
 
 		void ResetInputState()
 		{
 			typedef void(__thiscall* OriginalFn)(void*);
-			return call_vfunc< OriginalFn >(this, 39)(this);
+			return GetMethod< OriginalFn >(this, 39)(this);
 		}
 
 		bool IsButtonDown(ButtonCode_t code)
 		{
 			typedef bool(__thiscall* OriginalFn)(void*, ButtonCode_t);
-			return call_vfunc< OriginalFn >(this, 15)(this, code);
+			return GetMethod< OriginalFn >(this, 15)(this, code);
 		}
 
 		void GetCursorPosition(int* m_pX, int* m_pY)
 		{
 			typedef void(__thiscall* OriginalFn)(void*, int*, int*);
-			return call_vfunc< OriginalFn >(this, 56)(this, m_pX, m_pY);
+			return GetMethod< OriginalFn >(this, 56)(this, m_pX, m_pY);
 		}
 
 		ButtonCode_t VirtualKeyToButtonCode(int nVirtualKey)
 		{
 			typedef ButtonCode_t(__thiscall* OriginalFn)(void*, int);
-			return call_vfunc< OriginalFn >(this, 45)(this, nVirtualKey);
+			return GetMethod< OriginalFn >(this, 45)(this, nVirtualKey);
 		}
 
 		int ButtonCodeToVirtualKey(ButtonCode_t code)
 		{
 			typedef int(__thiscall* OriginalFn)(void*, ButtonCode_t);
-			return call_vfunc< OriginalFn >(this, 46)(this, code);
+			return GetMethod< OriginalFn >(this, 46)(this, code);
 		}
 
 		void*& GetWindow()

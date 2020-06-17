@@ -292,13 +292,13 @@ namespace SDK
 		IMaterial* CreateMaterial(const char* pMaterialName, KeyValues* pVMTKeyValues)
 		{
 			typedef IMaterial* (__thiscall* oCreateMaterial)(PVOID, const char*, KeyValues*);
-			return call_vfunc<oCreateMaterial>(this, 83)(this, pMaterialName, pVMTKeyValues);
+			return GetMethod <oCreateMaterial>(this, 83)(this, pMaterialName, pVMTKeyValues);
 		}
 
 		IMaterial* FindMaterial( const char* pMaterialName , const char* pTextureGroupName , bool complain = true , const char* pComplainPrefix = 0 )
 		{
 			typedef IMaterial* (__thiscall* oFindMaterial)(PVOID, char const*, char const*, bool, char const*);
-			return call_vfunc< oFindMaterial >( this , 84 )( this , pMaterialName , pTextureGroupName , complain , pComplainPrefix );
+			return GetMethod <oFindMaterial>( this , 84 )( this , pMaterialName , pTextureGroupName , complain , pComplainPrefix );
 		}
 
 		MaterialHandle_t FirstMaterial()

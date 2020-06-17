@@ -882,7 +882,6 @@ void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMod
 		if (!ChamsVisibleOnly)
 		{
 			float ArrColor[3] = { ChamsInvisColor.G1R(), ChamsInvisColor.G1G(), ChamsInvisColor.G1B() };
-
 			I::RenderView()->SetColorModulation(ArrColor);
 			I::RenderView()->SetBlend(ChamsInvisColor.G1A());
 
