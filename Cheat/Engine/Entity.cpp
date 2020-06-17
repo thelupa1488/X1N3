@@ -217,44 +217,6 @@ namespace Engine
 		return *(CUserCmd**)((uintptr_t)this + currentCommand);
 	}
 
-	float CBaseEntity::MaxRotation(CCSGOPlayerAnimState* AnimState)
-	{
-		auto animstate = uintptr_t(AnimState);
-		float duckamount = *(float*)(animstate + 0xA4);
-		float speedfraction = Maximum<float>(0.f, Minimum<float>(*reinterpret_cast<float*>(animstate + 0xF8), 1.f));
-
-		float unk1 = ((*reinterpret_cast<float*>(animstate + 0x11C) * -0.3f) - 0.2f)* speedfraction;
-		float unk2 = unk1 + 1.f;
-
-		if (duckamount > 0.f)
-		{
-			float speedfactor = Maximum<float>(0.f, Minimum<float>(1.f, *reinterpret_cast<float*>(animstate + 0xFC)));
-			unk2 += ((duckamount * speedfactor) * (0.5f - unk2));
-		}
-		return *(float*)(animstate + 0x334) * unk2;
-	}
-
-	float CBaseEntity::GetMaxDesyncAngle()
-	{
-		if (!this)
-			return 0.f;
-
-		auto anim_state = this->GetBasePlayerAnimState();
-		if (!anim_state)
-			return 0.f;
-
-		float duck_amount = anim_state->m_fDuckAmount;
-		float speed_fraction = Minimum<float>(0, Minimum<float>(anim_state->m_flFeetSpeedForwardsOrSideWays, 1));
-		float speed_factor = Maximum<float>(0, Minimum<float>(1, anim_state->m_flFeetSpeedUnknownForwardOrSideways));
-
-		float yaw_modifier = (((anim_state->m_flStopToFullRunningFraction * -0.3f) - 0.2f) * speed_fraction) + 1.0f;
-
-		if (duck_amount > 0.f)
-			yaw_modifier += ((duck_amount * speed_factor) * (0.5f - yaw_modifier));
-
-		return *(float*)((uintptr_t)anim_state + 0x334) * yaw_modifier;
-	}
-
 	float CBaseEntity::GetSpawnTime()
 	{
 		return *(float*)((uintptr_t)this + offsets["m_flSpawnTime"]);

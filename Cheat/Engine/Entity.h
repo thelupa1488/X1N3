@@ -119,8 +119,6 @@ namespace Engine
 		AnimationLayer* GetAnimOverlays();
 		AnimationLayer* GetAnimOverlay(int i);
 		CUserCmd*&      GetCurrentCommand();
-		float           GetMaxDesyncAngle();
-		float           MaxRotation(CCSGOPlayerAnimState* AnimState);
 		float           GetSpawnTime();
 
 

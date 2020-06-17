@@ -610,7 +610,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					pCmd->buttons |= IN_BULLRUSH;
 				}
 			}
-
 			static bool NoFlashReset = false;
 			if (AntiFlash)
 			{
@@ -1099,122 +1098,122 @@ void CMisc::EnginePrediction(bool& bSendPacket, CUserCmd* pCmd)
 						pCmd->buttons |= IN_JUMP;
 				}
 
-				QAngle angleold = pCmd->viewangles;
-				if (Desync)
-				{
-					if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
-						CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER || CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP
-						|| CGlobal::LocalPlayer->IsDead())
-						return;
+				//QAngle angleold = pCmd->viewangles;
+				//if (Desync)
+				//{
+				//	if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
+				//		CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER || CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP
+				//		|| CGlobal::LocalPlayer->IsDead())
+				//		return;
 
-					if (I::GameRules() && I::GameRules()->IsFreezePeriod()) //need fix
-						return;
+				//	if (I::GameRules() && I::GameRules()->IsFreezePeriod()) //need fix
+				//		return;
 
-					CBaseWeapon* weapon = CGlobal::LocalPlayer->GetBaseWeapon();
+				//	CBaseWeapon* weapon = CGlobal::LocalPlayer->GetBaseWeapon();
 
-					if (!weapon)
-						return;
+				//	if (!weapon)
+				//		return;
 
-					if ((CGlobal::GWeaponID == WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_FAMAS) && weapon->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
-						return;
+				//	if ((CGlobal::GWeaponID == WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_FAMAS) && weapon->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
+				//		return;
 
-					if (CGlobal::GWeaponType == WEAPON_TYPE_GRENADE)
-					{
-						if (!weapon->GetPinPulled())
-						{
-							float throwTime = weapon->GetThrowTime();
-							if (throwTime > 0.f)
-								return;
-						}
+				//	if (CGlobal::GWeaponType == WEAPON_TYPE_GRENADE)
+				//	{
+				//		if (!weapon->GetPinPulled())
+				//		{
+				//			float throwTime = weapon->GetThrowTime();
+				//			if (throwTime > 0.f)
+				//				return;
+				//		}
 
-						if ((pCmd->buttons & IN_ATTACK) || (pCmd->buttons & IN_ATTACK2))
-						{
-							if (weapon->GetThrowTime() > 0.f)
-								return;
-						}
-					}
+				//		if ((pCmd->buttons & IN_ATTACK) || (pCmd->buttons & IN_ATTACK2))
+				//		{
+				//			if (weapon->GetThrowTime() > 0.f)
+				//				return;
+				//		}
+				//	}
 
-					if (fabsf(CGlobal::LocalPlayer->GetSpawnTime() - I::GlobalVars()->curtime) < 1.0f)
-						return;
+				//	if (fabsf(CGlobal::LocalPlayer->GetSpawnTime() - I::GlobalVars()->curtime) < 1.0f)
+				//		return;
 
-					static bool broke_lby = false;
+				//	static bool broke_lby = false;
 
-					auto sideauto = GetBestHeadAngle(CGlobal::vangle.y);
+				//	auto sideauto = GetBestHeadAngle(CGlobal::vangle.y);
 
-					if (!DesyncAd)
-					{
-						if (DesyncBind.Check())
-						{
-							CGlobal::side = 1.0f;
-						}
-						else
-							CGlobal::side = -1.0f;
-					}
-					else
-						CGlobal::side = sideauto;
+				//	if (!DesyncAd)
+				//	{
+				//		if (DesyncBind.Check())
+				//		{
+				//			CGlobal::side = 1.0f;
+				//		}
+				//		else
+				//			CGlobal::side = -1.0f;
+				//	}
+				//	else
+				//		CGlobal::side = sideauto;
 
-					if (DesyncType == 1)
-					{
-						float minimal_move = CGlobal::LocalPlayer->GetFlags() & IN_DUCK ? 3.0f : 1.0f;
+				//	if (DesyncType == 1)
+				//	{
+				//		float minimal_move = CGlobal::LocalPlayer->GetFlags() & IN_DUCK ? 3.0f : 1.0f;
 
-						if (!bSendPacket)
-							pCmd->viewangles.y += 120.f * CGlobal::side;
+				//		if (!bSendPacket)
+				//			pCmd->viewangles.y += 120.f * CGlobal::side;
 
-						static bool flip = 1;
-						flip = !flip;
+				//		static bool flip = 1;
+				//		flip = !flip;
 
-						pCmd->sidemove += flip ? minimal_move : -minimal_move;
-					}
-					else if (DesyncType == 2)
-					{
-						if (CGlobal::next_lby >= I::GlobalVars()->curtime)
-						{
-							if (!broke_lby && bSendPacket)
-								return;
+				//		pCmd->sidemove += flip ? minimal_move : -minimal_move;
+				//	}
+				//	else if (DesyncType == 2)
+				//	{
+				//		if (CGlobal::next_lby >= I::GlobalVars()->curtime)
+				//		{
+				//			if (!broke_lby && bSendPacket)
+				//				return;
 
-							broke_lby = false;
-							bSendPacket = false;
-							pCmd->viewangles.y += 120.0f * CGlobal::side;
-						}
-						else
-						{
-							broke_lby = true;
-							bSendPacket = false;
-							pCmd->viewangles.y += 120.0f * -(CGlobal::side);
-						}
-					}
-					else if (DesyncType == 3)
-					{
-						static bool switchaa = false;
-						switchaa = !switchaa;
+				//			broke_lby = false;
+				//			bSendPacket = false;
+				//			pCmd->viewangles.y += 120.0f * CGlobal::side;
+				//		}
+				//		else
+				//		{
+				//			broke_lby = true;
+				//			bSendPacket = false;
+				//			pCmd->viewangles.y += 120.0f * -(CGlobal::side);
+				//		}
+				//	}
+				//	else if (DesyncType == 3)
+				//	{
+				//		static bool switchaa = false;
+				//		switchaa = !switchaa;
 
-						if (!bSendPacket)
-							pCmd->viewangles.y += switchaa ? 180.f : 0.f;
-					}
-					FixAngles(pCmd->viewangles);
-				}
-				CGlobal::CorrectMouse(pCmd);
-				auto anim_state = CGlobal::LocalPlayer->GetBasePlayerAnimState();
-				if (anim_state)
-				{
-					CCSGOPlayerAnimState anim_state_backup = *anim_state;
-					*anim_state = g_AnimState;
-					CGlobal::LocalPlayer->GetVAngles() = pCmd->viewangles;
-					CGlobal::LocalPlayer->UpdateClientSideAnimation();
+				//		if (!bSendPacket)
+				//			pCmd->viewangles.y += switchaa ? 180.f : 0.f;
+				//	}
+				//	FixAngles(pCmd->viewangles);
+				//}
+				//CGlobal::CorrectMouse(pCmd);
+				//auto anim_state = CGlobal::LocalPlayer->GetBasePlayerAnimState();
+				//if (anim_state)
+				//{
+				//	CCSGOPlayerAnimState anim_state_backup = *anim_state;
+				//	*anim_state = g_AnimState;
+				//	CGlobal::LocalPlayer->GetVAngles() = pCmd->viewangles;
+				//	CGlobal::LocalPlayer->UpdateClientSideAnimation();
 
-					GP_Misc->UpdateLBY(anim_state);
+				//	GP_Misc->UpdateLBY(anim_state);
 
-					g_AnimState = *anim_state;
-					*anim_state = anim_state_backup;
-				}
-				if (CGlobal::bSendPacket)
-				{
-					CGlobal::RealAngle = g_AnimState.m_flGoalFeetYaw;
-					if (anim_state)
-						CGlobal::FakeAngle = anim_state->m_flGoalFeetYaw;
-					CGlobal::vangle = pCmd->viewangles;
-				}
-				FixMovement(pCmd, angleold);
+				//	g_AnimState = *anim_state;
+				//	*anim_state = anim_state_backup;
+				//}
+				//if (CGlobal::bSendPacket)
+				//{
+				//	CGlobal::RealAngle = g_AnimState.m_flGoalFeetYaw;
+				//	if (anim_state)
+				//		CGlobal::FakeAngle = anim_state->m_flGoalFeetYaw;
+				//	CGlobal::vangle = pCmd->viewangles;
+				//}
+				//FixMovement(pCmd, angleold);
 
 				if (AutoBlock && AutoBlockBind.Check())
 				{
@@ -1492,7 +1491,7 @@ void CMisc::GetViewModelFOV(float &Fov)
 
 void CMisc::AutoAcceptEmit()
 {
-	if (AutoAccept && !CGlobal::FullUpdateCheck)
+	if (AutoAccept && CGlobal::AcceptMatchBeep && !CGlobal::FullUpdateCheck)
 	{
 		static auto fnAccept = reinterpret_cast<bool(__stdcall*)(const char*)>
 			(CSX::Memory::FindPatternV2(clientFactory,
