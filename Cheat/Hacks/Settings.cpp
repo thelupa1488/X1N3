@@ -457,5 +457,5 @@ void CConfig::UpdateColors()
 {
 	for (auto &v : VecColor)
 		if (v.Var.brainbow)
-			v.Var.UpdateRainbow(0.99f, 1.f);
+			v.Var.UpdateRainbow(1.f, 1.f);
 }

@@ -190,8 +190,9 @@ namespace SDK
 
 		void UpdateRainbow(float saturation, float brightness)
 		{
-			this->rainbow += 0.005f;
-			if (this->rainbow > 1.f) this->rainbow = 0.f;
+			this->rainbow += 0.002f;
+			if (this->rainbow > 1.f) 
+				this->rainbow = 0.f;
 
 			float h = this->rainbow == 1.0f ? 0 : this->rainbow * 6.0f;
 			float f = h - (int)h;
