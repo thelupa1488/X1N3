@@ -1503,9 +1503,9 @@ void CMisc::AutoAcceptEmit()
 			HWND window = FastCall::G().t_FindWindowA(XorStr("Valve001"), 0);
 			FLASHWINFO flash{ sizeof(FLASHWINFO), window, FLASHW_TRAY | FLASHW_TIMERNOFG, 0, 0 };
 			FlashWindowEx(&flash);
+			CGlobal::AcceptMatchBeep = false;
 		}
 
-		CGlobal::AcceptMatchBeep = false;
 		//typedef void(__cdecl* accept_t)(void);
 		//static accept_t accept = (accept_t)CSX::Memory::FindPatternV2(clientFactory,
 		//	XorStr("55 8B EC 51 56 8B 35 ? ? ? ? 57 83 BE"));
