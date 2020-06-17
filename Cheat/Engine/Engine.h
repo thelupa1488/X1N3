@@ -509,7 +509,7 @@ public:
 		\n\t\"$nocull\" \"0\"\
 		\n\t\"$selfillum\" \"1\"\
 		\n\t\"$halflambert\" \"1\"\
-		\n\t\"$nofog\" \"0\"\
+		\n\t\"$nofog\" \"1\"\
 		\n\t\"$ignorez\" \"" + std::to_string(ignorez) + "\"\
 		\n\t\"$znearer\" \"0\"\
 		\n\t\"$wireframe\" \"" + std::to_string(wireframe) + "\"\
