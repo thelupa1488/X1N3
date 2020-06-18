@@ -1,7 +1,7 @@
 #pragma once
 #include "Tables.h"
 
-void __fastcall FrameStageNotify(void* ecx, void* edx, int Stage)
+void __fastcall hkFrameStageNotify(void* ecx, void* edx, int Stage)
 {
 	static auto ofunc = HookTables::pFrameStageNotify->GetTrampoline();
 

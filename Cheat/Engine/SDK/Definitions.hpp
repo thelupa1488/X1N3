@@ -87,35 +87,6 @@ namespace SDK
 
 	typedef void( *pfnDemoCustomDataCallback )( unsigned char *pData , size_t iSize );
 
-	enum class FontFeature {
-		FONT_FEATURE_ANTIALIASED_FONTS = 1 ,
-		FONT_FEATURE_DROPSHADOW_FONTS = 2 ,
-		FONT_FEATURE_OUTLINE_FONTS = 6 ,
-	};
-
-	enum class FontDrawType {
-		FONT_DRAW_DEFAULT = 0 ,
-		FONT_DRAW_NONADDITIVE ,
-		FONT_DRAW_ADDITIVE ,
-		FONT_DRAW_TYPE_COUNT = 2 ,
-	};
-
-	enum class FontFlags {
-		FONTFLAG_NONE ,
-		FONTFLAG_ITALIC = 0x001 ,
-		FONTFLAG_UNDERLINE = 0x002 ,
-		FONTFLAG_STRIKEOUT = 0x004 ,
-		FONTFLAG_SYMBOL = 0x008 ,
-		FONTFLAG_ANTIALIAS = 0x010 ,
-		FONTFLAG_GAUSSIANBLUR = 0x020 ,
-		FONTFLAG_ROTARY = 0x040 ,
-		FONTFLAG_DROPSHADOW = 0x080 ,
-		FONTFLAG_ADDITIVE = 0x100 ,
-		FONTFLAG_OUTLINE = 0x200 ,
-		FONTFLAG_CUSTOM = 0x400 ,
-		FONTFLAG_BITMAP = 0x800 ,
-	};
-
 	enum class ObserverMode_t : int
 	{
 		OBS_MODE_NONE = 0 ,

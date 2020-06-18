@@ -94,7 +94,7 @@ public:
 				{
 					pContext.ApplyDetour<EmitSoundFn>(static_cast<EmitSoundFn>(SoundTable[decod(EmitSoundIdx)]),
 						reinterpret_cast<EmitSoundFn>
-						(EmitSound),
+						(hkEmitSound),
 						&pEmitSound);
 					ADD_LOG("Hook: Emit Sound\n");
 				}
@@ -103,13 +103,13 @@ public:
 				{
 					pContext.ApplyDetour<PlaySoundFn>(static_cast<PlaySoundFn>(SurfaceTable[decod(PlaySoundIdx)]),
 						reinterpret_cast<PlaySoundFn>
-						(PlaySound),
+						(hkPlaySound),
 						&pPlaySound);
 					ADD_LOG("Hook: Sound\n");
 
 					pContext.ApplyDetour<LockCursorFn>(static_cast<LockCursorFn>(SurfaceTable[decod(LockCursorIdx)]),
 						reinterpret_cast<LockCursorFn>
-						(LockCursor),
+						(hkLockCursor),
 						&pLockCursor);
 					ADD_LOG("Hook: Cursor\n");
 				}
@@ -118,25 +118,25 @@ public:
 				{
 					pContext.ApplyDetour<CreateMoveFn>(static_cast<CreateMoveFn>(ClientModeTable[decod(CreateMoveIdx)]),
 						reinterpret_cast<CreateMoveFn>
-						(CreateMove),
+						(hkCreateMove),
 						&pCreateMove);
 					ADD_LOG("Hook: CreateMove\n");
 
 					pContext.ApplyDetour<DoPostScreenEffectsFn>(static_cast<DoPostScreenEffectsFn>(ClientModeTable[decod(DoPostScreenEffectsIdx)]),
 						reinterpret_cast<DoPostScreenEffectsFn>
-						(DoPostScreenEffects),
+						(hkDoPostScreenEffects),
 						&pDoPostScreenEffects);
 					ADD_LOG("Hook: DoPostScreenEffects\n");
 
 					pContext.ApplyDetour<OverrideViewFn>(static_cast<OverrideViewFn>(ClientModeTable[decod(OverrideViewIdx)]),
 						reinterpret_cast<OverrideViewFn>
-						(OverrideView),
+						(hkOverrideView),
 						&pOverrideView);
 					ADD_LOG("Hook: OverrideView\n");
 
 					pContext.ApplyDetour<GetViewModelFOVFn>(static_cast<GetViewModelFOVFn>(ClientModeTable[decod(GetViewModelFOVIdx)]),
 						reinterpret_cast<GetViewModelFOVFn>
-						(GetViewModelFOV),
+						(hkGetViewModelFOV),
 						&pGetViewModelFOV);
 					ADD_LOG("Hook: GetViewModelFOV\n");
 				}
@@ -145,7 +145,7 @@ public:
 				{
 					pContext.ApplyDetour<FrameStageNotifyFn>(static_cast<FrameStageNotifyFn>(ClientTable[decod(FrameStageNotifyIdx)]),
 						reinterpret_cast<FrameStageNotifyFn>
-						(FrameStageNotify),
+						(hkFrameStageNotify),
 						&pFrameStageNotify);
 					ADD_LOG("Hook: StageNotify\n");
 				}
@@ -159,7 +159,7 @@ public:
 				{
 					pContext.ApplyDetour<DrawModelExecuteFn>(static_cast<DrawModelExecuteFn>(ModelRenderTable[decod(DrawModelExecuteIdx)]),
 						reinterpret_cast<DrawModelExecuteFn>
-						(DrawModelExecute),
+						(hkDrawModelExecute),
 						&pDrawModelExecute);
 					ADD_LOG("Hook: DME\n");
 				}

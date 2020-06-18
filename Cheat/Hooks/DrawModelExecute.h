@@ -1,7 +1,7 @@
 #pragma once
 #include "Tables.h"
 
-void __fastcall DrawModelExecute(void* thisptr, int edx, IMatRenderContext* ctx, const DrawModelState_t &state,
+void __fastcall hkDrawModelExecute(void* thisptr, int edx, IMatRenderContext* ctx, const DrawModelState_t &state,
 	const ModelRenderInfo_t &pInfo, matrix3x4_t *pCustomBoneToWorld)
 {
 	static auto ofunc = HookTables::pDrawModelExecute->GetTrampoline();

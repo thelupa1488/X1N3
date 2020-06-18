@@ -1,7 +1,7 @@
 #pragma once
 #include "Tables.h"
 
-bool __stdcall CreateMove(float flInputSampleTime, CUserCmd* pCmd)
+bool __stdcall hkCreateMove(float flInputSampleTime, CUserCmd* pCmd)
 {
 	bool bReturn = HookTables::pCreateMove->GetTrampoline()(flInputSampleTime, pCmd);
 

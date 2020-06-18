@@ -1,7 +1,7 @@
 #pragma once
 #include "Tables.h"
 
-void __fastcall EmitSound(void* ecx, void* edx, void* filter, int iEntIndex, int iChannel, const char* pSoundEntry, unsigned int nSoundEntryHash, const char* pSample, float flVolume,
+void __fastcall hkEmitSound(void* ecx, void* edx, void* filter, int iEntIndex, int iChannel, const char* pSoundEntry, unsigned int nSoundEntryHash, const char* pSample, float flVolume,
 	float flAttenuation, int nSeed, int iFlags, int iPitch, const Vector* pOrigin, const Vector* pDirection, Vector* pUtlVecOrigins, bool bUpdatePositions, float soundtime,
 	int speakerentity, StartSoundParams_t& params)
 {
@@ -13,7 +13,7 @@ void __fastcall EmitSound(void* ecx, void* edx, void* filter, int iEntIndex, int
 		flAttenuation, nSeed, iFlags, iPitch, pOrigin, pDirection, pUtlVecOrigins, bUpdatePositions, soundtime, speakerentity, params);
 }
 
-void __fastcall PlaySound(void* thisptr, int edx, const char* pszSoundName)
+void __fastcall hkPlaySound(void* thisptr, int edx, const char* pszSoundName)
 {
 //	if (GP_Misc)
 //		GP_Misc->PlaySound(pszSoundName); 

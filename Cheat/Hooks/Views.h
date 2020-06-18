@@ -1,7 +1,7 @@
 #pragma once
 #include "Tables.h"
 
-bool WINAPI OverrideView(CViewSetup* pSetup)
+bool WINAPI hkOverrideView(CViewSetup* pSetup)
 {
 	if (GP_Misc)
 		GP_Misc->OverrideView(pSetup);
@@ -13,7 +13,7 @@ bool WINAPI OverrideView(CViewSetup* pSetup)
 	return HookTables::pOverrideView->GetTrampoline()(pSetup);
 }
 
-float WINAPI GetViewModelFOV()
+float WINAPI hkGetViewModelFOV()
 {
 	float fov = HookTables::pGetViewModelFOV->GetTrampoline()();
 
@@ -23,7 +23,7 @@ float WINAPI GetViewModelFOV()
 	return fov;
 }
 
-void __fastcall LockCursor(void* thisptr, int edx)
+void __fastcall hkLockCursor(void* thisptr, int edx)
 {
 	HookTables::pLockCursor->GetTrampoline()(thisptr);
 
