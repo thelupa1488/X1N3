@@ -4,7 +4,8 @@
 
 namespace SDK
 {
-	class CGlobalVarsBase {
+	class CGlobalVarsBase 
+	{
 	public:
 		float     realtime;
 		int       framecount;
