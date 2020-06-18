@@ -21,7 +21,7 @@ namespace SDK
 	IEngineSound*		I::g_pSound = nullptr;
 	IVModelRender*		I::g_pModelRender = nullptr;
 	CGlowObjectManager* I::g_pGlowObjManager = nullptr;
-	IVRenderView*		I::g_pRenderView = nullptr;
+	IViewRender*		I::g_pRenderView = nullptr;
 	IMaterialSystem*	I::g_pMaterialSystem = nullptr;
 	ISurface*			I::g_pSurface = nullptr;
 	IPhysicsSurfaceProps*I::g_PhysSurface = nullptr;
@@ -203,11 +203,11 @@ namespace SDK
 		return g_pModelRender;
 	}
 
-	IVRenderView* I::RenderView()
+	IViewRender* I::RenderView()
 	{
 		if (!g_pRenderView)
 		{
-			g_pRenderView = GetInterface<IVRenderView>(engineFactory, XorStr("VEngineRenderView"));
+			g_pRenderView = GetInterface<IViewRender>(engineFactory, XorStr("VEngineRenderView"));
 			ADD_LOG("->RenderView -> %X\n", (DWORD)g_pRenderView);
 		}
 		return g_pRenderView;

@@ -109,7 +109,7 @@ namespace SDK
 		static IEngineSound*		Sound();
 		static IVModelRender*		ModelRender();
 		static CGlowObjectManager*  GlowObjManager();
-		static IVRenderView*		RenderView();
+		static IViewRender*		    RenderView();
 		static IMaterialSystem*		MaterialSystem();
 		static ISurface*			Surface();
 		static IPhysicsSurfaceProps*PhysSurface();
@@ -140,7 +140,7 @@ namespace SDK
 		static IEngineSound*		g_pSound;
 		static IVModelRender*		g_pModelRender;
 		static CGlowObjectManager*  g_pGlowObjManager;
-		static IVRenderView*		g_pRenderView;
+		static IViewRender*		    g_pRenderView;
 		static IMaterialSystem*		g_pMaterialSystem;
 		static ISurface*			g_pSurface;
 		static IPhysicsSurfaceProps* g_PhysSurface;
