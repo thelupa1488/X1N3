@@ -105,7 +105,7 @@ namespace SDK
 		static IEngineTrace*		EngineTrace();
 		static CPanel*              Panel();
 		static IClientMode*			ClientMode();
-		static IVModelInfoClient*	ModelInfo();
+		static IVModelInfo*	        ModelInfo();
 		static IEngineSound*		Sound();
 		static IVModelRender*		ModelRender();
 		static CGlowObjectManager*  GlowObjManager();
@@ -136,7 +136,7 @@ namespace SDK
 		static IEngineTrace*		g_pEngineTrace;
 		static IClientMode*			g_pClientMode;
 		static CPanel*              g_pPanel;
-		static IVModelInfoClient*	g_pModelInfo;
+		static IVModelInfo*	        g_pModelInfo;
 		static IEngineSound*		g_pSound;
 		static IVModelRender*		g_pModelRender;
 		static CGlowObjectManager*  g_pGlowObjManager;

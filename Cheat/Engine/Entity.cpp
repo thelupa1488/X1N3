@@ -23,7 +23,7 @@ namespace Engine
 {
 	int CBaseEntity::GetSequenceActivity(int sequence)
 	{
-		studiohdr_t* hdr = I::ModelInfo()->GetStudioModel(this->GetModel());
+		studiohdr_t* hdr = I::ModelInfo()->GetStudiomodel(this->GetModel());
 
 		if (!hdr)
 			return -1;
@@ -464,7 +464,7 @@ namespace Engine
 			return nullptr;
 
 
-		studiohdr_t* pStudioModel = I::ModelInfo()->GetStudioModel(model);
+		studiohdr_t* pStudioModel = I::ModelInfo()->GetStudiomodel(model);
 
 		if (!pStudioModel)
 			return nullptr;
@@ -481,7 +481,7 @@ namespace Engine
 		if (!pStudioModel)
 			return pBoneBox;
 
-		mstudiobone_t* pBone = pStudioModel->pBone(nBone);
+		mstudiobone_t* pBone = pStudioModel->GetBone(nBone);
 
 		if (!pBone)
 			return nullptr;
@@ -502,7 +502,7 @@ namespace Engine
 		if (!pHitboxSet)
 			return pHitboxBox;
 
-		pHitboxBox = pHitboxSet->pHitbox(nHitbox);
+		pHitboxBox = pHitboxSet->GetHitbox(nHitbox);
 
 		if (!pHitboxBox)
 			return nullptr;
@@ -520,7 +520,7 @@ namespace Engine
 		if (!pStudioModel)
 			return pHitboxSet;
 
-		pHitboxSet = pStudioModel->pHitboxSet(0);
+		pHitboxSet = pStudioModel->GetHitboxSet(0);
 
 		if (!pHitboxSet)
 			return nullptr;
@@ -543,11 +543,11 @@ namespace Engine
 		if (!SetupBones(MatrixArray, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, 0))
 			return vRet;
 
-		if (!pHitboxBox->m_Bone || !pHitboxBox->m_vBbmin.IsValid() || !pHitboxBox->m_vBbmax.IsValid())
+		if (!pHitboxBox->bone || !pHitboxBox->bbmin.IsValid() || !pHitboxBox->bbmax.IsValid())
 			return vRet;
 
-		VectorTransform(pHitboxBox->m_vBbmin, MatrixArray[pHitboxBox->m_Bone], vMin);
-		VectorTransform(pHitboxBox->m_vBbmax, MatrixArray[pHitboxBox->m_Bone], vMax);
+		VectorTransform(pHitboxBox->bbmin, MatrixArray[pHitboxBox->bone], vMin);
+		VectorTransform(pHitboxBox->bbmax, MatrixArray[pHitboxBox->bone], vMax);
 
 		vRet = (vMin + vMax) * 0.5f;
 

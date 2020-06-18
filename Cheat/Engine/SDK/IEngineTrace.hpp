@@ -432,14 +432,16 @@ namespace SDK
 		void* pUserData;
 	};
 
-	struct cmodel_t {
+	struct cmodel_t 
+	{
 		Vector         mins, maxs;
 		Vector         origin;        // for sounds or lights
 		int            headnode;
 		vcollide_t     vcollisionData;
 	};
 
-	struct csurface_t {
+	struct csurface_t 
+	{
 		const char* name;
 		short          surfaceProps;
 		unsigned short flags;         // BUGBUG: These are declared per surface, not per material, but this database is per-material now

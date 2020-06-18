@@ -11,6 +11,10 @@ using namespace Engine;
 
 namespace SDK
 {
+    class CViewSetup;
+    struct vrect_t;
+    class IMaterial;
+
     enum DrawFlags_t
     {
         DF_RENDER_REFRACTION = 0x1,
@@ -37,10 +41,6 @@ namespace SDK
     //-----------------------------------------------------------------------------
     // Purpose: View setup and rendering
     //-----------------------------------------------------------------------------
-    class CViewSetup;
-    struct vrect_t;
-    class IMaterial;
-
     class IViewRender
     {
     public:

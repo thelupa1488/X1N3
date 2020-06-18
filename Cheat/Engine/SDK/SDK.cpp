@@ -17,7 +17,7 @@ namespace SDK
 	IEngineTrace*       I::g_pEngineTrace = nullptr;
 	IClientMode*        I::g_pClientMode = nullptr;
 	CPanel*             I::g_pPanel = nullptr;
-	IVModelInfoClient*	I::g_pModelInfo = nullptr;
+	IVModelInfo*	    I::g_pModelInfo = nullptr;
 	IEngineSound*		I::g_pSound = nullptr;
 	IVModelRender*		I::g_pModelRender = nullptr;
 	CGlowObjectManager* I::g_pGlowObjManager = nullptr;
@@ -183,11 +183,11 @@ namespace SDK
 		return g_pEngine;
 	}
 
-	IVModelInfoClient* I::ModelInfo()
+	IVModelInfo* I::ModelInfo()
 	{
 		if (!g_pModelInfo)
 		{
-			g_pModelInfo = GetInterface<IVModelInfoClient>(engineFactory, XorStr("VModelInfoClient"));
+			g_pModelInfo = GetInterface<IVModelInfo>(engineFactory, XorStr("VModelInfoClient"));
 			ADD_LOG("->ModelInfo -> %X\n", (DWORD)g_pModelInfo);
 		}
 		return g_pModelInfo;

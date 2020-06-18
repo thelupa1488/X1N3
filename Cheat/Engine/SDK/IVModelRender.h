@@ -4,6 +4,31 @@
 
 namespace SDK
 {
+    typedef unsigned short ModelInstanceHandle_t;
+    typedef void* LightCacheHandle_t;
+    typedef void* StudioDecalHandle_t;
+    typedef int OverrideType_t;
+    typedef int ImageFormat;
+    typedef int VertexFormat_t;
+    typedef int MaterialPropertyTypes_t;
+
+    class IClientRenderable;
+    class IMaterial;
+    class CStudioHdr;
+    class IMatRenderContext;
+    class DataCacheHandle_t;
+    class ITexture;
+    class IMaterialVar;
+    class KeyValues;
+    struct model_t;
+    struct mstudioanimdesc_t;
+    struct mstudioseqdesc_t;
+    struct Ray_t;
+    struct DrawModelInfo_t;
+    struct studiohwdata_t;
+    struct MaterialLightingState_t;
+    struct ColorMeshInfo_t;
+
     enum PreviewImageRetVal_t
     {
         MATERIAL_PREVIEW_IMAGE_BAD = 0,
@@ -46,31 +71,6 @@ namespace SDK
         MATERIAL_VAR_ALPHA_MODIFIED_BY_PROXY = (1 << 30),
         MATERIAL_VAR_VERTEXFOG = (1 << 31),
     };
-
-    typedef unsigned short ModelInstanceHandle_t;
-    typedef void* LightCacheHandle_t;
-    typedef void* StudioDecalHandle_t;
-    typedef int OverrideType_t;
-    typedef int ImageFormat;
-    typedef int VertexFormat_t;
-    typedef int MaterialPropertyTypes_t;
-
-    class IClientRenderable;
-    class IMaterial;
-    class CStudioHdr;
-    class IMatRenderContext;
-    class DataCacheHandle_t;
-    class ITexture;
-    class IMaterialVar;
-    class KeyValues;
-    struct model_t;
-    struct mstudioanimdesc_t;
-    struct mstudioseqdesc_t;
-    struct Ray_t;
-    struct DrawModelInfo_t;
-    struct studiohwdata_t;
-    struct MaterialLightingState_t;
-    struct ColorMeshInfo_t;
 
     struct DrawModelState_t
     {

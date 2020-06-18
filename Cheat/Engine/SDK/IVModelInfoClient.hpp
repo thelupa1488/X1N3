@@ -5,13 +5,21 @@
 #include "Vector.hpp"
 #include "VMatrix.hpp"
 
-class CUtlBuffer;
-struct virtualmodel_t;
-typedef unsigned short MDLHandle_t;
-
 namespace SDK
 {
-	enum HitboxEnum_t 
+	class CUtlBuffer;
+	struct virtualmodel_t;
+	typedef unsigned short MDLHandle_t;
+	typedef float Quaternion[4];
+	typedef float RadianEuler[3];
+
+	class CPhysCollide;
+	class CUtlBuffer;
+	class IClientRenderable;
+	struct virtualmodel_t;
+	struct model_t;
+
+	enum Hitboxes
 	{
 		HITBOX_HEAD,
 		HITBOX_NECK,
@@ -35,170 +43,130 @@ namespace SDK
 		HITBOX_MAX
 	};
 
+	struct mstudiobone_t
+	{
+		int                    sznameindex;
+		inline char* const    pszName(void) const { return ((char*)this) + sznameindex; }
+		int                    parent;
+		int                    bonecontroller[6];    // bone controller index, -1 == none
+		Vector                 pos;
+		Quaternion             quat;
+		RadianEuler            rot;
+		// compression scale
+		Vector                 posscale;
+		Vector                 rotscale;
+
+		matrix3x4_t            poseToBone;
+		Quaternion             qAlignment;
+		int                    flags;
+		int                    proctype;
+		int                    procindex;
+		mutable int            physicsbone;
+		inline void* pProcedure() const { if (procindex == 0) return NULL; else return  (void*)(((byte*)this) + procindex); };
+		int                    surfacepropidx;
+		inline char* const    pszSurfaceProp(void) const { return ((char*)this) + surfacepropidx; }
+		inline int             GetSurfaceProp(void) const { return surfacepropLookup; }
+
+		int                    contents;
+		int                    surfacepropLookup;
+		int                    m_iPad01[7];
+
+		mstudiobone_t() {}
+	private:
+		// No copy constructors allowed
+		mstudiobone_t(const mstudiobone_t& vOther);
+	};
+
 	struct mstudiobbox_t
 	{
-		int32_t m_Bone;
-		int32_t m_Group; // intersection group
-		Vector m_vBbmin; // bounding box 
-		Vector m_vBbmax;
-		int32_t m_Szhitboxnameindex; // offset to the name of the hitbox.
-		int32_t pad[3];
-		float m_flRadius;
-		int32_t pad2[4];
+		int         bone;
+		int         group;
+		Vector      bbmin;
+		Vector      bbmax;
+		int         szhitboxnameindex;
+		int32_t     m_iPad01[3];
+		float       m_flRadius;
+		int32_t     m_iPad02[4];
 
-		char* GetHitboxName( void )
+		const char* GetName()
 		{
-			if ( m_Szhitboxnameindex == 0 )
-				return "";
-
-			return ( ( char* )this ) + m_Szhitboxnameindex;
+			if (!szhitboxnameindex) return nullptr;
+			return (const char*)((uint8_t*)this + szhitboxnameindex);
 		}
 	};
 
 	struct mstudiohitboxset_t
 	{
-		int						sznameindex;
-		inline char* const		GetName( void ) const { return ( ( char* )this ) + sznameindex; }
-		int						numhitboxes;
-		int						hitboxindex;
-		inline mstudiobbox_t*	pHitbox( int i ) const { return (mstudiobbox_t*)( ( ( BYTE* )this ) + hitboxindex ) + i; };
+		int    sznameindex;
+		int    numhitboxes;
+		int    hitboxindex;
+
+		const char* GetName()
+		{
+			if (!sznameindex) return nullptr;
+			return (const char*)((uint8_t*)this + sznameindex);
+		}
+
+		mstudiobbox_t* GetHitbox(int i)
+		{
+			if (i > numhitboxes) return nullptr;
+			return (mstudiobbox_t*)((uint8_t*)this + hitboxindex) + i;
+		}
 	};
 
-	struct mstudiobone_t
+	struct model_t
 	{
-		int					sznameindex;
-		inline char * const GetName( void ) const { return ( ( char * )this ) + sznameindex; }
-		int		 			parent;
-		int					bonecontroller[6];
-
-		Vector				pos;
-		float				quat[4];
-		Vector				rot;
-		Vector				posscale;
-		Vector				rotscale;
-
-		matrix3x4_t			poseToBone;
-		float				qAlignment[4];
-		int					flags;
-		int					proctype;
-		int					procindex;		// procedural rule
-		mutable int			physicsbone;	// index into physically simulated bone
-		inline void *		GetProcedure() const { if ( procindex == 0 ) return NULL; else return  (void *)( ( ( BYTE * )this ) + procindex ); };
-		int					surfacepropidx;	// index into string tablefor property name
-		inline char * const GetSurfaceProps( void ) const { return ( ( char * )this ) + surfacepropidx; }
-		int					contents;		// See BSPFlags.h for the contents flags
-
-		int					unused[8];		// remove as appropriate
-	};
+		void* fnHandle;               //0x0000 
+		char    szName[260];            //0x0004 
+		__int32 nLoadFlags;             //0x0108 
+		__int32 nServerCount;           //0x010C 
+		__int32 type;                   //0x0110 
+		__int32 flags;                  //0x0114 
+		Vector  vecMins;                //0x0118 
+		Vector  vecMaxs;                //0x0124 
+		float   radius;                 //0x0130 
+		char    pad[0x1C];              //0x0134
+	};//Size=0x0150
 
 	struct studiohdr_t
 	{
-		int					id;
-		int					version;
-		int					checksum;
-		char				name[64];
-		int					length;
-		Vector				eyeposition;
-		Vector				illumposition;
-		Vector				hull_min;
-		Vector				hull_max;
-		Vector				view_bbmin;
-		Vector				view_bbmax;
-		int					flags;
-		int					numbones;
-		int					boneindex;
+		__int32 id;                     //0x0000 
+		__int32 version;                //0x0004 
+		long    checksum;               //0x0008 
+		char    szName[64];             //0x000C 
+		__int32 length;                 //0x004C 
+		Vector  vecEyePos;              //0x0050 
+		Vector  vecIllumPos;            //0x005C 
+		Vector  vecHullMin;             //0x0068 
+		Vector  vecHullMax;             //0x0074 
+		Vector  vecBBMin;               //0x0080 
+		Vector  vecBBMax;               //0x008C 
+		__int32 flags;                  //0x0098 
+		__int32 numbones;               //0x009C 
+		__int32 boneindex;              //0x00A0 
+		__int32 numbonecontrollers;     //0x00A4 
+		__int32 bonecontrollerindex;    //0x00A8 
+		__int32 numhitboxsets;          //0x00AC 
+		__int32 hitboxsetindex;         //0x00B0 
+		__int32 numlocalanim;           //0x00B4 
+		__int32 localanimindex;         //0x00B8 
+		__int32 numlocalseq;            //0x00BC 
+		__int32 localseqindex;          //0x00C0 
+		__int32 activitylistversion;    //0x00C4 
+		__int32 eventsindexed;          //0x00C8 
+		__int32 numtextures;            //0x00CC 
+		__int32 textureindex;           //0x00D0
 
-		inline mstudiobone_t *pBone( int i ) const { return (mstudiobone_t *)( ( ( BYTE * )this ) + boneindex ) + i; };
-
-		int					numbonecontrollers;
-		int					bonecontrollerindex;
-		int					numhitboxsets;
-		int					hitboxsetindex;
-
-		mstudiohitboxset_t* pHitboxSet( int i ) const
+		mstudiohitboxset_t* GetHitboxSet(int i)
 		{
-			return (mstudiohitboxset_t*)( ( ( BYTE* )this ) + hitboxsetindex ) + i;
+			if (i > numhitboxsets) return nullptr;
+			return (mstudiohitboxset_t*)((uint8_t*)this + hitboxsetindex) + i;
 		}
-
-		inline mstudiobbox_t* pHitbox( int i , int set ) const
+		mstudiobone_t* GetBone(int i)
 		{
-			mstudiohitboxset_t const* s = pHitboxSet( set );
-
-			if ( !s )
-				return NULL;
-
-			return s->pHitbox( i );
+			if (i > numbones) return nullptr;
+			return (mstudiobone_t*)((uint8_t*)this + boneindex) + i;
 		}
-
-		inline int GetHitboxCount( int set ) const
-		{
-			mstudiohitboxset_t const* s = pHitboxSet( set );
-
-			if ( !s )
-				return 0;
-
-			return s->numhitboxes;
-		}
-
-		int					numlocalanim;
-		int					localanimindex;
-		int					numlocalseq;
-		int					localseqindex;
-		mutable int			activitylistversion;
-		mutable int			eventsindexed;
-		int					numtextures;
-		int					textureindex;
-		int					numcdtextures;
-		int					cdtextureindex;
-		int					numskinref;
-		int					numskinfamilies;
-		int					skinindex;
-		int					numbodyparts;
-		int					bodypartindex;
-		int					numlocalattachments;
-		int					localattachmentindex;
-		int					numlocalnodes;
-		int					localnodeindex;
-		int					localnodenameindex;
-		int					numflexdesc;
-		int					flexdescindex;
-		int					numflexcontrollers;
-		int					flexcontrollerindex;
-		int					numflexrules;
-		int					flexruleindex;
-		int					numikchains;
-		int					ikchainindex;
-		int					nummouths;
-		int					mouthindex;
-		int					numlocalposeparameters;
-		int					localposeparamindex;
-		int					surfacepropindex;
-		int					keyvalueindex;
-		int					keyvaluesize;
-		int					numlocalikautoplaylocks;
-		int					localikautoplaylockindex;
-		float				mass;
-		int					contents;
-		int					numincludemodels;
-		int					includemodelindex;
-		mutable void		*virtualModel;
-		int					szanimblocknameindex;
-		int					numanimblocks;
-		int					animblockindex;
-		mutable void		*animblockModel;
-		int					bonetablebynameindex;
-		void				*pVertexBase;
-		void				*pIndexBase;
-		BYTE				constdirectionallightdot;
-		BYTE				rootLOD;
-		BYTE				numAllowedRootLODs;
-		PAD( 0x5 );
-		int					numflexcontrollerui;
-		int					flexcontrolleruiindex;
-		float				flVertAnimFixedPointScale;
-		PAD( 0x4 );
-		int					studiohdr2index;
-		PAD( 0x4 );
 	};
 
 	enum RenderableTranslucencyType_t
@@ -208,79 +176,58 @@ namespace SDK
 		RENDERABLE_IS_TWO_PASS ,	// has both translucent and opaque sub-partsa
 	};
 
-	class IVModelInfoClient
+	class IVModelInfo
 	{
 	public:
-		virtual							~IVModelInfoClient( void ) { }
-		virtual const model_t			*GetModel( int modelindex ) const = 0;
-		// Returns index of model by name
-		virtual int						GetModelIndex( const char *name ) const = 0;
-		// Returns name of model
-		virtual const char				*GetModelName( const model_t *model ) const = 0;
-		virtual vcollide_t				*GetVCollide( const model_t *model ) const = 0;
-		virtual vcollide_t				*GetVCollide( int modelindex ) const = 0;
-		virtual void					GetModelBounds( const model_t *model , Vector& mins , Vector& maxs ) const = 0;
-		virtual	void					GetModelRenderBounds( const model_t *model , Vector& mins , Vector& maxs ) const = 0;
-		virtual int						GetModelFrameCount( const model_t *model ) const = 0;
-		virtual int						GetModelType( const model_t *model ) const = 0;
-		virtual void					*GetModelExtraData( const model_t *model ) = 0;
-		virtual bool					ModelHasMaterialProxy( const model_t *model ) const = 0;
-		virtual bool					IsTranslucent( model_t const* model ) const = 0;
-		virtual bool					IsTranslucentTwoPass( const model_t *model ) const = 0;
-		virtual void					Unused0() {};
-		virtual RenderableTranslucencyType_t ComputeTranslucencyType( const model_t *model , int nSkin , int nBody ) = 0;
-		virtual int						GetModelMaterialCount( const model_t* model ) const = 0;
-		virtual void					GetModelMaterials( const model_t *model , int count , IMaterial** ppMaterials ) = 0;
-		virtual bool					IsModelVertexLit( const model_t *model ) const = 0;
-		virtual const char				*GetModelKeyValueText( const model_t *model ) = 0;
-		virtual bool					GetModelKeyValue( const model_t *model , CUtlBuffer &buf ) = 0; // supports keyvalue blocks in submodels
-		virtual float					GetModelRadius( const model_t *model ) = 0;
-
-		virtual const studiohdr_t		*FindModel( const studiohdr_t *pStudioHdr , void **cache , const char *modelname ) const = 0;
-		virtual const studiohdr_t		*FindModel( void *cache ) const = 0;
-		virtual	virtualmodel_t			*GetVirtualModel( const studiohdr_t *pStudioHdr ) const = 0;
-		virtual byte					*GetAnimBlock( const studiohdr_t *pStudioHdr , int iBlock ) const = 0;
-		virtual bool					HasAnimBlockBeenPreloaded( studiohdr_t const* , int ) const = 0;
-
-		// Available on client only!!!
-		virtual void					GetModelMaterialColorAndLighting( const model_t *model , Vector const& origin ,
-																		  QAngle const& angles , trace_t* pTrace ,
-																		  Vector& lighting , Vector& matColor ) = 0;
-		virtual void					GetIlluminationPoint( const model_t *model , IClientRenderable *pRenderable , Vector const& origin ,
-															  QAngle const& angles , Vector* pLightingCenter ) = 0;
-
-		virtual int    GetModelContents(int modelIndex) const = 0;
-		virtual void UNUSED() = 0;
-		virtual void UNUSE11D() = 0;
-		virtual studiohdr_t    *GetStudioModel(const model_t *mod) = 0;
-		virtual int    GetModelSpriteWidth(const model_t *model) const = 0;
-		virtual int    GetModelSpriteHeight(const model_t *model) const = 0;
-
-		// Sets/gets a map-specified fade range (client only)
-		virtual void					SetLevelScreenFadeRange( float flMinSize , float flMaxSize ) = 0;
-		virtual void					GetLevelScreenFadeRange( float *pMinArea , float *pMaxArea ) const = 0;
-
-		// Sets/gets a map-specified per-view fade range (client only)
-		virtual void					SetViewScreenFadeRange( float flMinSize , float flMaxSize ) = 0;
-
-		// Computes fade alpha based on distance fade + screen fade (client only)
-		virtual unsigned char			ComputeLevelScreenFade( const Vector &vecAbsOrigin , float flRadius , float flFadeScale ) const = 0;
-		virtual unsigned char			ComputeViewScreenFade( const Vector &vecAbsOrigin , float flRadius , float flFadeScale ) const = 0;
-
-		// both client and server
-		virtual int						GetAutoplayList( const studiohdr_t *pStudioHdr , unsigned short **pAutoplayList ) const = 0;
-
-		// Gets a virtual terrain collision model (creates if necessary)
-		// NOTE: This may return NULL if the terrain model cannot be virtualized
-		virtual CPhysCollide			*GetCollideForVirtualTerrain( int index ) = 0;
-		virtual bool					IsUsingFBTexture( const model_t *model , int nSkin , int nBody , void /*IClientRenderable*/ *pClientRenderable ) const = 0;
-		virtual const model_t			*FindOrLoadModel( const char *name ) const = 0;
-		virtual MDLHandle_t				GetCacheHandle( const model_t *model ) const = 0;
-		// Returns planes of non-nodraw brush model surfaces
-		virtual int						GetBrushModelPlaneCount( const model_t *model ) const = 0;
-		virtual void					GetBrushModelPlane( const model_t *model , int nIndex , cplane_t &plane , Vector *pOrigin ) const = 0;
-		virtual int						GetSurfacepropsForVirtualTerrain( int index ) = 0;
-		virtual bool					UsesEnvCubemap( const model_t *model ) const = 0;
-		virtual bool					UsesStaticLighting( const model_t *model ) const = 0;
+		virtual                                 ~IVModelInfo(void) {}
+		virtual const model_t*                  GetModel(int modelindex) const = 0;
+		virtual int                             GetModelIndex(const char* name) const = 0;
+		virtual const char*                     GetModelName(const model_t* model) const = 0;
+		virtual vcollide_t*                     GetVCollide(const model_t* model) const = 0;
+		virtual vcollide_t*                     GetVCollide(int modelindex) const = 0;
+		virtual void                            GetModelBounds(const model_t* model, Vector& mins, Vector& maxs) const = 0;
+		virtual void                            GetModelRenderBounds(const model_t* model, Vector& mins, Vector& maxs) const = 0;
+		virtual int                             GetModelFrameCount(const model_t* model) const = 0;
+		virtual int                             GetModelType(const model_t* model) const = 0;
+		virtual void*                           GetModelExtraData(const model_t* model) = 0;
+		virtual bool                            ModelHasMaterialProxy(const model_t* model) const = 0;
+		virtual bool                            IsTranslucent(model_t const* model) const = 0;
+		virtual bool                            IsTranslucentTwoPass(const model_t* model) const = 0;
+		virtual void                            Unused0() {};
+		virtual void                            UNUSED() = 0;
+		virtual void                            UNUSE11D() = 0;
+		virtual RenderableTranslucencyType_t    ComputeTranslucencyType(const model_t* model, int nSkin, int nBody) = 0;
+		virtual int                             GetModelMaterialCount(const model_t* model) const = 0;
+		virtual void                            GetModelMaterials(const model_t* model, int count, IMaterial** ppMaterial) = 0;
+		virtual bool                            IsModelVertexLit(const model_t* model) const = 0;
+		virtual const char*                     GetModelKeyValueText(const model_t* model) = 0;
+		virtual bool                            GetModelKeyValue(const model_t* model, CUtlBuffer& buf) = 0;
+		virtual float                           GetModelRadius(const model_t* model) = 0;
+		virtual studiohdr_t*                     GetStudioHdr(MDLHandle_t handle) = 0;
+		virtual const studiohdr_t*              FindModel(const studiohdr_t* pStudioHdr, void** cache, const char* modelname) const = 0;
+		virtual const studiohdr_t*              FindModel(void* cache) const = 0;
+		virtual virtualmodel_t*                 GetVirtualModel(const studiohdr_t* pStudioHdr) const = 0;
+		virtual uint8_t*                        GetAnimBlock(const studiohdr_t* pStudioHdr, int iBlock) const = 0;
+		virtual void                            GetModelMaterialColorAndLighting(const model_t* model, Vector const& origin, QAngle const& angles, trace_t* pTrace, Vector& lighting, Vector& matColor) = 0;
+		virtual void                            GetIlluminationPoint(const model_t* model, IClientRenderable* pRenderable, Vector const& origin, QAngle const& angles, Vector* pLightingCenter) = 0;
+		virtual int                             GetModelContents(int modelIndex) const = 0;
+		virtual studiohdr_t*                    GetStudiomodel(const model_t* mod) = 0;
+		virtual int                             GetModelSpriteWidth(const model_t* model) const = 0;
+		virtual int                             GetModelSpriteHeight(const model_t* model) const = 0;
+		virtual void                            SetLevelScreenFadeRange(float flMinSize, float flMaxSize) = 0;
+		virtual void                            GetLevelScreenFadeRange(float* pMinArea, float* pMaxArea) const = 0;
+		virtual void                            SetViewScreenFadeRange(float flMinSize, float flMaxSize) = 0;
+		virtual unsigned char                   ComputeLevelScreenFade(const Vector& vecAbsOrigin, float flRadius, float flFadeScale) const = 0;
+		virtual unsigned char                   ComputeViewScreenFade(const Vector& vecAbsOrigin, float flRadius, float flFadeScale) const = 0;
+		virtual int                             GetAutoplayList(const studiohdr_t* pStudioHdr, unsigned short** pAutoplayList) const = 0;
+		virtual CPhysCollide*                   GetCollideForVirtualTerrain(int index) = 0;
+		virtual bool                            IsUsingFBTexture(const model_t* model, int nSkin, int nBody, IClientRenderable** pClientRenderable) const = 0;
+		virtual const model_t*                  FindOrLoadModel(const char* name) const = 0;
+		virtual MDLHandle_t                     GetCacheHandle(const model_t* model) const = 0;
+		virtual int                             GetBrushModelPlaneCount(const model_t* model) const = 0;
+		virtual void                            GetBrushModelPlane(const model_t* model, int nIndex, cplane_t& plane, Vector* pOrigin) const = 0;
+		virtual int                             GetSurfacepropsForVirtualTerrain(int index) = 0;
+		virtual bool                            UsesEnvCubemap(const model_t* model) const = 0;
+		virtual bool                            UsesStaticLighting(const model_t* model) const = 0;
 	};
 }
