@@ -92,7 +92,7 @@
     <ClInclude Include="Engine\SDK\Const.h" />
     <ClInclude Include="Engine\SDK\CRC.hpp" />
     <ClInclude Include="Engine\SDK\CUserCmd.hpp" />
-    <ClInclude Include="Engine\SDK\CVar.h" />
+    <ClInclude Include="Engine\SDK\ICVar.h" />
     <ClInclude Include="Engine\SDK\Definitions.hpp" />
     <ClInclude Include="Engine\SDK\IAppSystem.hpp" />
     <ClInclude Include="Engine\SDK\IBaseClientDll.hpp" />

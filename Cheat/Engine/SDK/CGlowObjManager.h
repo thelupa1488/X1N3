@@ -17,7 +17,7 @@ namespace SDK
     public:
         GlowObjectDefinition_t() { memset(this, 0, sizeof(*this)); }
 
-        class CBaseEntity* m_pEntity;    //0x0000
+        class IClientEntity* m_pEntity;    //0x0000
         union
         {
             Vector m_vGlowColor;           //0x0004
@@ -50,7 +50,7 @@ namespace SDK
     class CGlowObjectManager
     {
     public:
-        int RegisterGlowObject(CBaseEntity* pEntity, const Vector& vGlowColor, float flGlowAlpha, bool bRenderWhenOccluded, bool bRenderWhenUnoccluded, int nSplitScreenSlot)
+        int RegisterGlowObject(IClientEntity* pEntity, const Vector& vGlowColor, float flGlowAlpha, bool bRenderWhenOccluded, bool bRenderWhenUnoccluded, int nSplitScreenSlot)
         {
             int nIndex;
             if (m_nFirstFreeSlot == GlowObjectDefinition_t::END_OF_FREE_LIST) {
@@ -79,7 +79,7 @@ namespace SDK
             m_nFirstFreeSlot = nGlowObjectHandle;
         }
 
-        void SetEntity(int nGlowObjectHandle, CBaseEntity* pEntity)
+        void SetEntity(int nGlowObjectHandle, IClientEntity* pEntity)
         {
             m_GlowObjectDefinitions[nGlowObjectHandle].m_pEntity = pEntity;
         }
@@ -110,7 +110,7 @@ namespace SDK
             return m_GlowObjectDefinitions[nGlowObjectHandle].m_bRenderWhenUnoccluded;
         }
 
-        bool HasGlowEffect(CBaseEntity* pEntity) const
+        bool HasGlowEffect(IClientEntity* pEntity) const
         {
             for (int i = 0; i < m_GlowObjectDefinitions.Count(); ++i) {
                 if (!m_GlowObjectDefinitions[i].IsUnused() && m_GlowObjectDefinitions[i].m_pEntity == pEntity) {

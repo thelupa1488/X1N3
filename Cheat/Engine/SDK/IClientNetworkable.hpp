@@ -17,7 +17,8 @@ namespace SDK
 		DATA_UPDATE_DESTROYED
 	};
 
-	class IClientNetworkable {
+	class IClientNetworkable 
+	{
 	public:
 		virtual IClientUnknown*  GetIClientUnknown() = 0;
 		virtual void             Release() = 0;

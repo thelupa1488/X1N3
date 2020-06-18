@@ -23,7 +23,7 @@ namespace Engine
 {
 	int CBaseEntity::GetSequenceActivity(int sequence)
 	{
-		studiohdr_t* hdr = I::ModelInfo()->GetStudiomodel(this->GetModel());
+		studiohdr_t* hdr = I::ModelInfo()->GetStudioModel(this->GetModel());
 
 		if (!hdr)
 			return -1;
@@ -464,7 +464,7 @@ namespace Engine
 			return nullptr;
 
 
-		studiohdr_t* pStudioModel = I::ModelInfo()->GetStudiomodel(model);
+		studiohdr_t* pStudioModel = I::ModelInfo()->GetStudioModel(model);
 
 		if (!pStudioModel)
 			return nullptr;

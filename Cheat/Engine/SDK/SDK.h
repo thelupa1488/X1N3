@@ -39,7 +39,7 @@
 #include "ISurface.h"
 #include "IGameEvent.h"
 #include "TextureGroupNames.h"
-#include "CVar.h"
+#include "ICVar.h"
 #include "CGlowObjManager.h"
 #include "IPhysics.hpp"
 #include "Math.hpp"
@@ -114,7 +114,7 @@ namespace SDK
 		static IPhysicsSurfaceProps*PhysSurface();
 		static IGameEventManager2*	GameEvent();
 		static IInputSystem*		InputSystem();
-		static ConVar*              GetConVar();
+		static ConVar*               GetConVar();
 		static IClientEntityList*	g_pEntityList;
 		static IGameEventManager2*  g_pGameEvents;
 		static ILocalize*           Localize();
@@ -144,7 +144,7 @@ namespace SDK
 		static IPhysicsSurfaceProps* g_PhysSurface;
 		static IGameEventManager2*	g_pGameEventMgr;
 		static IInputSystem*		g_pInputSystem;
-		static ConVar*              g_pConVar;
+		static ConVar*               g_pConVar;
 		static ILocalize*           g_pLocalize;
 		static ISteamGameCoordinator* g_pSteamGameCoordinator;
 		static ISteamUser*          g_pSteamUser;

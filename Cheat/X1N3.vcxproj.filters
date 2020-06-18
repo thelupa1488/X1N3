@@ -379,9 +379,6 @@
     <ClInclude Include="Engine\SDK\CRC.hpp">
       <Filter>Engine\SDK</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\SDK\CVar.h">
-      <Filter>Engine\SDK</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\SDK\Definitions.hpp">
       <Filter>Engine\SDK</Filter>
     </ClInclude>
@@ -665,6 +662,9 @@
     <ClInclude Include="X1API\ThreadInMemory.h" />
     <ClInclude Include="Hooks\Other.h" />
     <ClInclude Include="Engine\SDK\KeyValues.h" />
+    <ClInclude Include="Engine\SDK\ICVar.h">
+      <Filter>Engine\SDK</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="3DMenu">

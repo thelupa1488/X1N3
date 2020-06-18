@@ -14,7 +14,6 @@ namespace SDK
 	typedef float RadianEuler[3];
 
 	class CPhysCollide;
-	class CUtlBuffer;
 	class IClientRenderable;
 	struct virtualmodel_t;
 	struct model_t;
@@ -211,7 +210,7 @@ namespace SDK
 		virtual void                            GetModelMaterialColorAndLighting(const model_t* model, Vector const& origin, QAngle const& angles, trace_t* pTrace, Vector& lighting, Vector& matColor) = 0;
 		virtual void                            GetIlluminationPoint(const model_t* model, IClientRenderable* pRenderable, Vector const& origin, QAngle const& angles, Vector* pLightingCenter) = 0;
 		virtual int                             GetModelContents(int modelIndex) const = 0;
-		virtual studiohdr_t*                    GetStudiomodel(const model_t* mod) = 0;
+		virtual studiohdr_t*                    GetStudioModel(const model_t* mod) = 0;
 		virtual int                             GetModelSpriteWidth(const model_t* model) const = 0;
 		virtual int                             GetModelSpriteHeight(const model_t* model) const = 0;
 		virtual void                            SetLevelScreenFadeRange(float flMinSize, float flMaxSize) = 0;
