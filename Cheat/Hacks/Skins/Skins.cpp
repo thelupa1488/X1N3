@@ -60,7 +60,7 @@ static auto make_glove(int entry, int serial) -> CBaseAttributableItem*
 
 	create_wearable_fn(entry, serial);
 
-	const auto glove = static_cast<CBaseAttributableItem*>(I::EntityList()->GetClientEntity(entry));
+	const auto glove = (CBaseAttributableItem*)I::EntityList()->GetClientEntity(entry);
 	assert(glove);
 	{
 		CSX::Memory::FindPattern(clientFactory, XorStr("\x53\x8D\x48\x04\xE8\x00\x00\x00\x00\x8B\x4D\x10"), XorStr("xxxxx????xxx"), 4);
@@ -210,7 +210,7 @@ void CSkins::PostDataUpdate()
 
 	int nLocalPlayerID = I::Engine()->GetLocalPlayer();
 
-	CBaseEntity* pLocal = (CBaseEntity*)I::ClientEntityList()->GetClientEntity(nLocalPlayerID);
+	CBaseEntity* pLocal = I::EntityList()->GetClientEntity(nLocalPlayerID);
 
 
 	if (!pLocal)
@@ -225,7 +225,7 @@ void CSkins::PostDataUpdate()
 	auto weapons = pLocal->m_hMyWeapons();
 	for (size_t i = 0; weapons[i] != INVALID_EHANDLE_INDEX; i++)
 	{
-		CBaseEntity* pEntity = (CBaseEntity*)I::ClientEntityList()->GetClientEntityFromHandle(weapons[i]);
+		CBaseEntity* pEntity = I::EntityList()->GetClientEntityFromHandle(weapons[i]);
 		if (pEntity)
 		{
 			CBaseWeapon* pWeapon = (CBaseWeapon*)pEntity;
@@ -250,7 +250,7 @@ void CSkins::PostDataUpdate()
 					int mdl_idx = GetKnifeModelIdx(sel_mod, IsTT);
 					worldmodel_handle = pWeapon->GetWeaponWorldModel();
 					if (worldmodel_handle)
-						worldmodel = (CBaseEntity*)I::ClientEntityList()->GetClientEntityFromHandleknife(worldmodel_handle);
+						worldmodel = I::EntityList()->GetClientEntityFromHandleknife(worldmodel_handle);
 
 					*pWeapon->ModelIndex() = mdl_idx;
 					*pWeapon->ViewModelIndex() = mdl_idx;
@@ -439,7 +439,7 @@ void CSkins::ApplyCustomSkin(CBaseAttributableItem* pWeapon, int nWeaponIndex, b
 void CSkins::SetSkin(CBaseAttributableItem* pWeapon, SkinSettings *SkinParam, int id, bool IsCT, bool IsKnife)
 {
 	int nLocalPlayerID = I::Engine()->GetLocalPlayer();
-	CBaseEntity* pLocal = (CBaseEntity*)I::ClientEntityList()->GetClientEntity(nLocalPlayerID);
+	CBaseEntity* pLocal = I::EntityList()->GetClientEntity(nLocalPlayerID);
 	PlayerInfo LocalPlayerInfo;
 
 	if (!I::Engine()->GetPlayerInfo(nLocalPlayerID, &LocalPlayerInfo))

@@ -3,12 +3,31 @@
 #include "Definitions.hpp"
 #include "VMatrix.hpp"
 
+namespace Engine
+{
+	class CBaseEntity;
+}
+using namespace Engine;
+
 namespace SDK
 {
-	class CPanel;
-	class C_BaseEntity;
+	class IPanel
+	{
+	public:
+		const char* GetName(unsigned int vguiPanel)
+		{
+			typedef const char* (__thiscall* tGetName)(void*, unsigned int);
+			return GetMethod<tGetName>(this, 36)(this, vguiPanel);
+		}
+		const char* GetClassName(unsigned int vguiPanel)
+		{
+			typedef const char* (__thiscall* tGetClassName)(void*, unsigned int);
+			return GetMethod<tGetClassName>(this, 37)(this, vguiPanel);
+		}
+	};
 
-	enum class ClearFlags_t {
+	enum class ClearFlags_t
+	{
 		VIEW_CLEAR_COLOR = 0x1,
 		VIEW_CLEAR_DEPTH = 0x2,
 		VIEW_CLEAR_FULL_TARGET = 0x4,
@@ -17,123 +36,60 @@ namespace SDK
 		VIEW_CLEAR_STENCIL = 0x20,
 	};
 
-	enum class MotionBlurMode_t {
-		MOTION_BLUR_DISABLE = 1 ,
-		MOTION_BLUR_GAME = 2 ,
+
+	enum class MotionBlurMode_t
+	{
+		MOTION_BLUR_DISABLE = 1,
+		MOTION_BLUR_GAME = 2,
 		MOTION_BLUR_SFM = 3
 	};
 
 	class CViewSetup
 	{
 	public:
-		// left side of view window
-		int			x , x_old;
-		// top side of view window
-		int			y , y_old;
-		// width of view window
-		int			width , width_old;
-		// height of view window
-		int			height , height_old;
-		// the rest are only used by 3D views
-		// Orthographic projection?
-		bool		m_bOrtho;
-		// View-space rectangle for ortho projection.
-		float		m_OrthoLeft;
-		float		m_OrthoTop;
-		float		m_OrthoRight;
-		float		m_OrthoBottom;
-		bool		m_bCustomViewMatrix; // 0x34
-		matrix3x4_t	m_matCustomViewMatrix; // 0x38
-		char		pad_0x68[0x48]; // 0x68
-									// horizontal FOV in degrees
-		float		fov; //	0xB0
-						 // horizontal FOV in degrees for in-view model
-		float		fovViewmodel;
-		// 3D origin of camera
-		Vector		origin;
-		// heading of camera (pitch, yaw, roll)
-		QAngle		angles;
-		// local Z coordinate of near plane of camera
-		float		zNear;
-		// local Z coordinate of far plane of camera
-		float		zFar;
-		// local Z coordinate of near plane of camera ( when rendering view model )
-		float		zNearViewmodel;
-		// local Z coordinate of far plane of camera ( when rendering view model )
-		float		zFarViewmodel;
-		// The aspect ratio to use for computing the perspective projection matrix
-		// (0.0f means use the viewport)
-		float		m_flAspectRatio;
-		// Camera settings to control depth of field
-		float		m_flNearBlurDepth;
-		float		m_flNearFocusDepth;
-		float		m_flFarFocusDepth;
-		float		m_flFarBlurDepth;
-		float		m_flNearBlurRadius;
-		float		m_flFarBlurRadius;
-		int			m_nDoFQuality;
-		// Camera settings to control motion blur
-		MotionBlurMode_t	m_nMotionBlurMode;
-		float		m_flShutterTime;				// In seconds
-		Vector		m_vShutterOpenPosition;			// Start of frame or "shutter open"
-		QAngle		m_shutterOpenAngles;			//
-		Vector		m_vShutterClosePosition;		// End of frame or "shutter close"
-		QAngle		m_shutterCloseAngles;			// 
-													// Controls for off-center projection (needed for poster rendering)
-		float		m_flOffCenterTop;
-		float		m_flOffCenterBottom;
-		float		m_flOffCenterLeft;
-		float		m_flOffCenterRight;
-		int			m_EdgeBlur; // 0x148
-	};
+		__int32   x;                  //0x0000 
+		__int32   x_old;              //0x0004 
+		__int32   y;                  //0x0008 
+		__int32   y_old;              //0x000C 
+		__int32   width;              //0x0010 
+		__int32   width_old;          //0x0014 
+		__int32   height;             //0x0018 
+		__int32   height_old;         //0x001C 
+		char      pad_0x0020[0x90];   //0x0020
+		float     fov;                //0x00B0 
+		float     viewmodel_fov;      //0x00B4 
+		Vector    origin;             //0x00B8 
+		Vector    angles;             //0x00C4 
+		char      pad_0x00D0[0x7C];   //0x00D0
 
-	namespace TABLE
-	{
-		namespace IClientMode
-		{
-			enum
-			{
-				OverrideView = 18 ,
-				CreateMove = 24 ,
-				GetViewModelFOV = 35,
-				DoPostScreenSpaceEffects = 44
-			};
-		}
-	}
+	};//Size=0x014C
 
-	class IClientMode 
+	class IClientMode
 	{
 	public:
-		bool OverrideView( CViewSetup* pSetup )
-		{
-			VirtualFn( bool )( PVOID , CViewSetup* );
-			return GetMethod< OriginalFn >( this , TABLE::IClientMode::OverrideView )( this , pSetup );
-		}
-		bool CreateMove( float flInputSampleTime , CUserCmd* cmd )
-		{
-			VirtualFn( bool )( PVOID , float , CUserCmd* );
-			return GetMethod< OriginalFn >( this , TABLE::IClientMode::CreateMove )( this , flInputSampleTime , cmd );
-		}
-		float GetViewModelFOV()
-		{
-			VirtualFn( float )( PVOID );
-			return GetMethod< OriginalFn >( this , TABLE::IClientMode::GetViewModelFOV )( this );
-		}
-		bool DoPostScreenSpaceEffects(int callback)
-		{
-			VirtualFn(int)(IClientMode*, int);
-			return GetMethod< OriginalFn >(this, TABLE::IClientMode::DoPostScreenSpaceEffects)(this, callback);
-		}
-	};
-
-	class CPanel
-	{
-	public:
-		const char* GetName(unsigned int Panel)
-		{
-			typedef const char*(__thiscall* OriginalFn)(void*, unsigned int);
-			return GetVFunc<OriginalFn>(this, 36)(this, Panel);
-		}
-
+		virtual             ~IClientMode() {}
+		virtual int         ClientModeCSNormal(void*) = 0;
+		virtual void        Init() = 0;
+		virtual void        InitViewport() = 0;
+		virtual void        Shutdown() = 0;
+		virtual void        Enable() = 0;
+		virtual void        Disable() = 0;
+		virtual void        Layout() = 0;
+		virtual IPanel*     GetViewport() = 0;
+		virtual void*       GetViewportAnimationController() = 0;
+		virtual void        ProcessInput(bool bActive) = 0;
+		virtual bool        ShouldDrawDetailObjects() = 0;
+		virtual bool        ShouldDrawEntity(CBaseEntity* pEnt) = 0;
+		virtual bool        ShouldDrawLocalPlayer(CBaseEntity* pPlayer) = 0;
+		virtual bool        ShouldDrawParticles() = 0;
+		virtual bool        ShouldDrawFog(void) = 0;
+		virtual void        OverrideView(CViewSetup* pSetup) = 0;
+		virtual int         KeyInput(int down, int keynum, const char* pszCurrentBinding) = 0;
+		virtual void        StartMessageMode(int iMessageModeType) = 0;
+		virtual IPanel*     GetMessagePanel() = 0;
+		virtual void        OverrideMouseInput(float* x, float* y) = 0;
+		virtual bool        CreateMove(float flInputSampleTime, void* usercmd) = 0;
+		virtual void        LevelInit(const char* newmap) = 0;
+		virtual void        LevelShutdown(void) = 0;
 	};
 }

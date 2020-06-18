@@ -1554,7 +1554,7 @@ void CLegitAim::LegitResolver()
 	{
 		for (int i = 1; i < I::Engine()->GetMaxClients(); i++)
 		{
-			CBaseEntity* pEntity = I::ClientEntityList()->GetClientEntity(i);
+			CBaseEntity* pEntity = I::EntityList()->GetClientEntity(i);
 
 			if (!pEntity)
 				continue;

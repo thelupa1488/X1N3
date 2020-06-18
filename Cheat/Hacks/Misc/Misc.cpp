@@ -664,7 +664,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				static std::vector<int> stolenIds;
 				for (int EntIndex = 1; EntIndex <= I::Engine()->GetMaxClients(); ++EntIndex)
 				{
-					const auto entity = I::ClientEntityList()->GetClientEntity(EntIndex);
+					const auto entity = I::EntityList()->GetClientEntity(EntIndex);
 
 					if (!entity || entity == CGlobal::LocalPlayer)
 						continue;
@@ -1222,7 +1222,7 @@ void CMisc::EnginePrediction(bool& bSendPacket, CUserCmd* pCmd)
 
 					for (int i = 1; i < I::Engine()->GetMaxClients(); i++)
 					{
-						CBaseEntity* entity = (CBaseEntity*)I::ClientEntityList()->GetClientEntity(i);
+						CBaseEntity* entity = I::EntityList()->GetClientEntity(i);
 
 						if (!entity)
 							continue;
@@ -1242,7 +1242,7 @@ void CMisc::EnginePrediction(bool& bSendPacket, CUserCmd* pCmd)
 					if (index == -1)
 						return;
 
-					CBaseEntity* target = (CBaseEntity*)I::ClientEntityList()->GetClientEntity(index);
+					CBaseEntity* target = I::EntityList()->GetClientEntity(index);
 
 					if (!target)
 						return;

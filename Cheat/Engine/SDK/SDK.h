@@ -98,12 +98,11 @@ namespace SDK
 		static IVEngineClient*		Engine();
 		static IBaseClientDLL*		Client();
 		static IClientEntityList*	EntityList();
-		static CClientEntityList*	ClientEntityList();
 		static CGlobalVarsBase*		GlobalVars();
 		static CInput*				Input();
 		static CClientState*		ClientState();
 		static IEngineTrace*		EngineTrace();
-		static CPanel*              Panel();
+		static IPanel*              Panel();
 		static IClientMode*			ClientMode();
 		static IVModelInfo*	        ModelInfo();
 		static IEngineSound*		Sound();
@@ -117,7 +116,6 @@ namespace SDK
 		static IInputSystem*		InputSystem();
 		static ConVar*              GetConVar();
 		static IClientEntityList*	g_pEntityList;
-		static CClientEntityList*	g_pClientEntityList;
 		static IGameEventManager2*  g_pGameEvents;
 		static ILocalize*           Localize();
 		static ISteamGameCoordinator* SteamGameCoordinator();
@@ -135,7 +133,7 @@ namespace SDK
 		static CClientState*		g_pClientState;
 		static IEngineTrace*		g_pEngineTrace;
 		static IClientMode*			g_pClientMode;
-		static CPanel*              g_pPanel;
+		static IPanel*              g_pPanel;
 		static IVModelInfo*	        g_pModelInfo;
 		static IEngineSound*		g_pSound;
 		static IVModelRender*		g_pModelRender;

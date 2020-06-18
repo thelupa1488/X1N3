@@ -9,14 +9,13 @@ namespace SDK
 	IVEngineClient*     I::g_pEngine = nullptr;
 	IBaseClientDLL*     I::g_pClient = nullptr;
 	IClientEntityList*  I::g_pEntityList = nullptr;
-	CClientEntityList*	I::g_pClientEntityList = nullptr;
 	IGameEventManager2* I::g_pGameEvents = nullptr;
 	CGlobalVarsBase*    I::g_pGlobals = nullptr;
 	CInput*             I::g_pInput = nullptr;
 	CClientState*       I::g_pClientState = nullptr;
 	IEngineTrace*       I::g_pEngineTrace = nullptr;
 	IClientMode*        I::g_pClientMode = nullptr;
-	CPanel*             I::g_pPanel = nullptr;
+	IPanel*             I::g_pPanel = nullptr;
 	IVModelInfo*	    I::g_pModelInfo = nullptr;
 	IEngineSound*		I::g_pSound = nullptr;
 	IVModelRender*		I::g_pModelRender = nullptr;
@@ -141,18 +140,6 @@ namespace SDK
 			return nullptr;
 	}
 
-	CClientEntityList* I::ClientEntityList()
-	{
-		if (!g_pClientEntityList)
-		{
-			g_pClientEntityList = reinterpret_cast<CClientEntityList*>(FindInterface(clientFactory, XorStr("VClientEntityList")));
-		}
-		if (!IsBadReadPtr(g_pClientEntityList, sizeof(CClientEntityList*)))
-			return g_pClientEntityList;
-		else
-			return nullptr;
-	}
-
 	IPrediction* I::Prediction()
 	{
 		if (!g_pPrediction)
@@ -263,11 +250,11 @@ namespace SDK
 		return g_pConVar;
 	}
 
-	CPanel* I::Panel()
+	IPanel* I::Panel()
 	{
 		if (!g_pPanel)
 		{
-			g_pPanel = GetInterface<CPanel>(vguiFactory, XorStr("VGUI_Panel"));
+			g_pPanel = GetInterface<IPanel>(vguiFactory, XorStr("VGUI_Panel"));
 			ADD_LOG("->Panel -> %X\n", (DWORD)g_pPanel);
 		}
 		return g_pPanel;
