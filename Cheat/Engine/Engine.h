@@ -448,11 +448,11 @@ public:
 		return LWorldToScreen();
 	}
 
-	static void InitKeyValues(KeyValues* kv_, std::string name_)
+	static void InitKeyValues(KeyValues* kv_, string name_)
 	{
 		VMP_MUTATION("InitKeyValues");
 		static auto address = offsets["InitKeyValuesEx"];
-		using Fn = void(__thiscall*)(void*, const char*);
+		using Fn = void(__thiscall*)(void* thisptr, const char* name);
 		reinterpret_cast<Fn>(address)(kv_, name_.c_str());
 
 		//DWORD dwFunction = (DWORD)offsets["InitKeyValuesEx"];
@@ -468,12 +468,15 @@ public:
 		VMP_END;
 	}
 
-	static void LoadFromBuffer(KeyValues* vk_, std::string name_, std::string buffer_)
+	static void LoadFromBuffer(KeyValues* vk_, string name_, string buffer_)
 	{
 		VMP_MUTATION("LoadFromBuffer");
 		static auto address = offsets["LoadFromBufferEx"];
-		using Fn = void(__thiscall*)(void*, const char*, const char*, void*, const char*, void*, void*);
-		reinterpret_cast<Fn>(address)(vk_, name_.c_str(), buffer_.c_str(), nullptr, nullptr, nullptr, nullptr);
+		using Fn = void(__thiscall*)(
+			void* thisptr, const char* resourceName,
+			const char* pBuffer, void* pFileSystem,
+			const char* pPathID, void* pfnEvaluateSymbolProc);
+		reinterpret_cast<Fn>(address)(vk_, name_.c_str(), buffer_.c_str(), nullptr, nullptr, nullptr);
 
 		//DWORD dwFunction = (DWORD)offsets["LoadFromBufferEx"];
 		//if (dwFunction)
@@ -496,11 +499,10 @@ public:
 	static IMaterial* CreateMaterialBasic(bool ignorez, bool lit = true, bool wireframe = false)
 	{
 		VMP_MUTATION("CreateMaterialBasic");
-		static auto created = 0;
 
-		std::string type = lit ? XorStr("VertexLitGeneric") : XorStr("UnlitGeneric");
-		auto matdata =
-			"\"" + type + "\"\
+		string Generic = lit ? "VertexLitGeneric" : "UnlitGeneric";
+		string matdata =
+			"\"" + Generic + "\"\
 		\n{\
 		\n\t\"$basetexture\" \"vgui/white\"\
 		\n\t\"$envmap\" \"\"\
@@ -509,25 +511,22 @@ public:
 		\n\t\"$nocull\" \"0\"\
 		\n\t\"$selfillum\" \"1\"\
 		\n\t\"$halflambert\" \"1\"\
-		\n\t\"$nofog\" \"1\"\
-		\n\t\"$ignorez\" \"" + std::to_string(ignorez) + "\"\
+		\n\t\"$nofog\" \"0\"\
+		\n\t\"$ignorez\" \"" + to_string(ignorez) + "\"\
 		\n\t\"$znearer\" \"0\"\
-		\n\t\"$wireframe\" \"" + std::to_string(wireframe) + "\"\
+		\n\t\"$wireframe\" \"" + to_string(wireframe) + "\"\
 		\n}\n";
 
 
-		auto matname = XorStr("custom_") + std::to_string(created);
-		++created;
-
+		auto matname = XorStr("Basic");
 		auto keyValues = static_cast<KeyValues*>(malloc(sizeof(KeyValues)));
 
-		InitKeyValues(keyValues, type.c_str());
+		InitKeyValues(keyValues, Generic.c_str());
 		LoadFromBuffer(keyValues, matname, matdata);
 
-		auto material =
-			I::MaterialSystem()->CreateMaterial(matname.c_str(), keyValues);
-
+		auto material = I::MaterialSystem()->CreateMaterial(matname, keyValues);
 		material->IncrementReferenceCount();
+
 		VMP_END;
 		return material;
 	}
@@ -535,17 +534,16 @@ public:
 	static IMaterial* CreateMaterialMetallic(bool ignorez)
 	{
 		VMP_MUTATION("CreateMaterialMetallic");
-		static auto created = 0;
 
-		std::string type = XorStr("VertexLitGeneric");
-		auto matdata =
-			"\"" + type + "\"\
+		string Generic = "VertexLitGeneric";
+		string matdata =
+			"\"" + Generic + "\"\
 		\n{\
 		\n\t\"$basetexture\" \"vgui/white\"\
 		\n\t\"$envmap\" \"env_cubemap\"\
 		\n\t\"$normalmapalphaenvmapmask\" \"1\"\
 		\n\t\"$envmapcontrast\" \"1\"\
-		\n\t\"$ignorez\" \"" + std::to_string(ignorez) + "\"\
+		\n\t\"$ignorez\" \"" + to_string(ignorez) + "\"\
 		\n\t\"$model\" \"1\"\
 		\n\t\"$flat\" \"1\"\
 		\n\t\"$nocull\" \"0\"\
@@ -559,18 +557,15 @@ public:
 		\n\t\"$rimlightboost\" \"[ 1 1 1 ]\"\
 		\n}\n";
 
-		auto matname = XorStr("custom_") + std::to_string(created);
-		++created;
-
+		auto matname = XorStr("Metallic");
 		auto keyValues = static_cast<KeyValues*>(malloc(sizeof(KeyValues)));
 
-		InitKeyValues(keyValues, type.c_str());
+		InitKeyValues(keyValues, Generic.c_str());
 		LoadFromBuffer(keyValues, matname, matdata);
 
-		auto material =
-			I::MaterialSystem()->CreateMaterial(matname.c_str(), keyValues);
-
+		auto material = I::MaterialSystem()->CreateMaterial(matname, keyValues);
 		material->IncrementReferenceCount();
+
 		VMP_END;
 		return material;
 	}
@@ -578,16 +573,14 @@ public:
 	static IMaterial* CreateMaterialMetallicPlus(bool ignorez)
 	{
 		VMP_MUTATION("CreateMaterialMetallicPlus");
-		static auto created = 0;
-
-		std::string type = XorStr("VertexLitGeneric");
-		auto matdata =
-			"\"" + type + "\"\
+		string Generic = "VertexLitGeneric";
+		string matdata =
+			"\"" + Generic + "\"\
 		\n{\
 		\n\t\"$basetexture\" \"vgui/white\"\
         \n\t\"$bumpmap\" \"de_nuke/hr_nuke/pool_water_normals_002\"\
         \n\t\"$bumptransform\" \"center 0.5 0.5 scale 0.25 0.25 rotate 0.0 translate 0.0 0.0\"\
-		\n\t\"$ignorez\" \"" + std::to_string(ignorez) + "\"\
+		\n\t\"$ignorez\" \"" + to_string(ignorez) + "\"\
 		\n\t\"$nofog\" \"0\"\
 		\n\t\"$model\" \"1\"\
         \n\t\"$color2\" \"[1.0, 1.0, 1.0]\"\
@@ -616,18 +609,15 @@ public:
 		\n\}\
 		\n}\n";
 
-		auto matname = XorStr("custom_") + std::to_string(created);
-		++created;
-
+		auto matname = XorStr("Metallic_Plus");
 		auto keyValues = static_cast<KeyValues*>(malloc(sizeof(KeyValues)));
 
-		InitKeyValues(keyValues, type.c_str());
+		InitKeyValues(keyValues, Generic.c_str());
 		LoadFromBuffer(keyValues, matname, matdata);
 
-		auto material =
-			I::MaterialSystem()->CreateMaterial(matname.c_str(), keyValues);
-
+		auto material = I::MaterialSystem()->CreateMaterial(matname, keyValues);
 		material->IncrementReferenceCount();
+
 		VMP_END;
 		return material;
 	}

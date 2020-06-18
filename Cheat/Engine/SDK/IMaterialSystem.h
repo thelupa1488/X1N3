@@ -6,194 +6,125 @@ typedef unsigned short MaterialHandle_t;
 
 namespace SDK
 {
-	enum ShaderParamType_t
-	{
-		SHADER_PARAM_TYPE_TEXTURE ,
-		SHADER_PARAM_TYPE_INTEGER ,
-		SHADER_PARAM_TYPE_COLOR ,
-		SHADER_PARAM_TYPE_VEC2 ,
-		SHADER_PARAM_TYPE_VEC3 ,
-		SHADER_PARAM_TYPE_VEC4 ,
-		SHADER_PARAM_TYPE_ENVMAP ,	// obsolete
-		SHADER_PARAM_TYPE_FLOAT ,
-		SHADER_PARAM_TYPE_BOOL ,
-		SHADER_PARAM_TYPE_FOURCC ,
-		SHADER_PARAM_TYPE_MATRIX ,
-		SHADER_PARAM_TYPE_MATERIAL ,
-		SHADER_PARAM_TYPE_STRING ,
-	};
-
-	enum MaterialMatrixMode_t
-	{
-		MATERIAL_VIEW = 0 ,
-		MATERIAL_PROJECTION ,
-
-		MATERIAL_MATRIX_UNUSED0 ,
-		MATERIAL_MATRIX_UNUSED1 ,
-		MATERIAL_MATRIX_UNUSED2 ,
-		MATERIAL_MATRIX_UNUSED3 ,
-		MATERIAL_MATRIX_UNUSED4 ,
-		MATERIAL_MATRIX_UNUSED5 ,
-		MATERIAL_MATRIX_UNUSED6 ,
-		MATERIAL_MATRIX_UNUSED7 ,
-
-		MATERIAL_MODEL ,
-
-		// Total number of matrices
-		NUM_MATRIX_MODES = MATERIAL_MODEL + 1 ,
-	};
-
-	// FIXME: How do I specify the actual number of matrix modes?
-	const int NUM_MODEL_TRANSFORMS = 53;
-	const int MATERIAL_MODEL_MAX = MATERIAL_MODEL + NUM_MODEL_TRANSFORMS;
-
-	enum MaterialPrimitiveType_t
-	{
-		MATERIAL_POINTS = 0x0 ,
-		MATERIAL_LINES ,
-		MATERIAL_TRIANGLES ,
-		MATERIAL_TRIANGLE_STRIP ,
-		MATERIAL_LINE_STRIP ,
-		MATERIAL_LINE_LOOP ,	// a single line loop
-		MATERIAL_POLYGON ,	// this is a *single* polygon
-		MATERIAL_QUADS ,
-		MATERIAL_SUBD_QUADS_EXTRA , // Extraordinary sub-d quads
-		MATERIAL_SUBD_QUADS_REG ,   // Regular sub-d quads
-		MATERIAL_INSTANCED_QUADS , // (X360) like MATERIAL_QUADS, but uses vertex instancing
-
-								   // This is used for static meshes that contain multiple types of
-								   // primitive types.	When calling draw, you'll need to specify
-								   // a primitive type.
-								   MATERIAL_HETEROGENOUS
-	};
-
-	enum TessellationMode_t
-	{
-		TESSELLATION_MODE_DISABLED = 0 ,
-		TESSELLATION_MODE_ACC_PATCHES_EXTRA ,
-		TESSELLATION_MODE_ACC_PATCHES_REG
-	};
-
-	enum MaterialPropertyTypes_t
-	{
-		MATERIAL_PROPERTY_NEEDS_LIGHTMAP = 0 ,					// bool
-		MATERIAL_PROPERTY_OPACITY ,								// int (enum MaterialPropertyOpacityTypes_t)
-		MATERIAL_PROPERTY_REFLECTIVITY ,							// vec3_t
-		MATERIAL_PROPERTY_NEEDS_BUMPED_LIGHTMAPS				// bool
-	};
-
-	// acceptable property values for MATERIAL_PROPERTY_OPACITY
-	enum MaterialPropertyOpacityTypes_t
-	{
-		MATERIAL_ALPHATEST = 0 ,
-		MATERIAL_OPAQUE ,
-		MATERIAL_TRANSLUCENT
-	};
-
-	enum MaterialBufferTypes_t
-	{
-		MATERIAL_FRONT = 0 ,
-		MATERIAL_BACK
-	};
-
-	enum MaterialCullMode_t
-	{
-		MATERIAL_CULLMODE_CCW ,	// this culls polygons with counterclockwise winding
-		MATERIAL_CULLMODE_CW	// this culls polygons with clockwise winding
-	};
-
-	enum MaterialIndexFormat_t
-	{
-		MATERIAL_INDEX_FORMAT_UNKNOWN = -1 ,
-		MATERIAL_INDEX_FORMAT_16BIT = 0 ,
-		MATERIAL_INDEX_FORMAT_32BIT ,
-	};
-
-	enum MaterialFogMode_t
-	{
-		MATERIAL_FOG_NONE ,
-		MATERIAL_FOG_LINEAR ,
-		MATERIAL_FOG_LINEAR_BELOW_FOG_Z ,
-	};
-
-	enum MaterialHeightClipMode_t
-	{
-		MATERIAL_HEIGHTCLIPMODE_DISABLE ,
-		MATERIAL_HEIGHTCLIPMODE_RENDER_ABOVE_HEIGHT ,
-		MATERIAL_HEIGHTCLIPMODE_RENDER_BELOW_HEIGHT
-	};
-
-	enum MaterialNonInteractiveMode_t
-	{
-		MATERIAL_NON_INTERACTIVE_MODE_NONE = -1 ,
-		MATERIAL_NON_INTERACTIVE_MODE_STARTUP = 0 ,
-		MATERIAL_NON_INTERACTIVE_MODE_LEVEL_LOAD ,
-
-		MATERIAL_NON_INTERACTIVE_MODE_COUNT ,
-	};
-
 	//-----------------------------------------------------------------------------
-	//
-	//-----------------------------------------------------------------------------
+    // forward declarations
+    //-----------------------------------------------------------------------------
+	class IMaterial;
+	class IMesh;
+	class IVertexBuffer;
+	class IIndexBuffer;
+	struct MaterialSystem_Config_t;
+	class VMatrix;
+	class matrix3x4_t;
+	class ITexture;
+	struct MaterialSystemHWID_t;
+	class KeyValues;
+	class IShader;
+	class IVertexTexture;
+	class IMorph;
+	class IMatRenderContext;
+	class ICallQueue;
+	struct MorphWeight_t;
+	class IFileList;
+	struct VertexStreamSpec_t;
+	struct ShaderStencilState_t;
+	struct MeshInstanceData_t;
+	class IClientMaterialSystem;
+	class CPaintMaterial;
+	class IPaintMapDataManager;
+	class IPaintMapTextureManager;
+	class GPUMemoryStats;
+	struct AspectRatioInfo_t;
+	struct CascadedShadowMappingState_t;
 
-	enum MaterialThreadMode_t
+	class IMaterialProxyFactory;
+	class ITexture;
+	class IMaterialSystemHardwareConfig;
+	class CShadowMgr;
+
+	enum CompiledVtfFlags
 	{
-		MATERIAL_SINGLE_THREADED ,
-		MATERIAL_QUEUED_SINGLE_THREADED ,
-		MATERIAL_QUEUED_THREADED
+		TEXTUREFLAGS_POINTSAMPLE = 0x00000001,
+		TEXTUREFLAGS_TRILINEAR = 0x00000002,
+		TEXTUREFLAGS_CLAMPS = 0x00000004,
+		TEXTUREFLAGS_CLAMPT = 0x00000008,
+		TEXTUREFLAGS_ANISOTROPIC = 0x00000010,
+		TEXTUREFLAGS_HINT_DXT5 = 0x00000020,
+		TEXTUREFLAGS_PWL_CORRECTED = 0x00000040,
+		TEXTUREFLAGS_NORMAL = 0x00000080,
+		TEXTUREFLAGS_NOMIP = 0x00000100,
+		TEXTUREFLAGS_NOLOD = 0x00000200,
+		TEXTUREFLAGS_ALL_MIPS = 0x00000400,
+		TEXTUREFLAGS_PROCEDURAL = 0x00000800,
+		TEXTUREFLAGS_ONEBITALPHA = 0x00001000,
+		TEXTUREFLAGS_EIGHTBITALPHA = 0x00002000,
+		TEXTUREFLAGS_ENVMAP = 0x00004000,
+		TEXTUREFLAGS_RENDERTARGET = 0x00008000,
+		TEXTUREFLAGS_DEPTHRENDERTARGET = 0x00010000,
+		TEXTUREFLAGS_NODEBUGOVERRIDE = 0x00020000,
+		TEXTUREFLAGS_SINGLECOPY = 0x00040000,
+		TEXTUREFLAGS_PRE_SRGB = 0x00080000,
+		TEXTUREFLAGS_UNUSED_00100000 = 0x00100000,
+		TEXTUREFLAGS_UNUSED_00200000 = 0x00200000,
+		TEXTUREFLAGS_UNUSED_00400000 = 0x00400000,
+		TEXTUREFLAGS_NODEPTHBUFFER = 0x00800000,
+		TEXTUREFLAGS_UNUSED_01000000 = 0x01000000,
+		TEXTUREFLAGS_CLAMPU = 0x02000000,
+		TEXTUREFLAGS_VERTEXTEXTURE = 0x04000000,
+		TEXTUREFLAGS_SSBUMP = 0x08000000,
+		TEXTUREFLAGS_UNUSED_10000000 = 0x10000000,
+		TEXTUREFLAGS_BORDER = 0x20000000,
+		TEXTUREFLAGS_UNUSED_40000000 = 0x40000000,
+		TEXTUREFLAGS_UNUSED_80000000 = 0x80000000
 	};
-
-	//-----------------------------------------------------------------------------
-	//
-	//-----------------------------------------------------------------------------
-
-	enum MaterialContextType_t
-	{
-		MATERIAL_HARDWARE_CONTEXT ,
-		MATERIAL_QUEUED_CONTEXT ,
-		MATERIAL_NULL_CONTEXT
-	};
-
-	enum
-	{
-		MATERIAL_MAX_LIGHT_COUNT = 4 ,
-	};
-
-#define CREATERENDERTARGETFLAGS_HDR				0x00000001
-#define CREATERENDERTARGETFLAGS_AUTOMIPMAP		0x00000002
-#define CREATERENDERTARGETFLAGS_UNFILTERABLE_OK 0x00000004
-
-	enum MorphFormatFlags_t
-	{
-		MORPH_POSITION = 0x0001 ,	// 3D
-		MORPH_NORMAL = 0x0002 ,	// 3D
-		MORPH_WRINKLE = 0x0004 ,	// 1D
-		MORPH_SPEED = 0x0008 ,	// 1D
-		MORPH_SIDE = 0x0010 ,	// 1D
-	};
-
-
-	//-----------------------------------------------------------------------------
-	// The morph format type
-	//-----------------------------------------------------------------------------
-	typedef unsigned int MorphFormat_t;
 
 	enum StandardLightmap_t
 	{
-		MATERIAL_SYSTEM_LIGHTMAP_PAGE_WHITE = -1 ,
-		MATERIAL_SYSTEM_LIGHTMAP_PAGE_WHITE_BUMP = -2 ,
+		MATERIAL_SYSTEM_LIGHTMAP_PAGE_WHITE = -1,
+		MATERIAL_SYSTEM_LIGHTMAP_PAGE_WHITE_BUMP = -2,
 		MATERIAL_SYSTEM_LIGHTMAP_PAGE_USER_DEFINED = -3
 	};
 
 
 	struct MaterialSystem_SortInfo_t
 	{
-		IMaterial	*material;
+		IMaterial* material;
 		int			lightmapPageID;
 	};
 
+	enum MaterialThreadMode_t
+	{
+		MATERIAL_SINGLE_THREADED,
+		MATERIAL_QUEUED_SINGLE_THREADED,
+		MATERIAL_QUEUED_THREADED
+	};
 
-#define MAX_FB_TEXTURES 4
+	enum MaterialContextType_t
+	{
+		MATERIAL_HARDWARE_CONTEXT,
+		MATERIAL_QUEUED_CONTEXT,
+		MATERIAL_NULL_CONTEXT
+	};
+
+	struct MaterialTextureInfo_t
+	{
+		int iExcludeInformation;
+	};
+
+	struct ApplicationPerformanceCountersInfo_t
+	{
+		float msMain;
+		float msMST;
+		float msGPU;
+		float msFlip;
+		float msTotal;
+	};
+
+	struct ApplicationInstantCountersInfo_t
+	{
+		uint32_t m_nCpuActivityMask;
+		uint32_t m_nDeferredWordsAllocated;
+	};
 
 	enum
 	{
@@ -214,116 +145,150 @@ namespace SDK
 		unsigned int m_nDriverVersionLow;
 	};
 
-	enum MaterialInitFlags_t
+	struct MaterialVideoMode_t
 	{
-		MATERIAL_INIT_ALLOCATE_FULLSCREEN_TEXTURE = 0x2 ,
-		MATERIAL_INIT_REFERENCE_RASTERIZER = 0x4 ,
+		int m_Width;			// if width and height are 0 and you select 
+		int m_Height;			// windowed mode, it'll use the window size
+		ImageFormat m_Format;	// use ImageFormats (ignored for windowed mode)
+		int m_RefreshRate;		// 0 == default (ignored for windowed mode)
+	};
+	enum HDRType_t
+	{
+		HDR_TYPE_NONE,
+		HDR_TYPE_INTEGER,
+		HDR_TYPE_FLOAT,
 	};
 
-	//-----------------------------------------------------------------------------
-	// Flags to specify type of depth buffer used with RT
-	//-----------------------------------------------------------------------------
+	enum RestoreChangeFlags_t
+	{
+		MATERIAL_RESTORE_VERTEX_FORMAT_CHANGED = 0x1,
+		MATERIAL_RESTORE_RELEASE_MANAGED_RESOURCES = 0x2,
+	};
 
-	// GR - this is to add RT with no depth buffer bound
+	enum RenderTargetSizeMode_t
+	{
+		RT_SIZE_NO_CHANGE = 0,
+		RT_SIZE_DEFAULT = 1,
+		RT_SIZE_PICMIP = 2,
+		RT_SIZE_HDR = 3,
+		RT_SIZE_FULL_FRAME_BUFFER = 4,
+		RT_SIZE_OFFSCREEN = 5,
+		RT_SIZE_FULL_FRAME_BUFFER_ROUNDED_UP = 6
+	};
 
 	enum MaterialRenderTargetDepth_t
 	{
-		MATERIAL_RT_DEPTH_SHARED = 0x0 ,
-		MATERIAL_RT_DEPTH_SEPARATE = 0x1 ,
-		MATERIAL_RT_DEPTH_NONE = 0x2 ,
-		MATERIAL_RT_DEPTH_ONLY = 0x3 ,
+		MATERIAL_RT_DEPTH_SHARED = 0x0,
+		MATERIAL_RT_DEPTH_SEPARATE = 0x1,
+		MATERIAL_RT_DEPTH_NONE = 0x2,
+		MATERIAL_RT_DEPTH_ONLY = 0x3,
 	};
 
-	//-----------------------------------------------------------------------------
-	// A function to be called when we need to release all vertex buffers
-	// NOTE: The restore function will tell the caller if all the vertex formats
-	// changed so that it can flush caches, etc. if it needs to (for dxlevel support)
-	//-----------------------------------------------------------------------------
-	enum RestoreChangeFlags_t
-	{
-		MATERIAL_RESTORE_VERTEX_FORMAT_CHANGED = 0x1 ,
-		MATERIAL_RESTORE_RELEASE_MANAGED_RESOURCES = 0x2 ,
-	};
+	typedef void(*MaterialBufferReleaseFunc_t)(int nChangeFlags);	// see RestoreChangeFlags_t
+	typedef void(*MaterialBufferRestoreFunc_t)(int nChangeFlags);	// see RestoreChangeFlags_t
+	typedef void(*ModeChangeCallbackFunc_t)(void);
+	typedef void(*EndFrameCleanupFunc_t)(void);
+	typedef bool(*EndFramePriorToNextContextFunc_t)(void);
+	typedef void(*OnLevelShutdownFunc_t)(void* pUserData);
 
+	typedef unsigned short MaterialHandle_t;
+	DECLARE_POINTER_HANDLE(MaterialLock_t);
 
-	// NOTE: All size modes will force the render target to be smaller than or equal to
-	// the size of the framebuffer.
-	enum RenderTargetSizeMode_t
-	{
-		RT_SIZE_NO_CHANGE = 0 ,			// Only allowed for render targets that don't want a depth buffer
-										// (because if they have a depth buffer, the render target must be less than or equal to the size of the framebuffer).
-										RT_SIZE_DEFAULT = 1 ,				// Don't play with the specified width and height other than making sure it fits in the framebuffer.
-										RT_SIZE_PICMIP = 2 ,				// Apply picmip to the render target's width and height.
-										RT_SIZE_HDR = 3 ,					// frame_buffer_width / 4
-										RT_SIZE_FULL_FRAME_BUFFER = 4 ,	// Same size as frame buffer, or next lower power of 2 if we can't do that.
-										RT_SIZE_OFFSCREEN = 5 ,			// Target of specified size, don't mess with dimensions
-										RT_SIZE_FULL_FRAME_BUFFER_ROUNDED_UP = 6 // Same size as the frame buffer, rounded up if necessary for systems that can't do non-power of two textures.
-	};
-
-	struct MaterialTextureInfo_t
-	{
-		// Exclude information:
-		//		-1	texture is not subject to exclude-handling
-		//		 0	texture is completely excluded
-		//		>0	texture is clamped according to exclude-instruction
-		int iExcludeInformation;
-	};
-
-
-	struct ApplicationPerformanceCountersInfo_t
-	{
-		float msMain;
-		float msMST;
-		float msGPU;
-		float msFlip;
-		float msTotal;
-	};
-
-	struct ApplicationInstantCountersInfo_t
-	{
-		uint m_nCpuActivityMask;
-		uint m_nDeferredWordsAllocated;
-	};
-	
-
-	class IMaterialSystem
+	class IMaterialSystem : public IAppSystem
 	{
 	public:
-		IMaterial* CreateMaterial(const char* pMaterialName, KeyValues* pVMTKeyValues)
-		{
-			typedef IMaterial* (__thiscall* oCreateMaterial)(PVOID, const char*, KeyValues*);
-			return GetMethod <oCreateMaterial>(this, 83)(this, pMaterialName, pVMTKeyValues);
-		}
 
-		IMaterial* FindMaterial( const char* pMaterialName , const char* pTextureGroupName , bool complain = true , const char* pComplainPrefix = 0 )
-		{
-			typedef IMaterial* (__thiscall* oFindMaterial)(PVOID, char const*, char const*, bool, char const*);
-			return GetMethod <oFindMaterial>( this , 84 )( this , pMaterialName , pTextureGroupName , complain , pComplainPrefix );
-		}
-
-		MaterialHandle_t FirstMaterial()
-		{
-			typedef MaterialHandle_t(__thiscall* FirstMaterialFn)(void*);
-			return GetMethod <FirstMaterialFn>(this, 86)(this);
-		}
-
-		MaterialHandle_t NextMaterial(MaterialHandle_t h)
-		{
-			typedef MaterialHandle_t(__thiscall* NextMaterialFn)(void*, MaterialHandle_t);
-			return GetMethod <NextMaterialFn>(this, 87)(this, h);
-		}
-
-		MaterialHandle_t InvalidMaterial()
-		{
-			typedef MaterialHandle_t(__thiscall* InvalidMaterialFn)(void*);
-			return GetMethod <InvalidMaterialFn>(this, 88)(this);
-		}
-
-		IMaterial* GetMaterial(MaterialHandle_t h)
-		{
-			typedef IMaterial*(__thiscall* GetMaterialFn)(void*, MaterialHandle_t);
-			return GetMethod <GetMaterialFn>(this, 89)(this, h);
-		}
+		virtual CreateInterfaceFn               Init(char const* pShaderAPIDLL, IMaterialProxyFactory* pMaterialProxyFactory, CreateInterfaceFn fileSystemFactory, CreateInterfaceFn cvarFactory = NULL) = 0;
+		virtual void                            SetShaderAPI(char const* pShaderAPIDLL) = 0;
+		virtual void                            SetAdapter(int nAdapter, int nFlags) = 0;
+		virtual void                            ModInit() = 0;
+		virtual void                            ModShutdown() = 0;
+		virtual void                            SetThreadMode(MaterialThreadMode_t mode, int nServiceThread = -1) = 0;
+		virtual MaterialThreadMode_t            GetThreadMode() = 0;
+		virtual void                            ExecuteQueued() = 0;
+		virtual void                            OnDebugEvent(const char* pEvent) = 0;
+		virtual IMaterialSystemHardwareConfig* GetHardwareConfig(const char* pVersion, int* returnCode) = 0;
+		virtual void                            __unknown() = 0;
+		virtual bool                            UpdateConfig(bool bForceUpdate) = 0; //20
+		virtual bool                            OverrideConfig(const MaterialSystem_Config_t& config, bool bForceUpdate) = 0;
+		virtual const MaterialSystem_Config_t& GetCurrentConfigForVideoCard() const = 0;
+		virtual bool                            GetRecommendedConfigurationInfo(int nDXLevel, KeyValues* pKeyValues) = 0;
+		virtual int                             GetDisplayAdapterCount() const = 0;
+		virtual int                             GetCurrentAdapter() const = 0;
+		virtual void                            GetDisplayAdapterInfo(int adapter, MaterialAdapterInfo_t& info) const = 0;
+		virtual int                             GetModeCount(int adapter) const = 0;
+		virtual void                            GetModeInfo(int adapter, int mode, MaterialVideoMode_t& info) const = 0;
+		virtual void                            AddModeChangeCallBack(ModeChangeCallbackFunc_t func) = 0;
+		virtual void                            GetDisplayMode(MaterialVideoMode_t& mode) const = 0; //30
+		virtual bool                            SetMode(void* hwnd, const MaterialSystem_Config_t& config) = 0;
+		virtual bool                            SupportsMSAAMode(int nMSAAMode) = 0;
+		virtual const MaterialSystemHWID_t& GetVideoCardIdentifier(void) const = 0;
+		virtual void                            SpewDriverInfo() const = 0;
+		virtual void                            GetBackBufferDimensions(int& width, int& height) const = 0;
+		virtual ImageFormat                     GetBackBufferFormat() const = 0;
+		virtual const AspectRatioInfo_t&        GetAspectRatioInfo() const = 0;
+		virtual bool                            SupportsHDRMode(CStudioHdr nHDRModede) = 0;
+		virtual bool                            AddView(void* hwnd) = 0;
+		virtual void                            RemoveView(void* hwnd) = 0; //40
+		virtual void                            SetView(void* hwnd) = 0;
+		virtual void                            BeginFrame(float frameTime) = 0;
+		virtual void                            EndFrame() = 0;
+		virtual void                            Flush(bool flushHardware = false) = 0;
+		virtual unsigned int                    GetCurrentFrameCount() = 0;
+		virtual void                            SwapBuffers() = 0;
+		virtual void                            EvictManagedResources() = 0;
+		virtual void                            ReleaseResources(void) = 0;
+		virtual void                            ReacquireResources(void) = 0;
+		virtual void                            AddReleaseFunc(MaterialBufferReleaseFunc_t func) = 0; //50
+		virtual void                            RemoveReleaseFunc(MaterialBufferReleaseFunc_t func) = 0;
+		virtual void                            AddRestoreFunc(MaterialBufferRestoreFunc_t func) = 0;
+		virtual void                            RemoveRestoreFunc(MaterialBufferRestoreFunc_t func) = 0;
+		virtual void                            AddEndFrameCleanupFunc(EndFrameCleanupFunc_t func) = 0;
+		virtual void                            RemoveEndFrameCleanupFunc(EndFrameCleanupFunc_t func) = 0;
+		virtual void                            OnLevelShutdown() = 0;
+		virtual bool                            AddOnLevelShutdownFunc(OnLevelShutdownFunc_t func, void* pUserData) = 0;
+		virtual bool                            RemoveOnLevelShutdownFunc(OnLevelShutdownFunc_t func, void* pUserData) = 0;
+		virtual void                            OnLevelLoadingComplete() = 0;
+		virtual void                            ResetTempHWMemory(bool bExitingLevel = false) = 0; //60
+		virtual void                            HandleDeviceLost() = 0;
+		virtual int                             ShaderCount() const = 0;
+		virtual int                             GetShaders(int nFirstShader, int nMaxCount, IShader** ppShaderList) const = 0;
+		virtual int                             ShaderFlagCount() const = 0;
+		virtual const char* ShaderFlagName(int nIndex) const = 0;
+		virtual void                            GetShaderFallback(const char* pShaderName, char* pFallbackShader, int nFallbackLength) = 0;
+		virtual IMaterialProxyFactory* GetMaterialProxyFactory() = 0;
+		virtual void                            SetMaterialProxyFactory(IMaterialProxyFactory* pFactory) = 0;
+		virtual void                            EnableEditorMaterials() = 0;
+		virtual void                            EnableGBuffers() = 0; //70
+		virtual void                            SetInStubMode(bool bInStubMode) = 0;
+		virtual void                            DebugPrintUsedMaterials(const char* pSearchSubString, bool bVerbose) = 0;
+		virtual void                            DebugPrintUsedTextures(void) = 0;
+		virtual void                            ToggleSuppressMaterial(char const* pMaterialName) = 0;
+		virtual void                            ToggleDebugMaterial(char const* pMaterialName) = 0;
+		virtual bool                            UsingFastClipping(void) = 0;
+		virtual int                             StencilBufferBits(void) = 0; //number of bits per pixel in the stencil buffer
+		virtual void                            UncacheAllMaterials() = 0;
+		virtual void                            UncacheUnusedMaterials(bool bRecomputeStateSnapshots = false) = 0;
+		virtual void                            CacheUsedMaterials() = 0; //80
+		virtual void                            ReloadTextures() = 0;
+		virtual void                            ReloadMaterials(const char* pSubString = NULL) = 0;
+		virtual IMaterial*                      CreateMaterial(const char* pMaterialName, KeyValues* pVMTKeyValues) = 0;
+		virtual IMaterial*                      FindMaterial(char const* pMaterialName, const char* pTextureGroupName = nullptr, bool complain = true, const char* pComplainPrefix = NULL) = 0;
+		virtual void							unk0() = 0;
+		virtual MaterialHandle_t                FirstMaterial() const = 0;
+		virtual MaterialHandle_t                NextMaterial(MaterialHandle_t h) const = 0;
+		virtual MaterialHandle_t                InvalidMaterial() const = 0;
+		virtual IMaterial* GetMaterial(MaterialHandle_t h) const = 0;
+		virtual int                             GetNumMaterials() const = 0;
+		virtual ITexture* FindTexture(char const* pTextureName, const char* pTextureGroupName, bool complain = true) = 0;
+		virtual bool                            IsTextureLoaded(char const* pTextureName) const = 0;
+		virtual ITexture* CreateProceduralTexture(const char* pTextureName, const char* pTextureGroupName, int w, int h, ImageFormat fmt, int nFlags) = 0;
+		virtual void                            BeginRenderTargetAllocation() = 0;
+		virtual void                            EndRenderTargetAllocation() = 0; // Simulate an Alt-Tab in here, which causes a release/restore of all resources
+		virtual ITexture* CreateRenderTargetTexture(int w, int h, RenderTargetSizeMode_t sizeMode, ImageFormat	format, MaterialRenderTargetDepth_t depth = MATERIAL_RT_DEPTH_SHARED) = 0;
+		virtual ITexture* CreateNamedRenderTargetTextureEx(const char* pRTName, int w, int h, RenderTargetSizeMode_t sizeMode, ImageFormat format, MaterialRenderTargetDepth_t depth = MATERIAL_RT_DEPTH_SHARED, unsigned int textureFlags = TEXTUREFLAGS_CLAMPS | TEXTUREFLAGS_CLAMPT, unsigned int renderTargetFlags = 0) = 0;
+		virtual ITexture* CreateNamedRenderTargetTexture(const char* pRTName, int w, int h, RenderTargetSizeMode_t sizeMode, ImageFormat format, MaterialRenderTargetDepth_t depth = MATERIAL_RT_DEPTH_SHARED, bool bClampTexCoords = true, bool bAutoMipMap = false) = 0;
+		virtual ITexture* CreateNamedRenderTargetTextureEx2(const char* pRTName, int w, int h, RenderTargetSizeMode_t sizeMode, ImageFormat format, MaterialRenderTargetDepth_t depth = MATERIAL_RT_DEPTH_SHARED, unsigned int textureFlags = TEXTUREFLAGS_CLAMPS | TEXTUREFLAGS_CLAMPT, unsigned int renderTargetFlags = 0) = 0;
 	};
 }
                                                                                                                                                                                                                                                                                                                                                          

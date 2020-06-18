@@ -2,14 +2,14 @@
 #include "../Engine/XorStr.h"
 #include <VMProtectSDK.h>
 
-#define ENABLE_XOR_STR
-#define ENABLE_VMP
+//#define ENABLE_XOR_STR
+//#define ENABLE_VMP
 //#define YOUGAMEBIZ
 
 #define PRESENT_ENABLE
 
 //#define ENABLE_CONSOLE_LOG
-//#define ENABLE_DEBUG_FILE 1
+//#define ENABLE_DEBUG_FILE 1V
 
 #define MAX_FONT_SIZE 30
 #define ENABLE_HOOK_CS_WND_PROC
@@ -34,11 +34,11 @@
 
 #ifdef ENABLE_VMP
 #define VMP_ProtectStringA(e) VMProtectDecryptStringA(e)
-#define VMP_VIRTUAL(e) VMProtectBeginVirtualization(e);
-#define VMP_MUTATION(e) VMProtectBeginMutation(e);
-#define VMP_ULTRA(e) VMProtectBeginUltra(e);
-#define VMP_BEGIN(e) VMProtectBegin(e);
-#define VMP_END VMProtectEnd();
+#define VMP_VIRTUAL(e) VMProtectBeginVirtualization(e)
+#define VMP_MUTATION(e) VMProtectBeginMutation(e)
+#define VMP_ULTRA(e) VMProtectBeginUltra(e)
+#define VMP_BEGIN(e) VMProtectBegin(e)
+#define VMP_END VMProtectEnd()
 #else
 #define VMP_ProtectStringA(e) 
 #define VMP_MUTATION(e)

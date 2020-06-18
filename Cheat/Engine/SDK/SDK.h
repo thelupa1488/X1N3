@@ -35,7 +35,6 @@
 #include "IEngineSound.h"
 #include "IVModelRender.h"
 #include "IVRenderView.h"
-#include "IMaterial.h"
 #include "IMaterialSystem.h"
 #include "ISurface.h"
 #include "IGameEvent.h"

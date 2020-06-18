@@ -433,9 +433,6 @@
     <ClInclude Include="Engine\SDK\ILocalize.hpp">
       <Filter>Engine\SDK</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\SDK\IMaterial.h">
-      <Filter>Engine\SDK</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\SDK\IMaterialSystem.h">
       <Filter>Engine\SDK</Filter>
     </ClInclude>

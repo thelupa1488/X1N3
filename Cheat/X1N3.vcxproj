@@ -112,7 +112,6 @@
     <ClInclude Include="Engine\SDK\IHandleEntity.hpp" />
     <ClInclude Include="Engine\SDK\IInputSystem.hpp" />
     <ClInclude Include="Engine\SDK\ILocalize.hpp" />
-    <ClInclude Include="Engine\SDK\IMaterial.h" />
     <ClInclude Include="Engine\SDK\IMaterialSystem.h" />
     <ClInclude Include="Engine\SDK\InputEnums.h" />
     <ClInclude Include="Engine\SDK\IPhysics.hpp" />
