@@ -40,7 +40,7 @@ namespace Engine
 			static PlayerInfo Info;
 
 			if (I::Engine()->GetPlayerInfo(EntIndex(), &Info))
-				return Info.m_szPlayerName;
+				return Info.szName;
 		}
 
 		return "";

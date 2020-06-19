@@ -457,9 +457,6 @@
     <ClInclude Include="Engine\SDK\memalloc.h">
       <Filter>Engine\SDK</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\SDK\PlayerInfo.hpp">
-      <Filter>Engine\SDK</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\SDK\QAngle.hpp">
       <Filter>Engine\SDK</Filter>
     </ClInclude>
@@ -500,7 +497,6 @@
     <ClInclude Include="Engine\SDK\Color.hpp" />
     <ClInclude Include="Engine\SDK\Const.h" />
     <ClInclude Include="Engine\SDK\CRC.hpp" />
-    <ClInclude Include="Engine\SDK\CVar.h" />
     <ClInclude Include="Engine\SDK\Definitions.hpp" />
     <ClInclude Include="Engine\SDK\IAppSystem.hpp" />
     <ClInclude Include="Engine\SDK\IBaseClientDll.hpp" />
@@ -518,7 +514,6 @@
     <ClInclude Include="Engine\SDK\IGameEvent.h" />
     <ClInclude Include="Engine\SDK\IHandleEntity.hpp" />
     <ClInclude Include="Engine\SDK\ILocalize.hpp" />
-    <ClInclude Include="Engine\SDK\IMaterial.h" />
     <ClInclude Include="Engine\SDK\IMaterialSystem.h" />
     <ClInclude Include="Engine\SDK\InputEnums.h" />
     <ClInclude Include="Engine\SDK\ISurface.h" />

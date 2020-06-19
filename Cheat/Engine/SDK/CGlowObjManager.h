@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Definitions.hpp"
-#include "PlayerInfo.hpp"
 #include "Vector.hpp"
 
 namespace Engine

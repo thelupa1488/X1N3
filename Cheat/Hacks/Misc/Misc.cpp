@@ -350,8 +350,8 @@ bool CMisc::ChangeName(bool reconnect, const char* newName, float delay)
 	if (!exploitInitialized && CGlobal::IsGameReady)
 	{
 		PlayerInfo playerInfo;
-		if (CGlobal::LocalPlayer && I::Engine()->GetPlayerInfo(CGlobal::LocalPlayer->EntIndex(), &playerInfo) && (!strcmp(playerInfo.m_szPlayerName, XorStr("?empty")) ||
-			!strcmp(playerInfo.m_szPlayerName, XorStr("\n\xAD\xAD\xAD"))))
+		if (CGlobal::LocalPlayer && I::Engine()->GetPlayerInfo(CGlobal::LocalPlayer->EntIndex(), &playerInfo) && (!strcmp(playerInfo.szName, XorStr("?empty")) ||
+			!strcmp(playerInfo.szName, XorStr("\n\xAD\xAD\xAD"))))
 		{
 			exploitInitialized = true;
 		}
@@ -673,11 +673,11 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					if (!I::Engine()->GetPlayerInfo(entity->EntIndex(), &playerInfo))
 						continue;
 
-					if (playerInfo.m_bIsFakePlayer || std::find(stolenIds.cbegin(), stolenIds.cend(), playerInfo.m_nUserID) != stolenIds.cend())
+					if (playerInfo.fakeplayer || std::find(stolenIds.cbegin(), stolenIds.cend(), playerInfo.userId) != stolenIds.cend())
 						continue;
 
-					if (ChangeName(false, (std::string(playerInfo.m_szPlayerName) +'\x1').c_str(), 1.0f))
-						stolenIds.push_back(playerInfo.m_nUserID);
+					if (ChangeName(false, (std::string(playerInfo.szName) +'\x1').c_str(), 1.0f))
+						stolenIds.push_back(playerInfo.userId);
 
 					return;
 				}
@@ -1684,10 +1684,10 @@ void CMisc::ShowSpectatorList()
 			if (!I::Engine()->GetPlayerInfo(playerId, &Pinfo))
 				continue;
 
-			if (Pinfo.m_bIsFakePlayer)
+			if (Pinfo.fakeplayer)
 				continue;
 
-			spect = Pinfo.m_szPlayerName;
+			spect = Pinfo.szName;
 
 			if (spect != "")
 			{

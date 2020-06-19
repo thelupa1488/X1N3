@@ -96,46 +96,6 @@ struct weapon_info
 	const char* icon;
 };
 
-const weapon_info* get_weapon_info(int defindex)
-{
-	const static std::map<int, weapon_info> info =
-	{
-		{WEAPON_KNIFE,{XorStr("models/weapons/v_knife_default_ct.mdl"), XorStr("knife_default_ct")}},
-		{WEAPON_KNIFE_T,{XorStr("models/weapons/v_knife_default_t.mdl"), XorStr("knife_t")}},
-		{WEAPON_KNIFE_BAYONET, {XorStr("models/weapons/v_knife_bayonet.mdl"), XorStr("bayonet")}},
-		{WEAPON_KNIFE_CSS, {XorStr("models/weapons/v_knife_css.mdl"), XorStr("knife_css")}},
-		{WEAPON_KNIFE_FLIP, {XorStr("models/weapons/v_knife_flip.mdl"), XorStr("knife_flip")}},
-		{WEAPON_KNIFE_GUT, {XorStr("models/weapons/v_knife_gut.mdl"), XorStr("knife_gut")}},
-		{WEAPON_KNIFE_KARAMBIT, {XorStr("models/weapons/v_knife_karam.mdl"), XorStr("knife_karambit")}},
-		{WEAPON_KNIFE_M9_BAYONET, {XorStr("models/weapons/v_knife_m9_bay.mdl"), XorStr("knife_m9_bayonet")}},
-		{WEAPON_KNIFE_TACTICAL, {XorStr("models/weapons/v_knife_tactical.mdl"), XorStr("knife_tactical")}},
-		{WEAPON_KNIFE_FALCHION, {XorStr("models/weapons/v_knife_falchion_advanced.mdl"), XorStr("knife_falchion")}},
-		{WEAPON_KNIFE_SURVIVAL_BOWIE, {XorStr("models/weapons/v_knife_survival_bowie.mdl"), XorStr("knife_survival_bowie")}},
-		{WEAPON_KNIFE_BUTTERFLY, {XorStr("models/weapons/v_knife_butterfly.mdl"), XorStr("knife_butterfly")}},
-		{WEAPON_KNIFE_PUSH, {XorStr("models/weapons/v_knife_push.mdl"), XorStr("knife_push")}},
-		{WEAPON_KNIFE_CORD, {XorStr("models/weapons/v_knife_cord.mdl"), XorStr("knife_cord")}},
-		{WEAPON_KNIFE_CANIS, {XorStr("models/weapons/v_knife_canis.mdl"), XorStr("knife_canis")}},
-		{WEAPON_KNIFE_URSUS,{XorStr("models/weapons/v_knife_ursus.mdl"), XorStr("knife_ursus")}},
-		{WEAPON_KNIFE_GYPSY_JACKKNIFE,{XorStr("models/weapons/v_knife_gypsy_jackknife.mdl"), XorStr("knife_gypsy_jackknife")}},
-		{WEAPON_KNIFE_OUTDOOR,{XorStr("models/weapons/v_knife_outdoor.mdl"), XorStr("knife_outdoor")}},
-		{WEAPON_KNIFE_STILETTO,{XorStr("models/weapons/v_knife_stiletto.mdl"), XorStr("knife_stiletto")}},
-		{WEAPON_KNIFE_WIDOWMAKER,{XorStr("models/weapons/v_knife_widowmaker.mdl"), XorStr("knife_widowmaker")}},
-		{WEAPON_KNIFE_SKELETON,{XorStr("models/weapons/v_knife_skeleton.mdl"), XorStr("knife_skeleton")}},
-		{GLOVE_STUDDED_BLOODHOUND,{XorStr("models/weapons/w_models/arms/w_glove_bloodhound.mdl")}},
-		{GLOVE_T_SIDE,{XorStr("models/weapons/w_models/arms/w_glove_fingerless.mdl")}},
-		{GLOVE_CT_SIDE,{XorStr("models/weapons/w_models/arms/w_glove_hardknuckle.mdl")}},
-		{GLOVE_SPORTY,{XorStr("models/weapons/w_models/arms/w_glove_sporty.mdl")}},
-		{GLOVE_SLICK,{XorStr("models/weapons/w_models/arms/w_glove_slick.mdl")}},
-		{GLOVE_LEATHER_WRAP,{XorStr("models/weapons/w_models/arms/w_glove_handwrap_leathery.mdl")}},
-		{GLOVE_MOTORCYCLE,{XorStr("models/weapons/w_models/arms/w_glove_motorcycle.mdl")}},
-		{GLOVE_SPECIALIST,{XorStr("models/weapons/w_models/arms/w_glove_specialist.mdl")}},
-		{GLOVE_HYDRA,{XorStr("models/weapons/w_models/arms/w_glove_bloodhound_hydra.mdl")}}
-	};
-
-	const auto entry = info.find(defindex);
-	return entry == end(info) ? nullptr : &entry->second;
-}
-
 void CSkins::RecvProxy_Viewmodel(CRecvProxyData *pData, void *pStruct, void *pOut)
 {
 	if (CGlobal::IsGameReady)
@@ -236,10 +196,10 @@ void CSkins::PostDataUpdate()
 
 			ApplyStickerHooks(pAttrib);
 
-			if (LocalPlayerInfo.m_nXuidLow != *pAttrib->GetOriginalOwnerXuidLow())
+			if (LocalPlayerInfo.xuid_low != *pAttrib->GetOriginalOwnerXuidLow())
 				continue;
 
-			if (LocalPlayerInfo.m_nXuidHigh != *pAttrib->GetOriginalOwnerXuidHigh())
+			if (LocalPlayerInfo.xuid_high != *pAttrib->GetOriginalOwnerXuidHigh())
 				continue;
 
 			if (pEntity->GetClientClass()->m_ClassID == (int)CLIENT_CLASS_ID::CKnife)
@@ -319,7 +279,7 @@ void CSkins::PostDataUpdate()
 			*glove->GetIndex() = -1;
 
 			*glove->GetItemIDHigh() = -1;
-			*glove->GetAccountID() = LocalPlayerInfo.m_nXuidLow;
+			*glove->GetAccountID() = LocalPlayerInfo.xuid_low;
 
 			*glove->GetEntityQuality() = 4;
 			*glove->GetFallbackWear() = CurGloveWear;
@@ -449,7 +409,7 @@ void CSkins::SetSkin(CBaseAttributableItem* pWeapon, SkinSettings *SkinParam, in
 
 	*pWeapon->GetFallbackPaintKit() = SkinParam->paint_kit_id;
 	*pWeapon->GetEntityQuality() = SkinParam->quality;
-	*pWeapon->GetAccountID() = LocalPlayerInfo.m_nXuidLow;
+	*pWeapon->GetAccountID() = LocalPlayerInfo.xuid_low;
 
 	if (SkinParam->stat_track != 0)
 		*pWeapon->GetFallbackStatTrak() = SkinParam->stat_track;

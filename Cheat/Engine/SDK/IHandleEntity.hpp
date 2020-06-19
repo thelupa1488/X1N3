@@ -4,7 +4,8 @@ namespace SDK
 {
 	class CBaseHandle;
 
-	class IHandleEntity {
+	class IHandleEntity 
+	{
 	public:
 		virtual ~IHandleEntity() {}
 		virtual void SetRefEHandle( const CBaseHandle &handle ) = 0;

@@ -26,7 +26,6 @@
 #include "IVEngineClient.hpp"
 #include "IEngineTrace.hpp"
 #include "ILocalize.hpp"
-#include "PlayerInfo.hpp"
 #include "Recv.hpp"
 #include "IClientMode.hpp"
 #include "IVModelInfoClient.hpp"

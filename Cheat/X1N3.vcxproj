@@ -125,7 +125,6 @@
     <ClInclude Include="Engine\SDK\Match.h" />
     <ClInclude Include="Engine\SDK\Math.hpp" />
     <ClInclude Include="Engine\SDK\memalloc.h" />
-    <ClInclude Include="Engine\SDK\PlayerInfo.hpp" />
     <ClInclude Include="Engine\SDK\QAngle.hpp" />
     <ClInclude Include="Engine\SDK\Recv.hpp" />
     <ClInclude Include="Engine\SDK\RecvCommon.hpp" />
