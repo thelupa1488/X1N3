@@ -84,7 +84,7 @@ using namespace  CSX::Memory;
 
 void CRender::IRender::Initialize()
 {
-	VMP_MUTATION("RenderInitialize");
+	VMP_ULTRA("RenderInitialize")
 	ADD_LOG("2-1-11-7-3-0\n");
 	m_pDevice = nullptr;
 	m_pDrawMngr = nullptr;
@@ -157,5 +157,5 @@ void CRender::IRender::Initialize()
 	ADD_LOG("->Window -> %X\n", (DWORD)hWindow);
 	ADD_LOG("2-1-11-7-3-15\n");
 	WndProc_o = (WNDPROC)FastCall::G().t_SetWindowLongA(hWindow, GWL_WNDPROC, (LONG)(LONG_PTR)WndProcHandler);
-	VMP_END;
+	VMP_END
 }

@@ -33,12 +33,12 @@
 #endif
 
 #ifdef ENABLE_VMP
+#define VMP_VIRTUAL(e) VMProtectBeginVirtualization(e);
+#define VMP_MUTATION(e) VMProtectBeginMutation(e);
+#define VMP_ULTRA(e) VMProtectBeginUltra(e);
+#define VMP_BEGIN(e) VMProtectBegin(e);
+#define VMP_END VMProtectEnd();
 #define VMP_ProtectStringA(e) VMProtectDecryptStringA(e)
-#define VMP_VIRTUAL(e) VMProtectBeginVirtualization(e)
-#define VMP_MUTATION(e) VMProtectBeginMutation(e)
-#define VMP_ULTRA(e) VMProtectBeginUltra(e)
-#define VMP_BEGIN(e) VMProtectBegin(e)
-#define VMP_END VMProtectEnd()
 #else
 #define VMP_ProtectStringA(e) 
 #define VMP_MUTATION(e)

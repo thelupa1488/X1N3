@@ -43,7 +43,7 @@ public:
 	public:
 		virtual void Setup()
 		{
-			VMP_MUTATION("SetupThread_Init_Setup");
+			VMP_ULTRA("SetupThread_Init_Setup")
 			ADD_LOG("2-1-11-7-0\n");
 			GP_Render =		new CRender::IRender();
 			GP_EntPlayers = new CEntityPlayers();
@@ -71,7 +71,7 @@ public:
 			ADD_LOG("2-1-11-7-4\n");
 			GP_Skins->AllSkinsLoaded = true;
 			ADD_LOG("2-1-11-7-5\n");
-			VMP_END;
+			VMP_END
 		}
 		virtual void Shutdown()
 		{

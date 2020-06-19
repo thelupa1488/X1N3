@@ -5,7 +5,7 @@
 
 DWORD WINAPI SetupThread(_In_ LPVOID lpThreadParameter)
 {
-	VMP_MUTATION("SetupThread");
+	VMP_ULTRA("SetupThread")
 	auto LSetupThread = [&]() -> DWORD
 	{
 		ADD_LOG("2-1-0\n");
@@ -21,15 +21,15 @@ DWORD WINAPI SetupThread(_In_ LPVOID lpThreadParameter)
 	};
 
 	return LSetupThread();
-	VMP_END;
+	VMP_END
 }
 
 BOOL WINAPI DllMain(_In_ HINSTANCE hinstDll, _In_ DWORD fdwReason, _In_opt_ LPVOID lpvReserved)
 {
-	VMP_MUTATION("SetupThread");
 	switch (fdwReason)
 	{
 	case DLL_PROCESS_ATTACH:
+	VMP_ULTRA("DllMain")
 #ifdef ENABLE_CONSOLE_LOG
 		AllocConsole();
 		AttachConsole(FastCall::G().t_GetCurrentProcessId());
@@ -42,6 +42,7 @@ BOOL WINAPI DllMain(_In_ HINSTANCE hinstDll, _In_ DWORD fdwReason, _In_opt_ LPVO
 		FastCall::G().t_DisableThreadLibraryCalls(hinstDll);
 		std::make_unique<CreateThread_>((LPTHREAD_START_ROUTINE)SetupThread, hinstDll);
 		ADD_LOG("2\n");
+	VMP_END
 		return TRUE;
 	case DLL_PROCESS_DETACH:
 		GP_Setup->Shutdown();
@@ -50,7 +51,6 @@ BOOL WINAPI DllMain(_In_ HINSTANCE hinstDll, _In_ DWORD fdwReason, _In_opt_ LPVO
 	default:
 		return TRUE;
 	}
-	VMP_END;
 }
 
 CMain& MainSettings()

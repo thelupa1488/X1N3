@@ -63,7 +63,7 @@ public:
 	public:
 		virtual void InitHooks()
 		{
-			VMP_MUTATION("InitHooks");
+			VMP_ULTRA("InitHooks")
 			auto LInitHooks = [&]() -> void
 			{
 				ADD_LOG("======================Init hooks:\n");
@@ -173,7 +173,7 @@ public:
 			LInitHooks();
 			ADD_LOG("2-1-11-11\n");
 
-			VMP_END;
+			VMP_END
 		}
 		virtual void InitOffsets()
 		{
@@ -266,7 +266,7 @@ public:
 		}	
 		virtual bool Init()
 		{
-			VMP_MUTATION("SetupThread_Init");
+			VMP_ULTRA("SetupThread_Init")
 			auto LInit = [&]() -> bool
 			{
 #ifndef ONLY_DRAW_HOOK			
@@ -304,7 +304,7 @@ public:
 				return true;
 			};
 			return LInit();
-			VMP_END;
+			VMP_END
 		}
 	};
 };

@@ -448,13 +448,13 @@ public:
 		return LWorldToScreen();
 	}
 
-	static void InitKeyValues(KeyValues* kv_, string name_)
+	static void InitKeyValuesEx(KeyValues* kv_, string name_)
 	{
-		VMP_MUTATION("InitKeyValues");
+		VMP_MUTATION("InitKeyValuesEx")
 		static auto address = offsets["InitKeyValuesEx"];
 		using Fn = void(__thiscall*)(void* thisptr, const char* name);
 		reinterpret_cast<Fn>(address)(kv_, name_.c_str());
-
+		VMP_END
 		//DWORD dwFunction = (DWORD)offsets["InitKeyValuesEx"];
 		//if (dwFunction)
 		//{
@@ -465,19 +465,18 @@ public:
 		//		call dwFunction
 		//	}
 		//}
-		VMP_END;
 	}
 
-	static void LoadFromBuffer(KeyValues* vk_, string name_, string buffer_)
+	static void LoadFromBufferEx(KeyValues* vk_, string name_, string buffer_)
 	{
-		VMP_MUTATION("LoadFromBuffer");
+		VMP_MUTATION("LoadFromBufferEx")
 		static auto address = offsets["LoadFromBufferEx"];
 		using Fn = void(__thiscall*)(
 			void* thisptr, const char* resourceName,
 			const char* pBuffer, void* pFileSystem,
 			const char* pPathID, void* pfnEvaluateSymbolProc, void* a1);
 		reinterpret_cast<Fn>(address)(vk_, name_.c_str(), buffer_.c_str(), nullptr, nullptr, nullptr, nullptr);
-
+		VMP_END
 		//DWORD dwFunction = (DWORD)offsets["LoadFromBufferEx"];
 		//if (dwFunction)
 		//{
@@ -493,12 +492,11 @@ public:
 		//		call dwFunction
 		//	}
 		//}
-		VMP_END;
 	}
 
 	static IMaterial* CreateMaterialBasic(bool ignorez, bool lit = true, bool wireframe = false)
  	{
-		VMP_MUTATION("CreateMaterialBasic");
+		VMP_MUTATION("CreateMaterialBasic")
 
 		static auto created = 0; //number
 
@@ -524,19 +522,19 @@ public:
 		created++;
 		auto keyValues = static_cast<KeyValues*>(malloc(sizeof(KeyValues)));
 
-		InitKeyValues(keyValues, Generic.c_str());
-		LoadFromBuffer(keyValues, matname, matdata);
+		InitKeyValuesEx(keyValues, Generic.c_str());
+		LoadFromBufferEx(keyValues, matname, matdata);
 
 		auto material = I::MaterialSystem()->CreateMaterial(matname.c_str(), keyValues);
 		material->IncrementReferenceCount();
 
-		VMP_END;
+		VMP_END
 		return material;
 	}
 
 	static IMaterial* CreateMaterialMetallic(bool ignorez)
 	{
-		VMP_MUTATION("CreateMaterialMetallic");
+		VMP_MUTATION("CreateMaterialMetallic")
 
 		static auto created = 0;
 
@@ -566,19 +564,19 @@ public:
 		created++;
 		auto keyValues = static_cast<KeyValues*>(malloc(sizeof(KeyValues)));
 
-		InitKeyValues(keyValues, Generic.c_str());
-		LoadFromBuffer(keyValues, matname, matdata);
+		InitKeyValuesEx(keyValues, Generic.c_str());
+		LoadFromBufferEx(keyValues, matname, matdata);
 
 		auto material = I::MaterialSystem()->CreateMaterial(matname.c_str(), keyValues);
 		material->IncrementReferenceCount();
 
-		VMP_END;
+		VMP_END
 		return material;
 	}
 
 	static IMaterial* CreateMaterialMetallicPlus(bool ignorez)
 	{
-		VMP_MUTATION("CreateMaterialMetallicPlus");
+		VMP_MUTATION("CreateMaterialMetallicPlus")
 
 		static auto created = 0;
 		string Generic = "VertexLitGeneric";
@@ -621,13 +619,13 @@ public:
 		created++;
 		auto keyValues = static_cast<KeyValues*>(malloc(sizeof(KeyValues)));
 
-		InitKeyValues(keyValues, Generic.c_str());
-		LoadFromBuffer(keyValues, matname, matdata);
+		InitKeyValuesEx(keyValues, Generic.c_str());
+		LoadFromBufferEx(keyValues, matname, matdata);
 
 		auto material = I::MaterialSystem()->CreateMaterial(matname.c_str(), keyValues);
 		material->IncrementReferenceCount();
 
-		VMP_END;
+		VMP_END
 		return material;
 	}
 };

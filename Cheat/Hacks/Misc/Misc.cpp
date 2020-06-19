@@ -587,18 +587,11 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					}
 				}
 			}
-			if (LeftHandKnife)
+			if (LeftHandKnife && CGlobal::GWeaponType == WEAPON_TYPE_KNIFE)
 			{
-				if (CGlobal::LocalPlayer && CGlobal::GWeaponType == WEAPON_TYPE_KNIFE)
-				{
-					cl_righthand->SetValue(0);
-				}
-				else
-				{
-					cl_righthand->SetValue(1);
-				}
+				cl_righthand->SetValue(0);
 			}
-			if (!LeftHandKnife)
+			if (!LeftHandKnife || CGlobal::GWeaponType != WEAPON_TYPE_KNIFE)
 			{
 				cl_righthand->SetValue(1);
 			}

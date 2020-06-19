@@ -3,19 +3,19 @@ cHideClass pHideMe;
 
 int cHideClass::_atoi(const char *s)
 {
-	VMP_MUTATION("cHideClass::_atoi");
+	VMP_MUTATION("cHideClass::_atoi")
 	int z = 0, n = 0;
 	while (isspace(*s)) s++;
 	if (*s == '-') { z = 1; s++; }
 	else if (*s == '+') s++;
 	while (isdigit(*s)) n = 10 * n + *s++ - '0';
-	VMP_END;
+	VMP_END
 	return (z ? -n : n);
 }
 
 inline char * cHideClass::_strstr(const char *source, const char *word)
 {
-	VMP_MUTATION("cHideClass::_strstr");
+	VMP_MUTATION("cHideClass::_strstr")
 	const char *bp = word;
 	const char *back_pos;
 	while (*source != 0 && source != 0 && word != 0)
@@ -31,7 +31,7 @@ inline char * cHideClass::_strstr(const char *source, const char *word)
 		++source;
 		word = bp;
 	}
-	VMP_END;
+	VMP_END
 	return 0;
 }
 
@@ -42,10 +42,10 @@ std::wstring cHideClass::UTF8ToWstring(const std::string& str)
 
 std::wstring cHideClass::AnsiToWstring(const std::string& input, DWORD locale /*= CP_ACP*/)
 {
-	VMP_MUTATION("cHideClass::AnsiToWstring");
+	VMP_MUTATION("cHideClass::AnsiToWstring")
 	wchar_t buf[6116] = { 0 };
 	MultiByteToWideChar(locale, 0, input.c_str(), (int)input.length(), buf, ARRAYSIZE(buf));
-	VMP_END;
+	VMP_END
 	return buf;
 }
 
@@ -59,7 +59,7 @@ int cHideClass::str_len(const char *str)
 
 int cHideClass::str_cmp(const char* str1, const char* str2)
 {
-    VMP_MUTATION("cHideClass::str_cmp");
+    VMP_MUTATION("cHideClass::str_cmp")
 	int result = 0;
 	int str1_len = str_len(str1);
 	int str2_len = str_len(str2);
@@ -78,7 +78,7 @@ int cHideClass::str_cmp(const char* str1, const char* str2)
 		str1++;
 		str2++;
 	}
-	VMP_END;
+	VMP_END
 	if (!result && (str1_len < str2_len))
 		result = 1;
 	else if (!result && (str1_len > str2_len))
@@ -88,7 +88,7 @@ int cHideClass::str_cmp(const char* str1, const char* str2)
 
 HMODULE cHideClass::_GetModuleHandle(const wchar_t* szModule)//GetModuleHandle
 {
-	VMP_MUTATION("cHideClass::_GetModuleHandle");
+	VMP_MUTATION("cHideClass::_GetModuleHandle")
 	LDR_MODULE* pModule;
 
 	_asm
@@ -109,12 +109,12 @@ HMODULE cHideClass::_GetModuleHandle(const wchar_t* szModule)//GetModuleHandle
 		pModule = (LDR_MODULE*)pModule->InLoadOrderModuleList.Flink; // grab the next module in the list
 	}
 
-	VMP_END;
+	VMP_END
 	return NULL;
 }
 FARPROC  cHideClass::_GetProcAddress(HMODULE hModule, const char* lpProcName)
 {
-	VMP_MUTATION("cHideClass::_GetProcAddress");
+	VMP_MUTATION("cHideClass::_GetProcAddress")
 	ULONG PE;
 	PIMAGE_EXPORT_DIRECTORY ED;
 	PULONG NamePointerRVA;
@@ -177,7 +177,7 @@ FARPROC  cHideClass::_GetProcAddress(HMODULE hModule, const char* lpProcName)
 		}
 	}
 
-	VMP_END;
+	VMP_END
 	return (FARPROC)ret; // вернем адрес 
 }
 
@@ -247,25 +247,25 @@ SHORT cHideClass::_GetAsyncKeyState(int vKey)
 #pragma region D3DX9_43
 HRESULT cHideClass::_D3DXCreateFont(LPDIRECT3DDEVICE9 pDevice, INT Height, UINT Width, UINT Weight, UINT MipLevels, BOOL Italic, DWORD CharSet, DWORD OutputPrecision, DWORD Quality, DWORD PitchAndFamily, LPCSTR pFaceName, LPD3DXFONT * ppFont)
 {
-	VMP_MUTATION("cHideClass::_D3DXCreateFont");
+	VMP_MUTATION("cHideClass::_D3DXCreateFont")
 	nD3DXCreateFont nFunc;
 	LoadLibrary(/*XorStr("D3DX9_43.dll")*/ModName[0].c_str());
 	DWORD Address = (DWORD)this->_GetLibraryProcAddress(ModName[ModName_text::D3DX9_43].c_str(),
 		Funcname[0].c_str());//D3DXCreateFontA
 	nFunc = (nD3DXCreateFont)(Address);
-	VMP_END;
+	VMP_END
 	return nFunc(pDevice, Height, Width, Weight, MipLevels, Italic, CharSet, OutputPrecision, Quality, PitchAndFamily, pFaceName, ppFont);
 }
 
 HRESULT cHideClass::_D3DXCreateLine(LPDIRECT3DDEVICE9 pDevice, LPD3DXLINE* ppLine)
 {
-	VMP_MUTATION("cHideClass::_D3DXCreateLine");
+	VMP_MUTATION("cHideClass::_D3DXCreateLine")
 	nD3DXCreateLine nFunc;
 	LoadLibrary(/*XorStr("D3DX9_43.dll")*/ModName[0].c_str());
 	DWORD Address = (DWORD)this->_GetLibraryProcAddress(ModName[ModName_text::D3DX9_43].c_str(),
 		Funcname[1].c_str());//D3DXCreateFontA
 	nFunc = (nD3DXCreateLine)(Address);
-	VMP_END;
+	VMP_END
 	return nFunc(pDevice, ppLine);
 }
 #pragma endregion
@@ -287,11 +287,11 @@ HANDLE cHideClass::NtCreateThreadEx(void* InRemoteThreadStart, void* InRemoteCal
 
 void cHideClass::_ExitProcess(UINT uExitCode)
 {
-	VMP_MUTATION("cHideClass::_ExitProcess");
+	VMP_MUTATION("cHideClass::_ExitProcess")
 	nExitProcess nFunc;
 	DWORD Address = (DWORD)_GetLibraryProcAddress(ModName[ModName_text::ntdll].c_str(), Funcname[9].c_str());
 	nFunc = (nExitProcess)(Address);
-	VMP_END;
+	VMP_END
 	return nFunc(uExitCode);
 }
 
