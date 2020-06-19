@@ -9,7 +9,6 @@ namespace SDK
 	IVEngineClient*     I::g_pEngine = nullptr;
 	IBaseClientDLL*     I::g_pClient = nullptr;
 	IClientEntityList*  I::g_pEntityList = nullptr;
-	IGameEventManager2* I::g_pGameEvents = nullptr;
 	CGlobalVarsBase*    I::g_pGlobals = nullptr;
 	CInput*             I::g_pInput = nullptr;
 	CClientState*       I::g_pClientState = nullptr;

@@ -2139,10 +2139,4 @@ void CHitListener::Draw()
 			}
 		}
 	}
-
-}
-
-int CHitListener::GetEventDebugID(void)
-{
-	return 0x2A;
 }

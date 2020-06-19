@@ -307,8 +307,8 @@ void CSkins::SetKillIconCfg()
 	char* pszKnifeModelsIcon[19] =
 	{
 		"bayonet", "knife_css", "knife_flip", "knife_gut", "knife_karambit",
-		"knife_m9_bayonet", "knife_tactical", "knife_falchion",
-		"knife_survival_bowie", "knife_butterfly", "knife_push", "knife_cord", "knife_canis", "knife_ursus",
+		"knife_m9_bayonet", "knife_tactical", "knife_falchion", "knife_survival_bowie", 
+		"knife_butterfly", "knife_push", "knife_cord", "knife_canis", "knife_ursus",
 		"knife_gypsy_jackknife", "knife_outdoor", "knife_stiletto", "knife_widowmaker", "knife_skeleton"
 	};
 
@@ -318,7 +318,7 @@ void CSkins::SetKillIconCfg()
 	}
 	else
 	{
-		g_KillIconCfg["knife"] ="knife";
+		g_KillIconCfg["knife"] = "knife";
 	}
 
 	if (SelectedKnifeModelTT)
@@ -577,12 +577,6 @@ void CSkinListener::FireGameEvent(IGameEvent *event)
 		return;
 	}
 }
-
-int CSkinListener::GetEventDebugID(void)
-{
-	return 0x2A;
-}
-
 
 enum class EStickerAttributeType
 {
@@ -863,7 +857,7 @@ string pWeaponData[34] =
 
 string pKnifeData[19] =
 {
-	lol("knife_m9_bayonet"), lol("knife_css"), lol("knife_flip"),lol("knife_gut"),lol("knife_karambit") ,lol("knife_m9_bayonet"),
+	lol("bayonet"), lol("knife_css"), lol("knife_flip"),lol("knife_gut"),lol("knife_karambit") ,lol("knife_m9_bayonet"),
 	lol("knife_tactical"),lol("knife_falchion"),lol("knife_survival_bowie"),lol("knife_butterfly"),lol("knife_push"), lol("knife_cord"), lol("knife_canis"),
 	lol("knife_ursus"), lol("knife_gypsy_jackknife"), lol("knife_outdoor"), lol("knife_stiletto"), lol("knife_widowmaker"),  lol("knife_skeleton")
 };

@@ -16,8 +16,6 @@ public:
 	void UnRegListener();
 
 	void FireGameEvent(IGameEvent *pEvent) override;
-
-	int GetEventDebugID(void) override;
 };
 
 class ISkins
@@ -167,7 +165,7 @@ public:
 	vector<ItemSettings> KnifeNamesCT =
 	{
 	{ WEAPON_KNIFE, lol("Default"), lol("Default"), SkinSettings() },
-	{ WEAPON_KNIFE_BAYONET, lol("Bayonet"), lol("m9_bayonet"), SkinSettings() },
+	{ WEAPON_KNIFE_BAYONET, lol("Bayonet"), lol("bayonet"), SkinSettings() },
 	{ WEAPON_KNIFE_CSS,	lol("Classic"), lol("knife_css"), SkinSettings() },
 	{ WEAPON_KNIFE_FLIP,	lol("Flip"), lol("knife_flip"), SkinSettings() },
 	{ WEAPON_KNIFE_GUT,		lol("Gut Knife"), lol("knife_gut"), SkinSettings() },
@@ -191,7 +189,7 @@ public:
 	vector<ItemSettings> KnifeNamesTT =
 	{
 	{ WEAPON_KNIFE_T,	lol("Default"), lol("Default"), SkinSettings() },
-	{ WEAPON_KNIFE_BAYONET, lol("Bayonet"), lol("m9_bayonet"), SkinSettings() },
+	{ WEAPON_KNIFE_BAYONET, lol("Bayonet"), lol("bayonet"), SkinSettings() },
 	{ WEAPON_KNIFE_CSS,	lol("Classic"), lol("knife_css"), SkinSettings() },
 	{ WEAPON_KNIFE_FLIP,	lol("Flip"), lol("knife_flip"), SkinSettings() },
 	{ WEAPON_KNIFE_GUT,		lol("Gut Knife"), lol("knife_gut"), SkinSettings() },

@@ -46,8 +46,6 @@ public:
 
 	void FireGameEvent(IGameEvent *pEvent) override;
 	void Draw();
-
-	int GetEventDebugID(void) override;
 };
 
 class IMisc

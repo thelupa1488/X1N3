@@ -99,6 +99,8 @@ namespace SDK
 		static IVEngineClient*		Engine();
 		static IBaseClientDLL*		Client();
 		static IClientEntityList*	EntityList();
+		static IGameEventManager2*  GameEvent();
+		static IClientEntityList*   g_pEntityList;
 		static CGlobalVarsBase*		GlobalVars();
 		static CInput*				Input();
 		static CClientState*		ClientState();
@@ -113,11 +115,8 @@ namespace SDK
 		static IMaterialSystem*		MaterialSystem();
 		static ISurface*			Surface();
 		static IPhysicsSurfaceProps*PhysSurface();
-		static IGameEventManager2*	GameEvent();
 		static IInputSystem*		InputSystem();
 		static ConVar*               GetConVar();
-		static IClientEntityList*	g_pEntityList;
-		static IGameEventManager2*  g_pGameEvents;
 		static ILocalize*           Localize();
 		static ISteamGameCoordinator* SteamGameCoordinator();
 		static ISteamUser*          SteamUser();
