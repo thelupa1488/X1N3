@@ -28,7 +28,6 @@ namespace CSX
 					if (!hEvent)
 						return false;
 
-					//WaitForSingleObject( hEvent , dwModuleDelay );
 					FastCall::G().t_WaitForSingleObject(hEvent, dwModuleDelay);
 					FastCall::G().t_CloseHandle( hEvent );
 

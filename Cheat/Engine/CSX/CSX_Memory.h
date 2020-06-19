@@ -7,10 +7,6 @@ namespace CSX
 	namespace Memory
 	{
 //[swap_lines]
-		/* Find Push String ( 0x68, dword ptr [str] ) */
-		DWORD FindPushString( DWORD dwStart , DWORD dwEnd , DWORD dwAddress );
-		DWORD FindPushString( PCHAR szModule , DWORD dwAddress );
-
 		DWORD FindPatternV2(std::string moduleName, std::string Mask);
 		DWORD FindSignature(const char* szModuleName, char* szPattern);
 
