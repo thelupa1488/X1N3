@@ -551,7 +551,7 @@ void CSkins::Menu()
 //		{
 //			std::string imData = /*CGlobal::DownloadSkinBytes*/(link.c_str());
 //
-//			D3DXCreateTextureFromFileInMemoryEx(GP_Render->m_pDevice, imData.data(), imData.length(), 512, 384, D3DX_DEFAULT,
+//			FastCall::G().t_D3DXCreateTextureFromFileInMemoryEx(GP_Render->m_pDevice, imData.data(), imData.length(), 512, 384, D3DX_DEFAULT,
 //				0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &skinImg);
 //		}
 //	}

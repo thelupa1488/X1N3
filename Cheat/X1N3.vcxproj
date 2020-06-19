@@ -11,8 +11,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Engine\CSX\CSX_Cvar.cpp" />
-    <ClCompile Include="Engine\CSX\CSX_Log.cpp" />
     <ClCompile Include="Engine\CSX\CSX_Memory.cpp" />
     <ClCompile Include="Engine\CSX\CSX_Utils.cpp" />
     <ClCompile Include="Engine\Engine.cpp" />
@@ -68,8 +66,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\CSX\CSX.h" />
-    <ClInclude Include="Engine\CSX\CSX_Cvar.h" />
-    <ClInclude Include="Engine\CSX\CSX_Log.h" />
     <ClInclude Include="Engine\CSX\CSX_Memory.h" />
     <ClInclude Include="Engine\CSX\CSX_Utils.h" />
     <ClInclude Include="Engine\Engine.h" />

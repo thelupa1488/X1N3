@@ -92,10 +92,7 @@ namespace SDK
 			}
 			ADD_LOG("->Client -> %X\n", (DWORD)g_pClient);
 		}
-		if (!IsBadReadPtr(g_pClient, sizeof(IBaseClientDLL*)))
-			return g_pClient;
-		else
-			return nullptr;
+		return g_pClient;
 	}
 
 	IClientEntityList* I::EntityList()
@@ -105,10 +102,7 @@ namespace SDK
 			g_pEntityList = GetInterface<IClientEntityList>(clientFactory, XorStr("VClientEntityList"));
 			ADD_LOG("->EntityList -> %X\n", (DWORD)g_pEntityList);
 		}
-		if (!IsBadReadPtr(g_pEntityList, sizeof(IClientEntityList*)))
-			return g_pEntityList;
-		else
-			return nullptr;
+		return g_pEntityList;
 	}
 
 	IPrediction* I::Prediction()

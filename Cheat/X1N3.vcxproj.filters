@@ -2,12 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Engine\CSX\CSX_Cvar.cpp">
-      <Filter>Engine\CSX</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\CSX\CSX_Log.cpp">
-      <Filter>Engine\CSX</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\CSX\CSX_Memory.cpp">
       <Filter>Engine\CSX</Filter>
     </ClCompile>
@@ -203,12 +197,6 @@
   <ItemGroup>
     <ClInclude Include="Main.h" />
     <ClInclude Include="Engine\CSX\CSX.h">
-      <Filter>Engine\CSX</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\CSX\CSX_Cvar.h">
-      <Filter>Engine\CSX</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\CSX\CSX_Log.h">
       <Filter>Engine\CSX</Filter>
     </ClInclude>
     <ClInclude Include="Engine\CSX\CSX_Memory.h">
@@ -520,10 +508,8 @@
     <ClInclude Include="Engine\SDK\IVRenderView.h" />
     <ClInclude Include="Engine\SDK\KeyValues.h" />
     <ClInclude Include="Engine\SDK\memalloc.h" />
-    <ClInclude Include="Engine\SDK\PlayerInfo.hpp" />
     <ClInclude Include="Engine\SDK\QAngle.hpp" />
     <ClInclude Include="Engine\SDK\Recv.hpp" />
-    <ClInclude Include="Engine\SDK\RecvCommon.hpp" />
     <ClInclude Include="Engine\SDK\SDK.h" />
     <ClInclude Include="Engine\SDK\TextureGroupNames.h" />
     <ClInclude Include="Engine\SDK\Vector.hpp" />

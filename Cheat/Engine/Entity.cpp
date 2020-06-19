@@ -411,25 +411,12 @@ namespace Engine
 
 	Vector CBaseEntity::GetEyePosition()
 	{
-		//if (this == (CBaseEntity*)0xA)
-		//	return Vector(0, 0, 0);
-
-		//if (this == (CBaseEntity*)0xE)
-		//	return Vector(0, 0, 0);
-
-		//if (IsBadReadPtr(this, sizeof(Vector)))
-		//	return Vector(0, 0, 0);
-
-		//return GetRenderOrigin() + GetViewOffset();
-		return GetOrigin() + GetViewOffset();
+		return GetRenderOrigin() + GetViewOffset();
 	}
 
 	Vector CBaseEntity::GetPunchAngles()
 	{
 		if (!this)
-			return Vector(0, 0, 0);
-
-		if (IsBadReadPtr(this, sizeof(CBaseEntity*)))
 			return Vector(0, 0, 0);
 
 		return *(Vector*)((DWORD)this + offsets["m_vecPunchAngles"]);
@@ -462,15 +449,10 @@ namespace Engine
 		if (!this->IsValid())
 			return nullptr;
 
-
 		model = GetModel();
 
 		if (!model)
 			return nullptr;
-
-		if (IsBadReadPtr(model, sizeof(model_t*)))
-			return nullptr;
-
 
 		studiohdr_t* pStudioModel = I::ModelInfo()->GetStudioModel(model);
 

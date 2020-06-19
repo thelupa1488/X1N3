@@ -20,25 +20,17 @@ T GetVFunc(void *vTable, int iIndex)
 	return (*(T**)vTable)[iIndex];
 }
 
-template<typename FuncType>
-__forceinline static FuncType GetMethod(void* ppClass, int index)
+template< typename Function > Function GetMethod( PVOID Base , DWORD Index )
 {
-	int* pVTable = *(int**)ppClass;
-	int dwAddress = pVTable[index];
-	return (FuncType)(dwAddress);
-}
+	PDWORD* VTablePointer = (PDWORD*)Base;
+	PDWORD VTableFunctionBase = *VTablePointer;
+	DWORD dwAddress = VTableFunctionBase[Index];
 
-//template< typename Function > Function GetMethod( PVOID Base , DWORD Index )
-//{
-//	PDWORD* VTablePointer = (PDWORD*)Base;
-//	PDWORD VTableFunctionBase = *VTablePointer;
-//	DWORD dwAddress = VTableFunctionBase[Index];
-//
-//	if (IsBadReadPtr((Function)(dwAddress), sizeof(Function)))
-//		return nullptr;
-//
-//	return (Function)( dwAddress );
-//}
+	//if (FastCall::G().t_IsBadReadPtr((Function)(dwAddress), sizeof(Function)))
+	//	return nullptr;
+
+	return (Function)( dwAddress );
+}
 
 
 typedef struct con_nprint_s

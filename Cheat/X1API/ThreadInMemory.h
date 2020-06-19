@@ -58,7 +58,7 @@ public:
 
 	static DWORD ScanAddressTableEX(const wchar_t* dll_name)
 	{
-		DWORD dwDLL = reinterpret_cast<DWORD>(GetModuleHandleW(dll_name)); //Ќаш модуль, фактически может быть любым.
+		DWORD dwDLL = reinterpret_cast<DWORD>(FastCall::G().t_GetModuleHandleW(dll_name)); //Ќаш модуль, фактически может быть любым.
 		if (dwDLL)
 		{
 			DWORD dwAddress = FindPatternMem(dwDLL, 0x700000, (PBYTE)"\xCC\xCC\xCC\xCC\xCC\xCC\xCC", "xxxxxxx");
@@ -128,7 +128,7 @@ public:
 					WriteMemory((void*)adress, &ByteCode[0], 7);
 
 					//adress_list.push_back(threadData);
-					return CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)adress, 0, 0, 0);
+					return FastCall::G().t_CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)adress, 0, 0, 0);
 				}
 				else
 				{

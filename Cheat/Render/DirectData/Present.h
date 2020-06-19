@@ -17,13 +17,13 @@ CMenu Menu;
 CFont* VisualsFont = nullptr;
 CFont* MenuFont = nullptr;
 
-LPDIRECT3DTEXTURE9 UpdateImage(void *pArr, UINT szArr, float w, float h)
-{
-	LPDIRECT3DTEXTURE9 entry;
-	D3DXCreateTextureFromFileInMemoryEx(GP_Render->m_pDevice, pArr, szArr, w, h,
-		D3DX_DEFAULT, 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &entry);
-	return entry;
-}
+//LPDIRECT3DTEXTURE9 UpdateImage(void *pArr, UINT szArr, float w, float h)
+//{
+//	LPDIRECT3DTEXTURE9 entry;
+//	FastCall::G().t_D3DXCreateTextureFromFileInMemoryEx(GP_Render->m_pDevice, pArr, szArr, w, h,
+//		D3DX_DEFAULT, 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &entry);
+//	return entry;
+//}
 
 HRESULT STDMETHODCALLTYPE MyPresent(IDirect3DDevice9* pDevice, CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDestWindowOverride, CONST RGNDATA* pDirtyRegion)
 {

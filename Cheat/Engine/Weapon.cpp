@@ -88,10 +88,6 @@ namespace Engine
 		if (!this)
 			return 0;
 
-		if (IsBadReadPtr(this, sizeof(CBaseWeapon)))
-			return 0;
-
-
 		return *(PINT)((DWORD)this + offsets["m_zoomLevel"]);
 	}
 
@@ -128,9 +124,6 @@ namespace Engine
 
 	const char*	CBaseWeapon::GetName()
 	{
-		if (IsBadReadPtr(this, sizeof(CBaseWeapon)))
-			return "";
-
 		typedef const char* (__thiscall* GetNameFn)(void*);
 		return GetMethod<GetNameFn>(this, 386)(this); //385
 	}
