@@ -3,7 +3,6 @@
 #include "../Hacks/Setup.h"
 #include "../Engine/SDK/SDK.h"
 #include "../X1API/MinHook/hook.h"
-#include "../Engine/SDK/StartSoundParams.h"
 using namespace SDK;
 
 namespace HookTables
@@ -23,7 +22,7 @@ namespace HookTables
 	using PostDataUpdateFn = void(__stdcall*)(void*, int);
 	using EmitSoundFn = void(__fastcall*)(void*, void*, void*, int, int, const char*, unsigned int, const char*, float,
 		float, int, int, int, const Vector*, const Vector*, Vector*, bool, float,
-		int, StartSoundParams_t&);
+		int, SndInfo_t&);
 
 	cDetour<CreateMoveFn>* pCreateMove;
 	cDetour<OverrideViewFn>* pOverrideView;

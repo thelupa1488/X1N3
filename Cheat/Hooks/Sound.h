@@ -3,7 +3,7 @@
 
 void __fastcall hkEmitSound(void* ecx, void* edx, void* filter, int iEntIndex, int iChannel, const char* pSoundEntry, unsigned int nSoundEntryHash, const char* pSample, float flVolume,
 	float flAttenuation, int nSeed, int iFlags, int iPitch, const Vector* pOrigin, const Vector* pDirection, Vector* pUtlVecOrigins, bool bUpdatePositions, float soundtime,
-	int speakerentity, StartSoundParams_t& params)
+	int speakerentity, SndInfo_t& params)
 {
 
 	if (GP_Misc && !strcmp(pSoundEntry, XorStr("UIPanorama.popup_accept_match_beep")))

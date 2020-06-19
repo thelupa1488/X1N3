@@ -463,9 +463,6 @@
     <ClInclude Include="Engine\SDK\Recv.hpp">
       <Filter>Engine\SDK</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\SDK\RecvCommon.hpp">
-      <Filter>Engine\SDK</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\SDK\SDK.h">
       <Filter>Engine\SDK</Filter>
     </ClInclude>
@@ -635,7 +632,6 @@
     <ClInclude Include="Hacks\Radar\Radar.h">
       <Filter>Hacks\Radar</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\SDK\StartSoundParams.h" />
     <ClInclude Include="Engine\SDK\CGlowObjManager.h" />
     <ClInclude Include="Render\TestTexture.h" />
     <ClInclude Include="Engine\SDK\ClientState.hpp" />
@@ -660,6 +656,8 @@
     <ClInclude Include="Engine\SDK\ICVar.h">
       <Filter>Engine\SDK</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\SDK\CUtlVector.h" />
+    <ClInclude Include="Engine\SDK\CUtlMemory.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="3DMenu">

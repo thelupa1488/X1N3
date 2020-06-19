@@ -475,8 +475,8 @@ public:
 		using Fn = void(__thiscall*)(
 			void* thisptr, const char* resourceName,
 			const char* pBuffer, void* pFileSystem,
-			const char* pPathID, void* pfnEvaluateSymbolProc);
-		reinterpret_cast<Fn>(address)(vk_, name_.c_str(), buffer_.c_str(), nullptr, nullptr, nullptr);
+			const char* pPathID, void* pfnEvaluateSymbolProc, void* a1);
+		reinterpret_cast<Fn>(address)(vk_, name_.c_str(), buffer_.c_str(), nullptr, nullptr, nullptr, nullptr);
 
 		//DWORD dwFunction = (DWORD)offsets["LoadFromBufferEx"];
 		//if (dwFunction)
@@ -497,7 +497,7 @@ public:
 	}
 
 	static IMaterial* CreateMaterialBasic(bool ignorez, bool lit = true, bool wireframe = false)
-	{
+ 	{
 		VMP_MUTATION("CreateMaterialBasic");
 
 		string Generic = lit ? "VertexLitGeneric" : "UnlitGeneric";

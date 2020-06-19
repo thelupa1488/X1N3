@@ -274,27 +274,25 @@ void CEsp::Menu()
 			if (SoundEspEnable)
 			{
 				X1Gui().SameLine(SAME_LINE_1);
-				DColorEdit("Color##sound", SoundColor);
+				DColorEdit("Color##Sound", SoundColor);
 				X1Gui().SameLine(200);
 				VectorEx<const char*>itemsSE = { lolc("Circle") , lolc("Dynamic Circle(+)"), lolc("Dynamic Circle(-)"), lolc("Box"),lolc("Filled Box"), lolc("Star") };
 				X1Gui().PushItemWidth(PUSH_1);
-				DComboBox("Style##sound", SoundEspStyle, itemsSE);
+				DComboBox("Style##Sound", SoundEspStyle, itemsSE);
 
 				X1Gui().Spacing();
 				X1Gui().PushItemWidth(PUSH_2);
-				SliderInts("Size##sound", SoundEspSize, 1, 100);
-				X1Gui().PushItemWidth(PUSH_2);
-				SliderInts("Distance##sound", SoundDistance, 400, 900);
+				SliderInts("Size##Sound", SoundEspSize, 1, 100);
 				X1Gui().PushItemWidth(PUSH_1);
 				X1Gui().Spacing();
 				DCheckBox("Distance Text##sound", SoundEspDistance);
 				if (SoundEspDistance)
 				{
 					X1Gui().SameLine(SAME_LINE_2);
-					DColorEdit("Color##sounddistance", SoundDistanceColor);
+					DColorEdit("Color##SoundDistance", SoundDistanceColor);
 
 					X1Gui().PushItemWidth(PUSH_2);
-					SliderInts("Text Size##sound", TextSoundSize, 9, MAX_FONT_SIZE);
+					SliderInts("Text Size##Sound", TextSoundSize, 9, MAX_FONT_SIZE);
 
 				}
 			}

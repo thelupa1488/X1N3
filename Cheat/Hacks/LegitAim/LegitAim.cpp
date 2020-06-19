@@ -1554,7 +1554,7 @@ void CLegitAim::LegitResolver()
 	{
 		for (int i = 1; i < I::Engine()->GetMaxClients(); i++)
 		{
-			CBaseEntity* pEntity = I::EntityList()->GetClientEntity(i);
+			CBaseEntity* pEntity = (CBaseEntity*)I::EntityList()->GetClientEntity(i);
 
 			if (!pEntity)
 				continue;
@@ -1738,14 +1738,14 @@ bool __declspec(noinline) CLegitAim::CanFire(Vector mAngle, CUserCmd* pCmd, CBas
 
 			New_Ray.Init(Trace.endpos, vecS + vecForvard);
 
-			New_Filter.pSkip = Trace.m_pEnt;
+			New_Filter.pSkip = Trace.hit_entity;
 			I::EngineTrace()->TraceRay(New_Ray, PlayerVisibleMask, &New_Filter, &New_Trace);
 
-			if (New_Trace.m_pEnt == BaseEnt && (AllHitGroup ? true && New_Trace.hitgroup != 0 : CheckEnableHBox((New_Trace.hitgroup))))
+			if (New_Trace.hit_entity == BaseEnt && (AllHitGroup ? true && New_Trace.hitgroup != 0 : CheckEnableHBox((New_Trace.hitgroup))))
 				return true;
 		}
 		else
-			if (Trace.m_pEnt == BaseEnt && (AllHitGroup ? true && Trace.hitgroup != 0 : CheckEnableHBox((Trace.hitgroup))))
+			if (Trace.hit_entity == BaseEnt && (AllHitGroup ? true && Trace.hitgroup != 0 : CheckEnableHBox((Trace.hitgroup))))
 				return true;
 
 		return false;

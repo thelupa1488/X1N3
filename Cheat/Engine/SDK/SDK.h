@@ -16,6 +16,8 @@
 #include "ClientClass.hpp"
 #include "ClientState.hpp"
 #include "Color.hpp"
+#include "CUtlMemory.h"
+#include "CUtlVector.h"
 #include "IBaseClientDll.hpp"
 #include "IClientEntity.hpp"
 #include "IClientEntityList.hpp"

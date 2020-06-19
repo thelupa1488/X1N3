@@ -309,11 +309,11 @@ void CMisc::LegitPeek(CUserCmd* pCmd, bool& bSendPacket)
 			I::EngineTrace()->TraceRay(ray, MASK_SHOT_HULL | CONTENTS_HITBOX, &filter, &tr);
 			if (tr.contents & CONTENTS_WINDOW) // skip windows
 			{																					
-				filter.pSkip = tr.m_pEnt;// at this moment, we dont care about local player
+				filter.pSkip = tr.hit_entity;// at this moment, we dont care about local player
 				ray.Init(tr.endpos, hit_point);
 				I::EngineTrace()->TraceRay(ray, MASK_SHOT_HULL | CONTENTS_HITBOX, &filter, &tr);
 			}
-			if (tr.fraction == 1.0f || tr.m_pEnt == CGlobal::LocalPlayer)
+			if (tr.fraction == 1.0f || tr.hit_entity == CGlobal::LocalPlayer)
 			{
 				m_bIsPeeking = true;
 				break;
@@ -1222,7 +1222,7 @@ void CMisc::EnginePrediction(bool& bSendPacket, CUserCmd* pCmd)
 
 					for (int i = 1; i < I::Engine()->GetMaxClients(); i++)
 					{
-						CBaseEntity* entity = I::EntityList()->GetClientEntity(i);
+						CBaseEntity* entity = (CBaseEntity*)I::EntityList()->GetClientEntity(i);
 
 						if (!entity)
 							continue;
@@ -1242,7 +1242,7 @@ void CMisc::EnginePrediction(bool& bSendPacket, CUserCmd* pCmd)
 					if (index == -1)
 						return;
 
-					CBaseEntity* target = I::EntityList()->GetClientEntity(index);
+					CBaseEntity* target = (CBaseEntity*)I::EntityList()->GetClientEntity(index);
 
 					if (!target)
 						return;
@@ -1582,8 +1582,6 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 		if (!ModelName)
 			return;
 
-		static auto ofunc = HookTables::pDrawModelExecute->GetTrampoline();
-
 		if (HandChams)
 		{
 			if (strstr(ModelName, XorStr("arms")))
@@ -1602,8 +1600,6 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 				case 5: I::RenderView()->SetBlend(0.0f); I::ModelRender()->ForcedMaterialOverride(VisFlat); break; //disable
 				default: break;
 				}
-
-				ofunc(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 			}
 		}
 		if (WeaponChams)
@@ -1624,10 +1620,9 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 				case 5: I::RenderView()->SetBlend(0.0f); I::ModelRender()->ForcedMaterialOverride(VisFlat); break; //disable
 				default: break;
 				}
-
-				ofunc(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 			}
 		}
+		HookTables::pDrawModelExecute->GetTrampoline()(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 	}
 }
 
@@ -2017,9 +2012,9 @@ void CHitListener::FireGameEvent(IGameEvent *event)
 						trace_t tr;
 						I::EngineTrace()->TraceRay(ray, MASK_SHOT, &filter, &tr);
 
-						if (tr.m_pEnt && tr.DidHit())
+						if (tr.hit_entity && tr.DidHit())
 						{
-							if (reinterpret_cast<CBaseEntity*>(tr.m_pEnt)->IsPlayer())
+							if (reinterpret_cast<CBaseEntity*>(tr.hit_entity)->IsPlayer())
 							{
 								CMisc::HitImpact_t ImpEntry;
 								ImpEntry.Pos = ImpactPos;

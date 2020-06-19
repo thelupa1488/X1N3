@@ -170,7 +170,7 @@ void CSkins::PostDataUpdate()
 
 	int nLocalPlayerID = I::Engine()->GetLocalPlayer();
 
-	CBaseEntity* pLocal = I::EntityList()->GetClientEntity(nLocalPlayerID);
+	CBaseEntity* pLocal = (CBaseEntity*)I::EntityList()->GetClientEntity(nLocalPlayerID);
 
 
 	if (!pLocal)
@@ -399,7 +399,7 @@ void CSkins::ApplyCustomSkin(CBaseAttributableItem* pWeapon, int nWeaponIndex, b
 void CSkins::SetSkin(CBaseAttributableItem* pWeapon, SkinSettings *SkinParam, int id, bool IsCT, bool IsKnife)
 {
 	int nLocalPlayerID = I::Engine()->GetLocalPlayer();
-	CBaseEntity* pLocal = I::EntityList()->GetClientEntity(nLocalPlayerID);
+	CBaseEntity* pLocal = (CBaseEntity*)I::EntityList()->GetClientEntity(nLocalPlayerID);
 	PlayerInfo LocalPlayerInfo;
 
 	if (!I::Engine()->GetPlayerInfo(nLocalPlayerID, &LocalPlayerInfo))

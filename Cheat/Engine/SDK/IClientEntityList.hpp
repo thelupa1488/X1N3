@@ -20,8 +20,8 @@ namespace SDK
 		virtual IClientNetworkable*   GetClientNetworkable(int entnum) = 0;
 		virtual IClientNetworkable*   GetClientNetworkableFromHandle(CBaseHandle hEnt) = 0;
 		virtual IClientUnknown*       GetClientUnknownFromHandle(CBaseHandle hEnt) = 0;
-		virtual CBaseEntity*          GetClientEntity(int entNum) = 0;
-		virtual CBaseEntity*          GetClientEntityFromHandle(PVOID hEnt) = 0;
+		virtual IClientEntity*        GetClientEntity(int entNum) = 0;
+		virtual IClientEntity*        GetClientEntityFromHandle(PVOID hEnt) = 0;
 		virtual int                   NumberOfEntities(bool bIncludeNonNetworkable) = 0;
 		virtual int                   GetHighestEntityIndex(void) = 0;
 		virtual void                  SetMaxEntities(int maxEnts) = 0;

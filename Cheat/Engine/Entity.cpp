@@ -52,6 +52,14 @@ namespace Engine
 		return GetMethod<IsPlayerFn>(this, 157)(this); //156
 	}
 
+	bool CBaseEntity::IsWeapon()
+	{
+		//index: 160
+		//ref: "CNewParticleEffect::DrawModel"
+		//sig: 8B 80 ? ? ? ? FF D0 84 C0 74 6F 8B 4D A4
+		return GetMethod<bool(__thiscall*)(CBaseEntity*)>(this, 165)(this);
+	}
+
 	bool CBaseEntity::IsDefusing()
 	{
 
@@ -130,7 +138,7 @@ namespace Engine
 
 			I::EngineTrace()->TraceRay(ray, PlayerVisibleMask, &filter, &tr);
 
-			if (tr.m_pEnt == (IClientEntity*)this && !tr.allsolid)
+			if (tr.hit_entity == (IClientEntity*)this && !tr.allsolid)
 				return true;
 		}
 
@@ -155,7 +163,7 @@ namespace Engine
 
 		bool visible = false;
 
-		if (tr.m_pEnt == (IClientEntity*)this && !tr.allsolid)
+		if (tr.hit_entity == (IClientEntity*)this && !tr.allsolid)
 			visible = true;
 
 		if (visible && smokeCheck)

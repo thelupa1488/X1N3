@@ -156,7 +156,7 @@ public:
 	virtual void DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld);
 	virtual void DrawGlow();
 
-	void PlaySound(Vector _Pos, int EntityIdx);
+	void PlaySounds(Vector _Pos, int EntityIdx);
 	void Reset();
 
 	void DrawBar(Orent O, float x, float y, float w, float h, float val, bool Outline, Color MainC1, Color cBack, bool bBack, int Razd, bool Revers, Color OutlineCol);//переписать
@@ -200,7 +200,6 @@ public:
 	int SoundEspStyle = 0;
 	int SoundEspSize = 20;
 	bool SoundEspDistance = false;
-	int SoundDistance = 400;
 	bool WorldGrenade = false;
 	int WorldGrenadeStyle = 0;
 	bool WorldWeapons = false;
@@ -358,7 +357,6 @@ public:
 		RV(SoundEspStyle, "SoundEspStyle");
 		RV(SoundEspSize, "SoundEspSize");
 		RV(SoundEspDistance, "SoundEspDistance");
-		RV(SoundDistance, "SoundDistance");
 		RV(WorldGrenade, "WorldGrenade");
 		RV(WorldGrenadeStyle, "WorldGrenadeStyle");
 		RV(WorldWeapons, "WorldWeapons");

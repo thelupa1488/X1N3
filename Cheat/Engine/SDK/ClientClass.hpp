@@ -5,12 +5,6 @@
 #include "Recv.hpp"
 #include "IClientNetworkable.hpp"
 
-namespace Engine
-{
-    enum CLIENT_CLASS_ID;
-}
-using namespace Engine;
-
 namespace SDK
 {
     class ClientClass;
@@ -27,6 +21,6 @@ namespace SDK
         char*                    m_pNetworkName;
         RecvTable*               m_pRecvTable;
         ClientClass*             m_pNext;
-        CLIENT_CLASS_ID          m_ClassID;
+        int                      m_ClassID;
     };
 }

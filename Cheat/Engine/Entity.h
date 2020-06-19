@@ -99,6 +99,7 @@ namespace Engine
 		bool    IsDefusing();
 
 		bool	IsPlayer();
+		bool	IsWeapon();
 		bool	IsValid();
 		bool	IsDead();
 		bool	IsVisibleHitBox(CBaseEntity* pLocalEntity, Vector& vecAbsStart, Vector& vecAbsEnd, bool smokeCheck = true, bool flashcheck = false);

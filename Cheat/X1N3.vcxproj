@@ -92,6 +92,8 @@
     <ClInclude Include="Engine\SDK\Const.h" />
     <ClInclude Include="Engine\SDK\CRC.hpp" />
     <ClInclude Include="Engine\SDK\CUserCmd.hpp" />
+    <ClInclude Include="Engine\SDK\CUtlMemory.h" />
+    <ClInclude Include="Engine\SDK\CUtlVector.h" />
     <ClInclude Include="Engine\SDK\ICVar.h" />
     <ClInclude Include="Engine\SDK\Definitions.hpp" />
     <ClInclude Include="Engine\SDK\IAppSystem.hpp" />
@@ -127,9 +129,7 @@
     <ClInclude Include="Engine\SDK\memalloc.h" />
     <ClInclude Include="Engine\SDK\QAngle.hpp" />
     <ClInclude Include="Engine\SDK\Recv.hpp" />
-    <ClInclude Include="Engine\SDK\RecvCommon.hpp" />
     <ClInclude Include="Engine\SDK\SDK.h" />
-    <ClInclude Include="Engine\SDK\StartSoundParams.h" />
     <ClInclude Include="Engine\SDK\TextureGroupNames.h" />
     <ClInclude Include="Engine\SDK\Vector.hpp" />
     <ClInclude Include="Engine\SDK\Vector2D.hpp" />
