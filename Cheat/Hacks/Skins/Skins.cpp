@@ -101,28 +101,28 @@ void CSkins::RecvProxy_Viewmodel(CRecvProxyData *pData, void *pStruct, void *pOu
 	if (CGlobal::IsGameReady)
 	{
 		// Get the knife view model id's
-		int default_t = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_default_t.mdl"));
-		int default_ct = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_default_ct.mdl"));
-		int iBayonet = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_bayonet.mdl"));
-		int iCSS = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_css.mdl"));
-		int iButterfly = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_butterfly.mdl"));
-		int iFlip = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_flip.mdl"));
-		int iGut = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_gut.mdl"));
-		int iKarambit = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_karam.mdl"));
-		int iM9Bayonet = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_m9_bay.mdl"));
-		int iHuntsman = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_tactical.mdl"));
-		int iFalchion = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_falchion_advanced.mdl"));
-		int iDagger = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_push.mdl"));
-		int iCord = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_cord.mdl"));
-		int iCanis = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_canis.mdl"));
-		int iUrsus = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_ursus.mdl"));
-		int iBowie = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_survival_bowie.mdl"));
-		int iGunGame = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_gg.mdl"));
-		int iNavaja = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_gypsy_jackknife.mdl"));
-		int iOutdoor = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_outdoor.mdl"));
-		int iStiletto = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_stiletto.mdl"));
-		int iTalon = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_widowmaker.mdl"));
-		int iSkeleton = I::ModelInfo()->GetModelIndex(XorStr("models/weapons/v_knife_skeleton.mdl"));
+		int default_t = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_default_t.mdl");
+		int default_ct = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_default_ct.mdl");
+		int iBayonet = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_bayonet.mdl");
+		int iCSS = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_css.mdl");
+		int iButterfly = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_butterfly.mdl");
+		int iFlip = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_flip.mdl");
+		int iGut = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_gut.mdl");
+		int iKarambit = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_karam.mdl");
+		int iM9Bayonet = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_m9_bay.mdl");
+		int iHuntsman = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_tactical.mdl");
+		int iFalchion = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_falchion_advanced.mdl");
+		int iDagger = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_push.mdl");
+		int iCord = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_cord.mdl");
+		int iCanis = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_canis.mdl");
+		int iUrsus = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_ursus.mdl");
+		int iBowie = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_survival_bowie.mdl");
+		int iGunGame = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_gg.mdl");
+		int iNavaja = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_gypsy_jackknife.mdl");
+		int iOutdoor = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_outdoor.mdl");
+		int iStiletto = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_stiletto.mdl");
+		int iTalon = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_widowmaker.mdl");
+		int iSkeleton = I::ModelInfo()->GetModelIndex("models/weapons/v_knife_skeleton.mdl");
 
 		if (CGlobal::LocalPlayer)
 		{

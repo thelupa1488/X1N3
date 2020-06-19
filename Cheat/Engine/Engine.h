@@ -579,8 +579,8 @@ public:
 	static IMaterial* CreateMaterialMetallicPlus(bool ignorez)
 	{
 		VMP_MUTATION("CreateMaterialMetallicPlus");
-		static auto created = 0;
 
+		static auto created = 0;
 		string Generic = "VertexLitGeneric";
 		string matdata =
 			"\"" + Generic + "\"\

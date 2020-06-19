@@ -271,8 +271,8 @@ namespace SDK
 		virtual void                            CacheUsedMaterials() = 0; //80
 		virtual void                            ReloadTextures() = 0;
 		virtual void                            ReloadMaterials(const char* pSubString = NULL) = 0;
-		virtual IMaterial*                      CreateMaterial(const char* pMaterialName, KeyValues* pVMTKeyValues) = 0;
-		virtual IMaterial*                      FindMaterial(char const* pMaterialName, const char* pTextureGroupName = nullptr, bool complain = true, const char* pComplainPrefix = NULL) = 0;
+		virtual IMaterial*                      CreateMaterial(const char* pMaterialName, KeyValues* pVMTKeyValues) = 0; //83
+		virtual IMaterial*                      FindMaterial(char const* pMaterialName, const char* pTextureGroupName = nullptr, bool complain = true, const char* pComplainPrefix = NULL) = 0; //84
 		virtual void							unk0() = 0;
 		virtual MaterialHandle_t                FirstMaterial() const = 0;
 		virtual MaterialHandle_t                NextMaterial(MaterialHandle_t h) const = 0;
