@@ -81,34 +81,6 @@ namespace SDK
 		return iface;
 	}
 
-	void* FindInterface(const char* Module, const char* InterfaceName)
-	{
-		void* Interface = nullptr;
-		auto CreateInterface = reinterpret_cast<CreateInterfaceFn>(FastCall::G().t_GetProcAddress(
-			FastCall::G().t_GetModuleHandleA(Module), XorStr("CreateInterface")));
-
-		char PossibleInterfaceName[1024];
-		for (int i = 1; i < 100; i++)
-		{
-			sprintf(PossibleInterfaceName, XorStr("%s0%i"), InterfaceName, i);
-			Interface = CreateInterface(PossibleInterfaceName, 0);
-			if (Interface)
-				break;
-
-			sprintf(PossibleInterfaceName, XorStr("%s00%i"), InterfaceName, i);
-			Interface = CreateInterface(PossibleInterfaceName, 0);
-			if (Interface)
-				break;
-		}
-
-		if (!Interface)
-			std::cout << InterfaceName << XorStr(" not found!") << std::endl;
-		else
-			std::cout << InterfaceName << XorStr(" 0x") << Interface << std::endl;
-
-		return Interface;
-	}
-
 	IBaseClientDLL* I::Client()
 	{
 		if (!g_pClient)

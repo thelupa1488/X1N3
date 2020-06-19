@@ -100,7 +100,6 @@ namespace SDK
 		static IBaseClientDLL*		Client();
 		static IClientEntityList*	EntityList();
 		static IGameEventManager2*  GameEvent();
-		static IClientEntityList*   g_pEntityList;
 		static CGlobalVarsBase*		GlobalVars();
 		static CInput*				Input();
 		static CClientState*		ClientState();
@@ -128,6 +127,7 @@ namespace SDK
 	private:
 		static IVEngineClient*		g_pEngine;
 		static IBaseClientDLL*		g_pClient;
+		static IClientEntityList*   g_pEntityList;
 		static CGlobalVarsBase*		g_pGlobals;
 		static CInput*				g_pInput;
 		static CClientState*		g_pClientState;
