@@ -197,7 +197,6 @@ namespace SDK
 	class IMaterialSystem : public IAppSystem
 	{
 	public:
-
 		virtual CreateInterfaceFn               Init(char const* pShaderAPIDLL, IMaterialProxyFactory* pMaterialProxyFactory, CreateInterfaceFn fileSystemFactory, CreateInterfaceFn cvarFactory = NULL) = 0;
 		virtual void                            SetShaderAPI(char const* pShaderAPIDLL) = 0;
 		virtual void                            SetAdapter(int nAdapter, int nFlags) = 0;
@@ -207,11 +206,11 @@ namespace SDK
 		virtual MaterialThreadMode_t            GetThreadMode() = 0;
 		virtual void                            ExecuteQueued() = 0;
 		virtual void                            OnDebugEvent(const char* pEvent) = 0;
-		virtual IMaterialSystemHardwareConfig* GetHardwareConfig(const char* pVersion, int* returnCode) = 0;
+		virtual IMaterialSystemHardwareConfig*  GetHardwareConfig(const char* pVersion, int* returnCode) = 0;
 		virtual void                            __unknown() = 0;
 		virtual bool                            UpdateConfig(bool bForceUpdate) = 0; //20
 		virtual bool                            OverrideConfig(const MaterialSystem_Config_t& config, bool bForceUpdate) = 0;
-		virtual const MaterialSystem_Config_t& GetCurrentConfigForVideoCard() const = 0;
+		virtual const MaterialSystem_Config_t&  GetCurrentConfigForVideoCard() const = 0;
 		virtual bool                            GetRecommendedConfigurationInfo(int nDXLevel, KeyValues* pKeyValues) = 0;
 		virtual int                             GetDisplayAdapterCount() const = 0;
 		virtual int                             GetCurrentAdapter() const = 0;
@@ -222,7 +221,7 @@ namespace SDK
 		virtual void                            GetDisplayMode(MaterialVideoMode_t& mode) const = 0; //30
 		virtual bool                            SetMode(void* hwnd, const MaterialSystem_Config_t& config) = 0;
 		virtual bool                            SupportsMSAAMode(int nMSAAMode) = 0;
-		virtual const MaterialSystemHWID_t& GetVideoCardIdentifier(void) const = 0;
+		virtual const MaterialSystemHWID_t&     GetVideoCardIdentifier(void) const = 0;
 		virtual void                            SpewDriverInfo() const = 0;
 		virtual void                            GetBackBufferDimensions(int& width, int& height) const = 0;
 		virtual ImageFormat                     GetBackBufferFormat() const = 0;
@@ -254,9 +253,9 @@ namespace SDK
 		virtual int                             ShaderCount() const = 0;
 		virtual int                             GetShaders(int nFirstShader, int nMaxCount, IShader** ppShaderList) const = 0;
 		virtual int                             ShaderFlagCount() const = 0;
-		virtual const char* ShaderFlagName(int nIndex) const = 0;
+		virtual const char*                     ShaderFlagName(int nIndex) const = 0;
 		virtual void                            GetShaderFallback(const char* pShaderName, char* pFallbackShader, int nFallbackLength) = 0;
-		virtual IMaterialProxyFactory* GetMaterialProxyFactory() = 0;
+		virtual IMaterialProxyFactory*          GetMaterialProxyFactory() = 0;
 		virtual void                            SetMaterialProxyFactory(IMaterialProxyFactory* pFactory) = 0;
 		virtual void                            EnableEditorMaterials() = 0;
 		virtual void                            EnableGBuffers() = 0; //70

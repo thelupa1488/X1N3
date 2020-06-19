@@ -500,6 +500,8 @@ public:
  	{
 		VMP_MUTATION("CreateMaterialBasic");
 
+		static auto created = 0; //number
+
 		string Generic = lit ? "VertexLitGeneric" : "UnlitGeneric";
 		string matdata =
 			"\"" + Generic + "\"\
@@ -518,13 +520,14 @@ public:
 		\n}\n";
 
 
-		auto matname = XorStr("Basic");
+		auto matname = XorStr("basic_") + to_string(created); //material name + number
+		created++;
 		auto keyValues = static_cast<KeyValues*>(malloc(sizeof(KeyValues)));
 
 		InitKeyValues(keyValues, Generic.c_str());
 		LoadFromBuffer(keyValues, matname, matdata);
 
-		auto material = I::MaterialSystem()->CreateMaterial(matname, keyValues);
+		auto material = I::MaterialSystem()->CreateMaterial(matname.c_str(), keyValues);
 		material->IncrementReferenceCount();
 
 		VMP_END;
@@ -534,6 +537,8 @@ public:
 	static IMaterial* CreateMaterialMetallic(bool ignorez)
 	{
 		VMP_MUTATION("CreateMaterialMetallic");
+
+		static auto created = 0;
 
 		string Generic = "VertexLitGeneric";
 		string matdata =
@@ -557,13 +562,14 @@ public:
 		\n\t\"$rimlightboost\" \"[ 1 1 1 ]\"\
 		\n}\n";
 
-		auto matname = XorStr("Metallic");
+		auto matname = XorStr("metallic_") + to_string(created);
+		created++;
 		auto keyValues = static_cast<KeyValues*>(malloc(sizeof(KeyValues)));
 
 		InitKeyValues(keyValues, Generic.c_str());
 		LoadFromBuffer(keyValues, matname, matdata);
 
-		auto material = I::MaterialSystem()->CreateMaterial(matname, keyValues);
+		auto material = I::MaterialSystem()->CreateMaterial(matname.c_str(), keyValues);
 		material->IncrementReferenceCount();
 
 		VMP_END;
@@ -573,6 +579,8 @@ public:
 	static IMaterial* CreateMaterialMetallicPlus(bool ignorez)
 	{
 		VMP_MUTATION("CreateMaterialMetallicPlus");
+		static auto created = 0;
+
 		string Generic = "VertexLitGeneric";
 		string matdata =
 			"\"" + Generic + "\"\
@@ -609,13 +617,14 @@ public:
 		\n\}\
 		\n}\n";
 
-		auto matname = XorStr("Metallic_Plus");
+		auto matname = XorStr("metallic_plus_") + to_string(created);
+		created++;
 		auto keyValues = static_cast<KeyValues*>(malloc(sizeof(KeyValues)));
 
 		InitKeyValues(keyValues, Generic.c_str());
 		LoadFromBuffer(keyValues, matname, matdata);
 
-		auto material = I::MaterialSystem()->CreateMaterial(matname, keyValues);
+		auto material = I::MaterialSystem()->CreateMaterial(matname.c_str(), keyValues);
 		material->IncrementReferenceCount();
 
 		VMP_END;

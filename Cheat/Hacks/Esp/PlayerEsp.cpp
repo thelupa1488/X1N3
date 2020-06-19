@@ -850,6 +850,8 @@ void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMod
 			!VisFrame || !HidMetallic || !VisMetallic || !HidMetallicPlus || !HidMetallicPlus)
 			return;
 
+		static auto ofunc = HookTables::pDrawModelExecute->GetTrampoline();
+
 		const char* ModelName = I::ModelInfo()->GetModelName((model_t*)pInfo.pModel);
 
 		if (!ModelName)
@@ -894,6 +896,7 @@ void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMod
 			case 4: I::ModelRender()->ForcedMaterialOverride(HidMetallicPlus); break;
 			default: break;
 			}
+			ofunc(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 		}
 
 		if (ChamsStyle <= 4)
@@ -912,6 +915,7 @@ void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMod
 			case 4: I::ModelRender()->ForcedMaterialOverride(VisMetallicPlus); break;
 			default: break;
 			}
+			ofunc(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 		}
 
 		if (ChamsStyle == 5)
@@ -939,8 +943,8 @@ void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMod
 				I::RenderView()->SetBlend(ChamsInvisColor.G1A());
 				I::ModelRender()->ForcedMaterialOverride(HidFlat);
 			}
+			ofunc(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 		}
-		HookTables::pDrawModelExecute->GetTrampoline()(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 	}
 }
 
