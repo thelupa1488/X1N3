@@ -75,7 +75,6 @@ public:
 		}
 		virtual void Shutdown()
 		{
-			VMP_ULTRA("Shutdown")
 			GP_Misc->HitWorker.UnRegListener();
 			GP_Skins->FireEvent.UnRegListener();
 
@@ -86,7 +85,6 @@ public:
 			DELETE_PTR(GP_LegitAim);
 			DELETE_PTR(GP_Radar);
 			DELETE_PTR(GP_GHelper);
-			VMP_END
 		}
 	};
 };

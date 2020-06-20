@@ -29,7 +29,6 @@ BOOL WINAPI DllMain(_In_ HINSTANCE hinstDll, _In_ DWORD fdwReason, _In_opt_ LPVO
 	switch (fdwReason)
 	{
 	case DLL_PROCESS_ATTACH:
-	VMP_ULTRA("DLL_PROCESS_ATTACH")
 #ifdef ENABLE_CONSOLE_LOG
 		AllocConsole();
 		AttachConsole(FastCall::G().t_GetCurrentProcessId());
@@ -42,14 +41,11 @@ BOOL WINAPI DllMain(_In_ HINSTANCE hinstDll, _In_ DWORD fdwReason, _In_opt_ LPVO
 		FastCall::G().t_DisableThreadLibraryCalls(hinstDll);
 		std::make_unique<CreateThread_>((LPTHREAD_START_ROUTINE)SetupThread, hinstDll);
 		ADD_LOG("2\n");
-	VMP_END
 		return TRUE;
 	case DLL_PROCESS_DETACH:
-	VMP_ULTRA("DLL_PROCESS_DETACH")
 		GP_Setup->Shutdown();
 		DELETE_PTR(GP_Setup);
 		ADD_LOG("DLL DETACH\n");
-	VMP_END
 	default:
 		return TRUE;
 	}
