@@ -16,7 +16,6 @@ Vector CGlobal::GViewAngle;
 vector<string> CGlobal::ConfigList;
 CBaseEntity* CGlobal::LocalPlayer;
 CUserCmd* CGlobal::UserCmd;
-bool CGlobal::bSendPacket;
 
 QAngle CGlobal::vangle = QAngle();
 float CGlobal::side = 1.0f;

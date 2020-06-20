@@ -21,10 +21,10 @@ bool __stdcall hkCreateMove(float flInputSampleTime, CUserCmd* pCmd)
 			if (GP_Esp->GranadePrediction)
 				grenade_prediction::Get().Tick(pCmd->buttons);
 
-		uintptr_t* FPointer; __asm { MOV FPointer, EBP }
-		byte* SendPacket = (byte*)(*FPointer - 0x1C);
+		DWORD* FirstP;
+		__asm mov FirstP, ebp;
 
-		CGlobal::bSendPacket = *SendPacket;
+		bool bSendPacket = true;
 
 		if (CGlobal::IsGuiVisble)
 			pCmd->buttons &= ~IN_ATTACK;
@@ -38,7 +38,7 @@ bool __stdcall hkCreateMove(float flInputSampleTime, CUserCmd* pCmd)
 			GP_LegitAim->BacktrackCreateMove(pCmd);
 
 			if (GP_LegitAim->Enable)
-				GP_LegitAim->CreateMove(CGlobal::bSendPacket, flInputSampleTime, pCmd);
+				GP_LegitAim->CreateMove(bSendPacket, flInputSampleTime, pCmd);
 
 			if (GP_LegitAim->TriggerEnable)
 				GP_LegitAim->TriggerCreateMove(pCmd);
@@ -48,21 +48,21 @@ bool __stdcall hkCreateMove(float flInputSampleTime, CUserCmd* pCmd)
 			if (GP_Misc->ShowCompetitiveRank && pCmd->buttons & IN_SCORE)
 				GP_Misc->RankReveal();
 
-			GP_Misc->CreateMove(CGlobal::bSendPacket, flInputSampleTime, pCmd);
+			GP_Misc->CreateMove(bSendPacket, flInputSampleTime, pCmd);
 
 			if (GP_Misc->Desync && I::ClientState()->chokedcommands >= GP_Misc->MaxChokeTicks())
 			{
-				CGlobal::bSendPacket = true;
+				bSendPacket = true;
 				pCmd->viewangles = I::ClientState()->viewangles;
 			}
-			GP_Misc->EnginePrediction(CGlobal::bSendPacket, pCmd);
+			GP_Misc->EnginePrediction(bSendPacket, pCmd);
 		}
 
 		CGlobal::ClampAngles(pCmd->viewangles);
 		CGlobal::AngleNormalize(pCmd->viewangles);
-		*SendPacket = CGlobal::bSendPacket;
+		*(bool*)(*FirstP - 0x1C) = bSendPacket;
 
-		if (!CGlobal::bSendPacket)
+		if (!bSendPacket)
 			return false;
 	}
 

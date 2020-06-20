@@ -133,7 +133,6 @@ public:
 	static vector<string> ConfigList;
 	static CBaseEntity* LocalPlayer;
 	static CUserCmd* UserCmd;
-	static bool bSendPacket;
 
 	static QAngle vangle;
 	static float side;
