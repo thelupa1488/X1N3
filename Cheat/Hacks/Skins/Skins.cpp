@@ -63,9 +63,7 @@ static auto make_glove(int entry, int serial) -> CBaseAttributableItem*
 	const auto glove = (CBaseAttributableItem*)I::EntityList()->GetClientEntity(entry);
 	assert(glove);
 	{
-		CSX::Memory::FindPattern(clientFactory, XorStr("\x53\x8D\x48\x04\xE8\x00\x00\x00\x00\x8B\x4D\x10"), XorStr("xxxxx????xxx"), 4);
-
-		static auto set_abs_origin_addr = CSX::Memory::FindPattern(clientFactory, XorStr("\x55\x8B\xEC\x83\xE4\xF8\x51\x53\x56\x57\x8B\xF1"), XorStr("xxxxxxxxxxxx"), 0);
+		static auto set_abs_origin_addr = Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8"));
 		const auto set_abs_origin_fn = reinterpret_cast<void(__thiscall*)(void*, const std::array<float, 3>&)>(set_abs_origin_addr);
 
 		static constexpr std::array<float, 3> new_pos = { 10000.f, 10000.f, 10000.f };
@@ -471,8 +469,8 @@ struct hud_weapons_t {
 template<class T>
 static T* FindHudElement(const char* name)
 {
-	static auto pThis = *reinterpret_cast<DWORD**>(CSX::Memory::FindPatternV2(clientFactory, XorStr("B9 ? ? ? ? E8 ? ? ? ? 8B 5D 08")) + 1);
-	static auto find_hud_element = reinterpret_cast<DWORD(__thiscall*)(void*, const char*)>(CSX::Memory::FindPatternV2(clientFactory, XorStr("55 8B EC 53 8B 5D 08 56 57 8B F9 33 F6 39 77 28")));
+	static auto pThis = *reinterpret_cast<DWORD**>(Utils::PatternScan(clientFactory, XorStr("B9 ? ? ? ? E8 ? ? ? ? 8B 5D 08")) + 1);
+	static auto find_hud_element = reinterpret_cast<DWORD(__thiscall*)(void*, const char*)>(Utils::PatternScan(clientFactory, XorStr("55 8B EC 53 8B 5D 08 56 57 8B F9 33 F6 39 77 28")));
 	return (T*)find_hud_element(pThis, name);
 }
 
@@ -483,7 +481,7 @@ void CSkins::UpdateSkins(bool reset)
 	SetKillIconCfg();
 
 	typedef void(*ForceUpdate) (void);
-	ForceUpdate FullUpdate = (ForceUpdate)CSX::Memory::FindPatternV2(engineFactory, force_full_update_pattern);
+	ForceUpdate FullUpdate = (ForceUpdate)Utils::PatternScan(engineFactory, force_full_update_pattern);
 	FullUpdate();
 
 	ForceUpdated = reset;
@@ -873,7 +871,7 @@ void CSkins::ParseSortedKits()
 		lol("Ursus Knife"), lol("Navaja Knife"), lol("Nomad"), lol("Stiletto Knife"), lol("Talon Knife"), lol("Skeleton")
 	};
 
-	string CsgoPatch = CSX::Utils::GetModuleBaseDir(0) + XorStr("\\csgo");
+	string CsgoPatch = Utils::GetModuleBaseDir(0) + XorStr("\\csgo");
 
 	if (pSkins->Load(CsgoPatch, XorStr("csgo")))
 	{

@@ -324,7 +324,7 @@ void CMisc::LegitPeek(CUserCmd* pCmd, bool& bSendPacket)
 
 void CMisc::SetNewClan(string New, string Name)
 {
-	static auto pSetClanTag = reinterpret_cast<void(__fastcall*)(const char*, const char*)>(((DWORD)CSX::Memory::FindPatternV2(engineFactory, XorStr("53 56 57 8B DA 8B F9 FF 15"))));
+	static auto pSetClanTag = reinterpret_cast<void(__fastcall*)(const char*, const char*)>(((DWORD)Utils::PatternScan(engineFactory, XorStr("53 56 57 8B DA 8B F9 FF 15"))));
 
 	if (pSetClanTag)
 		pSetClanTag(New.c_str(), Name.c_str());
@@ -459,7 +459,7 @@ void CMisc::RankReveal()
 	using ServerRankRevealAll = bool(__cdecl*)(int*);
 
 	static auto fnServerRankRevealAll = reinterpret_cast<int(__thiscall*)(ServerRankRevealAll*, DWORD, void*)>
-		(CSX::Memory::FindPatternV2(clientFactory,
+		(Utils::PatternScan(clientFactory,
 			XorStr("55 8B EC 8B 0D ? ? ? ? 85 C9 75 28 A1 ? ? ? ? 68 ? ? ? ? 8B 08 8B 01 FF 50 04 85 C0 74 0B 8B C8 E8 ? ? ? ? 8B C8 EB 02 33 C9 89 0D ? ? ? ? 8B 45 08")));
 
 	int v[3] = { 0,0,0 };
@@ -587,11 +587,13 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					}
 				}
 			}
-			if (LeftHandKnife && CGlobal::GWeaponType == WEAPON_TYPE_KNIFE)
+			if (LeftHandKnife && 
+				CGlobal::GWeaponID == WEAPON_KNIFE || CGlobal::GWeaponID == WEAPON_KNIFE_T)
 			{
 				cl_righthand->SetValue(0);
 			}
-			if (!LeftHandKnife || CGlobal::GWeaponType != WEAPON_TYPE_KNIFE)
+			if (!LeftHandKnife || 
+				CGlobal::GWeaponID != WEAPON_KNIFE || CGlobal::GWeaponID != WEAPON_KNIFE_T)
 			{
 				cl_righthand->SetValue(1);
 			}
@@ -627,7 +629,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				lolc("particle/vistasmokev1/vistasmokev1_emods_impactdust"),
 				lolc("particle/vistasmokev1/vistasmokev1_fire"),
 			};
-			static auto smoke_count = *reinterpret_cast<uint32_t**>(CSX::Memory::FindSignature(clientFactory, XorStr("A3 ? ? ? ? 57 8B CB")) + 1);
+			static auto smoke_count = *reinterpret_cast<uint32_t**>(Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 EC 08 8B 15 ? ? ? ? 0F 57 C0")) + 8);
 			static bool NoSmokeReset = false;
 			if (NoSmoke)
 			{
@@ -1463,7 +1465,7 @@ void CMisc::GetViewModelFOV(float &Fov)
 //void SetLocalPlayerReady()
 //{
 //	static auto SetLocalPlayerReadyFn = reinterpret_cast<bool(__stdcall*)(const char*)>
-//		(CSX::Memory::FindPatternV2(clientFactory,
+//		(Utils::PatternScan(clientFactory,
 //			XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12")));
 //
 //	if (SetLocalPlayerReadyFn)
@@ -1473,7 +1475,7 @@ void CMisc::GetViewModelFOV(float &Fov)
 //void accept()
 //{
 //	typedef void(__cdecl* accept_t)(void);
-//	static accept_t accept = (accept_t)CSX::Memory::FindPatternV2(clientFactory,
+//	static accept_t accept = (accept_t)Utils::PatternScan(clientFactory,
 //		XorStr("55 8B EC 51 56 8B 35 ? ? ? ? 57 83 BE"));
 //
 //	if (accept && **(unsigned long**)((unsigned long)accept + 0x7))
@@ -1487,7 +1489,7 @@ void CMisc::AutoAcceptEmit()
 	if (AutoAccept && CGlobal::AcceptMatchBeep && !CGlobal::FullUpdateCheck)
 	{
 		static auto fnAccept = reinterpret_cast<bool(__stdcall*)(const char*)>
-			(CSX::Memory::FindPatternV2(clientFactory,
+			(Utils::PatternScan(clientFactory,
 				XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12")));
 
 		if (fnAccept)
@@ -1500,11 +1502,11 @@ void CMisc::AutoAcceptEmit()
 		}
 
 		//typedef void(__cdecl* accept_t)(void);
-		//static accept_t accept = (accept_t)CSX::Memory::FindPatternV2(clientFactory,
+		//static accept_t accept = (accept_t)Utils::PatternScan(clientFactory,
 		//	XorStr("55 8B EC 51 56 8B 35 ? ? ? ? 57 83 BE"));
 
 		//static auto SetLocalPlayerReadyFn = reinterpret_cast<bool(__stdcall*)(const char*)>
-		//	(CSX::Memory::FindPatternV2(clientFactory,
+		//	(Utils::PatternScan(clientFactory,
 		//		XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12")));
 
 		//auto match_session = I::MatchFramework()->get_match_session();

@@ -11,8 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Engine\CSX\CSX_Memory.cpp" />
-    <ClCompile Include="Engine\CSX\CSX_Utils.cpp" />
+    <ClCompile Include="Engine\Utils\Utils.cpp" />
     <ClCompile Include="Engine\Engine.cpp" />
     <ClCompile Include="Engine\Entity.cpp" />
     <ClCompile Include="Engine\EntityMem.cpp" />
@@ -65,9 +64,7 @@
     <ClCompile Include="X1API\MinHook\src\trampoline.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Engine\CSX\CSX.h" />
-    <ClInclude Include="Engine\CSX\CSX_Memory.h" />
-    <ClInclude Include="Engine\CSX\CSX_Utils.h" />
+    <ClInclude Include="Engine\Utils\Utils.h" />
     <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="Engine\EnginePrediction.h" />
     <ClInclude Include="Engine\Entity.h" />

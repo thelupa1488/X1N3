@@ -235,32 +235,8 @@ public:
 
 	static bool LineGoesThroughSmoke(Vector vStartPos, Vector vEndPos)
 	{
-		auto LLineGoesThroughSmoke = [&]()->bool
-		{
-			typedef bool(__cdecl* _LineGoesThroughSmoke) (Vector, Vector);
-
-			static _LineGoesThroughSmoke LineGoesThroughSmokeFn = 0;
-			static bool SearchFunction = false;
-
-			if (!SearchFunction)
-			{
-				DWORD dwFunctionAddress = CSX::Memory::FindPattern(clientFactory, smok_pattern, XorStr("xxxxxxxx????xxx"), 0);
-
-				if (dwFunctionAddress)
-				{
-					LineGoesThroughSmokeFn = (_LineGoesThroughSmoke)dwFunctionAddress;
-					SearchFunction = true;
-				}
-			}
-
-			if (LineGoesThroughSmokeFn && SearchFunction)
-			{
-				return LineGoesThroughSmokeFn(vStartPos, vEndPos);
-			}
-
-			return false;
-		};
-		return LLineGoesThroughSmoke();
+		static auto LineGoesThroughSmokeFn = (bool(*)(Vector vStartPos, Vector vEndPos))Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 EC 08 8B 15 ? ? ? ? 0F 57 C0"));
+		return LineGoesThroughSmokeFn(vStartPos, vEndPos);
 	}
 
 	static void ClampAngles(Vector& v)
@@ -404,7 +380,7 @@ public:
 				static std::uintptr_t pViewMatrix;
 				if (!pViewMatrix)
 				{
-					pViewMatrix = static_cast<std::uintptr_t>(CSX::Memory::FindPatternV2(clientFactory, XorStr("0F 10 05 ? ? ? ? 8D 85 ? ? ? ? B9")));
+					pViewMatrix = static_cast<std::uintptr_t>(Utils::PatternScan(clientFactory, XorStr("0F 10 05 ? ? ? ? 8D 85 ? ? ? ? B9")));
 					pViewMatrix += 3;
 					pViewMatrix = *reinterpret_cast<std::uintptr_t*>(pViewMatrix);
 					pViewMatrix += 176;

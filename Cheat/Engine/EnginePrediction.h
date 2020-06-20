@@ -24,8 +24,8 @@ namespace EnginePrediction
 
 		if (!_prediction_seed || !_prediction_player) 
 		{
-			_prediction_seed = *(int32_t**)(CSX::Memory::FindPatternV2(clientFactory, XorStr("8B 0D ? ? ? ? BA ? ? ? ? E8 ? ? ? ? 83 C4 04")) + 2);
-			_prediction_player = (CBaseEntity***)(CSX::Memory::FindPatternV2(clientFactory, XorStr("89 35 ? ? ? ? F3 0F 10 48 20")) + 2);
+			_prediction_seed = *(int32_t**)(Utils::PatternScan(clientFactory, XorStr("8B 0D ? ? ? ? BA ? ? ? ? E8 ? ? ? ? 83 C4 04")) + 2);
+			_prediction_player = (CBaseEntity***)(Utils::PatternScan(clientFactory, XorStr("89 35 ? ? ? ? F3 0F 10 48 20")) + 2);
 		}
 
 		if (_prediction_seed)

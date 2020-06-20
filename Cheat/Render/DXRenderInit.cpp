@@ -80,8 +80,6 @@ void CRender::IRender::DX_Init(DWORD* table)
 #endif
 }
 
-using namespace  CSX::Memory;
-
 void CRender::IRender::Initialize()
 {
 	VMP_ULTRA("RenderInitialize")
@@ -100,7 +98,7 @@ void CRender::IRender::Initialize()
 
 	auto& pContext = cContext::GetInstance();
 
-	DWORD d3d9TablePtrPtr = FindPatternV2(shaderapidx9Factory, XorStr("A1 ? ? ? ? 50 8B 08 FF 51 0C") + 1);
+	DWORD d3d9TablePtrPtr = Utils::PatternScan(shaderapidx9Factory, XorStr("A1 ? ? ? ? 50 8B 08 FF 51 0C")) + 1;
 	if (d3d9TablePtrPtr)
 	{
 		g_pDevice = (IDirect3DDevice9*)(**(PDWORD*)d3d9TablePtrPtr);

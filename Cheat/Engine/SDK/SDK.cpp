@@ -293,7 +293,7 @@ namespace SDK
 	{
 		if (!g_pInput)
 		{
-			g_pInput = *(CInput**)(CSX::Memory::FindPatternV2(clientFactory, XorStr("B9 ? ? ? ? F3 0F 11 04 24 FF 50 10")) + 1);
+			g_pInput = *(CInput**)(Utils::PatternScan(clientFactory, XorStr("B9 ? ? ? ? F3 0F 11 04 24 FF 50 10")) + 1);
 			ADD_LOG("->Input -> %X\n", (DWORD)g_pInput);
 		}
 		return g_pInput;
@@ -303,7 +303,7 @@ namespace SDK
 	{
 		if (!g_pMoveHelper)
 		{
-			g_pMoveHelper = **(IMoveHelper***)(CSX::Memory::FindPatternV2(clientFactory, XorStr("8B 0D ? ? ? ? 8B 45 ? 51 8B D4 89 02 8B 01")) + 2);
+			g_pMoveHelper = **(IMoveHelper***)(Utils::PatternScan(clientFactory, XorStr("8B 0D ? ? ? ? 8B 45 ? 51 8B D4 89 02 8B 01")) + 2);
 			ADD_LOG("->MoveHelper -> %X\n", (DWORD)g_pMoveHelper);
 		}
 
@@ -314,7 +314,7 @@ namespace SDK
 	{
 		if (!g_pGlowObjManager)
 		{
-			g_pGlowObjManager = *(CGlowObjectManager**)(CSX::Memory::FindPatternV2(clientFactory, XorStr("0F 11 05 ? ? ? ? 83 C8 01")) + 3);
+			g_pGlowObjManager = *(CGlowObjectManager**)(Utils::PatternScan(clientFactory, XorStr("0F 11 05 ? ? ? ? 83 C8 01")) + 3);
 			ADD_LOG("->GlowObjectManager -> %X\n", (DWORD)g_pGlowObjManager);
 		}
 		return g_pGlowObjManager;
@@ -324,7 +324,7 @@ namespace SDK
 	{
 		if (!g_pMatchFramework)
 		{
-			g_pMatchFramework = **(IMatchFramework***)(CSX::Memory::FindPatternV2(clientFactory, XorStr("8B 0D ? ? ? ? 8B 01 FF 50 2C 8D 4B 18")) + 2);
+			g_pMatchFramework = **(IMatchFramework***)(Utils::PatternScan(clientFactory, XorStr("8B 0D ? ? ? ? 8B 01 FF 50 2C 8D 4B 18")) + 2);
 			ADD_LOG("->MatchFramework -> %X\n", (DWORD)g_pMatchFramework);
 		}
 
@@ -335,7 +335,7 @@ namespace SDK
 	{
 		if (!g_pClientState)
 		{
-			g_pClientState = **(CClientState***)(CSX::Memory::FindPatternV2(engineFactory, XorStr("A1 ? ? ? ? 8B 80 ? ? ? ? C3")) + 1);
+			g_pClientState = **(CClientState***)(Utils::PatternScan(engineFactory, XorStr("A1 ? ? ? ? 8B 80 ? ? ? ? C3")) + 1);
 			ADD_LOG("->ClientState -> %X\n", (DWORD)g_pClientState);
 		}
 
@@ -346,7 +346,7 @@ namespace SDK
 	{
 		if (!g_pGameRules)
 		{
-			g_pGameRules = *(IGameRules**)(CSX::Memory::FindPatternV2(clientFactory, XorStr("8B 0D ?? ?? ?? ?? 85 C0 74 0A 8B 01 FF 50 78 83 C0 54")) + 2);
+			g_pGameRules = *(IGameRules**)(Utils::PatternScan(clientFactory, XorStr("8B 0D ?? ?? ?? ?? 85 C0 74 0A 8B 01 FF 50 78 83 C0 54")) + 2);
 			ADD_LOG("->GameRules -> %X\n", (DWORD)g_pGameRules);
 		}
 		return g_pGameRules;

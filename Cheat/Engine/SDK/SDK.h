@@ -56,7 +56,7 @@
 #include <Windows.h>
 #include <WinInet.h>
 
-#include "../CSX/CSX.h"
+#include "../Utils/Utils.h"
 #include "../../steam_sdk/steam_api.h"
 
 #pragma comment(lib, "Wininet.lib")

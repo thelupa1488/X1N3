@@ -2,12 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Engine\CSX\CSX_Memory.cpp">
-      <Filter>Engine\CSX</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\CSX\CSX_Utils.cpp">
-      <Filter>Engine\CSX</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Engine.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
@@ -134,8 +128,6 @@
     <ClCompile Include="Engine\SDK\VMatrix.cpp">
       <Filter>Engine\SDK</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\CSX\CSX_Cvar.cpp" />
-    <ClCompile Include="Engine\CSX\CSX_Log.cpp" />
     <ClCompile Include="Engine\CSX\CSX_Memory.cpp" />
     <ClCompile Include="Engine\CSX\CSX_Utils.cpp" />
     <ClCompile Include="Engine\SDK\CRC.cpp" />
@@ -193,18 +185,12 @@
     <ClCompile Include="Engine\SDK\checksum_md5.cpp" />
     <ClCompile Include="X1API\cHide.cpp" />
     <ClCompile Include="Engine\SDK\KeyValues.cpp" />
+    <ClCompile Include="Engine\Utils\Utils.cpp">
+      <Filter>Engine\CSX</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
-    <ClInclude Include="Engine\CSX\CSX.h">
-      <Filter>Engine\CSX</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\CSX\CSX_Memory.h">
-      <Filter>Engine\CSX</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\CSX\CSX_Utils.h">
-      <Filter>Engine\CSX</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Engine.h">
       <Filter>Engine</Filter>
     </ClInclude>
@@ -470,8 +456,6 @@
       <Filter>Engine\SDK</Filter>
     </ClInclude>
     <ClInclude Include="Engine\CSX\CSX.h" />
-    <ClInclude Include="Engine\CSX\CSX_Cvar.h" />
-    <ClInclude Include="Engine\CSX\CSX_Log.h" />
     <ClInclude Include="Engine\CSX\CSX_Memory.h" />
     <ClInclude Include="Engine\CSX\CSX_Utils.h" />
     <ClInclude Include="Engine\SDK\BaseTypes.h" />
@@ -644,6 +628,9 @@
     </ClInclude>
     <ClInclude Include="Engine\SDK\CUtlVector.h" />
     <ClInclude Include="Engine\SDK\CUtlMemory.h" />
+    <ClInclude Include="Engine\Utils\Utils.h">
+      <Filter>Engine\CSX</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="3DMenu">

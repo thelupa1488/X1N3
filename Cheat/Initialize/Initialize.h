@@ -1,8 +1,7 @@
 #pragma once
 #include "../Include/Def.h"
 #include "../Hooks/Tables.h"
-#include "../Engine/CSX/CSX_Memory.h"
-#include "../Engine/CSX/CSX_Utils.h"
+#include "../Engine/Utils/Utils.h"
 #include "../Engine/SDK/SDK.h"
 #include "../Engine/NetVar.h"
 #include "../Hooks/CreateMove.h"
@@ -256,8 +255,8 @@ public:
 				offsets["m_hWeaponWorldModel"] = mGetOffset("DT_BaseCombatWeapon", "m_hWeaponWorldModel");
 				offsets["m_iWorldModelIndex"] = mGetOffset("DT_BaseCombatWeapon", "m_iWorldModelIndex");
 				offsets["m_Item"] = mGetOffset("DT_BaseAttributableItem", "m_Item");
-				offsets["LoadFromBufferEx"] = CSX::Memory::FindPatternV2(clientFactory, KEY_VALUES_LOAD_FROM_BUFFER_MASK);
-				offsets["InitKeyValuesEx"] = CSX::Memory::FindPatternV2(clientFactory, KEY_VALUES_MASK);
+				offsets["LoadFromBufferEx"] = Utils::PatternScan(clientFactory, KEY_VALUES_LOAD_FROM_BUFFER_MASK);
+				offsets["InitKeyValuesEx"] = Utils::PatternScan(clientFactory, KEY_VALUES_MASK);
 				ADD_LOG("All Offsets sucessful\n");
 				ADD_LOG("2-1-9-1\n");
 	 		};
@@ -271,22 +270,22 @@ public:
 			{
 #ifndef ONLY_DRAW_HOOK			
 				ADD_LOG("2-1-1\n");
-				if (!CSX::Utils::IsModuleLoad(engineFactory, 5001))
+				if (!Utils::IsModuleLoad(engineFactory, 5001))
 					return false;
-				if (!CSX::Utils::IsModuleLoad(vguiFactory, 5001))
+				if (!Utils::IsModuleLoad(vguiFactory, 5001))
 					return false;
-				if (!CSX::Utils::IsModuleLoad(vguimatFactory, 5001))
+				if (!Utils::IsModuleLoad(vguimatFactory, 5001))
 					return false;
-				if (!CSX::Utils::IsModuleLoad(valveStdFactory, 5001))
+				if (!Utils::IsModuleLoad(valveStdFactory, 5001))
 					return false;
-				if (!CSX::Utils::IsModuleLoad(steamApiFactory, 5001))
+				if (!Utils::IsModuleLoad(steamApiFactory, 5001))
 					return false;
-				if (!CSX::Utils::IsModuleLoad(serverBrowserFactory, 40000))
+				if (!Utils::IsModuleLoad(serverBrowserFactory, 40000))
 					return false;
 
 				FastCall::G().t_Sleep(1500);
 
-				if (!CSX::Utils::IsModuleLoad(clientFactory, 5001))
+				if (!Utils::IsModuleLoad(clientFactory, 5001))
 					return false;
 
 				ADD_LOG("2-1-2\n");

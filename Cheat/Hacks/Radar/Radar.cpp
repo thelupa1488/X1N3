@@ -382,7 +382,7 @@ void CRadar::DrawMapImage(CBaseEntity* plocal)
 			RadarMapImage = nullptr;
 
 		if (RadarMapImage == nullptr)
-			D3DXCreateTextureFromFileEx(GP_Render->m_pDevice, string(CSX::Utils::GetModuleBaseDir(0) + XorStr("\\csgo\\resource\\overviews\\") + CurrentMap.Name + XorStr("_radar.dds")).c_str(), 1223, 1223,
+			D3DXCreateTextureFromFileEx(GP_Render->m_pDevice, string(Utils::GetModuleBaseDir(0) + XorStr("\\csgo\\resource\\overviews\\") + CurrentMap.Name + XorStr("_radar.dds")).c_str(), 1223, 1223,
 				D3DX_DEFAULT, 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &RadarMapImage);
 
 		float MapH = CurrentMap.Size.y;
