@@ -170,7 +170,6 @@ void CSkins::PostDataUpdate()
 
 	CBaseEntity* pLocal = (CBaseEntity*)I::EntityList()->GetClientEntity(nLocalPlayerID);
 
-
 	if (!pLocal)
 		return;
 

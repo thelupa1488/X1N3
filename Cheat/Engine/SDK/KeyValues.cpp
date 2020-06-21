@@ -13,10 +13,7 @@ namespace SDK
 
 		if ( !SearchFunction )
 		{
-
 			DWORD dwFunctionAddress = Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 83 EC 34 53 8B 5D 0C 89"));
-
-
 			if ( dwFunctionAddress )
 			{
 				LoadFromBufferFn = (_LoadFromBuffer)dwFunctionAddress;

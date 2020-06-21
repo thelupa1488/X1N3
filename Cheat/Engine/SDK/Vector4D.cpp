@@ -3,7 +3,8 @@
 #include <cmath>
 #include <limits>
 
-namespace SDK {
+namespace SDK 
+{
 
 	void VectorCopy( const Vector4D& src, Vector4D& dst ) {
 		dst.x = src.x;
