@@ -1,6 +1,5 @@
 #pragma once
-#include <Windows.h>
-#include <map>
+#include "../Include/Winheaders.h"
 #include "../Include/Def.h"
 #include "cHide.h"
 
@@ -96,7 +95,6 @@ private:
 		{"GetACP", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"GetACP")},
 		{"IsValidCodePage", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"IsValidCodePage")},
 		{"FindNextFileW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"FindNextFileW")},
-		{"K32GetModuleInformation", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"K32GetModuleInformation")},
 		{"GetModuleHandleA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"GetModuleHandleA")},
 		{"lstrlenA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"lstrlenA")},
 		{"GetCurrentProcess", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"GetCurrentProcess")},
@@ -157,6 +155,7 @@ private:
 		{"IsDebuggerPresent", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"IsDebuggerPresent")},
 		{"GetStartupInfoW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"GetStartupInfoW")},
 		{"GetCurrentProcessId", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"GetCurrentProcessId")},
+		{"K32GetModuleInformation", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"K32GetModuleInformation")},
 		{"SetWindowLongA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),"SetWindowLongA")},
 		{"GetKeyState", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),"GetKeyState")},
 		{"GetClipboardData", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),"GetClipboardData")},
@@ -1229,6 +1228,22 @@ public:
 		ALL_A(
 		));
 
+	CREATE_CALL(BOOL, WINAPI, _GetModuleInformation, "K32GetModuleInformation",
+		ALL_A(_In_ HANDLE       hProcess,
+			_In_ HMODULE      hModule,
+			_Out_ LPMODULEINFO lpmodinfo,
+			_In_ DWORD        cb
+		),
+		ALL_A(_In_ HANDLE,
+			_In_ HMODULE,
+			_Out_ LPMODULEINFO,
+			_In_ DWORD
+		),
+		ALL_A(_In_ hProcess,
+			_In_ hModule,
+			_Out_ lpmodinfo,
+			_In_ cb
+		));
 
 	CREATE_CALL(BOOL, WINAPI, _QueryPerformanceFrequency, "QueryPerformanceFrequency",
 		ALL_A(_Out_ LARGE_INTEGER* lpFrequency
@@ -1460,6 +1475,53 @@ public:
 		ALL_A(_In_ pDevice,
 			_In_ pSrcData,
 			_In_ SrcDataSize,
+			_In_ Width,
+			_In_ Height,
+			_In_ MipLevels,
+			_In_ Usage,
+			_In_ Format,
+			_In_ Pool,
+			_In_ Filter,
+			_In_ MipFilter,
+			_In_ ColorKey,
+			_Inout_ pSrcInfo,
+			_Out_ pPalette,
+			_Out_ ppTexture
+		));
+
+	CREATE_CALL(HRESULT, WINAPI, _D3DXCreateTextureFromFileEx, "D3DXCreateTextureFromFileEx",
+		ALL_A(_In_    LPDIRECT3DDEVICE9  pDevice,
+			_In_    LPCTSTR            pSrcFile,
+			_In_    UINT               Width,
+			_In_    UINT               Height,
+			_In_    UINT               MipLevels,
+			_In_    DWORD              Usage,
+			_In_    D3DFORMAT          Format,
+			_In_    D3DPOOL            Pool,
+			_In_    DWORD              Filter,
+			_In_    DWORD              MipFilter,
+			_In_    D3DCOLOR           ColorKey,
+			_Inout_ D3DXIMAGE_INFO* pSrcInfo,
+			_Out_   PALETTEENTRY* pPalette,
+			_Out_   LPDIRECT3DTEXTURE9* ppTexture
+		),
+		ALL_A(_In_    LPDIRECT3DDEVICE9,
+			_In_    LPCTSTR,
+			_In_    UINT,
+			_In_    UINT,
+			_In_    UINT,
+			_In_    DWORD,
+			_In_    D3DFORMAT,
+			_In_    D3DPOOL,
+			_In_    DWORD,
+			_In_    DWORD,
+			_In_    D3DCOLOR,
+			_Inout_ D3DXIMAGE_INFO*,
+			_Out_   PALETTEENTRY*,
+			_Out_   LPDIRECT3DTEXTURE9*
+		),
+		ALL_A(_In_ pDevice,
+			_In_ pSrcFile,
 			_In_ Width,
 			_In_ Height,
 			_In_ MipLevels,
