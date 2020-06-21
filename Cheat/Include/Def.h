@@ -40,11 +40,11 @@
 #define VMP_END VMProtectEnd();
 #define VMP_ProtectStringA(e) VMProtectDecryptStringA(e)
 #else
+#define VMP_MUTATION(e);
+#define VMP_ULTRA(e);
+#define VMP_BEGIN(e);
+#define VMP_END;
 #define VMP_ProtectStringA(e) 
-#define VMP_MUTATION(e)
-#define VMP_ULTRA(e)
-#define VMP_BEGIN(e)
-#define VMP_END 
 #endif
 
 #define DELETE_PTR(name) delete name; name = nullptr
