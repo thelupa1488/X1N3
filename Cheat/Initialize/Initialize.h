@@ -255,8 +255,8 @@ public:
 				offsets["m_hWeaponWorldModel"] = mGetOffset("DT_BaseCombatWeapon", "m_hWeaponWorldModel");
 				offsets["m_iWorldModelIndex"] = mGetOffset("DT_BaseCombatWeapon", "m_iWorldModelIndex");
 				offsets["m_Item"] = mGetOffset("DT_BaseAttributableItem", "m_Item");
-				offsets["LoadFromBufferEx"] = Utils::PatternScan(clientFactory, KEY_VALUES_LOAD_FROM_BUFFER_MASK);
-				offsets["InitKeyValuesEx"] = Utils::PatternScan(clientFactory, KEY_VALUES_MASK);
+				offsets["LoadFromBufferEx"] = Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 83 EC 34 53 8B 5D 0C 89 4C 24 04"));
+				offsets["InitKeyValuesEx"] = Utils::PatternScan(clientFactory, XorStr("55 8B EC 51 33 C0 C7 45"));
 				ADD_LOG("All Offsets sucessful\n");
 				ADD_LOG("2-1-9-1\n");
 	 		};

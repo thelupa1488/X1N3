@@ -481,7 +481,7 @@ void CSkins::UpdateSkins(bool reset)
 	SetKillIconCfg();
 
 	typedef void(*ForceUpdate) (void);
-	ForceUpdate FullUpdate = (ForceUpdate)Utils::PatternScan(engineFactory, force_full_update_pattern);
+	ForceUpdate FullUpdate = (ForceUpdate)Utils::PatternScan(engineFactory, XorStr("A1 ? ? ? ? B9 ? ? ? ? 56 FF 50 14 8B 34 85"));
 	FullUpdate();
 
 	ForceUpdated = reset;

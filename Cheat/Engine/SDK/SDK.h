@@ -61,35 +61,20 @@
 
 #pragma comment(lib, "Wininet.lib")
 
-#define engineFactory XorStr("engine.dll")
-#define clientFactory XorStr("client.dll")
-#define valveStdFactory XorStr("vstdlib.dll")
-#define matSysFactory XorStr("materialsystem.dll")
-#define vphysicsFactory XorStr("vphysics.dll")
-#define inputSysFactory XorStr("inputsystem.dll")
-#define localizeFactory XorStr("localize.dll")
-#define steamApiFactory XorStr("steam_api.dll")
-#define serverBrowserFactory XorStr("serverbrowser.dll")
-#define vguiFactory XorStr("vgui2.dll")
-#define vguimatFactory	XorStr("vguimatsurface.dll")
-#define d3d9Factory XorStr("d3d9.dll")
-#define shaderapidx9Factory XorStr("shaderapidx9.dll")
-#define gameoverlayrenderFactory XorStr("GameOverlayRenderer.dll")
-
-#define KEY_VALUES_MASK  XorStr("55 8B EC 51 33 C0 C7 45")
-#define KEY_VALUES_LOAD_FROM_BUFFER_MASK  XorStr("55 8B EC 83 E4 F8 83 EC 34 53 8B 5D 0C 89 4C 24 04")
-
-#define d3d9_mask XorStr("x????xxxxxx")
-#define gmor_mask XorStr("x????x????xxxx????xxxxxxx")
-
-#define d3d9_pattern XorStr("\xA1\x00\x00\x00\x00\x50\x8B\x08\xFF\x51\x0C")
-#define force_full_update_pattern XorStr("A1 ? ? ? ? B9 ? ? ? ? 56 FF 50 14 8B 34 85")
-
-#define gmor_pattern XorStr("\xA3\x00\x00\x00\x00\x68\x00\x00\x00\x00\xFF\x76\x54\xE8\x00\x00\x00\x00\x83\xC4\x08\x84\xC0\x75\x17")
-#define smok_pattern XorStr("\x55\x8B\xEC\x83\xEC\x08\x8B\x15\x00\x00\x00\x00\x0F\x57\xC0")
-
-#define CLIENT_MODE_PATTERN XorStr("\xB9\x00\x00\x00\x00\x83\x38\x02\x75\x0D\xFF\xB0\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x5D\xC3")
-#define CLIENT_MODE_MASK XorStr("x????xxxxxxx????x????xx")
+#define engineFactory               XorStr("engine.dll")
+#define clientFactory               XorStr("client.dll")
+#define valveStdFactory             XorStr("vstdlib.dll")
+#define matSysFactory               XorStr("materialsystem.dll")
+#define vphysicsFactory             XorStr("vphysics.dll")
+#define inputSysFactory             XorStr("inputsystem.dll")
+#define localizeFactory             XorStr("localize.dll")
+#define steamApiFactory             XorStr("steam_api.dll")
+#define serverBrowserFactory        XorStr("serverbrowser.dll")
+#define vguiFactory                 XorStr("vgui2.dll")
+#define vguimatFactory	            XorStr("vguimatsurface.dll")
+#define d3d9Factory                 XorStr("d3d9.dll")
+#define shaderapidx9Factory         XorStr("shaderapidx9.dll")
+#define gameoverlayrenderFactory    XorStr("GameOverlayRenderer.dll")
 
 namespace SDK
 {
