@@ -5,7 +5,6 @@
 #pragma comment(lib,"psapi")
 
 static const DWORD dwModuleDelay = 100;
-
 #define INRANGE(x,a,b)    (x >= a && x <= b) 
 #define getBits( x )    (INRANGE((x&(~0x20)),'A','F') ? ((x&(~0x20)) - 'A' + 0xa) : (INRANGE(x,'0','9') ? x - '0' : 0))
 #define getByte( x )    (getBits(x[0]) << 4 | getBits(x[1]))
@@ -72,6 +71,7 @@ namespace Utils
 		if (FastCall::G().t_GetModuleFileNameA(hModule, szFileName, MAX_PATH))
 			ModuleName = szFileName;
 		VMP_END
+
 		return ModuleName;
 	}
 
@@ -82,6 +82,8 @@ namespace Utils
 		string ModulePath = GetModuleFilePath(hModule);
 		return ModulePath.substr(0, ModulePath.find_last_of("\\/"));
 	}
+
+	/* IDA Style 00 FF ?? */
 
 	DWORD PatternScan(std::string moduleName, std::string Mask)
 	{

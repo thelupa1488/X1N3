@@ -227,14 +227,10 @@ void CMisc::Draw()
 				Vector w2sOrigin;
 				if (CGlobal::WorldToScreen(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin))
 				{
-					static float view;
-					//if (bSendPacket)
-					//	view = CGlobal::UserCmd->viewangles.y;
-
 					DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, CGlobal::LocalPlayer->GetBasePlayerAnimState()->m_flGoalFeetYaw, XorStr("fake"), Color::Orange());
 					DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, CGlobal::LocalPlayer->GetLowerBodyYawTarget(), XorStr("lby"), Color::Blue());
 					DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, CGlobal::RealAngle, XorStr("real"), Color::Green()); //need fix
-					DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, view, XorStr("view"), Color::Red());
+					DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, CGlobal::View, XorStr("view"), Color::Red());
 				}
 			}
 		}
@@ -1208,6 +1204,7 @@ void CMisc::EnginePrediction(bool& bSendPacket, CUserCmd* pCmd)
 				//	if (anim_state)
 				//		CGlobal::FakeAngle = anim_state->m_flGoalFeetYaw;
 				//	CGlobal::vangle = pCmd->viewangles;
+                //  CGlobal::View = CGlobal::UserCmd->viewangles.y;
 				//}
 				//FixMovement(pCmd, angleold);
 

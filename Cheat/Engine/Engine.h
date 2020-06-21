@@ -139,6 +139,7 @@ public:
 	static float next_lby;
 	static float RealAngle;
 	static float FakeAngle;
+	static float View;
 
 	static ConVar* viewmodel_offset_convar_x;
 	static ConVar* viewmodel_offset_convar_y;
