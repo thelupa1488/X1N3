@@ -626,7 +626,6 @@ UINT __fastcall Hooked_GetStickerAttributeBySlotIndexInt(void* thisptr, void* ed
 	int iID = *pItem->GetItemDefinitionIndex();
 
 	return GP_Skins->WeaponNames[GP_Skins->StickWeaponByDefIndex(iID)].Skin.Stickers[iSlot].kit;
-	// return Parser::Stickers.List[g_Weapons[iID].Stickers[iSlot].iID].iID; //
 }
 bool IsCodePtr(void* ptr)
 {

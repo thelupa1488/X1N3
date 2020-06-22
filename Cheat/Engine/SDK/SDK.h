@@ -74,7 +74,6 @@
 #define vguimatFactory	            XorStr("vguimatsurface.dll")
 #define d3d9Factory                 XorStr("d3d9.dll")
 #define shaderapidx9Factory         XorStr("shaderapidx9.dll")
-#define gameoverlayrenderFactory    XorStr("GameOverlayRenderer.dll")
 
 namespace SDK
 {
@@ -127,7 +126,7 @@ namespace SDK
 		static IMaterialSystem*		g_pMaterialSystem;
 		static ISurface*			g_pSurface;
 		static IPhysicsSurfaceProps* g_PhysSurface;
-		static IGameEventManager2*	g_pGameEventMgr;
+		static IGameEventManager2*	g_pGameEvent;
 		static IInputSystem*		g_pInputSystem;
 		static ConVar*               g_pConVar;
 		static ILocalize*           g_pLocalize;

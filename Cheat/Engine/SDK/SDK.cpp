@@ -23,7 +23,7 @@ namespace SDK
 	IMaterialSystem*	I::g_pMaterialSystem = nullptr;
 	ISurface*			I::g_pSurface = nullptr;
 	IPhysicsSurfaceProps*I::g_PhysSurface = nullptr;
-	IGameEventManager2*	I::g_pGameEventMgr = nullptr;
+	IGameEventManager2*	I::g_pGameEvent = nullptr;
 	IInputSystem*		I::g_pInputSystem = nullptr;
 	ConVar*             I::g_pConVar = nullptr;
 	ILocalize*          I::g_pLocalize = nullptr;
@@ -177,12 +177,12 @@ namespace SDK
 
 	IGameEventManager2* I::GameEvent()
 	{
-		if (!g_pGameEventMgr)
+		if (!g_pGameEvent)
 		{
-			g_pGameEventMgr = GetInterface<IGameEventManager2>(engineFactory, XorStr("GAMEEVENTSMANAGER002"), true);
-			ADD_LOG("->GameEventMgr -> %X\n", (DWORD)g_pGameEventMgr);
+			g_pGameEvent = GetInterface<IGameEventManager2>(engineFactory, XorStr("GAMEEVENTSMANAGER002"), true);
+			ADD_LOG("->GameEvent -> %X\n", (DWORD)g_pGameEvent);
 		}
-		return g_pGameEventMgr;
+		return g_pGameEvent;
 	}
 
 	IEngineSound* I::Sound()

@@ -2,14 +2,15 @@
 #include "../Engine/XorStr.h"
 #include <VMProtectSDK.h>
 
-//#define ENABLE_XOR_STR
-//#define ENABLE_VMP
+#define ENABLE_XOR_STR
+#define ENABLE_VMP
 //#define YOUGAMEBIZ
 
 #define PRESENT_ENABLE
 
+//#define ONLY_DRAW_HOOK
 //#define ENABLE_CONSOLE_LOG
-//#define ENABLE_DEBUG_FILE 1V
+//#define ENABLE_DEBUG_FILE
 
 #define MAX_FONT_SIZE 30
 #define ENABLE_HOOK_CS_WND_PROC

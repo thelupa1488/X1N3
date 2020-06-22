@@ -193,7 +193,6 @@ private:
 		{"DestroyWindow", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),"DestroyWindow")},
 	};
 public:
-
 	void Start()
 	{
 		for (auto it = lpAddrList.begin(); it != lpAddrList.end(); ++it)

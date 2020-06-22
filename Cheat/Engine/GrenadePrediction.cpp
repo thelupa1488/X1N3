@@ -38,11 +38,10 @@ void grenade_prediction::Paint()
 	{
 		static vector<Vector> TempPath;
 		static vector<Vector> CollisTempPath;
+
 		if (Simulated)
-		{
 			TempPath = path;
-			//CollisTempPath = CollisionsPath;
-		}
+
 		Simulated = false;
 
 		if (TempPath.size() > 0)
@@ -66,16 +65,7 @@ void grenade_prediction::Paint()
 				if (CGlobal::WorldToScreen(prev, nadeEnd))
 					GP_Render->DrawRing(nadeEnd.x, nadeEnd.y, 10, 22, Color::Red(), 2.f);
 			}
-		/*	if(type == WEAPON_HEGRENADE && Settings::Esp::esp_WorldGrenadeTrajRadius)
-				Client::g_pRender->Circle3D(prev, 36, 341, Color::Red());*/
-
-			//if (CollisTempPath.size() > 0)
-			//	for (auto it = TempPath.begin(), end = TempPath.end(); it != end; ++it)
-			//		if (WorldToScreen(*it, nadeEnd))
-			//			GP_IRender->render_Box(nadeEnd.x - 3, nadeEnd.y - 3, 6, 6, Color::Red().GetImColor());
-
-		}
-		
+		}		
 	}
 }
 static const constexpr auto PIRAD = 0.01745329251f;
