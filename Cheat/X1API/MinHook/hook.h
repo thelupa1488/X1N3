@@ -2,14 +2,6 @@
 #include "MinHook.h"
 #include "../../Main.h"
 
-#pragma once
-#include "MinHook.h"
-#include "../../Main.h"
-
-#pragma once
-#include "MinHook.h"
-#include "../../Main.h"
-
 typedef LONG* NTAPI LPFN_NtProtectVirtualMemory(HANDLE, PVOID*, PULONG, ULONG, PULONG);
 
 template<typename T>
@@ -18,12 +10,12 @@ class cDetour
 private:
 	BOOL NativeNtProtectVirtualMemory(LPVOID lpAddress, SIZE_T dwSize, DWORD flNewProtect, PDWORD lpflOldProtect)
 	{
-		LPFN_NtProtectVirtualMemory* NtProtectVirtualMemory = (LPFN_NtProtectVirtualMemory*)(GetProcAddress(GetModuleHandleA(XorStr("ntdll.dll")), XorStr("NtProtectVirtualMemory")));
+		LPFN_NtProtectVirtualMemory* NtProtectVirtualMemory = (LPFN_NtProtectVirtualMemory*)(FastCall::G().t_GetProcAddress(FastCall::G().t_GetModuleHandleA(XorStr("ntdll.dll")), XorStr("NtProtectVirtualMemory")));
 
 		if (!NtProtectVirtualMemory)
 			return FALSE;
 
-		NtProtectVirtualMemory(GetCurrentProcess(), (PVOID*)& lpAddress, (PULONG)& dwSize, flNewProtect, lpflOldProtect);
+		NtProtectVirtualMemory(FastCall::G().t_GetCurrentProcess(), (PVOID*)& lpAddress, (PULONG)& dwSize, flNewProtect, lpflOldProtect);
 
 		return TRUE;
 	}
@@ -93,7 +85,8 @@ public:
 		auto pDetour = new cDetour<T>(target, detour);
 		return pDetour;
 	}
-	template<typename T> bool        ApplyDetour(T target, T detour, cDetour<T>** ppDetour)
+
+	template<typename T> bool ApplyDetour(T target, T detour, cDetour<T>** ppDetour)
 	{
 		auto pDetour = CreateDetour(target, detour);
 		if (pDetour)
@@ -107,7 +100,7 @@ public:
 	void CloseExit()
 	{
 		if (!(MH_Uninitialize() == MH_OK))
-			TerminateProcess(GetCurrentProcess(), -1);
+			FastCall::G().t_TerminateProcess(FastCall::G().t_GetCurrentProcess(), -1);
 	}
 	cContext() {}
 	~cContext() {}

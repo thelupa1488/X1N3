@@ -38,19 +38,15 @@ inline int decod(const char *s)
 	return (z ? -n : n);
 }
 
-//#define RetrieveMessageIdx XorStr("2")
 #define EmitSoundIdx XorStr("5")
-//#define FireEventClientSideThinkIdx XorStr("9")
-//#define ResetIdx XorStr("16")
 #define OverrideViewIdx XorStr("18")
-//#define RunCommandIdx XorStr("19")
 #define DrawModelExecuteIdx XorStr("21")
 #define CreateMoveIdx XorStr("24")
 #define GetViewModelFOVIdx XorStr("35")
 #define FrameStageNotifyIdx XorStr("37")
 #define DoPostScreenEffectsIdx XorStr("44")
 #define LockCursorIdx XorStr("67")
-#define PlaySoundIdx XorStr("82")
+//#define PlaySoundIdx XorStr("82")
 
 using namespace HookTables;
 
@@ -100,11 +96,11 @@ public:
 				ADD_LOG("2-1-11-4\n");
 				if (SurfaceTable)
 				{
-					pContext.ApplyDetour<PlaySoundFn>(static_cast<PlaySoundFn>(SurfaceTable[decod(PlaySoundIdx)]),
-						reinterpret_cast<PlaySoundFn>
-						(hkPlaySound),
-						&pPlaySound);
-					ADD_LOG("Hook: Sound\n");
+					//pContext.ApplyDetour<PlaySoundFn>(static_cast<PlaySoundFn>(SurfaceTable[decod(PlaySoundIdx)]),
+					//	reinterpret_cast<PlaySoundFn>
+					//	(hkPlaySound),
+					//	&pPlaySound);
+					//ADD_LOG("Hook: Sound\n");
 
 					pContext.ApplyDetour<LockCursorFn>(static_cast<LockCursorFn>(SurfaceTable[decod(LockCursorIdx)]),
 						reinterpret_cast<LockCursorFn>
