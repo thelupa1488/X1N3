@@ -28,25 +28,15 @@ public:
 	};
 };
 
-inline int decod(const char *s)
-{
-	int z = 0, n = 0;
-	while (isspace(*s)) s++;
-	if (*s == '-') { z = 1; s++; }
-	else if (*s == '+') s++;
-	while (isdigit(*s)) n = 10 * n + *s++ - '0';
-	return (z ? -n : n);
-}
-
-#define EmitSoundIdx XorStr("5")
-#define OverrideViewIdx XorStr("18")
-#define DrawModelExecuteIdx XorStr("21")
-#define CreateMoveIdx XorStr("24")
-#define GetViewModelFOVIdx XorStr("35")
-#define FrameStageNotifyIdx XorStr("37")
-#define DoPostScreenEffectsIdx XorStr("44")
-#define LockCursorIdx XorStr("67")
-//#define PlaySoundIdx XorStr("82")
+#define EmitSoundIdx 5
+#define OverrideViewIdx 18
+#define DrawModelExecuteIdx 21
+#define CreateMoveIdx 24
+#define GetViewModelFOVIdx 35
+#define FrameStageNotifyIdx 37
+#define DoPostScreenEffectsIdx 44
+#define LockCursorIdx 67
+//#define PlaySoundIdx 82
 
 using namespace HookTables;
 
@@ -87,7 +77,7 @@ public:
 				ADD_LOG("2-1-11-3\n");
 				if (SoundTable)
 				{
-					pContext.ApplyDetour<EmitSoundFn>(static_cast<EmitSoundFn>(SoundTable[decod(EmitSoundIdx)]),
+					pContext.ApplyDetour<EmitSoundFn>(static_cast<EmitSoundFn>(SoundTable[EmitSoundIdx]),
 						reinterpret_cast<EmitSoundFn>
 						(hkEmitSound),
 						&pEmitSound);
@@ -102,7 +92,7 @@ public:
 					//	&pPlaySound);
 					//ADD_LOG("Hook: Sound\n");
 
-					pContext.ApplyDetour<LockCursorFn>(static_cast<LockCursorFn>(SurfaceTable[decod(LockCursorIdx)]),
+					pContext.ApplyDetour<LockCursorFn>(static_cast<LockCursorFn>(SurfaceTable[LockCursorIdx]),
 						reinterpret_cast<LockCursorFn>
 						(hkLockCursor),
 						&pLockCursor);
@@ -111,25 +101,25 @@ public:
 				ADD_LOG("2-1-11-5\n");
 				if (ClientModeTable)
 				{
-					pContext.ApplyDetour<CreateMoveFn>(static_cast<CreateMoveFn>(ClientModeTable[decod(CreateMoveIdx)]),
+					pContext.ApplyDetour<CreateMoveFn>(static_cast<CreateMoveFn>(ClientModeTable[CreateMoveIdx]),
 						reinterpret_cast<CreateMoveFn>
 						(hkCreateMove),
 						&pCreateMove);
 					ADD_LOG("Hook: CreateMove\n");
 
-					pContext.ApplyDetour<DoPostScreenEffectsFn>(static_cast<DoPostScreenEffectsFn>(ClientModeTable[decod(DoPostScreenEffectsIdx)]),
+					pContext.ApplyDetour<DoPostScreenEffectsFn>(static_cast<DoPostScreenEffectsFn>(ClientModeTable[DoPostScreenEffectsIdx]),
 						reinterpret_cast<DoPostScreenEffectsFn>
 						(hkDoPostScreenEffects),
 						&pDoPostScreenEffects);
 					ADD_LOG("Hook: DoPostScreenEffects\n");
 
-					pContext.ApplyDetour<OverrideViewFn>(static_cast<OverrideViewFn>(ClientModeTable[decod(OverrideViewIdx)]),
+					pContext.ApplyDetour<OverrideViewFn>(static_cast<OverrideViewFn>(ClientModeTable[OverrideViewIdx]),
 						reinterpret_cast<OverrideViewFn>
 						(hkOverrideView),
 						&pOverrideView);
 					ADD_LOG("Hook: OverrideView\n");
 
-					pContext.ApplyDetour<GetViewModelFOVFn>(static_cast<GetViewModelFOVFn>(ClientModeTable[decod(GetViewModelFOVIdx)]),
+					pContext.ApplyDetour<GetViewModelFOVFn>(static_cast<GetViewModelFOVFn>(ClientModeTable[GetViewModelFOVIdx]),
 						reinterpret_cast<GetViewModelFOVFn>
 						(hkGetViewModelFOV),
 						&pGetViewModelFOV);
@@ -138,7 +128,7 @@ public:
 				ADD_LOG("2-1-11-6\n");
 				if (ClientTable)
 				{
-					pContext.ApplyDetour<FrameStageNotifyFn>(static_cast<FrameStageNotifyFn>(ClientTable[decod(FrameStageNotifyIdx)]),
+					pContext.ApplyDetour<FrameStageNotifyFn>(static_cast<FrameStageNotifyFn>(ClientTable[FrameStageNotifyIdx]),
 						reinterpret_cast<FrameStageNotifyFn>
 						(hkFrameStageNotify),
 						&pFrameStageNotify);
@@ -152,7 +142,7 @@ public:
 				ADD_LOG("2-1-11-8\n");
 				if (ModelRenderTable)
 				{
-					pContext.ApplyDetour<DrawModelExecuteFn>(static_cast<DrawModelExecuteFn>(ModelRenderTable[decod(DrawModelExecuteIdx)]),
+					pContext.ApplyDetour<DrawModelExecuteFn>(static_cast<DrawModelExecuteFn>(ModelRenderTable[DrawModelExecuteIdx]),
 						reinterpret_cast<DrawModelExecuteFn>
 						(hkDrawModelExecute),
 						&pDrawModelExecute);

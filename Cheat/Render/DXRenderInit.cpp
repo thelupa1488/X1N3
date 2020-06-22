@@ -11,19 +11,9 @@ cDetour<oEndScene>* pEndScene;
 cDetour<oPresent>* pPresent;
 cDetour<oReset>* pReset;
 
-#define ResetIndex XorStr("16")
-#define PresentIndex XorStr("17")
-#define EndSceneIndex XorStr("42")
-
-inline int decod(const char* s)
-{
-	int z = 0, n = 0;
-	while (isspace(*s)) s++;
-	if (*s == '-') { z = 1; s++; }
-	else if (*s == '+') s++;
-	while (isdigit(*s)) n = 10 * n + *s++ - '0';
-	return (z ? -n : n);
-}
+#define ResetIndex 16
+#define PresentIndex 17
+#define EndSceneIndex 42
 
 LPDIRECT3DDEVICE9 nm_pD3Ddev = nullptr;
 
@@ -106,19 +96,19 @@ void CRender::IRender::Initialize()
 
 		if (IDirect3DDevice9Table)
 		{
-			pContext.ApplyDetour<oReset>(static_cast<oReset>(IDirect3DDevice9Table[decod(ResetIndex)]),
+			pContext.ApplyDetour<oReset>(static_cast<oReset>(IDirect3DDevice9Table[ResetIndex]),
 				reinterpret_cast<oReset>
 				(MyReset),
 				&pReset);
 			ADD_LOG("Hook: Reset\n");
 #ifdef PRESENT_ENABLE
-			pContext.ApplyDetour<oPresent>(static_cast<oPresent>(IDirect3DDevice9Table[decod(PresentIndex)]),
+			pContext.ApplyDetour<oPresent>(static_cast<oPresent>(IDirect3DDevice9Table[PresentIndex]),
 				reinterpret_cast<oPresent>
 				(MyPresent),
 				&pPresent);
 			ADD_LOG("Hook: Present\n");
 #else
-			pContext.ApplyDetour<oEndScene>(static_cast<oEndScene>(IDirect3DDevice9Table[decod(EndSceneIndex)]),
+			pContext.ApplyDetour<oEndScene>(static_cast<oEndScene>(IDirect3DDevice9Table[EndSceneIndex]),
 				reinterpret_cast<oEndScene>
 				(MyEndScene),
 				&pEndScene);

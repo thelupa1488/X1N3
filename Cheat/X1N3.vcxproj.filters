@@ -128,8 +128,6 @@
     <ClCompile Include="Engine\SDK\VMatrix.cpp">
       <Filter>Engine\SDK</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\CSX\CSX_Memory.cpp" />
-    <ClCompile Include="Engine\CSX\CSX_Utils.cpp" />
     <ClCompile Include="Engine\SDK\CRC.cpp" />
     <ClCompile Include="Engine\SDK\KeyValues.cpp" />
     <ClCompile Include="Engine\SDK\SDK.cpp" />
@@ -455,9 +453,6 @@
     <ClInclude Include="Engine\SDK\VMatrix.hpp">
       <Filter>Engine\SDK</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\CSX\CSX.h" />
-    <ClInclude Include="Engine\CSX\CSX_Memory.h" />
-    <ClInclude Include="Engine\CSX\CSX_Utils.h" />
     <ClInclude Include="Engine\SDK\BaseTypes.h" />
     <ClInclude Include="Engine\SDK\ButtonCode.h" />
     <ClInclude Include="Engine\SDK\CGlobalVarsBase.hpp" />

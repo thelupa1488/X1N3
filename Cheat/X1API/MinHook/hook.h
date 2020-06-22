@@ -85,7 +85,6 @@ public:
 		auto pDetour = new cDetour<T>(target, detour);
 		return pDetour;
 	}
-
 	template<typename T> bool ApplyDetour(T target, T detour, cDetour<T>** ppDetour)
 	{
 		auto pDetour = CreateDetour(target, detour);
