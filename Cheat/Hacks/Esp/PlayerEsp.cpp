@@ -799,137 +799,148 @@ void CEsp::DrawBar(Orent O, float x, float y, float w, float h, float val, bool 
 
 void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld)
 {
-	if (Enable && Chams && BindEnable.Check())
+	auto LDrawModelExecute = [&]()->void
 	{
-		static auto fnDME = HookTables::pDrawModelExecute->GetTrampoline();
-
-		const char* ModelName = I::ModelInfo()->GetModelName((model_t*)pInfo.pModel);
-
-		if (!ModelName)
-			return;
-
-		if (!strstr(ModelName, XorStr("models/player")))
-			return;
-
-		CEntityPlayer* Entity = GP_EntPlayers->GetByIdx(pInfo.entity_index);
-		CEntityPlayer* Local = GP_EntPlayers->EntityLocal;
-
-		if (!Entity || !Local)
-			return;
-
-		if (!Entity->IsUpdated)
-			return;
-
-		if (Entity->IsDead || Entity->Health <= 0)
-			return;
-
-		if (!Team && Entity->Team == Local->Team)
-			return;
-
-		if (!Enemy && Entity->Team != Local->Team)
-			return;
-
-		Color ChamsInvisColor = (Entity->Team == PLAYER_TEAM::TEAM_CT) ? ChamsCT : ChamsTT;
-		Color ChamsVisbleColor = (Entity->Team == PLAYER_TEAM::TEAM_CT) ? ChamsVisibleCT : ChamsVisibleTT;
-
-		if (!ChamsVisibleOnly)
+		if (Enable && Chams && BindEnable.Check())
 		{
-			ChamsInvisColor[4];
-			OverrideMaterial(true, ChamsStyle, ChamsInvisColor);
-			fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
+			static auto fnDME = HookTables::pDrawModelExecute->GetTrampoline();
+
+			const char* ModelName = I::ModelInfo()->GetModelName((model_t*)pInfo.pModel);
+
+			if (!ModelName)
+				return;
+
+			if (!strstr(ModelName, XorStr("models/player")))
+				return;
+
+			CEntityPlayer* Entity = GP_EntPlayers->GetByIdx(pInfo.entity_index);
+			CEntityPlayer* Local = GP_EntPlayers->EntityLocal;
+
+			if (!Entity || !Local)
+				return;
+
+			if (!Entity->IsUpdated)
+				return;
+
+			if (Entity->IsDead || Entity->Health <= 0)
+				return;
+
+			if (!Team && Entity->Team == Local->Team)
+				return;
+
+			if (!Enemy && Entity->Team != Local->Team)
+				return;
+
+			Color ChamsInvisColor = (Entity->Team == PLAYER_TEAM::TEAM_CT) ? ChamsCT : ChamsTT;
+			Color ChamsVisbleColor = (Entity->Team == PLAYER_TEAM::TEAM_CT) ? ChamsVisibleCT : ChamsVisibleTT;
+
+			if (!ChamsVisibleOnly)
+			{
+				ChamsInvisColor[4];
+				OverrideMaterial(true, ChamsStyle, ChamsInvisColor);
+				fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
+			}
+
+			if (ChamsStyle <= 4)
+			{
+				ChamsVisbleColor[4];
+				OverrideMaterial(false, ChamsStyle, ChamsVisbleColor);
+				fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
+			}
+
+			/* Material Chams */
+
+			//if (ChamsStyle == 5)
+			//{
+			//	float ArrVisbleColor[3] = { ChamsVisbleColor.G1R(), ChamsVisbleColor.G1G(), ChamsVisbleColor.G1B() };
+
+			//	if (MaterialFixColorChams > 1.f)
+			//		MaterialFixColorChams /= 100.f;
+			//	float FixColor = 100.01f - (99.f + MaterialFixColorChams);
+			//	ArrVisbleColor[0] = ArrVisbleColor[0] / FixColor;
+			//	ArrVisbleColor[1] = ArrVisbleColor[1] / FixColor;
+			//	ArrVisbleColor[2] = ArrVisbleColor[2] / FixColor;
+
+			//	I::RenderView()->SetColorModulation(ArrVisbleColor);
+			//	I::RenderView()->SetBlend(ChamsVisbleColor.G1A());
+			//}
+
+			//if (ChamsStyle == 5 && !ChamsVisibleOnly)
+			//{
+			//	if (!Entity->IsVisble)
+			//	{
+			//		ChamsInvisColor[4];
+			//		OverrideMaterial(true, 1/*Flat for HideMaterial*/, ChamsInvisColor);
+			//		fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
+			//	}
+			//}
 		}
-
-		if (ChamsStyle <= 4)
-		{
-			ChamsVisbleColor[4];
-			OverrideMaterial(false, ChamsStyle, ChamsVisbleColor);
-			fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
-		}
-
-		//if (ChamsStyle == 5)
-		//{
-		//	float ArrVisbleColor[3] = { ChamsVisbleColor.G1R(), ChamsVisbleColor.G1G(), ChamsVisbleColor.G1B() };
-
-		//	if (MaterialFixColorChams > 1.f)
-		//		MaterialFixColorChams /= 100.f;
-		//	float FixColor = 100.01f - (99.f + MaterialFixColorChams);
-		//	ArrVisbleColor[0] = ArrVisbleColor[0] / FixColor;
-		//	ArrVisbleColor[1] = ArrVisbleColor[1] / FixColor;
-		//	ArrVisbleColor[2] = ArrVisbleColor[2] / FixColor;
-
-		//	I::RenderView()->SetColorModulation(ArrVisbleColor);
-		//	I::RenderView()->SetBlend(ChamsVisbleColor.G1A());
-		//}
-
-		//if (ChamsStyle == 5 && !ChamsVisibleOnly)
-		//{
-		//	if (!Entity->IsVisble)
-		//	{
-		//		ChamsInvisColor[4];
-		//		OverrideMaterial(true, 1/*Flat for HideMaterial*/, ChamsInvisColor);
-		//		fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
-		//	}
-		//}
-	}
+	};
+	LDrawModelExecute();
 }
 
 void CEsp::DrawGlow()
 {
-	if (Enable && Glow && BindEnable.Check())
+	auto LDrawGlow = [&]()->void
 	{
-		for (auto EntIndex = 0; EntIndex < I::GlowObjManager()->m_GlowObjectDefinitions.Count(); EntIndex++)
+		if (Enable && Glow && BindEnable.Check())
 		{
-			auto& glowObject = I::GlowObjManager()->m_GlowObjectDefinitions[EntIndex];
-			CBaseEntity* Entity = reinterpret_cast<CBaseEntity*>(glowObject.m_pEntity);
-			CBaseEntity* Local = CGlobal::LocalPlayer;
-
-			if (glowObject.IsUnused())
-				continue;
-
-			if (!Entity || !Local || Entity->IsDormant())
-				continue;
-
-			if (Entity->IsDead() || Entity->GetHealth() <= 0)
-				continue;
-
-			if (Entity->GetClientClass()->m_ClassID != CCSPlayer)
-				continue;
-
-			if (!Team && (PLAYER_TEAM)Entity->GetTeam() == (PLAYER_TEAM)Local->GetTeam())
-				continue;
-
-			if (!Enemy && (PLAYER_TEAM)Entity->GetTeam() != (PLAYER_TEAM)Local->GetTeam())
-				continue;
-
-			if (GlowVisibleOnly && !Entity->IsVisible(Local))
-				continue;
-
-			Color GlowColor = Color::White();
-			if (Entity->IsVisible(Local))
+			//довести до ума
+			for (auto EntIndex = 0; EntIndex < I::GlowObjManager()->m_GlowObjectDefinitions.Count(); EntIndex++)
 			{
-				switch ((PLAYER_TEAM)Entity->GetTeam())
-				{
-				case PLAYER_TEAM::TEAM_CT: GlowColor = GlowVisibleCT; break;
-				case PLAYER_TEAM::TEAM_TT: GlowColor = GlowVisibleTT; break;
-				default: break;
-				}
-			}
-			else
-			{
-				switch ((PLAYER_TEAM)Entity->GetTeam())
-				{
-				case PLAYER_TEAM::TEAM_CT: GlowColor = GlowCT; break;
-				case PLAYER_TEAM::TEAM_TT: GlowColor = GlowTT; break;
-				default: break;
-				}
-			}
-			float ArrColor[3] = { GlowColor.G1R(), GlowColor.G1G(), GlowColor.G1B() };
+				auto& glowObject = I::GlowObjManager()->m_GlowObjectDefinitions[EntIndex];
+				CBaseEntity* Entity = reinterpret_cast<CBaseEntity*>(glowObject.m_pEntity);
+				CBaseEntity* Local = CGlobal::LocalPlayer;
 
-			glowObject.m_vGlowColor = ArrColor;
-			glowObject.m_flAlpha = GlowColor.G1A();
-			glowObject.m_bRenderWhenOccluded = true;
-			glowObject.m_bRenderWhenUnoccluded = false;
-			glowObject.m_nGlowStyle = GlowStyle;
+				if (glowObject.IsUnused())
+					continue;
+
+				if (!Entity || !Local || Entity->IsDormant())
+					continue;
+
+				if (Entity->IsDead() || Entity->GetHealth() <= 0)
+					continue;
+
+				if (Entity->GetClientClass()->m_ClassID != CCSPlayer)
+					continue;
+
+				if (!Team && (PLAYER_TEAM)Entity->GetTeam() == (PLAYER_TEAM)Local->GetTeam())
+					continue;
+
+				if (!Enemy && (PLAYER_TEAM)Entity->GetTeam() != (PLAYER_TEAM)Local->GetTeam())
+					continue;
+
+				if (GlowVisibleOnly && !Entity->IsVisible(Local))
+					continue;
+
+				Color GlowColor = Color::White();
+				if (Entity->IsVisible(Local))
+				{
+					switch ((PLAYER_TEAM)Entity->GetTeam())
+					{
+					case PLAYER_TEAM::TEAM_CT: GlowColor = GlowVisibleCT; break;
+					case PLAYER_TEAM::TEAM_TT: GlowColor = GlowVisibleTT; break;
+					default: break;
+					}
+				}
+				else
+				{
+					switch ((PLAYER_TEAM)Entity->GetTeam())
+					{
+					case PLAYER_TEAM::TEAM_CT: GlowColor = GlowCT; break;
+					case PLAYER_TEAM::TEAM_TT: GlowColor = GlowTT; break;
+					default: break;
+					}
+				}
+				float ArrColor[3] = { GlowColor.G1R(), GlowColor.G1G(), GlowColor.G1B() };
+
+				glowObject.m_vGlowColor = ArrColor;
+				glowObject.m_flAlpha = GlowColor.G1A();
+				glowObject.m_bRenderWhenOccluded = true;
+				glowObject.m_bRenderWhenUnoccluded = false;
+				glowObject.m_nGlowStyle = GlowStyle;
+			}
 		}
-	}
+	};
+	LDrawGlow();
 }

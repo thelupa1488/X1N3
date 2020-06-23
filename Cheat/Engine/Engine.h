@@ -517,17 +517,17 @@ public:
 			"\"" + Generic + "\"\
 		\n{\
 		\n\t\"$basetexture\" \"vgui/white\"\
+		\n\t\"$ignorez\" \"0\"\
 		\n\t\"$envmap\" \"env_cubemap\"\
 		\n\t\"$normalmapalphaenvmapmask\" \"1\"\
 		\n\t\"$envmapcontrast\" \"1\"\
-		\n\t\"$ignorez\" \"0\"\
+		\n\t\"$nofog\" \"1\"\
 		\n\t\"$model\" \"1\"\
-		\n\t\"$flat\" \"1\"\
 		\n\t\"$nocull\" \"0\"\
 		\n\t\"$selfillum\" \"1\"\
 		\n\t\"$halflambert\" \"1\"\
-		\n\t\"$nofog\" \"1\"\
 		\n\t\"$znearer\" \"0\"\
+		\n\t\"$flat\" \"1\"\
 		\n\t\"$rimlight\" \"1\"\
 		\n\t\"$rimlightexponent\" \"2\"\
 		\n\t\"$rimlightboost\" \"0.2\"\
