@@ -146,6 +146,55 @@ void CEsp::SoundFrameStage()
 	}
 }
 
+void CEsp::OverrideMaterial(bool ignoreZ, int type, Color rgba)
+{
+	static IMaterial* Texture = nullptr;
+	static IMaterial* Flat = nullptr;
+	static IMaterial* Wireframe = nullptr;
+	static IMaterial* Metallic = nullptr;
+	static IMaterial* MetallicPlus = nullptr;
+
+	if (!Texture)
+		Texture = CGlobal::CreateMaterialBasic(true);
+
+	if (!Flat)
+		Flat = CGlobal::CreateMaterialBasic(false);
+
+	if (!Wireframe)
+		Wireframe = CGlobal::CreateMaterialBasic(true, true);
+
+	if (!Metallic)
+		Metallic = CGlobal::CreateMaterialMetallic();
+
+	if (!MetallicPlus)
+		MetallicPlus = CGlobal::CreateMaterialMetallicPlus();
+
+	if (!Texture || !Flat || !Wireframe || !Metallic || !MetallicPlus)
+		return;
+
+	static IMaterial* Material = nullptr;
+
+	switch (type)
+	{
+	case 0: Material = Texture; break;
+	case 1: Material = Flat; break;
+	case 2: Material = Wireframe; break;
+	case 3: Material = Metallic; break;
+	case 4: Material = MetallicPlus; break;
+	}
+
+	if (!Material)
+		return;
+
+	Material->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, ignoreZ);
+
+	Material->ColorModulate(rgba.G1R(), rgba.G1G(), rgba.G1B());
+	Material->AlphaModulate(rgba.G1A());
+
+	Material->IncrementReferenceCount();
+	I::ModelRender()->ForcedMaterialOverride(Material);
+}
+
 void CEsp::LoadVisuals(nlohmann::json &j)
 {
 #define LV(a,b) if(!j[XorStr("Esp")][XorStr("CustomVisuals")][MVItemList[i].Name][XorStr(a)].is_null()) {b = j[XorStr("Esp")][XorStr("CustomVisuals")][MVItemList[i].Name][XorStr(a)];}

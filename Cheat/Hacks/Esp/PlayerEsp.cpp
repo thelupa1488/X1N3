@@ -799,58 +799,9 @@ void CEsp::DrawBar(Orent O, float x, float y, float w, float h, float val, bool 
 
 void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld)
 {
-	static IMaterial* HidTex = nullptr;
-	static IMaterial* VisTex = nullptr;
-
-	static IMaterial* HidFlat = nullptr;
-	static IMaterial* VisFlat = nullptr;
-
-	static IMaterial* HidFrame = nullptr;
-	static IMaterial* VisFrame = nullptr;
-
-	static IMaterial* HidMetallic = nullptr;
-	static IMaterial* VisMetallic = nullptr;
-
-	static IMaterial* HidMetallicPlus = nullptr;
-	static IMaterial* VisMetallicPlus = nullptr;
-
 	if (Enable && Chams && BindEnable.Check())
 	{
-		if (!HidTex)
-			HidTex = CGlobal::CreateMaterialBasic(true);
-
-		if (!VisTex)
-			VisTex = CGlobal::CreateMaterialBasic(false);
-
-		if (!HidFlat)
-			HidFlat = CGlobal::CreateMaterialBasic(true, false);
-
-		if (!VisFlat)
-			VisFlat = CGlobal::CreateMaterialBasic(false, false);
-
-		if (!HidFrame)
-			HidFrame = CGlobal::CreateMaterialBasic(true, true, true);
-
-		if (!VisFrame)
-			VisFrame = CGlobal::CreateMaterialBasic(false, true, true);
-
-		if (!HidMetallic)
-			HidMetallic = CGlobal::CreateMaterialMetallic(true);
-
-		if (!VisMetallic)
-			VisMetallic = CGlobal::CreateMaterialMetallic(false);
-
-		if (!HidMetallicPlus)
-			HidMetallicPlus = CGlobal::CreateMaterialMetallicPlus(true);
-
-		if (!VisMetallicPlus)
-			VisMetallicPlus = CGlobal::CreateMaterialMetallicPlus(false);
-
-		if (!HidTex || !VisTex || !HidFlat || !VisFlat ||!HidFrame || 
-			!VisFrame || !HidMetallic || !VisMetallic || !HidMetallicPlus || !HidMetallicPlus)
-			return;
-
-		static auto ofunc = HookTables::pDrawModelExecute->GetTrampoline();
+		static auto fnDME = HookTables::pDrawModelExecute->GetTrampoline();
 
 		const char* ModelName = I::ModelInfo()->GetModelName((model_t*)pInfo.pModel);
 
@@ -883,68 +834,42 @@ void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMod
 
 		if (!ChamsVisibleOnly)
 		{
-			float ArrColor[3] = { ChamsInvisColor.G1R(), ChamsInvisColor.G1G(), ChamsInvisColor.G1B() };
-			I::RenderView()->SetColorModulation(ArrColor);
-			I::RenderView()->SetBlend(ChamsInvisColor.G1A());
-
-			switch (ChamsStyle)
-			{
-			case 0: I::ModelRender()->ForcedMaterialOverride(HidTex); break;
-			case 1: I::ModelRender()->ForcedMaterialOverride(HidFlat); break;
-			case 2: I::ModelRender()->ForcedMaterialOverride(HidFrame); break;
-			case 3: I::ModelRender()->ForcedMaterialOverride(HidMetallic); break;
-			case 4: I::ModelRender()->ForcedMaterialOverride(HidMetallicPlus); break;
-			default: break;
-			}
-			ofunc(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
+			ChamsInvisColor[4];
+			OverrideMaterial(true, ChamsStyle, ChamsInvisColor);
+			fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 		}
 
 		if (ChamsStyle <= 4)
 		{
-			float ArrColor[3] = { ChamsVisbleColor.G1R(), ChamsVisbleColor.G1G(), ChamsVisbleColor.G1B() };
-
-			I::RenderView()->SetColorModulation(ArrColor);
-			I::RenderView()->SetBlend(ChamsVisbleColor.G1A());
-
-			switch (ChamsStyle)
-			{
-			case 0: I::ModelRender()->ForcedMaterialOverride(VisTex); break;
-			case 1: I::ModelRender()->ForcedMaterialOverride(VisFlat); break;
-			case 2: I::ModelRender()->ForcedMaterialOverride(VisFrame); break;
-			case 3: I::ModelRender()->ForcedMaterialOverride(VisMetallic); break;
-			case 4: I::ModelRender()->ForcedMaterialOverride(VisMetallicPlus); break;
-			default: break;
-			}
-			ofunc(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
+			ChamsVisbleColor[4];
+			OverrideMaterial(false, ChamsStyle, ChamsVisbleColor);
+			fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 		}
 
-		if (ChamsStyle == 5)
-		{
-			float ArrVisbleColor[3] = { ChamsVisbleColor.G1R(), ChamsVisbleColor.G1G(), ChamsVisbleColor.G1B() };
+		//if (ChamsStyle == 5)
+		//{
+		//	float ArrVisbleColor[3] = { ChamsVisbleColor.G1R(), ChamsVisbleColor.G1G(), ChamsVisbleColor.G1B() };
 
-			if (MaterialFixColorChams > 1.f)
-				MaterialFixColorChams /= 100.f;
-			float FixColor = 100.01f - (99.f + MaterialFixColorChams);
-			ArrVisbleColor[0] = ArrVisbleColor[0] / FixColor;
-			ArrVisbleColor[1] = ArrVisbleColor[1] / FixColor;
-			ArrVisbleColor[2] = ArrVisbleColor[2] / FixColor;
+		//	if (MaterialFixColorChams > 1.f)
+		//		MaterialFixColorChams /= 100.f;
+		//	float FixColor = 100.01f - (99.f + MaterialFixColorChams);
+		//	ArrVisbleColor[0] = ArrVisbleColor[0] / FixColor;
+		//	ArrVisbleColor[1] = ArrVisbleColor[1] / FixColor;
+		//	ArrVisbleColor[2] = ArrVisbleColor[2] / FixColor;
 
-			I::RenderView()->SetColorModulation(ArrVisbleColor);
-			I::RenderView()->SetBlend(ChamsVisbleColor.G1A());
-		}
+		//	I::RenderView()->SetColorModulation(ArrVisbleColor);
+		//	I::RenderView()->SetBlend(ChamsVisbleColor.G1A());
+		//}
 
-		if (ChamsStyle == 5 && !ChamsVisibleOnly)
-		{
-			if (!Entity->IsVisble)
-			{
-				float ArrInvisColor[3] = { ChamsInvisColor.G1R(), ChamsInvisColor.G1G(), ChamsInvisColor.G1B() };
-
-				I::RenderView()->SetColorModulation(ArrInvisColor);
-				I::RenderView()->SetBlend(ChamsInvisColor.G1A());
-				I::ModelRender()->ForcedMaterialOverride(HidFlat);
-			}
-			ofunc(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
-		}
+		//if (ChamsStyle == 5 && !ChamsVisibleOnly)
+		//{
+		//	if (!Entity->IsVisble)
+		//	{
+		//		ChamsInvisColor[4];
+		//		OverrideMaterial(true, 1/*Flat for HideMaterial*/, ChamsInvisColor);
+		//		fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
+		//	}
+		//}
 	}
 }
 

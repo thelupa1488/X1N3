@@ -470,11 +470,10 @@ public:
 		//}
 	}
 
-	static IMaterial* CreateMaterialBasic(bool ignorez, bool lit = true, bool wireframe = false)
+	static IMaterial* CreateMaterialBasic(bool lit = true, bool wireframe = false)
  	{
 		VMP_MUTATION("CreateMaterialBasic")
-
-		static auto created = 0; //number
+		static auto created = 0; //number material name (custom)
 
 		string Generic = lit ? "VertexLitGeneric" : "UnlitGeneric";
 		string matdata =
@@ -488,13 +487,13 @@ public:
 		\n\t\"$selfillum\" \"1\"\
 		\n\t\"$halflambert\" \"1\"\
 		\n\t\"$nofog\" \"0\"\
-		\n\t\"$ignorez\" \"" + to_string(ignorez) + "\"\
+		\n\t\"$ignorez\" \"0\"\
 		\n\t\"$znearer\" \"0\"\
 		\n\t\"$wireframe\" \"" + to_string(wireframe) + "\"\
 		\n}\n";
 
 
-		auto matname = XorStr("basic_") + to_string(created); //material name + number
+		auto matname = XorStr("basic_") + to_string(created); //material name + number (custom)
 		created++;
 		auto keyValues = static_cast<KeyValues*>(malloc(sizeof(KeyValues)));
 
@@ -503,15 +502,14 @@ public:
 
 		auto material = I::MaterialSystem()->CreateMaterial(matname.c_str(), keyValues);
 		material->IncrementReferenceCount();
-
 		VMP_END
+
 		return material;
 	}
 
-	static IMaterial* CreateMaterialMetallic(bool ignorez)
+	static IMaterial* CreateMaterialMetallic()
 	{
 		VMP_MUTATION("CreateMaterialMetallic")
-
 		static auto created = 0;
 
 		string Generic = "VertexLitGeneric";
@@ -522,7 +520,7 @@ public:
 		\n\t\"$envmap\" \"env_cubemap\"\
 		\n\t\"$normalmapalphaenvmapmask\" \"1\"\
 		\n\t\"$envmapcontrast\" \"1\"\
-		\n\t\"$ignorez\" \"" + to_string(ignorez) + "\"\
+		\n\t\"$ignorez\" \"0\"\
 		\n\t\"$model\" \"1\"\
 		\n\t\"$flat\" \"1\"\
 		\n\t\"$nocull\" \"0\"\
@@ -545,12 +543,12 @@ public:
 
 		auto material = I::MaterialSystem()->CreateMaterial(matname.c_str(), keyValues);
 		material->IncrementReferenceCount();
-
 		VMP_END
+
 		return material;
 	}
 
-	static IMaterial* CreateMaterialMetallicPlus(bool ignorez)
+	static IMaterial* CreateMaterialMetallicPlus()
 	{
 		VMP_MUTATION("CreateMaterialMetallicPlus")
 
@@ -562,7 +560,7 @@ public:
 		\n\t\"$basetexture\" \"vgui/white\"\
         \n\t\"$bumpmap\" \"de_nuke/hr_nuke/pool_water_normals_002\"\
         \n\t\"$bumptransform\" \"center 0.5 0.5 scale 0.25 0.25 rotate 0.0 translate 0.0 0.0\"\
-		\n\t\"$ignorez\" \"" + to_string(ignorez) + "\"\
+		\n\t\"$ignorez\" \"0\"\
 		\n\t\"$nofog\" \"0\"\
 		\n\t\"$model\" \"1\"\
         \n\t\"$color2\" \"[1.0, 1.0, 1.0]\"\
@@ -600,8 +598,8 @@ public:
 
 		auto material = I::MaterialSystem()->CreateMaterial(matname.c_str(), keyValues);
 		material->IncrementReferenceCount();
-
 		VMP_END
+
 		return material;
 	}
 };

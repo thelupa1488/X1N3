@@ -1543,32 +1543,9 @@ void CMisc::AutoAcceptEmit()
 
 void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld)
 {
-	static IMaterial* VisTex = nullptr;
-	static IMaterial* VisFlat = nullptr;
-	static IMaterial* VisFrame = nullptr;
-	static IMaterial* VisMetallic = nullptr;
-	static IMaterial* VisMetallicPlus = nullptr;
-	static IMaterial* VisGlowOverlay = nullptr;
-
 	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
 	{
-		if (!VisTex)
-			VisTex = CGlobal::CreateMaterialBasic(false);
-
-		if (!VisFlat)
-			VisFlat = CGlobal::CreateMaterialBasic(false, false);
-
-		if (!VisFrame)
-			VisFrame = CGlobal::CreateMaterialBasic(false, false, true);
-
-		if (!VisMetallic)
-			VisMetallic = CGlobal::CreateMaterialMetallic(false);
-
-		if (!VisMetallicPlus)
-			VisMetallicPlus = CGlobal::CreateMaterialMetallicPlus(false);
-
-		if (!VisTex && !VisFlat && !VisFrame && !VisMetallic && !VisMetallicPlus)
-			return;
+		static auto fnDME = HookTables::pDrawModelExecute->GetTrampoline();
 
 		const char* ModelName = I::ModelInfo()->GetModelName((model_t*)pInfo.pModel);
 
@@ -1579,19 +1556,11 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 		{
 			if (strstr(ModelName, XorStr("arms")))
 			{
-				float HandColor[3] = { HandChamsColor.G1R(), HandChamsColor.G1G(), HandChamsColor.G1B() };
-				I::RenderView()->SetColorModulation(HandColor);
-				I::RenderView()->SetBlend(HandChamsColor.G1A());
-
-				switch (HandChamsStyle)
+				if (HandChamsStyle <= 4)
 				{
-				case 0: I::ModelRender()->ForcedMaterialOverride(VisTex); break; //texture
-				case 1: I::ModelRender()->ForcedMaterialOverride(VisFlat); break; //flat
-				case 2: I::ModelRender()->ForcedMaterialOverride(VisFrame); break; //wireframe
-				case 3: I::ModelRender()->ForcedMaterialOverride(VisMetallic); break; //metallic
-				case 4: I::ModelRender()->ForcedMaterialOverride(VisMetallicPlus); break; //metallicplus
-				case 5: I::RenderView()->SetBlend(0.0f); I::ModelRender()->ForcedMaterialOverride(VisFlat); break; //disable
-				default: break;
+					HandChamsColor[4];
+					GP_Esp->OverrideMaterial(false, HandChamsStyle, HandChamsColor);
+					fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 				}
 			}
 		}
@@ -1599,23 +1568,14 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 		{
 			if (strstr(ModelName, XorStr("models/weapons/v_")) && !strstr(ModelName, XorStr("arms")))
 			{
-				float WeaponColor[3] = { WeaponChamsColor.G1R(), WeaponChamsColor.G1G(), WeaponChamsColor.G1B() };
-				I::RenderView()->SetColorModulation(WeaponColor);
-				I::RenderView()->SetBlend(WeaponChamsColor.G1A());
-
-				switch (WeaponChamsStyle)
+				if (WeaponChamsStyle <= 4)
 				{
-				case 0: I::ModelRender()->ForcedMaterialOverride(VisTex); break; //texture
-				case 1: I::ModelRender()->ForcedMaterialOverride(VisFlat); break; //flat
-				case 2: I::ModelRender()->ForcedMaterialOverride(VisFrame); break; //wireframe
-				case 3: I::ModelRender()->ForcedMaterialOverride(VisMetallic); break; //metallic
-				case 4: I::ModelRender()->ForcedMaterialOverride(VisMetallicPlus); break; //metallicplus
-				case 5: I::RenderView()->SetBlend(0.0f); I::ModelRender()->ForcedMaterialOverride(VisFlat); break; //disable
-				default: break;
+					WeaponChamsColor[4];
+					GP_Esp->OverrideMaterial(false, WeaponChamsStyle, WeaponChamsColor);
+					fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 				}
 			}
 		}
-		HookTables::pDrawModelExecute->GetTrampoline()(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 	}
 }
 
