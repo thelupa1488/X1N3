@@ -53,7 +53,7 @@ class IMisc
 protected:
 	virtual void GetViewModelFOV(float &Fov) = 0;
 //	virtual void PlaySound(const char* pszSoundName) = 0;
-	virtual void AutoAcceptEmit() = 0;
+	virtual void AutoAcceptEmit(bool MatchBeep) = 0;
 	virtual void DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t &state, const ModelRenderInfo_t &pInfo, matrix3x4_t *pCustomBoneToWorld) = 0;
 	virtual void ShowSpectatorList() = 0;
 	virtual vector<int> GetObservervators(int playerId) = 0;
@@ -100,7 +100,7 @@ public:
 	virtual void OverrideView(CViewSetup* pSetup);
 	virtual void GetViewModelFOV(float &Fov);
 //	virtual void PlaySound(const char* pszSoundName);
-	virtual void AutoAcceptEmit();
+	virtual void AutoAcceptEmit(bool MatchBeep);
 	virtual void DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t &state, const ModelRenderInfo_t &pInfo, matrix3x4_t *pCustomBoneToWorld);
 	virtual void ShowSpectatorList();
 	virtual vector<int> GetObservervators(int playerId);

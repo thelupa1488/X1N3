@@ -1482,56 +1482,19 @@ void CMisc::GetViewModelFOV(float &Fov)
 //	}
 //}
 
-void CMisc::AutoAcceptEmit()
+void CMisc::AutoAcceptEmit(bool MatchBeep)
 {
-	if (AutoAccept && !CGlobal::FullUpdateCheck)
+	if (AutoAccept && MatchBeep && !CGlobal::FullUpdateCheck)
 	{
 		static auto fnAccept = reinterpret_cast<bool(__stdcall*)(const char*)>(Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12")));
-
 		if (fnAccept)
 		{
 			fnAccept("");
 			HWND window = FastCall::G().t_FindWindowA(XorStr("Valve001"), 0);
 			FLASHWINFO flash{ sizeof(FLASHWINFO), window, FLASHW_TRAY | FLASHW_TIMERNOFG, 0, 0 };
 			FlashWindowEx(&flash);
-			ShowWindow(window, SW_RESTORE);
+			CGlobal::MatchBeep = false;
 		}
-
-		//typedef void(__cdecl* accept_t)(void);
-		//static accept_t accept = (accept_t)Utils::PatternScan(clientFactory,
-		//	XorStr("55 8B EC 51 56 8B 35 ? ? ? ? 57 83 BE"));
-
-		//static auto SetLocalPlayerReadyFn = reinterpret_cast<bool(__stdcall*)(const char*)>
-		//	(Utils::PatternScan(clientFactory,
-		//		XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12")));
-
-		//auto match_session = I::MatchFramework()->get_match_session();
-		//if (match_session) 
-		//{
-		//	auto session_settings = match_session->get_session_settings();
-		//	if (session_settings) 
-		//	{
-		//		string search_state = session_settings->GetString("game/mmqueue", "");
-
-		//		if (search_state == "reserved") 
-		//		{
-		//			FLASHWINFO fi;
-		//			fi.cbSize = sizeof(FLASHWINFO);
-		//			fi.hwnd = FastCall::G().t_FindWindowA(NULL, XorStr("Counter-Strike: Global Offensive"));
-		//			fi.dwFlags = FLASHW_ALL | FLASHW_TIMERNOFG;
-		//			fi.uCount = 0;
-		//			fi.dwTimeout = 0;
-		//			FlashWindowEx(&fi);
-		//			ShowWindow(fi.hwnd, SW_RESTORE);
-		//			Sleep(500);
-		//			if (accept && **(unsigned long**)((unsigned long)accept + 0x7)) 
-		//			{
-		//				if (SetLocalPlayerReadyFn)
-		//					SetLocalPlayerReadyFn("");
-		//			}
-		//		}
-		//	}
-		//}
 	}
 }
 

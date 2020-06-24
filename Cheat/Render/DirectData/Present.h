@@ -118,8 +118,8 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDirect3DDevice9* pDevice, CONST RECT* pSour
 					if (GP_Misc)
 					{
 						GP_Misc->Reset();
-						GP_Misc->AutoAcceptEmit();
-					}
+						GP_Misc->AutoAcceptEmit(CGlobal::MatchBeep);
+					}				
 				}
 
 				Message::Get().Show();
