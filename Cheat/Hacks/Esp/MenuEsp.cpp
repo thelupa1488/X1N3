@@ -202,13 +202,6 @@ void CEsp::Menu()
 				DComboBox("Style##Chams", ChamsStyle, itemsCSVis);
 				X1Gui().SameLine(SAME_LINE_1 + PUSH_1 + 40);
 				DCheckBox("Visible only##Chams", ChamsVisibleOnly);
-				//if (ChamsStyle == 5)
-				//{
-				//	X1Gui().Spacing();
-				//	X1Gui().PushItemWidth(PUSH_2);
-				//	SliderFloats("Brightness##Chams", MaterialFixColorChams, 0.0000000001, 1);
-				//	X1Gui().Spacing();
-				//}
 
 				DColorEdit("CT color##Chams", ChamsCT);
 				X1Gui().SameLine(100);

@@ -108,6 +108,8 @@ namespace Utils
 		return NULL;
 	}
 
+	/* IDA Style \xE8????\x8B */
+
 	std::uintptr_t FindPattern(const wchar_t* module, const char* pattern)
 	{
 		static auto id = 0;
@@ -123,13 +125,15 @@ namespace Utils
 			auto first = start;
 			auto second = pattern;
 
-			while (first < end && *second) {
+			while (first < end && *second) 
+			{
 				if (*first == *second || *second == '?')
 				{
 					++first;
 					++second;
 				}
-				else {
+				else 
+				{
 					first = ++start;
 					second = pattern;
 				}
@@ -138,7 +142,7 @@ namespace Utils
 			if (!*second)
 				return reinterpret_cast<std::uintptr_t>(start);
 		}
-		FastCall::G().t_MessageBoxA(NULL, ("Failed to find pattern #" + std::to_string(id) + '!').c_str(), "X1N3", MB_OK | MB_ICONWARNING);
+		FastCall::G().t_MessageBoxA(NULL, (XorStr("Failed to find pattern #") + std::to_string(id) + '!').c_str(), XorStr("X1N3"), MB_OK | MB_ICONWARNING);
 		return 0;
 	}
 }
