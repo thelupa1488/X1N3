@@ -1,16 +1,13 @@
 #pragma once
 #include "Tables.h"
 
-void __fastcall hkEmitSound(void* ecx, void* edx, void* filter, int iEntIndex, int iChannel, const char* pSoundEntry, unsigned int nSoundEntryHash, const char* pSample, float flVolume,
-	float flAttenuation, int nSeed, int iFlags, int iPitch, const Vector* pOrigin, const Vector* pDirection, Vector* pUtlVecOrigins, bool bUpdatePositions, float soundtime,
-	int speakerentity, SndInfo_t& params)
+void __stdcall hkEmitSound(SoundData data)
 {
 
-	if (GP_Misc && !strcmp(pSoundEntry, XorStr("UIPanorama.popup_accept_match_beep")))
-		CGlobal::MatchBeep = false;
+	if (GP_Misc && !strcmp(data.soundEntry, XorStr("UIPanorama.popup_accept_match_beep")))
+		GP_Misc->AutoAcceptEmit();
 
-	HookTables::pEmitSound->GetTrampoline()(ecx, edx, filter, iEntIndex, iChannel, pSoundEntry, nSoundEntryHash, pSample, flVolume,
-		flAttenuation, nSeed, iFlags, iPitch, pOrigin, pDirection, pUtlVecOrigins, bUpdatePositions, soundtime, speakerentity, params);
+	HookTables::pEmitSound->GetTrampoline()(data);
 }
 
 void __fastcall hkPlaySound(void* thisptr, int edx, const char* pszSoundName)
