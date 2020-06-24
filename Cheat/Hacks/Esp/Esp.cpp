@@ -153,6 +153,7 @@ void CEsp::OverrideMaterial(bool ignoreZ, int type, Color rgba)
 	static IMaterial* Wireframe = nullptr;
 	static IMaterial* Metallic = nullptr;
 	static IMaterial* Pearlescent = nullptr;
+	static IMaterial* Animated = nullptr;
 
 	if (!Texture)
 		Texture = I::MaterialSystem()->CreateMaterial("Texture", KeyValues::FromString("VertexLitGeneric", "$basetexture white"));
@@ -188,7 +189,19 @@ void CEsp::OverrideMaterial(bool ignoreZ, int type, Color rgba)
 			\$pearlescent 3\
 			\$basemapalphaphongmask 1"));
 
-	if (!Texture || !Flat || !Wireframe || !Metallic || !Pearlescent)
+	if (!Animated)
+	{
+		const auto kv = KeyValues::FromString("VertexLitGeneric", 
+			"$basetexture white\
+			\"$envmap editor/cube_vertigo\
+			\$envmapcontrast 1\
+			\$basetexture dev/zone_warning proxies\
+			\{ texturescroll { texturescrollvar $basetexturetransform texturescrollrate 0.6 texturescrollangle 90 } }");
+		kv->SetString("$envmaptint", "[.7 .7 .7]");
+		Animated = I::MaterialSystem()->CreateMaterial("Animated", kv);
+	}
+
+	if (!Texture || !Flat || !Wireframe || !Metallic || !Pearlescent || !Animated)
 		return;
 
 	static IMaterial* Material = nullptr;
@@ -200,6 +213,7 @@ void CEsp::OverrideMaterial(bool ignoreZ, int type, Color rgba)
 	case 2: Material = Wireframe; break;
 	case 3: Material = Metallic; break;
 	case 4: Material = Pearlescent; break;
+	case 5: Material = Animated; break;
 	}
 
 	if (!Material)

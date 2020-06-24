@@ -198,7 +198,7 @@ void CEsp::Menu()
 			{
 				X1Gui().SameLine(SAME_LINE_1);
 				X1Gui().PushItemWidth(PUSH_1);
-				VectorEx<const char*>itemsCSVis = { lolc("Textured"), lolc("Flat"), lolc("Wireframe"), lolc("Metallic"), lolc("Pearlescent") };
+				VectorEx<const char*>itemsCSVis = { lolc("Textured"), lolc("Flat"), lolc("Wireframe"), lolc("Metallic"), lolc("Pearlescent"), lolc("Animated") };
 				DComboBox("Style##Chams", ChamsStyle, itemsCSVis);
 				X1Gui().SameLine(SAME_LINE_1 + PUSH_1 + 40);
 				DCheckBox("Visible only##Chams", ChamsVisibleOnly);

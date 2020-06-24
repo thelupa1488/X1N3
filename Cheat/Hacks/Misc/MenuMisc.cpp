@@ -313,7 +313,7 @@ void CMisc::Menu()
 		DColorEdit("Color##Hand", HandChamsColor);
 		X1Gui().SameLine();
 		X1Gui().PushItemWidth(PUSH_1);
-		VectorEx<const char* >itemsCS = { lolc("Textured"),lolc("Flat"), lolc("Wireframe"), lolc("Metallic"), lolc("Pearlescent") };
+		VectorEx<const char* >itemsCS = { lolc("Textured"),lolc("Flat"), lolc("Wireframe"), lolc("Metallic"), lolc("Pearlescent"), lolc("Animated") };
 		DComboBox("Style##Hand", HandChamsStyle, itemsCS);
 	}
 	X1Gui().Spacing();
@@ -326,7 +326,7 @@ void CMisc::Menu()
 		DColorEdit("Color##Weapon", WeaponChamsColor);
 		X1Gui().SameLine();
 		X1Gui().PushItemWidth(PUSH_1);
-		VectorEx<const char* >itemsCS = { lolc("Textured"),lolc("Flat"), lolc("Wireframe"), lolc("Metallic"), lolc("Pearlescent") };
+		VectorEx<const char* >itemsCS = { lolc("Textured"),lolc("Flat"), lolc("Wireframe"), lolc("Metallic"), lolc("Pearlescent"), lolc("Animated") };
 		DComboBox("Style##Weapon", WeaponChamsStyle, itemsCS);
 	}
 	X1Gui().Spacing();
