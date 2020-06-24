@@ -1484,7 +1484,7 @@ void CMisc::GetViewModelFOV(float &Fov)
 
 void CMisc::AutoAcceptEmit()
 {
-	if (AutoAccept && CGlobal::AcceptMatchBeep && !CGlobal::FullUpdateCheck)
+	if (AutoAccept && !CGlobal::MatchBeep && !CGlobal::FullUpdateCheck)
 	{
 		static auto fnAccept = reinterpret_cast<bool(__stdcall*)(const char*)>
 			(Utils::PatternScan(clientFactory,
@@ -1496,7 +1496,7 @@ void CMisc::AutoAcceptEmit()
 			HWND window = FastCall::G().t_FindWindowA(XorStr("Valve001"), 0);
 			FLASHWINFO flash{ sizeof(FLASHWINFO), window, FLASHW_TRAY | FLASHW_TIMERNOFG, 0, 0 };
 			FlashWindowEx(&flash);
-			CGlobal::AcceptMatchBeep = false;
+			CGlobal::MatchBeep = true;
 		}
 
 		//typedef void(__cdecl* accept_t)(void);

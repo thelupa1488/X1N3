@@ -7,7 +7,7 @@ void __fastcall hkEmitSound(void* ecx, void* edx, void* filter, int iEntIndex, i
 {
 
 	if (GP_Misc && !strcmp(pSoundEntry, XorStr("UIPanorama.popup_accept_match_beep")))
-		CGlobal::AcceptMatchBeep = true;
+		CGlobal::MatchBeep = false;
 
 	HookTables::pEmitSound->GetTrampoline()(ecx, edx, filter, iEntIndex, iChannel, pSoundEntry, nSoundEntryHash, pSample, flVolume,
 		flAttenuation, nSeed, iFlags, iPitch, pOrigin, pDirection, pUtlVecOrigins, bUpdatePositions, soundtime, speakerentity, params);

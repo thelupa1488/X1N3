@@ -122,12 +122,12 @@ public:
 	static WEAPON_ID GWeaponID;
 	static bool IsGuiVisble;
 	static bool IsGameReady;
-	static bool AcceptMatchBeep;
 	static int iScreenWidth;
 	static int iScreenHeight;
 	static string SystemDisk;
 	static float GFovView;
 	static float GFovViewExt;
+	static bool MatchBeep;
 	static bool FullUpdateCheck;
 	static Vector GViewAngle;
 	static vector<string> ConfigList;

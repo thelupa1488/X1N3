@@ -3,7 +3,6 @@
 
 bool CGlobal::IsGuiVisble = false;
 bool CGlobal::IsGameReady = false;
-bool CGlobal::AcceptMatchBeep = false;
 int CGlobal::iScreenWidth = 1920;
 int CGlobal::iScreenHeight = 1080;
 string CGlobal::SystemDisk = "C:\\";
@@ -11,6 +10,7 @@ WEAPON_TYPE CGlobal::GWeaponType = WEAPON_TYPE::WEAPON_TYPE_UNKNOWN;
 WEAPON_ID CGlobal::GWeaponID = WEAPON_ID::WEAPON_AK47;
 float CGlobal::GFovView = 90;
 float CGlobal::GFovViewExt = 90;
+bool CGlobal::MatchBeep = false;
 bool CGlobal::FullUpdateCheck = false;
 Vector CGlobal::GViewAngle;
 vector<string> CGlobal::ConfigList;

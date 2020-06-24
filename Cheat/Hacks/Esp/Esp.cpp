@@ -155,6 +155,8 @@ void CEsp::OverrideMaterial(bool ignoreZ, int type, Color rgba)
 	static IMaterial* Pearlescent = nullptr;
 	static IMaterial* Animated = nullptr;
 
+	static IMaterial* Material = nullptr;
+
 	if (!Texture)
 		Texture = I::MaterialSystem()->CreateMaterial("Texture", KeyValues::FromString("VertexLitGeneric", "$basetexture white"));
 
@@ -162,12 +164,11 @@ void CEsp::OverrideMaterial(bool ignoreZ, int type, Color rgba)
 		Flat = I::MaterialSystem()->CreateMaterial("Flat", KeyValues::FromString("UnlitGeneric", "$basetexture white"));
 
 	if (!Wireframe)
-		Wireframe = I::MaterialSystem()->CreateMaterial("Wireframe", KeyValues::FromString("VertexLitGeneric", 
-			"$basetexture white\
-            \$wireframe 1"));
+		Wireframe = I::MaterialSystem()->CreateMaterial("Wireframe", KeyValues::FromString("VertexLitGeneric", "$basetexture white $wireframe 1"));
 
 	if (!Metallic)
-		Metallic = I::MaterialSystem()->CreateMaterial("Metallic", KeyValues::FromString("VertexLitGeneric", 
+	{
+		Metallic = I::MaterialSystem()->CreateMaterial("Metallic", KeyValues::FromString("VertexLitGeneric",
 			"$basetexture white\
 			\$ignorez 0\
 			\$envmap env_cubemap\
@@ -179,15 +180,19 @@ void CEsp::OverrideMaterial(bool ignoreZ, int type, Color rgba)
 			\$selfillum 1\
 			\$halfambert 1\
 			\$znearer 0\
-			\$flat 1"));
+			\$flat 1\
+			$rimlight 1 $rimlightexponent 2 $rimlightboost 0.2 $rimlightboost [ 1 1 1 ]"));
+	}
 
 	if (!Pearlescent)
+	{
 		Pearlescent = I::MaterialSystem()->CreateMaterial("Pearlescent", KeyValues::FromString("VertexLitGeneric",
 			"$basetexture white\
 			\$ambientonly 1\
 			\$phong 1\
 			\$pearlescent 3\
 			\$basemapalphaphongmask 1"));
+	}
 
 	if (!Animated)
 	{
@@ -204,8 +209,6 @@ void CEsp::OverrideMaterial(bool ignoreZ, int type, Color rgba)
 	if (!Texture || !Flat || !Wireframe || !Metallic || !Pearlescent || !Animated)
 		return;
 
-	static IMaterial* Material = nullptr;
-
 	switch (type)
 	{
 	case 0: Material = Texture; break;
@@ -214,6 +217,7 @@ void CEsp::OverrideMaterial(bool ignoreZ, int type, Color rgba)
 	case 3: Material = Metallic; break;
 	case 4: Material = Pearlescent; break;
 	case 5: Material = Animated; break;
+	default: Material = nullptr;
 	}
 
 	if (!Material)
