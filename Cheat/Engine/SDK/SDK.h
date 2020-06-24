@@ -43,6 +43,7 @@
 #include "ICVar.h"
 #include "CGlowObjManager.h"
 #include "IPhysics.hpp"
+#include "KeyValues.h"
 #include "Math.hpp"
 #include "Match.h"
 #include "IPredition.hpp"
@@ -50,7 +51,6 @@
 #include "IGameRules.h"
 #include "CUserCmd.hpp"
 #include "IInputSystem.hpp"
-#include "KeyValues.h"
 //#include "memalloc.h"
 
 #include <Windows.h>

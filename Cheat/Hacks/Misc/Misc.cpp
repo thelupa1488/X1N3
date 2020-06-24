@@ -1556,24 +1556,18 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 		{
 			if (strstr(ModelName, XorStr("arms")))
 			{
-				if (HandChamsStyle <= 4)
-				{
-					HandChamsColor[4];
-					GP_Esp->OverrideMaterial(false, HandChamsStyle, HandChamsColor);
-					fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
-				}
+				HandChamsColor[4];
+				GP_Esp->OverrideMaterial(false, HandChamsStyle, HandChamsColor);
+				fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 			}
 		}
 		if (WeaponChams)
 		{
 			if (strstr(ModelName, XorStr("models/weapons/v_")) && !strstr(ModelName, XorStr("arms")))
 			{
-				if (WeaponChamsStyle <= 4)
-				{
-					WeaponChamsColor[4];
-					GP_Esp->OverrideMaterial(false, WeaponChamsStyle, WeaponChamsColor);
-					fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
-				}
+				WeaponChamsColor[4];
+				GP_Esp->OverrideMaterial(false, WeaponChamsStyle, WeaponChamsColor);
+				fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 			}
 		}
 	}

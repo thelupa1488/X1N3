@@ -1,31 +1,40 @@
 #include "SDK.h"
 #include "../../Main.h"
-//#include "../Settings/Settings.h"
+template <typename T>
+static constexpr auto relativeToAbsolute(int* address) noexcept
+{
+    return reinterpret_cast<T>(reinterpret_cast<char*>(address + 1) + *address);
+}
 
 namespace SDK
 {
-	bool KeyValues::LoadFromBuffer( KeyValues *pThis , const char *pszFirst , const char *pszSecond , PVOID pSomething , PVOID pAnother , PVOID pLast )
-	{
-		typedef bool( __thiscall *_LoadFromBuffer )( KeyValues* , const char* , const char* , PVOID , PVOID , PVOID );
+    KeyValues* KeyValues::FromString(const char* name, const char* value)
+    {
+        const auto pFromString = relativeToAbsolute<decltype(keyValuesFromString)>(reinterpret_cast<int*>(Utils::PatternScan(clientFactory, "E8 ? ? ? ? 83 C4 04 89 45 D8") + 1)); //доделать
+        KeyValues* keyValues;
+        __asm 
+        {
+            push 0
+            mov edx, value
+            mov ecx, name
+            call pFromString
+            add esp, 4
+            mov keyValues, eax
+        }
 
-		static _LoadFromBuffer LoadFromBufferFn = 0;
-		static bool SearchFunction = false;
+        return keyValues;
+    }
 
-		if ( !SearchFunction )
-		{
-			DWORD dwFunctionAddress = Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 83 EC 34 53 8B 5D 0C 89"));
-			if ( dwFunctionAddress )
-			{
-				LoadFromBufferFn = (_LoadFromBuffer)dwFunctionAddress;
-				SearchFunction = true;
-			}
-		}
+    KeyValues* KeyValues::FindKey(const char* keyName, bool create)
+    {
+        auto pFindKey = relativeToAbsolute<decltype(keyValuesFindKey)>(reinterpret_cast<int*>(Utils::PatternScan(clientFactory, "E8 ? ? ? ? F7 45") + 1));//доделать
+        return pFindKey(this, keyName, create);
+    }
 
-		if ( LoadFromBufferFn && SearchFunction )
-		{
-			return LoadFromBufferFn( pThis , pszFirst , pszSecond , pSomething , pAnother , pLast );
-		}
-
-		return false;
-	}
+    void KeyValues::SetString(const char* keyName, const char* value)
+    {
+        auto pSetSring = relativeToAbsolute<decltype(keyValuesSetString)>(reinterpret_cast<int*>(Utils::PatternScan(clientFactory, "E8 ? ? ? ? 89 77 38") + 1));//доделать
+        if (const auto key = FindKey(keyName, true))
+            pSetSring(key, value);
+    }
 }                                                       

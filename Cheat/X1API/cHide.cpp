@@ -43,7 +43,7 @@ std::wstring cHideClass::UTF8ToWstring(const std::string& str)
 std::wstring cHideClass::AnsiToWstring(const std::string& input, DWORD locale /*= CP_ACP*/)
 {
 	VMP_MUTATION("cHideClass::AnsiToWstring")
-	wchar_t buf[6116] = { 0 };
+	wchar_t buf[8192] = { 0 };
 	MultiByteToWideChar(locale, 0, input.c_str(), (int)input.length(), buf, ARRAYSIZE(buf));
 	VMP_END
 	return buf;

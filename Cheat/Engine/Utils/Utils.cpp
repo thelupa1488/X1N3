@@ -107,4 +107,38 @@ namespace Utils
 
 		return NULL;
 	}
+
+	std::uintptr_t FindPattern(const wchar_t* module, const char* pattern)
+	{
+		static auto id = 0;
+		++id;
+
+		if (HMODULE moduleHandle = FastCall::G().t_GetModuleHandleW(module))
+		{
+			MODULEINFO moduleInfo; FastCall::G().t_GetModuleInformation(FastCall::G().t_GetCurrentProcess(), moduleHandle, &moduleInfo, sizeof(moduleInfo));
+
+			auto start = static_cast<const char*>(moduleInfo.lpBaseOfDll);
+			const auto end = start + moduleInfo.SizeOfImage;
+
+			auto first = start;
+			auto second = pattern;
+
+			while (first < end && *second) {
+				if (*first == *second || *second == '?')
+				{
+					++first;
+					++second;
+				}
+				else {
+					first = ++start;
+					second = pattern;
+				}
+			}
+
+			if (!*second)
+				return reinterpret_cast<std::uintptr_t>(start);
+		}
+		FastCall::G().t_MessageBoxA(NULL, ("Failed to find pattern #" + std::to_string(id) + '!').c_str(), "X1N3", MB_OK | MB_ICONWARNING);
+		return 0;
+	}
 }

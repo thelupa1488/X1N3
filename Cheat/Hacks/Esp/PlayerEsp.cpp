@@ -840,40 +840,12 @@ void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMod
 				OverrideMaterial(true, ChamsStyle, ChamsInvisColor);
 				fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 			}
-
-			if (ChamsStyle <= 4)
+			if (ChamsStyle >= 0)
 			{
 				ChamsVisbleColor[4];
 				OverrideMaterial(false, ChamsStyle, ChamsVisbleColor);
 				fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 			}
-
-			/* Material Chams */
-
-			//if (ChamsStyle == 5)
-			//{
-			//	float ArrVisbleColor[3] = { ChamsVisbleColor.G1R(), ChamsVisbleColor.G1G(), ChamsVisbleColor.G1B() };
-
-			//	if (MaterialFixColorChams > 1.f)
-			//		MaterialFixColorChams /= 100.f;
-			//	float FixColor = 100.01f - (99.f + MaterialFixColorChams);
-			//	ArrVisbleColor[0] = ArrVisbleColor[0] / FixColor;
-			//	ArrVisbleColor[1] = ArrVisbleColor[1] / FixColor;
-			//	ArrVisbleColor[2] = ArrVisbleColor[2] / FixColor;
-
-			//	I::RenderView()->SetColorModulation(ArrVisbleColor);
-			//	I::RenderView()->SetBlend(ChamsVisbleColor.G1A());
-			//}
-
-			//if (ChamsStyle == 5 && !ChamsVisibleOnly)
-			//{
-			//	if (!Entity->IsVisble)
-			//	{
-			//		ChamsInvisColor[4];
-			//		OverrideMaterial(true, 1/*Flat for HideMaterial*/, ChamsInvisColor);
-			//		fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
-			//	}
-			//}
 		}
 	};
 	LDrawModelExecute();

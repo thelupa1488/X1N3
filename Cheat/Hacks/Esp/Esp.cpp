@@ -152,24 +152,43 @@ void CEsp::OverrideMaterial(bool ignoreZ, int type, Color rgba)
 	static IMaterial* Flat = nullptr;
 	static IMaterial* Wireframe = nullptr;
 	static IMaterial* Metallic = nullptr;
-	static IMaterial* MetallicPlus = nullptr;
+	static IMaterial* Pearlescent = nullptr;
 
 	if (!Texture)
-		Texture = CGlobal::CreateMaterialBasic(true);
+		Texture = I::MaterialSystem()->CreateMaterial("Texture", KeyValues::FromString("VertexLitGeneric", "$basetexture white"));
 
 	if (!Flat)
-		Flat = CGlobal::CreateMaterialBasic(false);
+		Flat = I::MaterialSystem()->CreateMaterial("Flat", KeyValues::FromString("UnlitGeneric", "$basetexture white"));
 
 	if (!Wireframe)
-		Wireframe = CGlobal::CreateMaterialBasic(true, true);
+		Wireframe = I::MaterialSystem()->CreateMaterial("Wireframe", KeyValues::FromString("VertexLitGeneric", 
+			"$basetexture white\
+            \$wireframe 1"));
 
 	if (!Metallic)
-		Metallic = CGlobal::CreateMaterialMetallic();
+		Metallic = I::MaterialSystem()->CreateMaterial("Metallic", KeyValues::FromString("VertexLitGeneric", 
+			"$basetexture white\
+			\$ignorez 0\
+			\$envmap env_cubemap\
+			\$normalmapalphaenvmapmask 1\
+			\$envmapcontrast 1\
+			\$nofog 1\
+			\$model 1\
+			\$nocull 0\
+			\$selfillum 1\
+			\$halfambert 1\
+			\$znearer 0\
+			\$flat 1"));
 
-	if (!MetallicPlus)
-		MetallicPlus = CGlobal::CreateMaterialMetallicPlus();
+	if (!Pearlescent)
+		Pearlescent = I::MaterialSystem()->CreateMaterial("Pearlescent", KeyValues::FromString("VertexLitGeneric",
+			"$basetexture white\
+			\$ambientonly 1\
+			\$phong 1\
+			\$pearlescent 3\
+			\$basemapalphaphongmask 1"));
 
-	if (!Texture || !Flat || !Wireframe || !Metallic || !MetallicPlus)
+	if (!Texture || !Flat || !Wireframe || !Metallic || !Pearlescent)
 		return;
 
 	static IMaterial* Material = nullptr;
@@ -180,7 +199,7 @@ void CEsp::OverrideMaterial(bool ignoreZ, int type, Color rgba)
 	case 1: Material = Flat; break;
 	case 2: Material = Wireframe; break;
 	case 3: Material = Metallic; break;
-	case 4: Material = MetallicPlus; break;
+	case 4: Material = Pearlescent; break;
 	}
 
 	if (!Material)

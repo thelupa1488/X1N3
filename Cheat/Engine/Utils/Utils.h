@@ -14,4 +14,5 @@ namespace Utils
 	string GetModuleBaseDir(HMODULE hModule);
 	/* IDA Style 00 FF ?? */
 	DWORD PatternScan(std::string moduleName, std::string Mask);
+	std::uintptr_t FindPattern(const wchar_t* module, const char* pattern);
 }
