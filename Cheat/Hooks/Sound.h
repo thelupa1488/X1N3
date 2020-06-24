@@ -4,8 +4,8 @@
 void __stdcall hkEmitSound(SoundData data)
 {
 
-	if (GP_Misc && !strcmp(data.soundEntry, XorStr("UIPanorama.popup_accept_match_beep")))
-		GP_Misc->AutoAcceptEmit();
+	//if (GP_Misc && !strcmp(data.soundEntry, XorStr("UIPanorama.popup_accept_match_beep")))
+	//	GP_Misc->AutoAcceptEmit();
 
 	HookTables::pEmitSound->GetTrampoline()(data);
 }

@@ -1486,8 +1486,7 @@ void CMisc::AutoAcceptEmit()
 {
 	if (AutoAccept && !CGlobal::FullUpdateCheck)
 	{
-		static auto fnAccept = reinterpret_cast<bool(__stdcall*)(const char*)>
-			(Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12")));
+		static auto fnAccept = reinterpret_cast<bool(__stdcall*)(const char*)>(Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12")));
 
 		if (fnAccept)
 		{
