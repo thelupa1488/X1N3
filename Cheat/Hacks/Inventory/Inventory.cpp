@@ -438,7 +438,7 @@ void CInventory::AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int inde
 	Skin.set_in_use(false);
 	Skin.set_original_id(0);
 	Skin.set_rarity(rarity);
-	Skin.set_quality(0);
+	Skin.set_quality(rarity);
 
 	if (name.size() > 0)
 		Skin.set_custom_name(name.data());

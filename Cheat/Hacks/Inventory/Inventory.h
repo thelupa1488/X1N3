@@ -60,6 +60,7 @@ public:
 		int Weapon = 0;
 		int WeaponSkinId = 0;
 		int Rarity = 5;
+		int Quality = 0;
 		int Style = 0;
 		int iTeam = CYRT_AUTO;
 		StickerSettings Stickers[5];
