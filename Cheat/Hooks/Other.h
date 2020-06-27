@@ -19,7 +19,7 @@ EGCResults __fastcall hkRetrieveMessage(void* ecx, void* edx, uint32_t* punMsgTy
 
 	uint32_t messageType = *punMsgType & 0x7FFFFFFF;
 
-	GP_Inventory->RetrieveMessage(ecx, edx, punMsgType, pubDest, cubDest, pcubMsgSize);
+	GP_Inventory->PostRetrieveMessage(punMsgType, pubDest, cubDest, pcubMsgSize);
 
 	return status;
 }
@@ -30,9 +30,9 @@ EGCResults __fastcall hkSendMessage(void* ecx, void* edx, uint32_t unMsgType, co
 	uint32_t messageType = unMsgType & 0x7FFFFFFF;
 	void* pubDataMutable = const_cast<void*>(pubData);
 
-	GP_Inventory->PreSendMessage(unMsgType, pubDataMutable, cubData);
-
 	status = HookTables::pSendMessage->GetTrampoline()(ecx, unMsgType, pubDataMutable, cubData);
+
+	GP_Inventory->PreSendMessage(unMsgType, pubDataMutable, cubData);
 
 	if (status != k_EGCResultOK)
 		return status;

@@ -4,12 +4,6 @@
 int CInventory::Inventory::LastIndex = 100;
 vector<IInventory::Inventory> InventoryList;
 
-void CInventory::RetrieveMessage(void* ecx, void* edx, uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize)
-{
-	PostRetrieveMessage(punMsgType, pubDest, cubDest, pcubMsgSize);
-	PostRetrieveMessageMisc(punMsgType, pubDest, cubDest, pcubMsgSize);
-}
-
 void CInventory::SSendMessage(void* ecx, void* edx, uint32_t unMsgType, const void* pubData, uint32_t cubData)
 {
 	void* pubDataMutable = const_cast<void*>(pubData);
@@ -301,7 +295,7 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 	return;
 }
 
-void CInventory::PostRetrieveMessageMisc(uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize)
+void CInventory::PostRetrieveMessage(uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize)
 {
 	uint32_t MessageType = *punMsgType & 0x7FFFFFFF;
 
@@ -351,84 +345,80 @@ void CInventory::PostRetrieveMessageMisc(uint32_t* punMsgType, void* pubDest, ui
 			*pcubMsgSize = Message.ByteSize() + 8;
 		}
 	}
-}
-
-void CInventory::PostRetrieveMessage(uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize)
-{
-	uint32_t MessageType = *punMsgType & 0x7FFFFFFF;
 
 	if (InventoryList.empty())
 		return;
 
-	if ((EGCBaseClientMsg)MessageType != k_EMsgGCClientWelcome)
-		return;
-
-	CMsgClientWelcome Message;
-
-	try
+	if ((EGCBaseClientMsg)MessageType == k_EMsgGCClientWelcome)
 	{
-		if (!Message.ParsePartialFromArray((void*)((DWORD)pubDest + 8), *pcubMsgSize - 8))
-			return;
-	}
-	catch (...)
-	{
-		return;
-	}
 
-	if (Message.outofdate_subscribed_caches_size() <= 0)
-		return;
+		CMsgClientWelcome Message;
 
-	CMsgSOCacheSubscribed* Cache = Message.mutable_outofdate_subscribed_caches(0);
-
-	for (int i = 0; i < Cache->objects_size(); i++)
-	{
-		CMsgSOCacheSubscribed::SubscribedType* Object = Cache->mutable_objects(i);
-
-		if (!Object->has_type_id())
-			continue;
-
-		if (Object->type_id() == 1)
+		try
 		{
-			for (int j = 0; j < Object->object_data_size(); j++)
+			if (!Message.ParsePartialFromArray((void*)((DWORD)pubDest + 8), *pcubMsgSize - 8))
+				return;
+		}
+		catch (...)
+		{
+			return;
+		}
+
+		if (Message.outofdate_subscribed_caches_size() <= 0)
+			return;
+
+		CMsgSOCacheSubscribed* Cache = Message.mutable_outofdate_subscribed_caches(0);
+
+		for (int i = 0; i < Cache->objects_size(); i++)
+		{
+			CMsgSOCacheSubscribed::SubscribedType* Object = Cache->mutable_objects(i);
+
+			if (!Object->has_type_id())
+				continue;
+
+			if (Object->type_id() == 1)
 			{
-				std::string* ObjectData = Object->mutable_object_data(j);
-
-				CSOEconItem Item;
-
-				if (!Item.ParseFromArray((void*)const_cast<char*>(ObjectData->data()), ObjectData->size()))
-					continue;
-
-				if (Item.equipped_state_size() <= 0)
-					continue;
-
-				for (int k = 0; k < Item.equipped_state_size(); k++)
+				for (int j = 0; j < Object->object_data_size(); j++)
 				{
-					auto EquippedState = Item.mutable_equipped_state(k);
+					std::string* ObjectData = Object->mutable_object_data(j);
 
-					EquippedState->set_new_class(0);
-					EquippedState->set_new_slot(0);
+					CSOEconItem Item;
+
+					if (!Item.ParseFromArray((void*)const_cast<char*>(ObjectData->data()), ObjectData->size()))
+						continue;
+
+					if (Item.equipped_state_size() <= 0)
+						continue;
+
+					for (int k = 0; k < Item.equipped_state_size(); k++)
+					{
+						auto EquippedState = Item.mutable_equipped_state(k);
+
+						EquippedState->set_new_class(0);
+						EquippedState->set_new_slot(0);
+					}
+
 				}
 
-			}
-
-			if (InventoryList.size() > 0)
-			{
-				for (size_t i(0); i < InventoryList.size(); i++)
+				if (InventoryList.size() > 0)
 				{
-					if (InventoryList[i].ItemType != IT_MEDAL)
-						AddItem(Object, InventoryList[i].Index, InventoryList[i].Weapon, InventoryList[i].Rarity + 1, InventoryList[i].WeaponSkinId, 38, InventoryList[i].Wear, "", i);
-					else
-						AddMedals(Object, InventoryList[i].Index, InventoryList[i].WeaponSkinId);
+					for (size_t i(0); i < InventoryList.size(); i++)
+					{
+						if (InventoryList[i].ItemType != IT_MEDAL)
+							AddItem(Object, InventoryList[i].Index, InventoryList[i].Weapon, InventoryList[i].Rarity + 1, InventoryList[i].WeaponSkinId, 38, InventoryList[i].Wear, "", i);
+						else
+							AddMedals(Object, InventoryList[i].Index, InventoryList[i].WeaponSkinId);
+					}
 				}
 			}
 		}
-	}
 
-	if ((uint32_t)Message.ByteSize() <= cubDest - 8)
-	{
-		Message.SerializeToArray((void*)((DWORD)pubDest + 8), Message.ByteSize());
+		if ((uint32_t)Message.ByteSize() <= cubDest - 8)
+		{
+			Message.SerializeToArray((void*)((DWORD)pubDest + 8), Message.ByteSize());
 
-		*pcubMsgSize = Message.ByteSize() + 8;
+			*pcubMsgSize = Message.ByteSize() + 8;
+		}
 	}
 }
 

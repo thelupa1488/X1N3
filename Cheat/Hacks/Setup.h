@@ -70,6 +70,7 @@ public:
 			GP_Skins->initialize_kits();
 			GP_Skins->ParseSortedKits();
 			GP_Skins->PrepareSortedSkins();
+			GP_Inventory->InitalizeMedals();
 #endif
 			ADD_LOG("2-1-11-7-4\n");
 			GP_Skins->AllSkinsLoaded = true;

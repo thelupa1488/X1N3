@@ -168,7 +168,7 @@ void CSkins::Menu()
 			lolc("Self-Made"), lolc("Customized"), lolc("Strange"), lolc("Completed"), lolc("Tournament") };
 
 		VectorEx<const char*> itemsQQ = { Quality[0].c_str() , Quality[1].c_str(), Quality[2].c_str(), Quality[3].c_str(), Quality[4].c_str() ,Quality[5].c_str() ,
-			Quality[6].c_str() ,Quality[6].c_str() ,Quality[7].c_str() , Quality[8].c_str() , Quality[9].c_str() };
+			Quality[6].c_str() ,Quality[6].c_str() ,Quality[7].c_str() , Quality[8].c_str() , Quality[9].c_str(), Quality[10].c_str() };
 
 		DComboBox("Quality", Item.quality, itemsQQ);
 

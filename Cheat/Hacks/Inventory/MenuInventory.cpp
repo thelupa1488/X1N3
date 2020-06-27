@@ -91,7 +91,7 @@ void CInventory::Menu()
 			lolc("Self-Made"), lolc("Customized"), lolc("Strange"), lolc("Completed"), lolc("Tournament") };
 
 		VectorEx<const char* > itemsQQEng = { ItemsCSS[0].c_str() , ItemsCSS[1].c_str(), ItemsCSS[2].c_str(), ItemsCSS[3].c_str(), ItemsCSS[4].c_str() ,ItemsCSS[5].c_str() ,
-			ItemsCSS[6].c_str() ,ItemsCSS[6].c_str() ,ItemsCSS[7].c_str() , ItemsCSS[8].c_str() , ItemsCSS[9].c_str() };
+			ItemsCSS[6].c_str() ,ItemsCSS[6].c_str() ,ItemsCSS[7].c_str() , ItemsCSS[8].c_str() , ItemsCSS[9].c_str(), ItemsCSS[10].c_str() };
 
 		DComboBox("Quality", Item.quality, itemsQQEng);
 		static string lll = "";
