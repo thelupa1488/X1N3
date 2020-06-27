@@ -9,7 +9,12 @@
 #include "../../protobuf/netmessages.pb.h"
 #include "../../protobuf/steammessages.pb.h"
 
-#pragma comment(lib, "libprotobuf.lib")
+#ifdef DEBUG_DLL
+#pragma comment(lib, "protobuf_release.lib")
+#else
+#pragma comment(lib, "protobuf_debug.lib")
+#endif
+
 #pragma comment(lib, "libprotoc.lib")
 
 #include "../../Main.h"

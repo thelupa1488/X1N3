@@ -357,8 +357,9 @@
     <ClInclude Include="X1API\X1Vector.h" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="protobuf\libprotobuf.lib" />
     <Library Include="protobuf\libprotoc.lib" />
+    <Library Include="protobuf\protobuf_debug.lib" />
+    <Library Include="protobuf\protobuf_release.lib" />
     <Library Include="VMP\VMProtectSDK32.lib" />
     <Library Include="X1API\detours.lib" />
   </ItemGroup>
