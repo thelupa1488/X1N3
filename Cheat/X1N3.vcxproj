@@ -77,6 +77,7 @@
     <ClCompile Include="X1API\MinHook\src\trampoline.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\SDK\IBaseFileSystem.h" />
     <ClInclude Include="Engine\Utils\Utils.h" />
     <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="Engine\EnginePrediction.h" />
@@ -251,6 +252,10 @@
     <Library Include="VMP\VMProtectSDK32.lib" />
     <Library Include="X1API\detours.lib" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="steam_sdk\steam_api.json" />
+    <None Include="steam_sdk\steam_api_interop.cs" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{45A301E6-73EC-4F60-88F4-D1D5154B58D7}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -294,7 +299,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)Include;$(SolutionDir)Cheat\VMP;$(SolutionDir)Cheat\Json;$(SolutionDir)Cheat\protobuf-2.5.0\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(DXSDK_DIR)Include;$(SolutionDir)Cheat\VMP;$(SolutionDir)Cheat\Json;$(SolutionDir)Cheat\protobuf\src;$(IncludePath)</IncludePath>
     <LibraryPath>$(DXSDK_DIR)Lib\x86;$(SolutionDir)Cheat\protobuf;$(SolutionDir)Cheat\VMP;$(SolutionDir)Cheat\X1API;$(LibraryPath)</LibraryPath>
     <TargetName>debug</TargetName>
     <OutDir>$(SolutionDir)build\debug</OutDir>
@@ -302,8 +307,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)Include;$(SolutionDir)Cheat\VMP;$(SolutionDir)Cheat\Json;$(SolutionDir)Cheat\protobuf-2.5.0\src;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(SolutionDir)Cheat\X1API;$(SolutionDir)CheatVMP;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(DXSDK_DIR)Include;$(SolutionDir)Cheat\VMP;$(SolutionDir)Cheat\Json;$(SolutionDir)Cheat\protobuf\src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(SolutionDir)Cheat\protobuf;$(SolutionDir)Cheat\X1API;$(SolutionDir)CheatVMP;$(LibraryPath)</LibraryPath>
     <TargetName>release</TargetName>
     <OutDir>$(SolutionDir)build\release</OutDir>
     <IntDir>$(SolutionDir)Cheat\output\release</IntDir>
@@ -373,6 +378,7 @@
       <CompileAs>Default</CompileAs>
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

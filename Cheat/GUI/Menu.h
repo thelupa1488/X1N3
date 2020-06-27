@@ -92,28 +92,22 @@ public:
 		X1Gui().SameLine(331);
 
 		if (ChangerMode == 0)
-		{
 			if (X1Gui().Button(GP_Skins->ShowSkinPreview ? XorStr("Preview <<<") : XorStr("Preview >>>"), Vec2(129, 20)))
 				GP_Skins->ShowSkinPreview = !GP_Skins->ShowSkinPreview;
-		}
-		else if (ChangerMode == 1)
-		{
+
+		if (ChangerMode == 1)
 			if (X1Gui().Button(GP_Inventory->ShowInventoryList ? XorStr("Inv. list <<<") : XorStr("Inv. list >>>"), Vec2(129, 20)))
 				GP_Inventory->ShowInventoryList = !GP_Inventory->ShowInventoryList;
-		}
 
 		X1Gui().Spacing();
 		X1Gui().Separator();
 		X1Gui().Spacing();
 
 		if (ChangerMode == 0)
-		{
 			DCheckBox("Enable Skins", GP_Skins->SkinsEnable);
-		}
-		else if (ChangerMode == 1)
-		{
+
+		if (ChangerMode == 1)
 			DCheckBox("Synchronization Inventory", GP_Inventory->SkinsSyncEnable);
-		}
 
 		X1Gui().Spacing();
 		X1Gui().Separator();
@@ -122,7 +116,7 @@ public:
 		if (ChangerMode == 0)
 			GP_Skins->Menu();
 
-		else if (ChangerMode == 1)
+		if (ChangerMode == 1)
 			GP_Inventory->Menu();
 	}
 
@@ -256,7 +250,7 @@ public:
 
 						bool IsVisualsTab = SelectedTab == 1 && GP_Esp->ShowPreview;
 						bool IsLegitAimTab = SelectedTab == 0 && GP_LegitAim->ShowWeaponList;
-						bool IsSkinsTab = SelectedTab == 3 && GP_Skins->ShowSkinPreview;
+						bool IsSkinsTab = SelectedTab == 3 && ChangerMode == 0 && GP_Skins->ShowSkinPreview;
 						bool IsInventTab = SelectedTab == 3 && ChangerMode == 1 && GP_Inventory->ShowInventoryList;
 
 						static Vec2 TargetSize = Vec2(100, 100);

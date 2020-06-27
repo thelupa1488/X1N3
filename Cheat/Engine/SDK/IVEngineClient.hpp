@@ -90,8 +90,8 @@ namespace SDK
 	class ISPSharedMemory;
 	class CGamestatsData;
 	class KeyValues;
-	class CSteamAPIContext;
 	struct Frustum_t;
+	class CSteamAPIContext;
 
 	typedef void(*pfnDemoCustomDataCallback)(uint8_t* pData, size_t iSize);
 

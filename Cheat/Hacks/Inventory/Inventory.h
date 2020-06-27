@@ -99,7 +99,7 @@ public:
 
 	CConfig Config = CConfig(XorStr("Inventory"));
 
-	bool SkinsSyncEnable = true;
+	bool SkinsSyncEnable = false;
 	void PostRetrieveMessage(uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize);
 	void PostRetrieveMessageMisc(uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize);
 	void RetrieveMessage(void* ecx, void* edx, uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize);

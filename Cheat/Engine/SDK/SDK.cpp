@@ -34,6 +34,7 @@ namespace SDK
 	IMoveHelper*        I::g_pMoveHelper = nullptr;
 	IGameMovement*      I::g_pGameMovement = nullptr;
 	IGameRules*         I::g_pGameRules = nullptr;
+	IBaseFileSystem*    I::g_pFileSystem = nullptr;
 
 	class InterfaceReg
 	{
@@ -266,6 +267,17 @@ namespace SDK
 		return g_pLocalize;
 	}
 
+	IBaseFileSystem* I::FileSystem()
+	{
+		if (!g_pFileSystem)
+		{
+			g_pFileSystem = GetInterface<IBaseFileSystem>(filesysFactory, XorStr("VBaseFileSystem011"));
+			ADD_LOG("->FileSystem -> %X\n", (DWORD)g_pFileSystem);
+		}
+
+		return g_pFileSystem;
+	}
+
 	CGlobalVarsBase* I::GlobalVars()
 	{
 		if (!g_pGlobals)
@@ -363,7 +375,8 @@ namespace SDK
 
 	ISteamGameCoordinator* I::SteamGameCoordinator()
 	{
-		if (!g_pSteamGameCoordinator) {
+		if (!g_pSteamGameCoordinator) 
+		{
 			typedef uint32_t SteamPipeHandle;
 			typedef uint32_t SteamUserHandle;
 

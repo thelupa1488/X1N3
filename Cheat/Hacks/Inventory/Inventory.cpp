@@ -575,7 +575,6 @@ void CInventory::AddMedals(CMsgSOCacheSubscribed::SubscribedType* pInventoryCach
 	Medal.set_id(20000 + Index);
 
 	pInventoryCacheObject->add_object_data(Medal.SerializeAsString());
-
 }
 
 bool CInventory::SendClientHello()

@@ -204,45 +204,23 @@
     <ClCompile Include="Engine\SDK\KeyValues.cpp">
       <Filter>Engine\SDK</Filter>
     </ClCompile>
-    <ClCompile Include="protobuf\base_gcmessages.pb.cc">
-      <Filter>protobuf</Filter>
-    </ClCompile>
-    <ClCompile Include="protobuf\cstrike15_gcmessages.pb.cc">
-      <Filter>protobuf</Filter>
-    </ClCompile>
-    <ClCompile Include="protobuf\econ_gcmessages.pb.cc">
-      <Filter>protobuf</Filter>
-    </ClCompile>
-    <ClCompile Include="protobuf\engine_gcmessages.pb.cc">
-      <Filter>protobuf</Filter>
-    </ClCompile>
-    <ClCompile Include="protobuf\fatdemo.pb.cc">
-      <Filter>protobuf</Filter>
-    </ClCompile>
-    <ClCompile Include="protobuf\gcsdk_gcmessages.pb.cc">
-      <Filter>protobuf</Filter>
-    </ClCompile>
-    <ClCompile Include="protobuf\gcsystemmsgs.pb.cc">
-      <Filter>protobuf</Filter>
-    </ClCompile>
     <ClCompile Include="Hacks\Inventory\Inventory.cpp">
       <Filter>Hacks\Inventory</Filter>
     </ClCompile>
     <ClCompile Include="Hacks\Inventory\MenuInventory.cpp">
       <Filter>Hacks\Inventory</Filter>
     </ClCompile>
-    <ClCompile Include="protobuf\netmessages.pb.cc">
-      <Filter>protobuf</Filter>
-    </ClCompile>
-    <ClCompile Include="protobuf\network_connection.pb.cc">
-      <Filter>protobuf</Filter>
-    </ClCompile>
-    <ClCompile Include="protobuf\steamdatagram_messages.pb.cc">
-      <Filter>protobuf</Filter>
-    </ClCompile>
-    <ClCompile Include="protobuf\steammessages.pb.cc">
-      <Filter>protobuf</Filter>
-    </ClCompile>
+    <ClCompile Include="protobuf\base_gcmessages.pb.cc" />
+    <ClCompile Include="protobuf\cstrike15_gcmessages.pb.cc" />
+    <ClCompile Include="protobuf\econ_gcmessages.pb.cc" />
+    <ClCompile Include="protobuf\engine_gcmessages.pb.cc" />
+    <ClCompile Include="protobuf\fatdemo.pb.cc" />
+    <ClCompile Include="protobuf\gcsdk_gcmessages.pb.cc" />
+    <ClCompile Include="protobuf\gcsystemmsgs.pb.cc" />
+    <ClCompile Include="protobuf\netmessages.pb.cc" />
+    <ClCompile Include="protobuf\network_connection.pb.cc" />
+    <ClCompile Include="protobuf\steamdatagram_messages.pb.cc" />
+    <ClCompile Include="protobuf\steammessages.pb.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
@@ -742,9 +720,6 @@
     <ClInclude Include="steam_sdk\isteamvideo.h">
       <Filter>steam_sdk</Filter>
     </ClInclude>
-    <ClInclude Include="steam_sdk\steam_api.h">
-      <Filter>steam_sdk</Filter>
-    </ClInclude>
     <ClInclude Include="steam_sdk\steam_api_flat.h">
       <Filter>steam_sdk</Filter>
     </ClInclude>
@@ -820,42 +795,22 @@
     <ClInclude Include="Render\TestTexture.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="protobuf\base_gcmessages.pb.h">
-      <Filter>protobuf</Filter>
-    </ClInclude>
-    <ClInclude Include="protobuf\cstrike15_gcmessages.pb.h">
-      <Filter>protobuf</Filter>
-    </ClInclude>
-    <ClInclude Include="protobuf\econ_gcmessages.pb.h">
-      <Filter>protobuf</Filter>
-    </ClInclude>
-    <ClInclude Include="protobuf\engine_gcmessages.pb.h">
-      <Filter>protobuf</Filter>
-    </ClInclude>
-    <ClInclude Include="protobuf\fatdemo.pb.h">
-      <Filter>protobuf</Filter>
-    </ClInclude>
-    <ClInclude Include="protobuf\gcsdk_gcmessages.pb.h">
-      <Filter>protobuf</Filter>
-    </ClInclude>
-    <ClInclude Include="protobuf\gcsystemmsgs.pb.h">
-      <Filter>protobuf</Filter>
-    </ClInclude>
     <ClInclude Include="Hacks\Inventory\Inventory.h">
       <Filter>Hacks\Inventory</Filter>
     </ClInclude>
-    <ClInclude Include="protobuf\netmessages.pb.h">
-      <Filter>protobuf</Filter>
-    </ClInclude>
-    <ClInclude Include="protobuf\network_connection.pb.h">
-      <Filter>protobuf</Filter>
-    </ClInclude>
-    <ClInclude Include="protobuf\steamdatagram_messages.pb.h">
-      <Filter>protobuf</Filter>
-    </ClInclude>
-    <ClInclude Include="protobuf\steammessages.pb.h">
-      <Filter>protobuf</Filter>
-    </ClInclude>
+    <ClInclude Include="Engine\SDK\IBaseFileSystem.h" />
+    <ClInclude Include="steam_sdk\steam_api.h" />
+    <ClInclude Include="protobuf\base_gcmessages.pb.h" />
+    <ClInclude Include="protobuf\cstrike15_gcmessages.pb.h" />
+    <ClInclude Include="protobuf\econ_gcmessages.pb.h" />
+    <ClInclude Include="protobuf\engine_gcmessages.pb.h" />
+    <ClInclude Include="protobuf\fatdemo.pb.h" />
+    <ClInclude Include="protobuf\gcsdk_gcmessages.pb.h" />
+    <ClInclude Include="protobuf\gcsystemmsgs.pb.h" />
+    <ClInclude Include="protobuf\netmessages.pb.h" />
+    <ClInclude Include="protobuf\network_connection.pb.h" />
+    <ClInclude Include="protobuf\steamdatagram_messages.pb.h" />
+    <ClInclude Include="protobuf\steammessages.pb.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -947,11 +902,11 @@
     <Library Include="VMP\VMProtectSDK32.lib">
       <Filter>VMP</Filter>
     </Library>
-    <Library Include="protobuf\libprotobuf.lib">
-      <Filter>protobuf</Filter>
-    </Library>
-    <Library Include="protobuf\libprotoc.lib">
-      <Filter>protobuf</Filter>
-    </Library>
+    <Library Include="protobuf\libprotobuf.lib" />
+    <Library Include="protobuf\libprotoc.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="steam_sdk\steam_api.json" />
+    <None Include="steam_sdk\steam_api_interop.cs" />
   </ItemGroup>
 </Project>
