@@ -80,6 +80,52 @@ private:
 
 public:
 
+	int ChangerMode = 0;
+
+	void Changers()
+	{
+		vector<string> ItemsCSS = { lolc("Skins"), lolc("Inventory") };
+		VectorEx<const char*> ChaArr = { ItemsCSS[0].c_str(), ItemsCSS[1].c_str() };
+
+		TabsLabels(ChangerMode, ChaArr, Vec2(328, 20), false);
+
+		X1Gui().SameLine(331);
+
+		if (ChangerMode == 0)
+		{
+			if (X1Gui().Button(GP_Skins->ShowSkinPreview ? XorStr("Preview <<<") : XorStr("Preview >>>"), Vec2(129, 20)))
+				GP_Skins->ShowSkinPreview = !GP_Skins->ShowSkinPreview;
+		}
+		else if (ChangerMode == 1)
+		{
+			if (X1Gui().Button(GP_Inventory->ShowInventoryList ? XorStr("Inv. list <<<") : XorStr("Inv. list >>>"), Vec2(129, 20)))
+				GP_Inventory->ShowInventoryList = !GP_Inventory->ShowInventoryList;
+		}
+
+		X1Gui().Spacing();
+		X1Gui().Separator();
+		X1Gui().Spacing();
+
+		if (ChangerMode == 0)
+		{
+			DCheckBox("Enable Skins", GP_Skins->SkinsEnable);
+		}
+		else if (ChangerMode == 1)
+		{
+			DCheckBox("Synchronization Inventory", GP_Inventory->SkinsSyncEnable);
+		}
+
+		X1Gui().Spacing();
+		X1Gui().Separator();
+		X1Gui().Spacing();
+
+		if (ChangerMode == 0)
+			GP_Skins->Menu();
+
+		else if (ChangerMode == 1)
+			GP_Inventory->Menu();
+	}
+
 	void SelectWindow()
 	{
 		VectorEx<const char*>MainTabs = { lolc("Aimbot"), lolc("Visualizations"), lolc("Radar"), lolc("Changer"), lolc("Miscellaneous"), lolc("Grenade helper"), lolc("Configuration") };
@@ -101,7 +147,8 @@ public:
 		case 0: if (GP_LegitAim) GP_LegitAim->Menu(); break;
 		case 1: if (GP_Esp) GP_Esp->Menu(); break;
 		case 2: if (GP_Radar) GP_Radar->Menu(); break;
-		case 3: if (GP_Skins) { GP_Skins->Menu(); } break;
+		//case 3: if (GP_Skins) GP_Skins->Menu(); break;
+		case 3: if (GP_Skins) Changers(); break;
 		case 4: if (GP_Misc) GP_Misc->Menu(); break;
 		case 5: if (GP_GHelper) { GP_GHelper->Menu(); } break;
 		case 6: SettingsMenu(); break;
@@ -207,9 +254,10 @@ public:
 					{
 						Vec2 MainWinPos = X1Gui().GetPrevWindowPos();
 
-						bool IsSkinsTab = SelectedTab == 3  && GP_Skins->ShowSkinPreview;
 						bool IsVisualsTab = SelectedTab == 1 && GP_Esp->ShowPreview;
 						bool IsLegitAimTab = SelectedTab == 0 && GP_LegitAim->ShowWeaponList;
+						bool IsSkinsTab = SelectedTab == 3 && GP_Skins->ShowSkinPreview;
+						bool IsInventTab = SelectedTab == 3 && ChangerMode == 1 && GP_Inventory->ShowInventoryList;
 
 						static Vec2 TargetSize = Vec2(100, 100);
 						static Vec2 CurSize = Vec2(100, 100);
@@ -218,6 +266,8 @@ public:
 							TargetSize = Vec2(350 + (X1Gui().GetStyle().wndPadding.x * 2) + 1, WINDOW2_SIZE_Y);
 						else if (IsSkinsTab)
 							TargetSize = Vec2(320, 248);
+						else if (IsInventTab)
+							TargetSize = Vec2(365, WINDOW2_SIZE_Y);
 						else if (IsLegitAimTab)
 						{
 							if (GP_LegitAim->WeaponCustomTypes == 0)
@@ -229,7 +279,7 @@ public:
 						}
 
 						static bool ShowPrewWin = false;
-						bool EnablePrewWin = IsVisualsTab || IsLegitAimTab || IsSkinsTab;
+						bool EnablePrewWin = IsVisualsTab || IsLegitAimTab || IsSkinsTab || IsInventTab;
 
 						if (AnimEnable)
 						{
@@ -261,9 +311,14 @@ public:
 									if (GP_Esp)
 										GP_Esp->VisualPreview();
 
-								//if (SelectedTab == 3)
-								//	if(GP_Skins)
-								//		GP_Skins->Preview();
+								if (SelectedTab == 3)	
+								{
+									if (ChangerMode == 0)
+										GP_Skins->Preview();
+
+									if (ChangerMode == 1)
+										GP_Inventory->InvListMenu();
+								}
 							}
 							X1Gui().End();
 						}

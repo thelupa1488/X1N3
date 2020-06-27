@@ -8,4 +8,5 @@ CMisc*				GP_Misc = nullptr;
 CLegitAim*			GP_LegitAim = nullptr;
 CRadar*				GP_Radar = nullptr;
 CSkins*				GP_Skins = nullptr;
+CInventory*         GP_Inventory = nullptr;
 CGHelper*			GP_GHelper = nullptr;

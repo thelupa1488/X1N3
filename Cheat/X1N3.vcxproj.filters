@@ -129,7 +129,6 @@
       <Filter>Engine\SDK</Filter>
     </ClCompile>
     <ClCompile Include="Engine\SDK\CRC.cpp" />
-    <ClCompile Include="Engine\SDK\KeyValues.cpp" />
     <ClCompile Include="Engine\SDK\SDK.cpp" />
     <ClCompile Include="Engine\SDK\Vector.cpp" />
     <ClCompile Include="Engine\SDK\Vector2D.cpp" />
@@ -150,11 +149,8 @@
     <ClCompile Include="Hacks\GrenadeHelper\GreandeHelper.cpp" />
     <ClCompile Include="Hacks\GrenadeHelper\GreandeHelperMenu.cpp" />
     <ClCompile Include="Hacks\LegitAim\LegitAim.cpp" />
-    <ClCompile Include="Hacks\LegitAim\MenuLegitAim.cpp" />
     <ClCompile Include="Hacks\Misc\MenuMisc.cpp" />
     <ClCompile Include="Hacks\Misc\Misc.cpp" />
-    <ClCompile Include="Hacks\Radar\Radar.cpp" />
-    <ClCompile Include="Hacks\Radar\RadarMenu.cpp" />
     <ClCompile Include="Hacks\Skins\DynSkin.cpp" />
     <ClCompile Include="Hacks\Skins\KitParser.cpp" />
     <ClCompile Include="Hacks\Skins\MenuSkins.cpp" />
@@ -172,20 +168,45 @@
     <ClCompile Include="X1API\MinHook\src\buffer.c" />
     <ClCompile Include="X1API\MinHook\src\hook.c" />
     <ClCompile Include="X1API\MinHook\src\trampoline.c" />
-    <ClCompile Include="Hacks\LegitAim\MenuLegitAim.cpp" />
     <ClCompile Include="Hacks\Radar\Radar.cpp">
       <Filter>Hacks\Radar</Filter>
     </ClCompile>
     <ClCompile Include="Hacks\Radar\RadarMenu.cpp">
       <Filter>Hacks\Radar</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\SDK\Math.cpp" />
-    <ClCompile Include="Engine\SDK\checksum_md5.cpp" />
-    <ClCompile Include="X1API\cHide.cpp" />
-    <ClCompile Include="Engine\SDK\KeyValues.cpp" />
     <ClCompile Include="Engine\Utils\Utils.cpp">
-      <Filter>Engine\CSX</Filter>
+      <Filter>Engine\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\SDK\checksum_md5.cpp">
+      <Filter>Engine\SDK</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\SDK\KeyValues.cpp">
+      <Filter>Engine\SDK</Filter>
+    </ClCompile>
+    <ClCompile Include="Hacks\Radar\Radar.cpp">
+      <Filter>Hacks\Radar</Filter>
+    </ClCompile>
+    <ClCompile Include="Hacks\Radar\RadarMenu.cpp">
+      <Filter>Hacks\Radar</Filter>
+    </ClCompile>
+    <ClCompile Include="Hacks\LegitAim\MenuLegitAim.cpp">
+      <Filter>Hacks\LegitAim</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\SDK\Math.cpp">
+      <Filter>Engine\SDK</Filter>
+    </ClCompile>
+    <ClCompile Include="X1API\Hide\cHide.cpp">
+      <Filter>X1API\Hide</Filter>
+    </ClCompile>
+    <ClCompile Include="Hacks\LegitAim\MenuLegitAim.cpp">
+      <Filter>Hacks\LegitAim</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\SDK\KeyValues.cpp">
+      <Filter>Engine\SDK</Filter>
+    </ClCompile>
+    <ClCompile Include="Hacks\Inventory\EconItem.cpp" />
+    <ClCompile Include="Hacks\Inventory\Inventory.cpp" />
+    <ClCompile Include="Hacks\Inventory\MenuInventory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
@@ -485,7 +506,6 @@
     <ClInclude Include="Engine\SDK\IVModelInfoClient.hpp" />
     <ClInclude Include="Engine\SDK\IVModelRender.h" />
     <ClInclude Include="Engine\SDK\IVRenderView.h" />
-    <ClInclude Include="Engine\SDK\KeyValues.h" />
     <ClInclude Include="Engine\SDK\memalloc.h" />
     <ClInclude Include="Engine\SDK\QAngle.hpp" />
     <ClInclude Include="Engine\SDK\Recv.hpp" />
@@ -507,7 +527,6 @@
     <ClInclude Include="Hacks\GrenadeHelper\GreandeHelper.h" />
     <ClInclude Include="Hacks\LegitAim\LegitAim.h" />
     <ClInclude Include="Hacks\Misc\Misc.h" />
-    <ClInclude Include="Hacks\Radar\Radar.h" />
     <ClInclude Include="Hacks\Skins\DynSkin.h" />
     <ClInclude Include="Hacks\Skins\Skins.h" />
     <ClInclude Include="Hacks\Settings.h" />
@@ -520,7 +539,6 @@
     <ClInclude Include="Hooks\Views.h" />
     <ClInclude Include="Include\Def.h" />
     <ClInclude Include="Include\Winheaders.h" />
-    <ClInclude Include="Initialize\Initialize.h" />
     <ClInclude Include="Initialize\Offsets.h" />
     <ClInclude Include="Json\Json.hpp" />
     <ClInclude Include="Render\DirectData\EndScene.h" />
@@ -535,8 +553,6 @@
     <ClInclude Include="Render\DXFont.h" />
     <ClInclude Include="Render\DXOverlayManager.h" />
     <ClInclude Include="Render\DXRender.h" />
-    <ClInclude Include="Render\TestTexture.h" />
-    <ClInclude Include="steam_sdk\steam_api.h" />
     <ClInclude Include="X1API\MinHook\src\HDE\hde32.h" />
     <ClInclude Include="X1API\MinHook\src\HDE\hde64.h" />
     <ClInclude Include="X1API\MinHook\src\HDE\pstdint.h" />
@@ -546,91 +562,232 @@
     <ClInclude Include="X1API\MinHook\src\trampoline.h" />
     <ClInclude Include="X1API\MinHook\hook.h" />
     <ClInclude Include="X1API\MinHook\MinHook.h" />
-    <ClInclude Include="X1API\detours.h" />
-    <ClInclude Include="X1API\X1FastCall.h" />
-    <ClInclude Include="X1API\X1Vector.h" />
-    <ClInclude Include="X1API\MinHook\include\MinHook.h" />
-    <ClInclude Include="X1API\X1FastCall.h" />
-    <ClInclude Include="X1API\X1Vector.h" />
-    <ClInclude Include="X1API\detours.h" />
-    <ClInclude Include="X1API\ProtectDLL.h" />
-    <ClInclude Include="X1API\XorStr.h" />
-    <ClInclude Include="Initialize\Initialize.h" />
-    <ClInclude Include="steam_sdk\isteamapplist.h" />
-    <ClInclude Include="steam_sdk\isteamapps.h" />
-    <ClInclude Include="steam_sdk\isteamappticket.h" />
-    <ClInclude Include="steam_sdk\isteamclient.h" />
-    <ClInclude Include="steam_sdk\isteamcontroller.h" />
-    <ClInclude Include="steam_sdk\isteamfriends.h" />
-    <ClInclude Include="steam_sdk\isteamgamecoordinator.h" />
-    <ClInclude Include="steam_sdk\isteamgameserver.h" />
-    <ClInclude Include="steam_sdk\isteamgameserverstats.h" />
-    <ClInclude Include="steam_sdk\isteamhtmlsurface.h" />
-    <ClInclude Include="steam_sdk\isteamhttp.h" />
-    <ClInclude Include="steam_sdk\isteaminventory.h" />
-    <ClInclude Include="steam_sdk\isteammasterserverupdater.h" />
-    <ClInclude Include="steam_sdk\isteammatchmaking.h" />
-    <ClInclude Include="steam_sdk\isteammusic.h" />
-    <ClInclude Include="steam_sdk\isteammusicremote.h" />
-    <ClInclude Include="steam_sdk\isteamnetworking.h" />
-    <ClInclude Include="steam_sdk\isteamparentalsettings.h" />
-    <ClInclude Include="steam_sdk\isteamps3overlayrenderer.h" />
-    <ClInclude Include="steam_sdk\isteamremotestorage.h" />
-    <ClInclude Include="steam_sdk\isteamscreenshots.h" />
-    <ClInclude Include="steam_sdk\isteamugc.h" />
-    <ClInclude Include="steam_sdk\isteamuser.h" />
-    <ClInclude Include="steam_sdk\isteamuserstats.h" />
-    <ClInclude Include="steam_sdk\isteamutils.h" />
-    <ClInclude Include="steam_sdk\isteamvideo.h" />
-    <ClInclude Include="steam_sdk\matchmakingtypes.h" />
-    <ClInclude Include="steam_sdk\steam_api.h" />
-    <ClInclude Include="steam_sdk\steam_api_flat.h" />
-    <ClInclude Include="steam_sdk\steam_api_internal.h" />
-    <ClInclude Include="steam_sdk\steam_gameserver.h" />
-    <ClInclude Include="steam_sdk\steamclientpublic.h" />
-    <ClInclude Include="steam_sdk\steamencryptedappticket.h" />
-    <ClInclude Include="steam_sdk\steamhttpenums.h" />
-    <ClInclude Include="steam_sdk\steamps3params.h" />
-    <ClInclude Include="steam_sdk\steamtypes.h" />
-    <ClInclude Include="steam_sdk\steamuniverse.h" />
-    <ClInclude Include="Engine\SDK\CGlowObjectManager.h" />
     <ClInclude Include="Hacks\Radar\Radar.h">
       <Filter>Hacks\Radar</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\SDK\CGlowObjManager.h" />
-    <ClInclude Include="Render\TestTexture.h" />
-    <ClInclude Include="Engine\SDK\ClientState.hpp" />
-    <ClInclude Include="Engine\XorStr.h" />
-    <ClInclude Include="Engine\SDK\IPhysics.hpp" />
-    <ClInclude Include="Engine\SDK\Math.hpp" />
-    <ClInclude Include="Engine\SDK\Match.h" />
-    <ClInclude Include="Engine\SDK\IPredition.hpp" />
-    <ClInclude Include="Engine\SDK\checksum_md5.hpp" />
-    <ClInclude Include="Engine\SDK\IGameRules.h" />
-    <ClInclude Include="Engine\SDK\IInputSystem.hpp" />
-    <ClInclude Include="Engine\SDK\CUserCmd.hpp" />
-    <ClInclude Include="X1API\cHide.h" />
-    <ClInclude Include="X1API\VMP\VMProtectSDK.h" />
     <ClInclude Include="Engine\SDK\CInput.hpp">
       <Filter>Engine\SDK</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\EnginePrediction.h" />
-    <ClInclude Include="X1API\ThreadInMemory.h" />
-    <ClInclude Include="Hooks\Other.h" />
-    <ClInclude Include="Engine\SDK\KeyValues.h" />
     <ClInclude Include="Engine\SDK\ICVar.h">
       <Filter>Engine\SDK</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\SDK\CUtlVector.h" />
-    <ClInclude Include="Engine\SDK\CUtlMemory.h" />
     <ClInclude Include="Engine\Utils\Utils.h">
-      <Filter>Engine\CSX</Filter>
+      <Filter>Engine\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\SDK\CGlowObjectManager.h">
+      <Filter>Engine\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SDK\CGlowObjManager.h">
+      <Filter>Engine\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SDK\checksum_md5.hpp">
+      <Filter>Engine\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SDK\ClientState.hpp">
+      <Filter>Engine\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SDK\CUserCmd.hpp">
+      <Filter>Engine\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SDK\CUtlVector.h">
+      <Filter>Engine\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SDK\CUtlMemory.h">
+      <Filter>Engine\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\EnginePrediction.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="X1API\detours.h">
+      <Filter>X1API</Filter>
+    </ClInclude>
+    <ClInclude Include="X1API\X1FastCall.h">
+      <Filter>X1API</Filter>
+    </ClInclude>
+    <ClInclude Include="X1API\X1Vector.h">
+      <Filter>X1API</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SDK\IGameRules.h">
+      <Filter>Engine\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SDK\IInputSystem.hpp">
+      <Filter>Engine\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Initialize\Initialize.h">
+      <Filter>Initialize</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SDK\Match.h">
+      <Filter>Engine\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SDK\KeyValues.h">
+      <Filter>Engine\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SDK\IPredition.hpp">
+      <Filter>Engine\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SDK\IPhysics.hpp">
+      <Filter>Engine\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteamapplist.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteamapps.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteamappticket.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteamclient.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteamcontroller.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteamfriends.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteamgamecoordinator.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteamgameserver.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteamgameserverstats.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteamhtmlsurface.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteamhttp.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteaminventory.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteammasterserverupdater.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteammatchmaking.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteammusic.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteammusicremote.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteamnetworking.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteamparentalsettings.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteamps3overlayrenderer.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteamremotestorage.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteamscreenshots.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteamugc.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteamuser.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteamuserstats.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteamutils.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\isteamvideo.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\steam_api.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\steam_api_flat.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\steam_api_internal.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\steam_gameserver.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\steamclientpublic.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\steamencryptedappticket.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\steamhttpenums.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\steamps3params.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\steamtypes.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\steamuniverse.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="Hacks\Radar\Radar.h">
+      <Filter>Hacks\Radar</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\matchmakingtypes.h">
+      <Filter>Engine\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\TestTexture.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="VMP\VMProtectSDK.h">
+      <Filter>VMP</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SDK\Math.hpp">
+      <Filter>Engine\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="X1API\ThreadInMemory.h">
+      <Filter>X1API</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\XorStr.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Hooks\Other.h">
+      <Filter>Hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="X1API\Hide\cHide.h">
+      <Filter>X1API\Hide</Filter>
+    </ClInclude>
+    <ClInclude Include="X1API\X1Vector.h">
+      <Filter>X1API</Filter>
+    </ClInclude>
+    <ClInclude Include="X1API\X1FastCall.h">
+      <Filter>X1API</Filter>
+    </ClInclude>
+    <ClInclude Include="X1API\detours.h">
+      <Filter>X1API</Filter>
+    </ClInclude>
+    <ClInclude Include="Initialize\Initialize.h">
+      <Filter>Initialize</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SDK\KeyValues.h">
+      <Filter>Engine\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="steam_sdk\steam_api.h">
+      <Filter>steam_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\TestTexture.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Hacks\Inventory\EconItem.h" />
+    <ClInclude Include="Hacks\Inventory\Inventory.h" />
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="3DMenu">
-      <UniqueIdentifier>{f12118ac-fd5e-426b-8167-1b875fc3a831}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine">
       <UniqueIdentifier>{54d00573-2776-465b-b25b-9a7075dd6ad0}</UniqueIdentifier>
     </Filter>
@@ -652,17 +809,11 @@
     <Filter Include="Json">
       <UniqueIdentifier>{edbe6c75-697e-470e-9492-1699cf54f433}</UniqueIdentifier>
     </Filter>
-    <Filter Include="License">
-      <UniqueIdentifier>{04ed62b9-85b2-4ab1-8889-d250b8b6772f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Render">
       <UniqueIdentifier>{6829291e-bd1c-490f-b9e3-d3c354a73b44}</UniqueIdentifier>
     </Filter>
     <Filter Include="X1API">
       <UniqueIdentifier>{03f37b99-d864-4887-b758-d00979202e74}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\CSX">
-      <UniqueIdentifier>{45881dc7-a42b-425c-9494-7ff37ac1463f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\SDK">
       <UniqueIdentifier>{97b1749c-5e42-448b-b981-b9cf247b387a}</UniqueIdentifier>
@@ -688,9 +839,6 @@
     <Filter Include="Hacks\Skins">
       <UniqueIdentifier>{1004cc64-aaa1-463e-aeba-e59316916888}</UniqueIdentifier>
     </Filter>
-    <Filter Include="X1API\HTTP">
-      <UniqueIdentifier>{9f188fdb-c333-4ea9-afbd-722bc0816e60}</UniqueIdentifier>
-    </Filter>
     <Filter Include="X1API\MinHook">
       <UniqueIdentifier>{8f23c2de-3e77-4f75-9da6-18e544a211e2}</UniqueIdentifier>
     </Filter>
@@ -709,12 +857,25 @@
     <Filter Include="steam_sdk">
       <UniqueIdentifier>{b4dc45bb-b5aa-490f-be49-2cf3b966efbb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="VMP">
+      <UniqueIdentifier>{929dde5c-7916-4e50-85be-59b2697f5b0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="X1API\Hide">
+      <UniqueIdentifier>{dfbbe952-7a30-4e4e-80ed-8f7a01c7af4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="protobuf">
+      <UniqueIdentifier>{0d6f2192-ef48-4224-b299-48a3df172849}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Utils">
+      <UniqueIdentifier>{45881dc7-a42b-425c-9494-7ff37ac1463f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="X1API\detours.lib" />
-    <Library Include="X1API\VMP\VMProtectSDK32.lib" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="X1API\VMP\VMProtectSDK32.dll" />
+    <Library Include="X1API\detours.lib">
+      <Filter>X1API</Filter>
+    </Library>
+    <Library Include="VMP\VMProtectSDK32.lib">
+      <Filter>VMP</Filter>
+    </Library>
   </ItemGroup>
 </Project>

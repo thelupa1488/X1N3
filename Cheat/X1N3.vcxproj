@@ -36,6 +36,9 @@
     <ClCompile Include="Hacks\Esp\WorldEsp.cpp" />
     <ClCompile Include="Hacks\GrenadeHelper\GreandeHelper.cpp" />
     <ClCompile Include="Hacks\GrenadeHelper\GreandeHelperMenu.cpp" />
+    <ClCompile Include="Hacks\Inventory\EconItem.cpp" />
+    <ClCompile Include="Hacks\Inventory\Inventory.cpp" />
+    <ClCompile Include="Hacks\Inventory\MenuInventory.cpp" />
     <ClCompile Include="Hacks\LegitAim\LegitAim.cpp" />
     <ClCompile Include="Hacks\LegitAim\MenuLegitAim.cpp" />
     <ClCompile Include="Hacks\Misc\MenuMisc.cpp" />
@@ -56,7 +59,7 @@
     <ClCompile Include="Render\DXRender.cpp" />
     <ClCompile Include="Render\DXRenderDraw.cpp" />
     <ClCompile Include="Render\DXRenderInit.cpp" />
-    <ClCompile Include="X1API\cHide.cpp" />
+    <ClCompile Include="X1API\Hide\cHide.cpp" />
     <ClCompile Include="X1API\MinHook\src\buffer.c" />
     <ClCompile Include="X1API\MinHook\src\HDE\hde32.c" />
     <ClCompile Include="X1API\MinHook\src\HDE\hde64.c" />
@@ -134,6 +137,8 @@
     <ClInclude Include="GUI\Gui.h" />
     <ClInclude Include="Hacks\Esp\Esp.h" />
     <ClInclude Include="Hacks\GrenadeHelper\GreandeHelper.h" />
+    <ClInclude Include="Hacks\Inventory\EconItem.h" />
+    <ClInclude Include="Hacks\Inventory\Inventory.h" />
     <ClInclude Include="Hacks\LegitAim\LegitAim.h" />
     <ClInclude Include="Hacks\Misc\Misc.h" />
     <ClInclude Include="Hacks\Radar\Radar.h" />
@@ -204,10 +209,10 @@
     <ClInclude Include="steam_sdk\steam_api_flat.h" />
     <ClInclude Include="steam_sdk\steam_api_internal.h" />
     <ClInclude Include="steam_sdk\steam_gameserver.h" />
-    <ClInclude Include="X1API\cHide.h" />
+    <ClInclude Include="VMP\VMProtectSDK.h" />
     <ClInclude Include="X1API\detours.h" />
+    <ClInclude Include="X1API\Hide\cHide.h" />
     <ClInclude Include="X1API\MinHook\hook.h" />
-    <ClInclude Include="X1API\MinHook\include\MinHook.h" />
     <ClInclude Include="X1API\MinHook\MinHook.h" />
     <ClInclude Include="X1API\MinHook\src\buffer.h" />
     <ClInclude Include="X1API\MinHook\src\HDE\hde32.h" />
@@ -216,19 +221,13 @@
     <ClInclude Include="X1API\MinHook\src\HDE\table32.h" />
     <ClInclude Include="X1API\MinHook\src\HDE\table64.h" />
     <ClInclude Include="X1API\MinHook\src\trampoline.h" />
-    <ClInclude Include="X1API\ProtectDLL.h" />
     <ClInclude Include="X1API\ThreadInMemory.h" />
-    <ClInclude Include="X1API\VMP\VMProtectSDK.h" />
     <ClInclude Include="X1API\X1FastCall.h" />
     <ClInclude Include="X1API\X1Vector.h" />
-    <ClInclude Include="X1API\XorStr.h" />
   </ItemGroup>
   <ItemGroup>
+    <Library Include="VMP\VMProtectSDK32.lib" />
     <Library Include="X1API\detours.lib" />
-    <Library Include="X1API\VMP\VMProtectSDK32.lib" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="X1API\VMP\VMProtectSDK32.dll" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{45A301E6-73EC-4F60-88F4-D1D5154B58D7}</ProjectGuid>
@@ -273,16 +272,16 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)Include;$(SolutionDir)Cheat\X1API\VMP;$(SolutionDir)Cheat\Json;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(SolutionDir)Cheat\X1API;$(SolutionDir)Cheat\X1API\VMP;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(DXSDK_DIR)Include;$(SolutionDir)Cheat\VMP;$(SolutionDir)Cheat\Json;$(SolutionDir)Cheat\protobuf-2.5.0\src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(SolutionDir)Cheat\protobuf;$(SolutionDir)Cheat\VMP;$(SolutionDir)Cheat\X1API;$(LibraryPath)</LibraryPath>
     <TargetName>debug</TargetName>
     <OutDir>$(SolutionDir)build\debug</OutDir>
     <IntDir>$(SolutionDir)Cheat\output\debug</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)Include;$(SolutionDir)Cheat\X1API;$(SolutionDir)Cheat\X1API\VMP;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(SolutionDir)Cheat\X1API;$(SolutionDir)Cheat\X1API\VMP;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(DXSDK_DIR)Include;$(SolutionDir)Cheat\VMP;$(SolutionDir)Cheat\Json;$(SolutionDir)Cheat\protobuf-2.5.0\src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(SolutionDir)Cheat\X1API;$(SolutionDir)CheatVMP;$(LibraryPath)</LibraryPath>
     <TargetName>release</TargetName>
     <OutDir>$(SolutionDir)build\release</OutDir>
     <IntDir>$(SolutionDir)Cheat\output\release</IntDir>
@@ -291,8 +290,8 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;GAMINGENHANCEMENT_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;X1N3_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -314,7 +313,14 @@
       <FloatingPointModel>Fast</FloatingPointModel>
       <BrowseInformation>false</BrowseInformation>
       <DisableSpecificWarnings>4091;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <SDLCheck>
+      </SDLCheck>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -328,10 +334,10 @@
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <Optimization>Full</Optimization>
+      <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_WINDOWS;_USRDLL;GAMINGENHANCEMENT_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;GAMINGENHANCEMENT_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>
       </LanguageStandard>
@@ -340,9 +346,11 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <StringPooling>true</StringPooling>
+      <StringPooling>
+      </StringPooling>
       <CompileAs>Default</CompileAs>
-      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

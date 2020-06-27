@@ -181,7 +181,7 @@ void CEsp::OverrideMaterial(bool ignoreZ, int type, Color rgba)
 			\$halfambert 1\
 			\$znearer 0\
 			\$flat 1\
-			$rimlight 1 $rimlightexponent 2 $rimlightboost 0.2 $rimlightboost [ 1 1 1 ]"));
+			\$rimlight 1 $rimlightexponent 2 $rimlightboost 0.2 $rimlightboost [ 1 1 1 ]"));
 	}
 
 	if (!Pearlescent)

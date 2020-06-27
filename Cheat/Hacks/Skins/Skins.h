@@ -34,7 +34,7 @@ public:
 	};
 
 	virtual void Menu() = 0;
-	//virtual void Preview() = 0;
+	virtual void Preview() = 0;
 	//auto initialize_kits() -> void;
 
 	virtual void PostDataUpdate() = 0;
@@ -87,6 +87,7 @@ public:
 		int paint_kit_id = 0;
 		int paint_kit_menu = 0;
 		int skins_mode = 1;
+		bool striker_enable = false;
 
 #define CHECK_VAR(l, r) if(l != src.##r) return false;
 		bool operator==(const SkinSettings& src) const
@@ -100,6 +101,7 @@ public:
 			CHECK_VAR(paint_kit_id, paint_kit_id);
 			CHECK_VAR(paint_kit_menu, paint_kit_menu);
 			CHECK_VAR(skins_mode, skins_mode);
+			CHECK_VAR(striker_enable, striker_enable);
 
 			return true;
 		}
@@ -107,12 +109,16 @@ public:
 
 	struct ItemSettings
 	{
-		ItemSettings(WEAPON_ID _ID, string _Name, string _CdnName, SkinSettings _Skin) : ID(_ID), Name(_Name), CdnName(_CdnName), Skin(_Skin), SkinTT(_Skin) { }
+		ItemSettings(WEAPON_ID _ID, string _Name, string _CdnName, SkinSettings _Skin) :
+			ID(_ID), Name(_Name), CdnName(_CdnName), Skin(_Skin), SkinTT(_Skin), IsInventory(false)
+		{
+		}
 		WEAPON_ID ID;
 		string Name = "";
 		string CdnName = "";
 		SkinSettings Skin;
 		SkinSettings SkinTT;
+		bool IsInventory;
 	};
 
 	struct WeaponSkin
@@ -324,7 +330,7 @@ public:
 	unordered_map<const char*, const char*> g_KillIconCfg;
 
 	virtual void Menu();
-	/*virtual void Preview();*/
+	virtual void Preview();
 	auto initialize_kits() -> void;
 
 	virtual void PostDataUpdate();
@@ -355,8 +361,7 @@ public:
 	int SelectedKnifeModelCT = 0;
 	int SelectedKnifeModelTT = 0;
 
-	//Credits:https://yougame.biz/ozelotick/
-	bool UpdateGlove = false; //Update Glove
+	bool UpdateGlove = false;
 
 	int SelectedGloveCT = 0;
 	int SelectedGloveTT = 0;
@@ -369,7 +374,7 @@ public:
 	string WeaponPreview = XorStr("<default>");
 	string SkinPreview = XorStr("<default>");
 
-	bool SkinsEnable = true;
+	bool SkinsEnable = false;
 
 	vector<SortedWeapons_s> SortedWeapons;
 	vector<SortedWeapons_s> SortedKnives;

@@ -390,7 +390,18 @@ void CSkins::ApplyCustomSkin(CBaseAttributableItem* pWeapon, int nWeaponIndex, b
 	if (!Item)
 		return;
 
-	SetSkin(pWeapon, &Item->Skin, Item->ID, false, bIsKnife);
+	if (Item->IsInventory && !GP_Inventory->SkinsSyncEnable)
+		return;
+
+	if (Item->IsInventory)
+	{
+		if (Item->Skin.paint_kit_id != 0 && !IsTT)
+			SetSkin(pWeapon, &Item->Skin, Item->ID, false, bIsKnife);
+		if (Item->SkinTT.paint_kit_id != 0 && IsTT)
+			SetSkin(pWeapon, &Item->SkinTT, Item->ID, false, bIsKnife);
+	}
+	else
+		SetSkin(pWeapon, &Item->Skin, Item->ID, false, bIsKnife);
 }
 
 void CSkins::SetSkin(CBaseAttributableItem* pWeapon, SkinSettings *SkinParam, int id, bool IsCT, bool IsKnife)
@@ -549,10 +560,32 @@ void CSkinListener::FireGameEvent(IGameEvent *event)
 					else
 					{
 						CSkins::ItemSettings* WItem = &GP_Skins->WeaponNames[GP_Skins->SelectedWeapon];
-						if (WItem->Skin.auto_stat_track)
+						if (WItem->IsInventory)
 						{
-							WItem->Skin.stat_track++;
-							ForceItemUpdate(CGlobal::LocalPlayer->GetBaseWeapon());
+							if (IsTT)
+							{
+								if (WItem->SkinTT.auto_stat_track)
+								{
+									WItem->SkinTT.stat_track++;
+									ForceItemUpdate(CGlobal::LocalPlayer->GetBaseWeapon());
+								}
+							}
+							else
+							{
+								if (WItem->Skin.auto_stat_track)
+								{
+									WItem->Skin.stat_track++;
+									ForceItemUpdate(CGlobal::LocalPlayer->GetBaseWeapon());
+								}
+							}
+						}
+						else
+						{
+							if (WItem->Skin.auto_stat_track)
+							{
+								WItem->Skin.stat_track++;
+								ForceItemUpdate(CGlobal::LocalPlayer->GetBaseWeapon());
+							}
 						}
 					}
 				}

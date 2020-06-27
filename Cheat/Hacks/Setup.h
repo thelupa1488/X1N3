@@ -5,6 +5,7 @@
 #include "Misc/Misc.h"
 #include "Radar/Radar.h"
 #include "Skins/Skins.h"
+#include "Inventory/Inventory.h"
 #include "GrenadeHelper/GreandeHelper.h"
 #include "../Render/DXRender.h"
 #include "../Engine/GrenadePrediction.h"
@@ -32,6 +33,7 @@ extern CMisc*				GP_Misc;
 extern CLegitAim*			GP_LegitAim;
 extern CRadar*				GP_Radar;
 extern CSkins*				GP_Skins;
+extern CInventory*          GP_Inventory;
 extern CGHelper*			GP_GHelper;
 
 
@@ -52,6 +54,7 @@ public:
 			GP_LegitAim =	new CLegitAim();
 			GP_Radar =		new CRadar();
 			GP_Skins =		new CSkins();
+			GP_Inventory =  new CInventory();
 			GP_GHelper =	new CGHelper();
 			ADD_LOG("2-1-11-7-1\n");
 			CGSettings::G().UpdateList();
@@ -84,6 +87,7 @@ public:
 			DELETE_PTR(GP_Misc);
 			DELETE_PTR(GP_LegitAim);
 			DELETE_PTR(GP_Radar);
+			DELETE_PTR(GP_Inventory);
 			DELETE_PTR(GP_GHelper);
 		}
 	};

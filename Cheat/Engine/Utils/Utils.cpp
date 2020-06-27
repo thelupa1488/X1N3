@@ -11,6 +11,21 @@ static const DWORD dwModuleDelay = 100;
 
 namespace Utils
 {
+	/* Random Int Range */
+
+	int RandomIntRange(int min, int max)
+	{
+		static bool first = true;
+
+		if (first)
+		{
+			srand(FastCall::G().t_GetTickCount64());
+			first = false;
+		}
+
+		return min + rand() % (max - min);
+	}
+
 	/* Wait dwMsec Load Module */
 
 	bool IsModuleLoad(PCHAR szModule, DWORD dwMsec)

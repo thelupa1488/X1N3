@@ -1,7 +1,7 @@
 #pragma once
 #include "../Include/Winheaders.h"
 #include "../Include/Def.h"
-#include "cHide.h"
+#include "Hide/cHide.h"
 
 #define DEREF( name )*(UINT_PTR *)(name)
 #define DEREF_64( name )*(DWORD64 *)(name)
@@ -33,10 +33,10 @@ public:
 class FastCall : public Call<FastCall>
 {
 private:
-
 	std::map<std::string, FARPROC> lpAddrList
 	{
 		{"CreateThread", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"CreateThread")},
+		{"VirtualProtect", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"VirtualProtect")},
 		{"TerminateThread", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"TerminateThread")},
 	    {"FreeLibraryAndExitThread", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"FreeLibraryAndExitThread")},
 		{"DisableThreadLibraryCalls", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"DisableThreadLibraryCalls")},
@@ -233,15 +233,43 @@ public:
 			_Out_opt_ lpThreadId
 		));
 
+	//WINBASEAPI
+	//	_Success_(return != FALSE)
+	//	BOOL
+	//	WINAPI
+	//	VirtualProtect(
+	//		_In_ LPVOID lpAddress,
+	//		_In_ SIZE_T dwSize,
+	//		_In_ DWORD flNewProtect,
+	//		_Out_ PDWORD lpflOldProtect
+	//	);
+
+	CREATE_CALL(BOOL, WINAPI, _VirtualProtect, "VirtualProtect",
+		ALL_A(_In_ LPVOID lpAddress,
+			_In_  SIZE_T dwSize,
+			_In_  DWORD flNewProtect,
+			_Out_ PDWORD lpflOldProtect
+		),
+		ALL_A(_In_ LPVOID,
+			_In_ SIZE_T,
+			_In_ DWORD,
+			_Out_ PDWORD
+		),
+		ALL_A(_In_ lpAddress,
+			_In_ dwSize,
+			_In_ flNewProtect,
+			_Out_ lpflOldProtect
+		));
+
 	CREATE_CALL(BOOL, WINAPI, _TerminateThread, "TerminateThread",
-		ALL_A(_In_opt_ HANDLE hThread,
-			_In_ DWORD  dwExitCode
+		ALL_A(_In_ HANDLE hThread,
+			_In_ DWORD dwExitCode
 		),
-		ALL_A(_In_opt_ HANDLE,
-			_In_     DWORD
+		ALL_A(_In_ HANDLE,
+			_In_ DWORD
 		),
-		ALL_A(_In_opt_ hThread,
-			_In_     dwExitCode
+		ALL_A(_In_ hThread,
+			_In_ dwExitCode
 		));
 
 	CREATE_CALL(VOID, WINAPI, _FreeLibraryAndExitThread, "FreeLibraryAndExitThread",
@@ -256,11 +284,11 @@ public:
 		));
 
 	CREATE_CALL(BOOL, WINAPI, _DisableThreadLibraryCalls, "DisableThreadLibraryCalls",
-		ALL_A(_In_opt_ HMODULE hLibModule
+		ALL_A(_In_ HMODULE hLibModule
 		),
-		ALL_A(_In_opt_ HMODULE
+		ALL_A(_In_ HMODULE
 		),
-		ALL_A(_In_opt_ hLibModule
+		ALL_A(_In_ hLibModule
 		));
 
 	CREATE_CALL(VOID, WINAPI, _mouse_event, "mouse_event",
