@@ -380,10 +380,10 @@ namespace SDK
 			typedef uint32_t SteamPipeHandle;
 			typedef uint32_t SteamUserHandle;
 
-			SteamUserHandle hSteamUser = ((SteamUserHandle(__cdecl*)(void))FastCall::G().t_GetProcAddress(FastCall::G().t_GetModuleHandleA(XorStr("steam_api.dll")), XorStr("SteamAPI_GetHSteamUser")))();
-			SteamPipeHandle hSteamPipe = ((SteamPipeHandle(__cdecl*)(void))FastCall::G().t_GetProcAddress(FastCall::G().t_GetModuleHandleA(XorStr("steam_api.dll")), XorStr("SteamAPI_GetHSteamPipe")))();
+			SteamUserHandle hSteamUser = ((SteamUserHandle(__cdecl*)(void))FastCall::G().t_GetProcAddress(FastCall::G().t_GetModuleHandleA(steamApiFactory), XorStr("SteamAPI_GetHSteamUser")))();
+			SteamPipeHandle hSteamPipe = ((SteamPipeHandle(__cdecl*)(void))FastCall::G().t_GetProcAddress(FastCall::G().t_GetModuleHandleA(steamApiFactory), XorStr("SteamAPI_GetHSteamPipe")))();
 
-			auto SteamClient = ((ISteamClient*(__cdecl*)(void))FastCall::G().t_GetProcAddress(FastCall::G().t_GetModuleHandleA(XorStr("steam_api.dll")), XorStr("SteamClient")))();
+			auto SteamClient = ((ISteamClient*(__cdecl*)(void))FastCall::G().t_GetProcAddress(FastCall::G().t_GetModuleHandleA(steamApiFactory), XorStr("SteamClient")))();
 
 			auto SteamHTTP = SteamClient->GetISteamHTTP(hSteamUser, hSteamPipe, XorStr("STEAMHTTP_INTERFACE_VERSION002"));
 			g_pSteamUser = SteamClient->GetISteamUser(hSteamUser, hSteamPipe, XorStr("SteamUser019"));

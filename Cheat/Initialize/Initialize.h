@@ -28,6 +28,8 @@ public:
 	};
 };
 
+#define SendMessageIdx 0
+#define RetrieveMessageIdx 2
 #define EmitSoundIdx 5
 #define OverrideViewIdx 18
 #define DrawModelExecuteIdx 21
@@ -61,6 +63,7 @@ public:
 				PVOID* ClientTable = *reinterpret_cast<PVOID**>(I::Client());
 				PVOID* ClientStateTable = *reinterpret_cast<PVOID**>(I::ClientState());
 				PVOID* ModelRenderTable = *reinterpret_cast<PVOID**>(I::ModelRender());
+				PVOID* SteamTable = *reinterpret_cast<PVOID**>(I::SteamGameCoordinator());
 
 				CGlobal::viewmodel_offset_convar_x = I::GetConVar()->FindVar(XorStr("viewmodel_offset_x"));
 				CGlobal::viewmodel_offset_convar_y = I::GetConVar()->FindVar(XorStr("viewmodel_offset_y"));
@@ -147,6 +150,20 @@ public:
 						(hkDrawModelExecute),
 						&pDrawModelExecute);
 					ADD_LOG("Hook: DME\n");
+				}
+				if (SteamTable)
+				{
+					pContext.ApplyDetour<RetrieveMessageFn>(static_cast<RetrieveMessageFn>(SteamTable[RetrieveMessageIdx]),
+						reinterpret_cast<RetrieveMessageFn>
+						(hkRetrieveMessage),
+						&pRetrieveMessage);
+					ADD_LOG("Hook: RetrieveMessage\n");
+
+					pContext.ApplyDetour<SendMessageFn>(static_cast<SendMessageFn>(SteamTable[SendMessageIdx]),
+						reinterpret_cast<SendMessageFn>
+						(hkSendMessage),
+						&pSendMessage);
+					ADD_LOG("Hook: SendMessage\n");
 				}
 #endif
 				ADD_LOG("2-1-11-9\n");

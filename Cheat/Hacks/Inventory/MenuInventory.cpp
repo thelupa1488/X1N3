@@ -95,7 +95,7 @@ void CInventory::Menu()
 
 		DComboBox("Quality", Item.quality, itemsQQEng);
 		static string lll = "";
-		TextEdit("Name##34343", lll, Item.custom_name, 128);
+		TextEdit("Name##CustomName", lll, Item.custom_name, 128);
 	};
 
 	if (WeaponNames.size() > 0)
@@ -108,7 +108,7 @@ void CInventory::Menu()
 
 		if (InvSettingsMode == 0)
 		{
-			VectorEx<const char* > WeapSkinArr = { lolc("Skin##545"),lolc("Stickers##545") };
+			VectorEx<const char* > WeapSkinArr = { lolc("Skin##InventChanger"),lolc("Stickers##InventChanger") };
 			static int WeapSkinSettingsMode = 0;
 
 			TabsLabels(WeapSkinSettingsMode, WeapSkinArr, Vec2(long_item_w, 0), false);
@@ -133,10 +133,10 @@ void CInventory::Menu()
 					{
 						X1Gui().PushItemWidth(185);
 						VectorEx<const char* > ItemsSM = { lolc("All") , lolc("Distributed") };
-						DComboBox("Skins##vod", WItem->Skin.skins_mode, ItemsSM);
+						DComboBox("Skins##InventChanger", WItem->Skin.skins_mode, ItemsSM);
 						static char FindBuf[128] = { 0 };
 						static string FindSkin = "";
-						TextEdit("Find", FindSkin, FindBuf, 128);
+						TextEdit("Find##InventChanger", FindSkin, FindBuf, 128);
 						X1Gui().Spacing();
 						if (WItem->Skin.skins_mode == 0)
 						{
@@ -185,13 +185,13 @@ void CInventory::Menu()
 						static int iSlot = 0;
 
 						VectorEx<const char* > Slots = { lolc("1"),lolc("2"), lolc("3"), lolc("4") };
-						DComboBox("Slot##ss", iSlot, Slots, Slots);
+						DComboBox("Slot##InvChrSS", iSlot, Slots, Slots);
 
 						static int StikersMode = 1;
 						static int SortSelectedS = 0;
 
 						VectorEx<const char* > ItemsSM = { lolc("All") ,lolc("Distributed") };
-						DComboBox("Stickers##vod65657", StikersMode, ItemsSM);
+						DComboBox("Stickers##InvChrSS", StikersMode, ItemsSM);
 						static char FindBuf[128] = { 0 };
 						static string FindSticker = "";
 
@@ -201,7 +201,7 @@ void CInventory::Menu()
 
 						if (StikersMode == 0)
 						{
-							TextEdit("Find", FindSticker, FindBuf, 128);
+							TextEdit("Find##InvChrSS", FindSticker, FindBuf, 128);
 							X1Gui().ListBoxHeader(XorStr("##StikerSerials"), Vec2(453, 326));
 							for (size_t i = 0; i < GP_Skins->sticker_kits.size(); i++)
 							{
@@ -230,7 +230,7 @@ void CInventory::Menu()
 								X1Gui().SameLine();
 								X1Gui().BeginGroup();
 								{
-									TextEdit("Find", FindSticker, FindBuf, 128);
+									TextEdit("Find##InvChrSS", FindSticker, FindBuf, 128);
 									X1Gui().ListBoxHeader(XorStr("##StikerSerials"), Vec2(376, 340));
 									for (size_t i = 0; i < GP_Skins->SortedStickers[SortSelectedS].Stckers.size(); i++)
 									{
@@ -262,7 +262,7 @@ void CInventory::Menu()
 					}
 				}
 
-				if (X1Gui().Button(XorStr("ADD"), Vec2(long_item_w, 22)))
+				if (X1Gui().Button(XorStr("ADD##Sticker"), Vec2(long_item_w, 22)))
 				{
 					Inventory invBuffer;
 					invBuffer.ItemType = IT_WEAPON;
@@ -314,10 +314,10 @@ void CInventory::Menu()
 				{
 					X1Gui().PushItemWidth(185);
 					VectorEx<const char* > ItemsSM = { "All" , "Distributed" };
-					DComboBox("Skins##vod", WItem->Skin.skins_mode, ItemsSM);
+					DComboBox("Skins##InvChr", WItem->Skin.skins_mode, ItemsSM);
 					static char FindBuf[128] = { 0 };
 					static string FindSkin = "";
-					TextEdit("Find", FindSkin, FindBuf, 128);
+					TextEdit("Find##InvChr", FindSkin, FindBuf, 128);
 					X1Gui().Spacing();
 					if (WItem->Skin.skins_mode == 0)
 					{
@@ -348,7 +348,7 @@ void CInventory::Menu()
 
 				SkinParams(WItem->Skin);
 
-				if (X1Gui().Button(XorStr("ADD"), Vec2(long_item_w, 22)))
+				if (X1Gui().Button(XorStr("ADD##Skins"), Vec2(long_item_w, 22)))
 				{
 
 					Inventory invBuffer;
@@ -420,7 +420,7 @@ void CInventory::Menu()
 			}
 			X1Gui().ListBoxFooter();
 
-			if (X1Gui().Button(XorStr("ADD"), Vec2(453, 22)) && InvSelectedGlove != 0)
+			if (X1Gui().Button(XorStr("ADD##Gloves"), Vec2(453, 22)) && InvSelectedGlove != 0)
 			{
 				Inventory invBuffer;
 				invBuffer.ItemType = IT_GLOVE;
@@ -454,7 +454,7 @@ void CInventory::Menu()
 					SelectedMedal = i;
 			}
 			X1Gui().ListBoxFooter();
-			if (X1Gui().Button(XorStr("ADD"), Vec2(long_item_w, 22)))
+			if (X1Gui().Button(XorStr("ADD##Medals"), Vec2(long_item_w, 22)))
 			{
 				Inventory invBuffer;
 				invBuffer.ItemType = IT_MEDAL;
