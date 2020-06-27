@@ -1,237 +1,8 @@
 #include "Inventory.h"
 #include "../Setup.h"
-#include "EconItem.h"
 
 int CInventory::Inventory::LastIndex = 100;
 vector<IInventory::Inventory> InventoryList;
-
-class CSharedObjectTypeCache
-{
-public:
-	void AddObject(void* obj)
-	{
-		typedef void(__thiscall* tOriginal)(void*, void*);
-		GetMethod<tOriginal>(this, 1)(this, obj);
-	}
-
-	void RemoveObject(void* obj)
-	{
-		typedef void(__thiscall* tOriginal)(void*, void*);
-		GetMethod<tOriginal>(this, 3)(this, obj);
-	}
-
-	std::vector<CEconItem*> CSharedObjectTypeCache::GetEconItems()
-	{
-		std::vector<CEconItem*> ret;
-
-		auto size = *reinterpret_cast<size_t*>(this + 0x18);
-
-		auto data = *reinterpret_cast<uintptr_t**>(this + 0x4);
-
-		for (size_t i = 0; i < size; i++)
-			ret.push_back(reinterpret_cast<CEconItem*>(data[i]));
-
-		return ret;
-	}
-};
-
-
-class C_EconItemView
-{
-public:
-	char pad_0x0000[0x194]; //0x0000
-	__int32 m_iItemDefinitionIndex; //0x0194 
-	__int32 m_iEntityQuality; //0x0198 
-	__int32 m_iEntityLevel; //0x019C 
-	char pad_0x01A0[0x8]; //0x01A0
-	__int32 m_iItemIDHigh; //0x01A8 
-	__int32 m_iItemIDLow; //0x01AC 
-	__int32 m_iAccountID; //0x01B0 
-	char pad_0x01B4[0x8]; //0x01B4
-	unsigned char m_bInitialized; //0x01BC 
-	char pad_0x01BD[0x67]; //0x01BD
-	char m_szCustomName[32]; //0x0224 
-
-};//Size=0x0244
-
-class CPlayerInventory
-{
-public:
-	void RemoveItem(uint64_t ID)
-	{
-		static auto fnRemoveItem
-			= reinterpret_cast<int(__thiscall*)(void*, int64_t)>(
-				Utils::PatternScan(clientFactory, "55 8B EC 83 E4 F8 56 57 FF 75 0C 8B F1")
-				);
-
-		fnRemoveItem(this, ID);
-	}
-
-	void RemoveItem(CEconItem* item)
-	{
-		RemoveItem(*item->GetItemID());
-		GetBaseTypeCache()->RemoveObject(item);
-	}
-
-	void ClearInventory()
-	{
-		auto BaseTypeCache = this->GetBaseTypeCache();
-		auto items = BaseTypeCache->GetEconItems();
-		for (auto item : items)
-		{
-			RemoveItem(*item->GetItemID());
-			BaseTypeCache->RemoveObject(item);
-		}
-	}
-
-	CSharedObjectTypeCache* CPlayerInventory::GetBaseTypeCache()
-	{
-		static auto fnGCSDK_CGCClient_FindSOCache
-			= reinterpret_cast<uintptr_t(__thiscall*)(uintptr_t, uint64_t, uint64_t, bool)>(
-				Utils::PatternScan(clientFactory, "55 8B EC 83 E4 F8 83 EC 1C 0F 10 45 08")
-				);
-
-		static auto fnGCSDK_CSharedObjectCache_CreateBaseTypeCache
-			= reinterpret_cast<CSharedObjectTypeCache * (__thiscall*)(uintptr_t, int)>(
-				Utils::PatternScan(clientFactory, "55 8B EC 51 53 56 8B D9 8D 45 08")
-				);
-		DWORD g_GCClientSystem = **reinterpret_cast<uintptr_t**>(Utils::PatternScan(clientFactory, "8B 0D ? ? ? ? 6A 00 83 EC 10") + 0x2);
-		auto SOCahce = fnGCSDK_CGCClient_FindSOCache(g_GCClientSystem + 0x70, *reinterpret_cast<uint64_t*>(this + 0x8), *reinterpret_cast<uint64_t*>(this + 0x10), 0);
-
-		return fnGCSDK_CSharedObjectCache_CreateBaseTypeCache(SOCahce, 1);
-	}
-
-	uint32_t GetSteamID()
-	{
-		return *reinterpret_cast<uint32_t*>(this + 0x8);
-	}
-
-	CUtlVector< C_EconItemView* >* CPlayerInventory::GetInventoryItems()
-	{
-		return reinterpret_cast<CUtlVector<C_EconItemView*>*>(this + 0x2C);
-	}
-
-	C_EconItemView* GetInventoryItemByItemID(int id)
-	{
-		auto items = GetInventoryItems();
-
-		for (int i = 0; i < items->Count(); i++)
-		{
-			auto curElemt = items->Element(i);
-
-			if (!curElemt)
-				continue;
-
-			//auto socData = curElemt->();
-
-			//if (!socData)
-			//	continue;
-
-			//if (*socData->GetItemID() == id)
-			return curElemt;
-		}
-	}
-
-	bool AddEconItem(CEconItem* item, int a3, int a4, char a5)
-	{
-		static auto fnAddEconItem
-			= reinterpret_cast<C_EconItemView * (__thiscall*)(void*, CEconItem*, int, int, char)>(
-				Utils::PatternScan(clientFactory, "55 8B EC 83 E4 F8 A1 ? ? ? ? 83 EC 14 53 56 57 8B F9 8B 08")
-				);
-
-		GetBaseTypeCache()->AddObject(item);
-
-
-		auto ret = fnAddEconItem(this, item, a3, a4, a5);
-
-		if (ret)
-		{
-			auto i = GetInventoryItemByItemID(*item->GetItemID());
-
-			*reinterpret_cast<bool*>((uintptr_t)i + 0xA1) = 1;
-		}
-
-
-		return ret;
-	}
-};
-
-bool CInventory::SendClientHello()
-{
-	Inventory* last_item = &InventoryList.back();
-
-	auto LocalInventory = **reinterpret_cast<CPlayerInventory***>(Utils::PatternScan(clientFactory, "8B 0D ? ? ? ? 85 C9 74 18 51") + 0x2);
-
-	auto Item = CreateEconItem();
-
-	*Item->GetAccountID() = LocalInventory->GetSteamID();
-	*Item->GetDefIndex() = last_item->Weapon;
-	*Item->GetItemID() = Utils::RandomIntRange(1, 50000);
-	*Item->GetInventory() = 1;
-	*Item->GetFlags() = 0;
-	*Item->GetOriginalID() = 0;
-
-	for (int j = 0; j < 5; j++)
-	{
-		Item->AddSticker(j, last_item->Stickers[j].kit, last_item->Stickers[j].wear, last_item->Stickers[j].scale, last_item->Stickers[j].rotation);
-	}
-
-	Item->SetStatTrak(last_item->StatTrack);
-	Item->SetPaintKit(last_item->WeaponSkinId);
-	Item->SetPaintSeed(last_item->Seed);
-	Item->SetPaintWear(last_item->Wear);
-	Item->SetOrigin(8);
-	Item->SetRarity(ITEM_RARITY_MYTHICAL);
-	Item->SetLevel(1);
-	Item->SetInUse(false);
-
-	LocalInventory->AddEconItem(Item, 1, 0, 1);
-
-	/*if(!CGlobal::IsGameReady)
-		I::Engine()->ExecuteClientCmd("econ_clear_inventory_images");
-
-	CMsgClientHello Message;
-
-	Message.set_client_session_need(1);
-	Message.clear_socache_have_versions();
-
-	void* ptr = malloc(Message.ByteSize() + 8);
-
-	if (!ptr)
-		return false;
-
-	((uint32_t*)ptr)[0] = k_EMsgGCClientHello | ((DWORD)1 << 31);
-	((uint32_t*)ptr)[1] = 0;
-
-	Message.SerializeToArray((void*)((DWORD)ptr + 8), Message.ByteSize());
-
-	bool result = I::SteamGameCoordinator()->SendMessage(k_EMsgGCClientHello | ((DWORD)1 << 31), ptr, Message.ByteSize() + 8) == k_EGCResultOK;
-
-	free(ptr);
-
-	return result;*/
-	return 0;
-}
-
-bool CInventory::SendMMHello()
-{
-	/*CMsgGCCStrike15_v2_MatchmakingClient2GCHello Message;
-	void* ptr = malloc(Message.ByteSize() + 8);
-	if (!ptr)
-		return false;
-
-	auto unMsgType = k_EMsgGCCStrike15_v2_MatchmakingClient2GCHello | ((DWORD)1 << 31);
-	((uint32_t*)ptr)[0] = unMsgType;
-	((uint32_t*)ptr)[1] = 0;
-
-	Message.SerializeToArray((void*)((DWORD)ptr + 8), Message.ByteSize());
-
-	bool result = I::SteamGameCoordinator()->SendMessage(k_EMsgGCCStrike15_v2_MatchmakingClient2GCHello | ((DWORD)1 << 31), ptr, Message.ByteSize() + 8) == k_EGCResultOK;
-
-	free(ptr);
-	return result;*/
-	return 0;
-}
 
 void CInventory::RetrieveMessage(void* ecx, void* edx, uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize)
 {
@@ -309,230 +80,232 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 
 	uint32_t MessageType = unMsgType & 0x7FFFFFFF;
 
-	//if ((EGCItemMsg)MessageType == k_EMsgGCAdjustItemEquippedState)
-	//{
-	//	CMsgAdjustItemEquippedState Message;
+	if ((EGCItemMsg)MessageType == k_EMsgGCAdjustItemEquippedState)
+	{
+		CMsgAdjustItemEquippedState Message;
 
-	//	try
-	//	{
-	//		if (!Message.ParsePartialFromArray((void*)((DWORD)pubData + 8), cubData - 8))
-	//			return;
-	//	}
-	//	catch (...)
-	//	{
-	//		return;
-	//	}
+		try
+		{
+			if (!Message.ParsePartialFromArray((void*)((DWORD)pubData + 8), cubData - 8))
+				return;
+		}
+		catch (...)
+		{
+			return;
+		}
 
-	//	if (!Message.has_item_id() || !Message.has_new_class() || !Message.has_new_slot())
-	//		return;
+		if (!Message.has_item_id() || !Message.has_new_class() || !Message.has_new_slot())
+			return;
 
 
-	//	int GameIdx = (int)((uint32_t)Message.item_id() - 20100);
-	//	int EquippedState = Message.new_slot();
-	//	TeamID Team = (TeamID)Message.new_class();
+		int GameIdx = (int)((uint32_t)Message.item_id() - 20100);
+		int EquippedState = Message.new_slot();
+		TeamID Team = (TeamID)Message.new_class();
 
-	//	bool Reset = EquippedState == 65535 || GameIdx < 0;
+		bool Reset = EquippedState == 65535 || GameIdx < 0;
 
-	//	int InventoryIndx = GetInventoryByGame(GameIdx, EquippedState, Team);
+		int InventoryIndx = GetInventoryByGame(GameIdx, EquippedState, Team);
 
-	//	static int LastChangeWeapon = -1;
-	//	static int LastChangeKnife = -1;
-	//	static int LastChangeGlove = -1;
+		static int LastChangeWeapon = -1;
+		static int LastChangeKnife = -1;
+		static int LastChangeGlove = -1;
 
-	//	if (InventoryIndx < (int)InventoryList.size() && InventoryIndx != -1)
-	//	{
-	//		auto SetTeam = [](Inventory &Inv, TeamID Tm, bool Rest, bool &IsRemoveCT) -> void
-	//		{
-	//			if (Rest)
-	//			{
-	//				if ((CyrTeamID)Inv.iTeam == CYRT_ALL)
-	//				{
-	//					if (Tm == TEAM_COUNTER_TERRORIST) { Inv.Team = TEAM_TERRORIST; Inv.iTeam = CYRT_TT; }
-	//					else if (Tm == TEAM_TERRORIST) { Inv.Team = TEAM_COUNTER_TERRORIST; Inv.iTeam = CYRT_CT; }
-	//				}
-	//				else
-	//				{
-	//					if ((CyrTeamID)Inv.iTeam == CYRT_CT && Tm == TEAM_COUNTER_TERRORIST) { Inv.iTeam = CYRT_DISBLE; IsRemoveCT = true; }
-	//					if ((CyrTeamID)Inv.iTeam == CYRT_TT && Tm == TEAM_TERRORIST) { Inv.iTeam = CYRT_DISBLE; IsRemoveCT = false; }
-	//				}
-	//			}
-	//			else
-	//			{
-	//				if ((TeamID)Inv.Team == TEAM_UNASSIGNED || (CyrTeamID)Inv.iTeam == CYRT_DISBLE || (CyrTeamID)Inv.iTeam == CYRT_ALL || (CyrTeamID)Inv.iTeam == CYRT_AUTO)
-	//				{
-	//					Inv.Team = Tm;
-	//					if (Tm == TEAM_COUNTER_TERRORIST) { Inv.iTeam = CYRT_CT; }
-	//					else if (Tm == TEAM_TERRORIST) { Inv.iTeam = CYRT_TT; }
-	//				}
-	//				else
-	//				{
-	//					if (Inv.Team == TEAM_COUNTER_TERRORIST && Tm == TEAM_TERRORIST) { Inv.Team = TEAM_ALL; Inv.iTeam = CYRT_ALL; }
-	//					if (Inv.Team == TEAM_TERRORIST && Tm == TEAM_COUNTER_TERRORIST) { Inv.Team = TEAM_ALL; Inv.iTeam = CYRT_ALL; }
-	//				}
-	//			}
-	//		};
+		if (InventoryIndx < (int)InventoryList.size() && InventoryIndx != -1)
+		{
+			auto SetTeam = [](Inventory& Inv, TeamID Tm, bool Rest, bool& IsRemoveCT) -> void
+			{
+				if (Rest)
+				{
+					if ((CyrTeamID)Inv.iTeam == CYRT_ALL)
+					{
+						if (Tm == TEAM_COUNTER_TERRORIST) { Inv.Team = TEAM_TERRORIST; Inv.iTeam = CYRT_TT; }
+						else if (Tm == TEAM_TERRORIST) { Inv.Team = TEAM_COUNTER_TERRORIST; Inv.iTeam = CYRT_CT; }
+					}
+					else
+					{
+						if ((CyrTeamID)Inv.iTeam == CYRT_CT && Tm == TEAM_COUNTER_TERRORIST) { Inv.iTeam = CYRT_DISBLE; IsRemoveCT = true; }
+						if ((CyrTeamID)Inv.iTeam == CYRT_TT && Tm == TEAM_TERRORIST) { Inv.iTeam = CYRT_DISBLE; IsRemoveCT = false; }
+					}
+				}
+				else
+				{
+					if ((TeamID)Inv.Team == TEAM_UNASSIGNED || (CyrTeamID)Inv.iTeam == CYRT_DISBLE || (CyrTeamID)Inv.iTeam == CYRT_ALL || (CyrTeamID)Inv.iTeam == CYRT_AUTO)
+					{
+						Inv.Team = Tm;
+						if (Tm == TEAM_COUNTER_TERRORIST) { Inv.iTeam = CYRT_CT; }
+						else if (Tm == TEAM_TERRORIST) { Inv.iTeam = CYRT_TT; }
+					}
+					else
+					{
+						if (Inv.Team == TEAM_COUNTER_TERRORIST && Tm == TEAM_TERRORIST) { Inv.Team = TEAM_ALL; Inv.iTeam = CYRT_ALL; }
+						if (Inv.Team == TEAM_TERRORIST && Tm == TEAM_COUNTER_TERRORIST) { Inv.Team = TEAM_ALL; Inv.iTeam = CYRT_ALL; }
+					}
+				}
+			};
 
-	//		auto GetWeaponFromInv = [&](WEAPON_ID id) -> int
-	//		{
-	//			for (int i(0); i < (int)GP_Skins->WeaponNames.size(); i++)
-	//			{
-	//				if (GP_Skins->WeaponNames[i].ID == id)
-	//					return i;
-	//			}
-	//			return 0;
-	//		};
+			auto GetWeaponFromInv = [&](WEAPON_ID id) -> int
+			{
+				for (int i(0); i < (int)GP_Skins->WeaponNames.size(); i++)
+				{
+					if (GP_Skins->WeaponNames[i].ID == id)
+						return i;
+				}
+				return 0;
+			};
 
-	//		Inventory *IBuffer = &InventoryList.at(InventoryIndx);
+			Inventory* IBuffer = &InventoryList.at(InventoryIndx);
 
-	//		bool IsRemCt = false;
-	//		//pWeapon->PostDataUpdate(0);
-	//		//pWeapon->OnDataChanged(0);
-	//		if (IBuffer->ItemType == IT_WEAPON)
-	//		{
+			bool IsRemCt = false;
+			//pWeapon->PostDataUpdate(0);
+			//pWeapon->OnDataChanged(0);
+			if (IBuffer->ItemType == IT_WEAPON)
+			{
 
-	//			SetTeam(*IBuffer, Team, Reset, IsRemCt);
+				SetTeam(*IBuffer, Team, Reset, IsRemCt);
 
-	//			ItemSettings* WBuffer = &GP_Skins->WeaponNames[GetWeaponFromInv((WEAPON_ID)IBuffer->Weapon)];
+				ItemSettings* WBuffer = &GP_Skins->WeaponNames[GetWeaponFromInv((WEAPON_ID)IBuffer->Weapon)];
 
-	//			WBuffer->IsInventory = true;
-	//			if ((CyrTeamID)IBuffer->iTeam == CYRT_DISBLE)
-	//			{
-	//				if (IsRemCt)
-	//					WBuffer->Skin.paint_kit_id = 0;
-	//				else
-	//					WBuffer->SkinTT.paint_kit_id = 0;
-	//			}
-	//			else if ((CyrTeamID)IBuffer->iTeam == CYRT_CT)
-	//			{
-	//				WBuffer->IsInventory = true;
-	//				WBuffer->Skin.paint_kit_id = IBuffer->WeaponSkinId;
-	//				WBuffer->Skin.wear = IBuffer->Wear;
-	//				WBuffer->Skin.seed = IBuffer->Seed;
-	//				WBuffer->Skin.stat_track = IBuffer->StatTrack;
-	//				WBuffer->Skin.auto_stat_track = IBuffer->AutoStatTrack;
-	//				WBuffer->Skin.quality = IBuffer->Rarity;
-	//				for (int si(0); si < 5; si++)
-	//				{
-	//					if (IBuffer->Stickers[si].kit != 0)
-	//						WBuffer->Skin.striker_enable = true;
-	//					WBuffer->Skin.Stickers[si] = IBuffer->Stickers[si];
-	//				}
-	//			}
-	//			else if ((CyrTeamID)IBuffer->iTeam == CYRT_TT)
-	//			{
-	//				WBuffer->IsInventory = true;
-	//				WBuffer->SkinTT.paint_kit_id = IBuffer->WeaponSkinId;
-	//				WBuffer->SkinTT.wear = IBuffer->Wear;
-	//				WBuffer->SkinTT.seed = IBuffer->Seed;
-	//				WBuffer->SkinTT.stat_track = IBuffer->StatTrack;
-	//				WBuffer->SkinTT.auto_stat_track = IBuffer->AutoStatTrack;
-	//				WBuffer->SkinTT.quality = IBuffer->Rarity;
+				WBuffer->IsInventory = true;
+				if ((CyrTeamID)IBuffer->iTeam == CYRT_DISBLE)
+				{
+					if (IsRemCt)
+						WBuffer->Skin.paint_kit_id = 0;
+					else
+						WBuffer->SkinTT.paint_kit_id = 0;
+				}
+				else if ((CyrTeamID)IBuffer->iTeam == CYRT_CT)
+				{
+					WBuffer->IsInventory = true;
+					WBuffer->Skin.paint_kit_id = IBuffer->WeaponSkinId;
+					WBuffer->Skin.wear = IBuffer->Wear;
+					WBuffer->Skin.seed = IBuffer->Seed;
+					WBuffer->Skin.stat_track = IBuffer->StatTrack;
+					WBuffer->Skin.auto_stat_track = IBuffer->AutoStatTrack;
+					WBuffer->Skin.quality = IBuffer->Rarity;
+					for (int si(0); si < 5; si++)
+					{
+						if (IBuffer->Stickers[si].kit != 0)
+							WBuffer->Skin.striker_enable = true;
+						WBuffer->Skin.Stickers[si] = IBuffer->Stickers[si];
+					}
+				}
+				else if ((CyrTeamID)IBuffer->iTeam == CYRT_TT)
+				{
+					WBuffer->IsInventory = true;
+					WBuffer->SkinTT.paint_kit_id = IBuffer->WeaponSkinId;
+					WBuffer->SkinTT.wear = IBuffer->Wear;
+					WBuffer->SkinTT.seed = IBuffer->Seed;
+					WBuffer->SkinTT.stat_track = IBuffer->StatTrack;
+					WBuffer->SkinTT.auto_stat_track = IBuffer->AutoStatTrack;
+					WBuffer->SkinTT.quality = IBuffer->Rarity;
 
-	//				for (int si(0); si < 5; si++)
-	//				{
-	//					if (IBuffer->Stickers[si].kit != 0)
-	//						WBuffer->Skin.striker_enable = true;
-	//					WBuffer->SkinTT.Stickers[si] = IBuffer->Stickers[si];
-	//				}
-	//			}
-	//			else if ((CyrTeamID)IBuffer->iTeam == CYRT_ALL)
-	//			{
-	//				WBuffer->IsInventory = true;
-	//				WBuffer->SkinTT.paint_kit_id = IBuffer->WeaponSkinId;
-	//				WBuffer->SkinTT.wear = IBuffer->Wear;
-	//				WBuffer->SkinTT.seed = IBuffer->Seed;
-	//				WBuffer->SkinTT.stat_track = IBuffer->StatTrack;
-	//				WBuffer->SkinTT.auto_stat_track = IBuffer->AutoStatTrack;
-	//				WBuffer->SkinTT.quality = IBuffer->Rarity;
-	//				for (int si(0); si < 5; si++)
-	//				{
-	//					if (IBuffer->Stickers[si].kit != 0)
-	//						WBuffer->Skin.striker_enable = true;
-	//					WBuffer->SkinTT.Stickers[si] = IBuffer->Stickers[si];
-	//				}
+					for (int si(0); si < 5; si++)
+					{
+						if (IBuffer->Stickers[si].kit != 0)
+							WBuffer->Skin.striker_enable = true;
+						WBuffer->SkinTT.Stickers[si] = IBuffer->Stickers[si];
+					}
+				}
+				else if ((CyrTeamID)IBuffer->iTeam == CYRT_ALL)
+				{
+					WBuffer->IsInventory = true;
+					WBuffer->SkinTT.paint_kit_id = IBuffer->WeaponSkinId;
+					WBuffer->SkinTT.wear = IBuffer->Wear;
+					WBuffer->SkinTT.seed = IBuffer->Seed;
+					WBuffer->SkinTT.stat_track = IBuffer->StatTrack;
+					WBuffer->SkinTT.auto_stat_track = IBuffer->AutoStatTrack;
+					WBuffer->SkinTT.quality = IBuffer->Rarity;
+					for (int si(0); si < 5; si++)
+					{
+						if (IBuffer->Stickers[si].kit != 0)
+							WBuffer->Skin.striker_enable = true;
+						WBuffer->SkinTT.Stickers[si] = IBuffer->Stickers[si];
+					}
 
-	//				WBuffer->Skin.paint_kit_id = IBuffer->WeaponSkinId;
-	//				WBuffer->Skin.wear = IBuffer->Wear;
-	//				WBuffer->Skin.seed = IBuffer->Seed;
-	//				WBuffer->Skin.stat_track = IBuffer->StatTrack;
-	//				WBuffer->Skin.auto_stat_track = IBuffer->AutoStatTrack;
-	//				WBuffer->Skin.quality = IBuffer->Rarity;
-	//				for (int si(0); si < 5; si++)
-	//				{
-	//					if (IBuffer->Stickers[si].kit != 0)
-	//						WBuffer->Skin.striker_enable = true;
-	//					WBuffer->Skin.Stickers[si] = IBuffer->Stickers[si];
-	//				}
-	//			}
-	//		}
-	//		else if (IBuffer->ItemType == IT_KNIFE)
-	//		{
-	//			SetTeam(*IBuffer, Team, Reset, IsRemCt);
+					WBuffer->Skin.paint_kit_id = IBuffer->WeaponSkinId;
+					WBuffer->Skin.wear = IBuffer->Wear;
+					WBuffer->Skin.seed = IBuffer->Seed;
+					WBuffer->Skin.stat_track = IBuffer->StatTrack;
+					WBuffer->Skin.auto_stat_track = IBuffer->AutoStatTrack;
+					WBuffer->Skin.quality = IBuffer->Rarity;
+					for (int si(0); si < 5; si++)
+					{
+						if (IBuffer->Stickers[si].kit != 0)
+							WBuffer->Skin.striker_enable = true;
+						WBuffer->Skin.Stickers[si] = IBuffer->Stickers[si];
+					}
+				}
+			}
+			else if (IBuffer->ItemType == IT_KNIFE)
+			{
+				SetTeam(*IBuffer, Team, Reset, IsRemCt);
 
-	//			if ((CyrTeamID)IBuffer->iTeam == CYRT_DISBLE)
-	//			{
-	//				GP_Skins->SelectedKnifeModelCT = 0;
-	//				GP_Skins->SelectedKnifeModelTT = 0;
-	//			}
-	//			else if ((CyrTeamID)IBuffer->iTeam == CYRT_CT)
-	//			{
+				if ((CyrTeamID)IBuffer->iTeam == CYRT_DISBLE)
+				{
+					GP_Skins->SelectedKnifeModelCT = 0;
+					GP_Skins->SelectedKnifeModelTT = 0;
+				}
+				else if ((CyrTeamID)IBuffer->iTeam == CYRT_CT)
+				{
 
-	//				SetKnife(IBuffer, true);
-	//			}
-	//			else if ((CyrTeamID)IBuffer->iTeam == CYRT_TT)
-	//			{
-	//				SetKnife(IBuffer, false);
-	//			}
-	//			else if ((CyrTeamID)IBuffer->iTeam == CYRT_ALL)
-	//			{
-	//				SetKnife(IBuffer, true);
-	//				SetKnife(IBuffer, false);
-	//			}
-	//		}
-	//		else if (IBuffer->ItemType == IT_GLOVE)
-	//		{
-	//			SetTeam(*IBuffer, Team, Reset, IsRemCt);
+					SetKnife(IBuffer, true);
+				}
+				else if ((CyrTeamID)IBuffer->iTeam == CYRT_TT)
+				{
+					SetKnife(IBuffer, false);
+				}
+				else if ((CyrTeamID)IBuffer->iTeam == CYRT_ALL)
+				{
+					SetKnife(IBuffer, true);
+					SetKnife(IBuffer, false);
+				}
+			}
+			else if (IBuffer->ItemType == IT_GLOVE)
+			{
+				SetTeam(*IBuffer, Team, Reset, IsRemCt);
 
-	//			if ((CyrTeamID)IBuffer->iTeam == CYRT_DISBLE)
-	//			{
-	//				if (IsRemCt)
-	//					GP_Skins->SelectedGloveCT = 0;
-	//				else
-	//					GP_Skins->SelectedGloveTT = 0;
-	//			}
-	//			else if ((CyrTeamID)IBuffer->iTeam == CYRT_CT)
-	//			{
-	//				SetGlove(IBuffer, true);
-	//			}
-	//			else if ((CyrTeamID)IBuffer->iTeam == CYRT_TT)
-	//			{
-	//				SetGlove(IBuffer, false);
-	//			}
-	//			else if ((CyrTeamID)IBuffer->iTeam == CYRT_ALL)
-	//			{
-	//				SetGlove(IBuffer, true);
-	//				SetGlove(IBuffer, false);
-	//			}
-	//		}
+				if ((CyrTeamID)IBuffer->iTeam == CYRT_DISBLE)
+				{
+					if (IsRemCt)
+						GP_Skins->SelectedGloveCT = 0;
+					else
+						GP_Skins->SelectedGloveTT = 0;
+				}
+				else if ((CyrTeamID)IBuffer->iTeam == CYRT_CT)
+				{
+					SetGlove(IBuffer, true);
+				}
+				else if ((CyrTeamID)IBuffer->iTeam == CYRT_TT)
+				{
+					SetGlove(IBuffer, false);
+				}
+				else if ((CyrTeamID)IBuffer->iTeam == CYRT_ALL)
+				{
+					SetGlove(IBuffer, true);
+					SetGlove(IBuffer, false);
+				}
+			}
 
-	//		IBuffer->GetEquippedState = EquippedState;
-	//	}
+			IBuffer->GetEquippedState = EquippedState;
+		}
 
-	//	/*ofstream file("ssp.txt", ios_base::app);
-	//	file << InventoryIndx << " () " << GameIdx << " | " << EquippedState << " : " << (int)Message.new_class() << "\n";
-	//	file.close();*/
-	//	return;
-	//}
+		//	/*ofstream file("ssp.txt", ios_base::app);
+		//	file << InventoryIndx << " () " << GameIdx << " | " << EquippedState << " : " << (int)Message.new_class() << "\n";
+		//	file.close();*/
+		//	return;
+		//}
+
+		return;
+	}
 
 	return;
 }
-
 
 void CInventory::PostRetrieveMessageMisc(uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize)
 {
 	uint32_t MessageType = *punMsgType & 0x7FFFFFFF;
 
-	/*if ((ECsgoGCMsg)MessageType == k_EMsgGCCStrike15_v2_MatchmakingGC2ClientHello)
+	if ((ECsgoGCMsg)MessageType == k_EMsgGCCStrike15_v2_MatchmakingGC2ClientHello)
 	{
 		CMsgGCCStrike15_v2_MatchmakingGC2ClientHello Message;
 		try
@@ -577,244 +350,280 @@ void CInventory::PostRetrieveMessageMisc(uint32_t* punMsgType, void* pubDest, ui
 
 			*pcubMsgSize = Message.ByteSize() + 8;
 		}
-	}*/
+	}
 }
+
 void CInventory::PostRetrieveMessage(uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize)
 {
+	uint32_t MessageType = *punMsgType & 0x7FFFFFFF;
 
+	if (InventoryList.empty())
+		return;
 
+	if ((EGCBaseClientMsg)MessageType != k_EMsgGCClientWelcome)
+		return;
 
-	//uint32_t MessageType = *punMsgType & 0x7FFFFFFF;
+	CMsgClientWelcome Message;
 
+	try
+	{
+		if (!Message.ParsePartialFromArray((void*)((DWORD)pubDest + 8), *pcubMsgSize - 8))
+			return;
+	}
+	catch (...)
+	{
+		return;
+	}
 
-	////		*pcubMsgSize = Message.ByteSize() + 8;
-	////	}
-	////}
+	if (Message.outofdate_subscribed_caches_size() <= 0)
+		return;
 
-	////k_EMsgGCClientWelcome
+	CMsgSOCacheSubscribed* Cache = Message.mutable_outofdate_subscribed_caches(0);
 
+	for (int i = 0; i < Cache->objects_size(); i++)
+	{
+		CMsgSOCacheSubscribed::SubscribedType* Object = Cache->mutable_objects(i);
 
-	//if (InventoryList.empty())
-	//	return;
+		if (!Object->has_type_id())
+			continue;
 
-	//if ((EGCBaseClientMsg)MessageType != k_EMsgGCClientWelcome)
-	//	return;
+		if (Object->type_id() == 1)
+		{
+			for (int j = 0; j < Object->object_data_size(); j++)
+			{
+				std::string* ObjectData = Object->mutable_object_data(j);
 
-	//CMsgClientWelcome Message;
+				CSOEconItem Item;
 
-	//try
-	//{
-	//	if (!Message.ParsePartialFromArray((void*)((DWORD)pubDest + 8), *pcubMsgSize - 8))
-	//		return;
-	//}
-	//catch (...)
-	//{
-	//	return;
-	//}
+				if (!Item.ParseFromArray((void*)const_cast<char*>(ObjectData->data()), ObjectData->size()))
+					continue;
 
-	//if (Message.outofdate_subscribed_caches_size() <= 0)
-	//	return;
+				if (Item.equipped_state_size() <= 0)
+					continue;
 
-	//CMsgSOCacheSubscribed* Cache = Message.mutable_outofdate_subscribed_caches(0);
+				for (int k = 0; k < Item.equipped_state_size(); k++)
+				{
+					auto EquippedState = Item.mutable_equipped_state(k);
 
-	//for (int i = 0; i < Cache->objects_size(); i++)
-	//{
-	//	CMsgSOCacheSubscribed::SubscribedType* Object = Cache->mutable_objects(i);
+					EquippedState->set_new_class(0);
+					EquippedState->set_new_slot(0);
+				}
 
-	//	if (!Object->has_type_id())
-	//		continue;
+			}
 
-	//	if (Object->type_id() == 1)
-	//	{
-	//		for (int j = 0; j < Object->object_data_size(); j++)
-	//		{
-	//			std::string* ObjectData = Object->mutable_object_data(j);
+			if (InventoryList.size() > 0)
+			{
+				for (size_t i(0); i < InventoryList.size(); i++)
+				{
+					if (InventoryList[i].ItemType != IT_MEDAL)
+						AddItem(Object, InventoryList[i].Index, InventoryList[i].Weapon, InventoryList[i].Rarity + 1, InventoryList[i].WeaponSkinId, 38, InventoryList[i].Wear, "", i);
+					else
+						AddMedals(Object, InventoryList[i].Index, InventoryList[i].WeaponSkinId);
+				}
+			}
+		}
+	}
 
-	//			CSOEconItem Item;
+	if ((uint32_t)Message.ByteSize() <= cubDest - 8)
+	{
+		Message.SerializeToArray((void*)((DWORD)pubDest + 8), Message.ByteSize());
 
-	//			if (!Item.ParseFromArray((void*)const_cast<char*>(ObjectData->data()), ObjectData->size()))
-	//				continue;
-
-	//			if (Item.equipped_state_size() <= 0)
-	//				continue;
-
-	//			for (int k = 0; k < Item.equipped_state_size(); k++)
-	//			{
-	//				auto EquippedState = Item.mutable_equipped_state(k);
-
-	//				EquippedState->set_new_class(0);
-	//				EquippedState->set_new_slot(0);
-	//			}
-
-	//		}
-
-	//		if (InventoryList.size() > 0)
-	//		{
-	//			for (size_t i(0); i < InventoryList.size(); i++)
-	//			{
-	//				if (InventoryList[i].ItemType != IT_MEDAL)
-	//					AddItem(Object, InventoryList[i].Index, InventoryList[i].Weapon, InventoryList[i].Rarity + 1, InventoryList[i].WeaponSkinId, 38, InventoryList[i].Wear, "", i);
-	//				else
-	//					AddMedals(Object, InventoryList[i].Index, InventoryList[i].WeaponSkinId);
-	//			}
-	//		}
-	//	}
-	//}
-
-	//if ((uint32_t)Message.ByteSize() <= cubDest - 8)
-	//{
-	//	Message.SerializeToArray((void*)((DWORD)pubDest + 8), Message.ByteSize());
-
-	//	*pcubMsgSize = Message.ByteSize() + 8;
-	//}
+		*pcubMsgSize = Message.ByteSize() + 8;
+	}
 }
 
-//void CInventory::AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int index, int itemDefIndex, int rarity, int paintKit, int seed, float wear, std::string name, int InventoryLIdx)
-//{
-//	CSOEconItem Skin;
-//
-//	Skin.set_id(20100 + index);
-//	Skin.set_account_id(I::SteamUser()->GetSteamID().GetAccountID());
-//	Skin.set_def_index(itemDefIndex);
-//	Skin.set_inventory(20100 + index);
-//	Skin.set_origin(24);
-//	Skin.set_quantity(1);
-//	Skin.set_level(1);
-//	Skin.set_style(0);
-//	Skin.set_flags(0);
-//	Skin.set_in_use(false);
-//	Skin.set_original_id(0);
-//	Skin.set_rarity(rarity);
-//	Skin.set_quality(0);
-//
-//	if (name.size() > 0)
-//		Skin.set_custom_name(name.data());
-//
-//	if ((CyrTeamID)InventoryList[InventoryLIdx].iTeam != CYRT_AUTO && (CyrTeamID)InventoryList[InventoryLIdx].iTeam != CYRT_ALL)
-//	{
-//		if (InventoryList[InventoryLIdx].Team == TEAM_COUNTER_TERRORIST)
-//		{
-//			CSOEconItemEquipped* EquippedState = Skin.add_equipped_state();
-//
-//			EquippedState->set_new_class(TEAM_COUNTER_TERRORIST);
-//			EquippedState->set_new_slot(InventoryList[InventoryLIdx].GetEquippedState);
-//		}
-//		if (InventoryList[InventoryLIdx].Team == TEAM_TERRORIST)
-//		{
-//			CSOEconItemEquipped* EquippedState = Skin.add_equipped_state();
-//
-//			EquippedState->set_new_class(TEAM_TERRORIST);
-//			EquippedState->set_new_slot(InventoryList[InventoryLIdx].GetEquippedState);
-//		}
-//	}
-//
-//	// Paint Kit
-//	auto PaintKitAttribute = Skin.add_attribute();
-//	float PaintKitAttributeValue = (float)paintKit;
-//
-//	PaintKitAttribute->set_def_index(6);
-//
-//	PaintKitAttribute->set_value_bytes(&PaintKitAttributeValue, 4);
-//
-//	// Paint Seed
-//	auto SeedAttribute = Skin.add_attribute();
-//	float SeedAttributeValue = (float)seed;
-//
-//	SeedAttribute->set_def_index(7);
-//
-//	SeedAttribute->set_value_bytes(&SeedAttributeValue, 4);
-//
-//	// Paint Wear
-//	auto WearAttribute = Skin.add_attribute();
-//	float WearAttributeValue = wear;
-//
-//	WearAttribute->set_def_index(8);
-//
-//	WearAttribute->set_value_bytes(&WearAttributeValue, 4);
-//
-//	if (InventoryList[InventoryLIdx].StatTrack != 0)
-//	{
-//		CSOEconItemAttribute* StatTrakAttribute = Skin.add_attribute();
-//		uint32_t StatTrakAttributeValue = 0;
-//
-//		StatTrakAttribute->set_def_index(81);
-//
-//		StatTrakAttribute->set_value_bytes(&StatTrakAttributeValue, 4);
-//
-//		// Counter Value
-//		CSOEconItemAttribute* StatTrakCountAttribute = Skin.add_attribute();
-//		uint32_t StatTrakCountAttributeValue = InventoryList[InventoryLIdx].StatTrack;
-//
-//		StatTrakCountAttribute->set_def_index(80);
-//
-//		StatTrakCountAttribute->set_value_bytes(&StatTrakCountAttributeValue, 4);
-//	}
-//
-//	// Stickers
-//	for (int j = 0; j < 5; j++)
-//	{
-//		// Sticker Kit
-//		CSOEconItemAttribute* StickerKitAttribute = Skin.add_attribute();
-//		uint32_t StickerKitAttributeValue = InventoryList[InventoryLIdx].Stickers[j].kit;
-//
-//		StickerKitAttribute->set_def_index(113 + 4 * j);
-//
-//		StickerKitAttribute->set_value_bytes(&StickerKitAttributeValue, sizeof(StickerKitAttributeValue));
-//
-//		// Sticker Wear
-//		CSOEconItemAttribute* StickerWearAttribute = Skin.add_attribute();
-//		float StickerWearAttributeValue = InventoryList[InventoryLIdx].Stickers[j].wear;
-//
-//		StickerWearAttribute->set_def_index(114 + 4 * j);
-//
-//		StickerWearAttribute->set_value_bytes(&StickerWearAttributeValue, sizeof(StickerWearAttributeValue));
-//
-//		// Sticker Scale
-//		CSOEconItemAttribute* StickerScaleAttribute = Skin.add_attribute();
-//		float StickerScaleAttributeValue = InventoryList[InventoryLIdx].Stickers[j].scale;
-//
-//		StickerScaleAttribute->set_def_index(115 + 4 * j);
-//
-//		StickerScaleAttribute->set_value_bytes(&StickerScaleAttributeValue, sizeof(StickerScaleAttributeValue));
-//
-//		// Sticker Rotation
-//		CSOEconItemAttribute* StickerRotationAttribute = Skin.add_attribute();
-//		float StickerRotationAttributeValue = InventoryList[InventoryLIdx].Stickers[j].rotation;
-//
-//		StickerRotationAttribute->set_def_index(116 + 4 * j);
-//
-//		StickerRotationAttribute->set_value_bytes(&StickerRotationAttributeValue, sizeof(StickerRotationAttributeValue));
-//	}
-//
-//	Object->add_object_data(Skin.SerializeAsString());
-//}
-//
-//
-//void CInventory::AddMedals(CMsgSOCacheSubscribed::SubscribedType* pInventoryCacheObject, int Index, int MedalId)
-//{
-//	CSOEconItem Medal;
-//
-//	Medal.set_account_id(I::SteamUser()->GetSteamID().GetAccountID());
-//	Medal.set_origin(9);
-//	Medal.set_rarity(6);
-//	Medal.set_quantity(1);
-//	Medal.set_quality(4);
-//	Medal.set_level(1);
-//
-//	CSOEconItemAttribute* TimeAcquiredAttribute = Medal.add_attribute();
-//	uint32_t TimeAcquiredAttributeValue = 0;
-//
-//	TimeAcquiredAttribute->set_def_index(222);
-//
-//	TimeAcquiredAttribute->set_value_bytes(&TimeAcquiredAttributeValue, 4);
-//
-//	Medal.set_def_index(MedalId);
-//	Medal.set_inventory(20000 + Index);
-//	Medal.set_id(20000 + Index);
-//
-//	pInventoryCacheObject->add_object_data(Medal.SerializeAsString());
-//
-//}
+void CInventory::AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int index, int itemDefIndex, int rarity, int paintKit, int seed, float wear, std::string name, int InventoryLIdx)
+{
+	CSOEconItem Skin;
+
+	Skin.set_id(20100 + index);
+	Skin.set_account_id(I::SteamUser()->GetSteamID().GetAccountID());
+	Skin.set_def_index(itemDefIndex);
+	Skin.set_inventory(20100 + index);
+	Skin.set_origin(24);
+	Skin.set_quantity(1);
+	Skin.set_level(1);
+	Skin.set_style(0);
+	Skin.set_flags(0);
+	Skin.set_in_use(false);
+	Skin.set_original_id(0);
+	Skin.set_rarity(rarity);
+	Skin.set_quality(0);
+
+	if (name.size() > 0)
+		Skin.set_custom_name(name.data());
+
+	if ((CyrTeamID)InventoryList[InventoryLIdx].iTeam != CYRT_AUTO && (CyrTeamID)InventoryList[InventoryLIdx].iTeam != CYRT_ALL)
+	{
+		if (InventoryList[InventoryLIdx].Team == TEAM_COUNTER_TERRORIST)
+		{
+			CSOEconItemEquipped* EquippedState = Skin.add_equipped_state();
+
+			EquippedState->set_new_class(TEAM_COUNTER_TERRORIST);
+			EquippedState->set_new_slot(InventoryList[InventoryLIdx].GetEquippedState);
+		}
+		if (InventoryList[InventoryLIdx].Team == TEAM_TERRORIST)
+		{
+			CSOEconItemEquipped* EquippedState = Skin.add_equipped_state();
+
+			EquippedState->set_new_class(TEAM_TERRORIST);
+			EquippedState->set_new_slot(InventoryList[InventoryLIdx].GetEquippedState);
+		}
+	}
+
+	// Paint Kit
+	auto PaintKitAttribute = Skin.add_attribute();
+	float PaintKitAttributeValue = (float)paintKit;
+
+	PaintKitAttribute->set_def_index(6);
+
+	PaintKitAttribute->set_value_bytes(&PaintKitAttributeValue, 4);
+
+	// Paint Seed
+	auto SeedAttribute = Skin.add_attribute();
+	float SeedAttributeValue = (float)seed;
+
+	SeedAttribute->set_def_index(7);
+
+	SeedAttribute->set_value_bytes(&SeedAttributeValue, 4);
+
+	// Paint Wear
+	auto WearAttribute = Skin.add_attribute();
+	float WearAttributeValue = wear;
+
+	WearAttribute->set_def_index(8);
+
+	WearAttribute->set_value_bytes(&WearAttributeValue, 4);
+
+	if (InventoryList[InventoryLIdx].StatTrack != 0)
+	{
+		CSOEconItemAttribute* StatTrakAttribute = Skin.add_attribute();
+		uint32_t StatTrakAttributeValue = 0;
+
+		StatTrakAttribute->set_def_index(81);
+
+		StatTrakAttribute->set_value_bytes(&StatTrakAttributeValue, 4);
+
+		// Counter Value
+		CSOEconItemAttribute* StatTrakCountAttribute = Skin.add_attribute();
+		uint32_t StatTrakCountAttributeValue = InventoryList[InventoryLIdx].StatTrack;
+
+		StatTrakCountAttribute->set_def_index(80);
+
+		StatTrakCountAttribute->set_value_bytes(&StatTrakCountAttributeValue, 4);
+	}
+
+	// Stickers
+	for (int j = 0; j < 5; j++)
+	{
+		// Sticker Kit
+		CSOEconItemAttribute* StickerKitAttribute = Skin.add_attribute();
+		uint32_t StickerKitAttributeValue = InventoryList[InventoryLIdx].Stickers[j].kit;
+
+		StickerKitAttribute->set_def_index(113 + 4 * j);
+
+		StickerKitAttribute->set_value_bytes(&StickerKitAttributeValue, sizeof(StickerKitAttributeValue));
+
+		// Sticker Wear
+		CSOEconItemAttribute* StickerWearAttribute = Skin.add_attribute();
+		float StickerWearAttributeValue = InventoryList[InventoryLIdx].Stickers[j].wear;
+
+		StickerWearAttribute->set_def_index(114 + 4 * j);
+
+		StickerWearAttribute->set_value_bytes(&StickerWearAttributeValue, sizeof(StickerWearAttributeValue));
+
+		// Sticker Scale
+		CSOEconItemAttribute* StickerScaleAttribute = Skin.add_attribute();
+		float StickerScaleAttributeValue = InventoryList[InventoryLIdx].Stickers[j].scale;
+
+		StickerScaleAttribute->set_def_index(115 + 4 * j);
+
+		StickerScaleAttribute->set_value_bytes(&StickerScaleAttributeValue, sizeof(StickerScaleAttributeValue));
+
+		// Sticker Rotation
+		CSOEconItemAttribute* StickerRotationAttribute = Skin.add_attribute();
+		float StickerRotationAttributeValue = InventoryList[InventoryLIdx].Stickers[j].rotation;
+
+		StickerRotationAttribute->set_def_index(116 + 4 * j);
+
+		StickerRotationAttribute->set_value_bytes(&StickerRotationAttributeValue, sizeof(StickerRotationAttributeValue));
+	}
+
+	Object->add_object_data(Skin.SerializeAsString());
+}
+
+void CInventory::AddMedals(CMsgSOCacheSubscribed::SubscribedType* pInventoryCacheObject, int Index, int MedalId)
+{
+	CSOEconItem Medal;
+
+	Medal.set_account_id(I::SteamUser()->GetSteamID().GetAccountID());
+	Medal.set_origin(9);
+	Medal.set_rarity(6);
+	Medal.set_quantity(1);
+	Medal.set_quality(4);
+	Medal.set_level(1);
+
+	CSOEconItemAttribute* TimeAcquiredAttribute = Medal.add_attribute();
+	uint32_t TimeAcquiredAttributeValue = 0;
+
+	TimeAcquiredAttribute->set_def_index(222);
+
+	TimeAcquiredAttribute->set_value_bytes(&TimeAcquiredAttributeValue, 4);
+
+	Medal.set_def_index(MedalId);
+	Medal.set_inventory(20000 + Index);
+	Medal.set_id(20000 + Index);
+
+	pInventoryCacheObject->add_object_data(Medal.SerializeAsString());
+
+}
+
+bool CInventory::SendClientHello()
+{
+	if (!CGlobal::IsGameReady)
+		I::Engine()->ExecuteClientCmd("econ_clear_inventory_images");
+
+	CMsgClientHello Message;
+
+	Message.set_client_session_need(1);
+	Message.clear_socache_have_versions();
+
+	void* ptr = malloc(Message.ByteSize() + 8);
+
+	if (!ptr)
+		return false;
+
+	((uint32_t*)ptr)[0] = k_EMsgGCClientHello | ((DWORD)1 << 31);
+	((uint32_t*)ptr)[1] = 0;
+
+	Message.SerializeToArray((void*)((DWORD)ptr + 8), Message.ByteSize());
+
+	bool result = I::SteamGameCoordinator()->SendMessage(k_EMsgGCClientHello | ((DWORD)1 << 31), ptr, Message.ByteSize() + 8) == k_EGCResultOK;
+
+	free(ptr);
+
+	return result;
+}
+
+bool CInventory::SendMMHello()
+{
+	CMsgGCCStrike15_v2_MatchmakingClient2GCHello Message;
+	void* ptr = malloc(Message.ByteSize() + 8);
+	if (!ptr)
+		return false;
+
+	auto unMsgType = k_EMsgGCCStrike15_v2_MatchmakingClient2GCHello | ((DWORD)1 << 31);
+	((uint32_t*)ptr)[0] = unMsgType;
+	((uint32_t*)ptr)[1] = 0;
+
+	Message.SerializeToArray((void*)((DWORD)ptr + 8), Message.ByteSize());
+
+	bool result = I::SteamGameCoordinator()->SendMessage(k_EMsgGCCStrike15_v2_MatchmakingClient2GCHello | ((DWORD)1 << 31), ptr, Message.ByteSize() + 8) == k_EGCResultOK;
+
+	free(ptr);
+	return result;
+}
+
 string __readFile(const string& fileName)
 {
 	ifstream f(fileName);
@@ -825,6 +634,7 @@ string __readFile(const string& fileName)
 	f.read(&s[0], size);
 	return s;
 }
+
 void CInventory::InitalizeMedals()
 {
 	string BuffNames = __readFile(XorStr(".\\csgo\\scripts\\items\\items_game.txt"));

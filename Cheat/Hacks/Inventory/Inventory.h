@@ -1,16 +1,16 @@
 #pragma once
 
-//#include "../../protobuf/base_gcmessages.pb.h"
-//#include "../../protobuf/cstrike15_gcmessages.pb.h"
-//#include "../../protobuf/econ_gcmessages.pb.h"
-//#include "../../protobuf/engine_gcmessages.pb.h"
-//#include "../../protobuf/gcsystemmsgs.pb.h"
-//#include "../../protobuf/gcsdk_gcmessages.pb.h"
-//#include "../../protobuf/netmessages.pb.h"
-//#include "../../protobuf/steammessages.pb.h"
+#include "../../protobuf/base_gcmessages.pb.h"
+#include "../../protobuf/cstrike15_gcmessages.pb.h"
+#include "../../protobuf/econ_gcmessages.pb.h"
+#include "../../protobuf/engine_gcmessages.pb.h"
+#include "../../protobuf/gcsystemmsgs.pb.h"
+#include "../../protobuf/gcsdk_gcmessages.pb.h"
+#include "../../protobuf/netmessages.pb.h"
+#include "../../protobuf/steammessages.pb.h"
 
-//#pragma comment(lib, "libprotobuf.lib")
-//#pragma comment(lib, "libprotoc.lib")
+#pragma comment(lib, "libprotobuf.lib")
+#pragma comment(lib, "libprotoc.lib")
 
 #include "../../Main.h"
 #include"../Skins/Skins.h"
@@ -20,19 +20,17 @@ class IInventory : protected CSkins
 protected:
 	virtual void PostRetrieveMessage(uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize) = 0;
 
-
 	virtual void Menu() = 0;
 	virtual void InvListMenu() = 0;
 
-	virtual int GetInventoryByGame(int IndGame, int Eqp, TeamID Team) = 0;
-
+	virtual int  GetInventoryByGame(int IndGame, int Eqp, TeamID Team) = 0;
 	virtual void PostRetrieveMessageMisc(uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize) = 0;
 	virtual void RetrieveMessage(void* ecx, void* edx, uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize) = 0;
 	virtual void PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cubData) = 0;
 	virtual void SSendMessage(void* ecx, void* edx, uint32_t unMsgType, const void* pubData, uint32_t cubData) = 0;
 
-	//virtual void AddMedals(CMsgSOCacheSubscribed::SubscribedType* pInventoryCacheObject, int Index, int MedalId) = 0;
-//	virtual void AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int index, int itemDefIndex, int rarity, int paintKit, int seed, float wear, std::string name, int InventoryLIdx) = 0;
+	virtual void AddMedals(CMsgSOCacheSubscribed::SubscribedType* pInventoryCacheObject, int Index, int MedalId) = 0;
+	virtual void AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int index, int itemDefIndex, int rarity, int paintKit, int seed, float wear, std::string name, int InventoryLIdx) = 0;
 
 	virtual bool SendClientHello() = 0;
 	virtual bool SendMMHello() = 0;
@@ -67,10 +65,10 @@ public:
 		int Style = 0;
 		int iTeam = CYRT_AUTO;
 		StickerSettings Stickers[5];
-		/*int StickerId = 0;
+		int StickerId = 0;
 		float StickerWear = 0;
 		float StickerScale = 0;
-		float StickerRotation = 0;*/
+		float StickerRotation = 0;
 
 		TeamID Team = TEAM_UNASSIGNED;
 
@@ -113,8 +111,8 @@ public:
 
 	int GetInventoryByGame(int IndGame, int Eqp, TeamID Team);
 
-	//void AddMedals(CMsgSOCacheSubscribed::SubscribedType* pInventoryCacheObject, int Index, int MedalId);
-	//void AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int index, int itemDefIndex, int rarity, int paintKit, int seed, float wear, std::string name, int InventoryLIdx);
+	void AddMedals(CMsgSOCacheSubscribed::SubscribedType* pInventoryCacheObject, int Index, int MedalId);
+	void AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int index, int itemDefIndex, int rarity, int paintKit, int seed, float wear, std::string name, int InventoryLIdx);
 
 	bool SendClientHello();
 	bool SendMMHello();

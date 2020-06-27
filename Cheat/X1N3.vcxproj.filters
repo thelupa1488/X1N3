@@ -204,9 +204,45 @@
     <ClCompile Include="Engine\SDK\KeyValues.cpp">
       <Filter>Engine\SDK</Filter>
     </ClCompile>
-    <ClCompile Include="Hacks\Inventory\EconItem.cpp" />
-    <ClCompile Include="Hacks\Inventory\Inventory.cpp" />
-    <ClCompile Include="Hacks\Inventory\MenuInventory.cpp" />
+    <ClCompile Include="protobuf\base_gcmessages.pb.cc">
+      <Filter>protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="protobuf\cstrike15_gcmessages.pb.cc">
+      <Filter>protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="protobuf\econ_gcmessages.pb.cc">
+      <Filter>protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="protobuf\engine_gcmessages.pb.cc">
+      <Filter>protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="protobuf\fatdemo.pb.cc">
+      <Filter>protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="protobuf\gcsdk_gcmessages.pb.cc">
+      <Filter>protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="protobuf\gcsystemmsgs.pb.cc">
+      <Filter>protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="Hacks\Inventory\Inventory.cpp">
+      <Filter>Hacks\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="Hacks\Inventory\MenuInventory.cpp">
+      <Filter>Hacks\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="protobuf\netmessages.pb.cc">
+      <Filter>protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="protobuf\network_connection.pb.cc">
+      <Filter>protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="protobuf\steamdatagram_messages.pb.cc">
+      <Filter>protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="protobuf\steammessages.pb.cc">
+      <Filter>protobuf</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
@@ -784,8 +820,42 @@
     <ClInclude Include="Render\TestTexture.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="Hacks\Inventory\EconItem.h" />
-    <ClInclude Include="Hacks\Inventory\Inventory.h" />
+    <ClInclude Include="protobuf\base_gcmessages.pb.h">
+      <Filter>protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="protobuf\cstrike15_gcmessages.pb.h">
+      <Filter>protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="protobuf\econ_gcmessages.pb.h">
+      <Filter>protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="protobuf\engine_gcmessages.pb.h">
+      <Filter>protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="protobuf\fatdemo.pb.h">
+      <Filter>protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="protobuf\gcsdk_gcmessages.pb.h">
+      <Filter>protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="protobuf\gcsystemmsgs.pb.h">
+      <Filter>protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="Hacks\Inventory\Inventory.h">
+      <Filter>Hacks\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="protobuf\netmessages.pb.h">
+      <Filter>protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="protobuf\network_connection.pb.h">
+      <Filter>protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="protobuf\steamdatagram_messages.pb.h">
+      <Filter>protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="protobuf\steammessages.pb.h">
+      <Filter>protobuf</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -876,6 +946,12 @@
     </Library>
     <Library Include="VMP\VMProtectSDK32.lib">
       <Filter>VMP</Filter>
+    </Library>
+    <Library Include="protobuf\libprotobuf.lib">
+      <Filter>protobuf</Filter>
+    </Library>
+    <Library Include="protobuf\libprotoc.lib">
+      <Filter>protobuf</Filter>
     </Library>
   </ItemGroup>
 </Project>

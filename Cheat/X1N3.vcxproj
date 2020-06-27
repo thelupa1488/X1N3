@@ -36,7 +36,6 @@
     <ClCompile Include="Hacks\Esp\WorldEsp.cpp" />
     <ClCompile Include="Hacks\GrenadeHelper\GreandeHelper.cpp" />
     <ClCompile Include="Hacks\GrenadeHelper\GreandeHelperMenu.cpp" />
-    <ClCompile Include="Hacks\Inventory\EconItem.cpp" />
     <ClCompile Include="Hacks\Inventory\Inventory.cpp" />
     <ClCompile Include="Hacks\Inventory\MenuInventory.cpp" />
     <ClCompile Include="Hacks\LegitAim\LegitAim.cpp" />
@@ -54,6 +53,17 @@
     <ClCompile Include="Include\Headers.h" />
     <ClCompile Include="Initialize\Offsets.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="protobuf\base_gcmessages.pb.cc" />
+    <ClCompile Include="protobuf\cstrike15_gcmessages.pb.cc" />
+    <ClCompile Include="protobuf\econ_gcmessages.pb.cc" />
+    <ClCompile Include="protobuf\engine_gcmessages.pb.cc" />
+    <ClCompile Include="protobuf\fatdemo.pb.cc" />
+    <ClCompile Include="protobuf\gcsdk_gcmessages.pb.cc" />
+    <ClCompile Include="protobuf\gcsystemmsgs.pb.cc" />
+    <ClCompile Include="protobuf\netmessages.pb.cc" />
+    <ClCompile Include="protobuf\network_connection.pb.cc" />
+    <ClCompile Include="protobuf\steamdatagram_messages.pb.cc" />
+    <ClCompile Include="protobuf\steammessages.pb.cc" />
     <ClCompile Include="Render\DXFont.cpp" />
     <ClCompile Include="Render\DXOverlayManager.cpp" />
     <ClCompile Include="Render\DXRender.cpp" />
@@ -137,7 +147,6 @@
     <ClInclude Include="GUI\Gui.h" />
     <ClInclude Include="Hacks\Esp\Esp.h" />
     <ClInclude Include="Hacks\GrenadeHelper\GreandeHelper.h" />
-    <ClInclude Include="Hacks\Inventory\EconItem.h" />
     <ClInclude Include="Hacks\Inventory\Inventory.h" />
     <ClInclude Include="Hacks\LegitAim\LegitAim.h" />
     <ClInclude Include="Hacks\Misc\Misc.h" />
@@ -159,6 +168,17 @@
     <ClInclude Include="Initialize\Offsets.h" />
     <ClInclude Include="Json\Json.hpp" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="protobuf\base_gcmessages.pb.h" />
+    <ClInclude Include="protobuf\cstrike15_gcmessages.pb.h" />
+    <ClInclude Include="protobuf\econ_gcmessages.pb.h" />
+    <ClInclude Include="protobuf\engine_gcmessages.pb.h" />
+    <ClInclude Include="protobuf\fatdemo.pb.h" />
+    <ClInclude Include="protobuf\gcsdk_gcmessages.pb.h" />
+    <ClInclude Include="protobuf\gcsystemmsgs.pb.h" />
+    <ClInclude Include="protobuf\netmessages.pb.h" />
+    <ClInclude Include="protobuf\network_connection.pb.h" />
+    <ClInclude Include="protobuf\steamdatagram_messages.pb.h" />
+    <ClInclude Include="protobuf\steammessages.pb.h" />
     <ClInclude Include="Render\color.h" />
     <ClInclude Include="Render\DirectData\EndScene.h" />
     <ClInclude Include="Render\DirectData\Present.h" />
@@ -226,6 +246,8 @@
     <ClInclude Include="X1API\X1Vector.h" />
   </ItemGroup>
   <ItemGroup>
+    <Library Include="protobuf\libprotobuf.lib" />
+    <Library Include="protobuf\libprotoc.lib" />
     <Library Include="VMP\VMProtectSDK32.lib" />
     <Library Include="X1API\detours.lib" />
   </ItemGroup>
@@ -337,8 +359,8 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;GAMINGENHANCEMENT_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;X1N3_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <LanguageStandard>
       </LanguageStandard>
       <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -370,7 +392,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
       <Optimization>Full</Optimization>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_WINDOWS;_USRDLL;GAMINGENHANCEMENT_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_WINDOWS;_USRDLL;X1N3_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
