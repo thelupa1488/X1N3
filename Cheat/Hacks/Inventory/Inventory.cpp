@@ -37,7 +37,8 @@ void CInventory::SetKnife(Inventory* Inv, bool IsCT)
 				GP_Skins->KnifeNamesCT[i].Skin.seed = Inv->Seed;
 				GP_Skins->KnifeNamesCT[i].Skin.stat_track = Inv->StatTrack;
 				GP_Skins->KnifeNamesCT[i].Skin.auto_stat_track = Inv->AutoStatTrack;
-				GP_Skins->KnifeNamesCT[i].Skin.quality = Inv->Rarity;
+				GP_Skins->KnifeNamesCT[i].Skin.rarity = Inv->Rarity;
+				GP_Skins->KnifeNamesCT[i].Skin.quality = Inv->Quality;
 			}
 
 	if (!IsCT)
@@ -50,7 +51,8 @@ void CInventory::SetKnife(Inventory* Inv, bool IsCT)
 				GP_Skins->KnifeNamesTT[i].Skin.seed = Inv->Seed;
 				GP_Skins->KnifeNamesTT[i].Skin.stat_track = Inv->StatTrack;
 				GP_Skins->KnifeNamesTT[i].Skin.auto_stat_track = Inv->AutoStatTrack;
-				GP_Skins->KnifeNamesTT[i].Skin.quality = Inv->Rarity;
+				GP_Skins->KnifeNamesTT[i].Skin.rarity = Inv->Rarity;
+				GP_Skins->KnifeNamesTT[i].Skin.quality = Inv->Quality;
 			}
 }
 
@@ -175,7 +177,8 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 					WBuffer->Skin.seed = IBuffer->Seed;
 					WBuffer->Skin.stat_track = IBuffer->StatTrack;
 					WBuffer->Skin.auto_stat_track = IBuffer->AutoStatTrack;
-					WBuffer->Skin.quality = IBuffer->Rarity;
+					WBuffer->Skin.rarity = IBuffer->Rarity;
+					WBuffer->Skin.quality = IBuffer->Quality;
 					for (int si(0); si < 5; si++)
 					{
 						if (IBuffer->Stickers[si].kit != 0)
@@ -191,7 +194,8 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 					WBuffer->SkinTT.seed = IBuffer->Seed;
 					WBuffer->SkinTT.stat_track = IBuffer->StatTrack;
 					WBuffer->SkinTT.auto_stat_track = IBuffer->AutoStatTrack;
-					WBuffer->SkinTT.quality = IBuffer->Rarity;
+					WBuffer->SkinTT.rarity = IBuffer->Rarity;
+					WBuffer->SkinTT.quality = IBuffer->Quality;
 
 					for (int si(0); si < 5; si++)
 					{
@@ -208,7 +212,8 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 					WBuffer->SkinTT.seed = IBuffer->Seed;
 					WBuffer->SkinTT.stat_track = IBuffer->StatTrack;
 					WBuffer->SkinTT.auto_stat_track = IBuffer->AutoStatTrack;
-					WBuffer->SkinTT.quality = IBuffer->Rarity;
+					WBuffer->SkinTT.rarity = IBuffer->Rarity;
+					WBuffer->SkinTT.quality = IBuffer->Quality;
 					for (int si(0); si < 5; si++)
 					{
 						if (IBuffer->Stickers[si].kit != 0)
@@ -221,7 +226,8 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 					WBuffer->Skin.seed = IBuffer->Seed;
 					WBuffer->Skin.stat_track = IBuffer->StatTrack;
 					WBuffer->Skin.auto_stat_track = IBuffer->AutoStatTrack;
-					WBuffer->Skin.quality = IBuffer->Rarity;
+					WBuffer->Skin.rarity = IBuffer->Rarity;
+					WBuffer->Skin.quality = IBuffer->Quality;
 					for (int si(0); si < 5; si++)
 					{
 						if (IBuffer->Stickers[si].kit != 0)
@@ -400,12 +406,12 @@ void CInventory::PostRetrieveMessage(uint32_t* punMsgType, void* pubDest, uint32
 
 				}
 
-				if (InventoryList.size() > 0)
+				if (InventoryList.size() > 0)	
 				{
 					for (size_t i(0); i < InventoryList.size(); i++)
 					{
 						if (InventoryList[i].ItemType != IT_MEDAL)
-							AddItem(Object, InventoryList[i].Index, InventoryList[i].Weapon, InventoryList[i].Rarity + 1, InventoryList[i].WeaponSkinId, 38, InventoryList[i].Wear, "", i);
+							AddItem(Object, InventoryList[i].Index, InventoryList[i].Weapon, InventoryList[i].Rarity, InventoryList[i].Quality, InventoryList[i].WeaponSkinId, 38, InventoryList[i].Wear, "", i);
 						else
 							AddMedals(Object, InventoryList[i].Index, InventoryList[i].WeaponSkinId);
 					}
@@ -422,7 +428,7 @@ void CInventory::PostRetrieveMessage(uint32_t* punMsgType, void* pubDest, uint32
 	}
 }
 
-void CInventory::AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int index, int itemDefIndex, int rarity, int paintKit, int seed, float wear, std::string name, int InventoryLIdx)
+void CInventory::AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int index, int itemDefIndex, int rarity, int quality, int paintKit, int seed, float wear, std::string name, int InventoryLIdx)
 {
 	CSOEconItem Skin;
 
@@ -438,7 +444,7 @@ void CInventory::AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int inde
 	Skin.set_in_use(false);
 	Skin.set_original_id(0);
 	Skin.set_rarity(rarity);
-	Skin.set_quality(rarity);
+	Skin.set_quality(quality);
 
 	if (name.size() > 0)
 		Skin.set_custom_name(name.data());
@@ -719,6 +725,7 @@ void CInventory::SaveInventory(nlohmann::json& j)
 		jb[XorStr("Weapon")] = v.Weapon;
 		jb[XorStr("WeaponSkinId")] = v.WeaponSkinId;
 		jb[XorStr("Rarity")] = v.Rarity;
+		jb[XorStr("Quality")] = v.Quality;
 		jb[XorStr("iTeam")] = v.iTeam;
 		jb[XorStr("Team")] = (int)v.Team;
 		jb[XorStr("GetEquippedState")] = v.GetEquippedState;
@@ -768,6 +775,8 @@ void CInventory::LoadInventory(nlohmann::json& j)
 					InvEntry.WeaponSkinId = j[XorStr("Inventory")][XorStr("Items")].at(i)[XorStr("WeaponSkinId")];
 				if (!j[XorStr("Inventory")][XorStr("Items")].at(i)[XorStr("Rarity")].is_null())
 					InvEntry.Rarity = j[XorStr("Inventory")][XorStr("Items")].at(i)[XorStr("Rarity")];
+				if (!j[XorStr("Inventory")][XorStr("Items")].at(i)[XorStr("Quality")].is_null())
+					InvEntry.Quality = j[XorStr("Inventory")][XorStr("Items")].at(i)[XorStr("Quality")];
 				if (!j[XorStr("Inventory")][XorStr("Items")].at(i)[XorStr("iTeam")].is_null())
 					InvEntry.iTeam = j[XorStr("Inventory")][XorStr("Items")].at(i)[XorStr("iTeam")];
 				if (!j[XorStr("Inventory")][XorStr("Items")].at(i)[XorStr("Team")].is_null())

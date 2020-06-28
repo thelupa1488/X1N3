@@ -164,13 +164,13 @@ void CSkins::Menu()
 
 		X1Gui().PushItemWidth(360);
 
-		vector<string> Quality = { lolc("Default"), lolc("Genuine"), lolc("Vintage"), lolc("Unusual"), lolc("Community"), lolc("Developer") ,
-			lolc("Self-Made"), lolc("Customized"), lolc("Strange"), lolc("Completed"), lolc("Tournament") };
+		vector<string> ItemsQuality = { lolc("Default"), lolc("Genuine"), lolc("Vintage"), lolc("Knife Star"), lolc("Tournament"), lolc("Community") ,
+			lolc("Valve"), lolc("Prototype"), lolc("Customized"), lolc("StatTrak"), lolc("Complited") };
 
-		VectorEx<const char*> itemsQQ = { Quality[0].c_str() , Quality[1].c_str(), Quality[2].c_str(), Quality[3].c_str(), Quality[4].c_str() ,Quality[5].c_str() ,
-			Quality[6].c_str() ,Quality[6].c_str() ,Quality[7].c_str() , Quality[8].c_str() , Quality[9].c_str(), Quality[10].c_str() };
+		VectorEx<const char* > ItemsQQ = { ItemsQuality[0].c_str(), ItemsQuality[1].c_str(), ItemsQuality[2].c_str(), ItemsQuality[3].c_str(), ItemsQuality[4].c_str(), ItemsQuality[5].c_str(),
+			ItemsQuality[6].c_str(), ItemsQuality[7].c_str(), ItemsQuality[8].c_str(), ItemsQuality[9].c_str(), ItemsQuality[10].c_str() };
 
-		DComboBox("Quality", Item.quality, itemsQQ);
+		DComboBox("Quality", Item.quality, ItemsQQ);
 
 		string old_name = Item.custom_name;
 		X1Gui().InputText(XorStr("Name##custom_name"), Item.custom_name, 32);
@@ -485,7 +485,7 @@ void CSkins::Menu()
 
 		if (glvTeamSettingsMode == 0)
 		{
-			X1Gui().ListBoxHeader(XorStr("##Gloves"), Vec2(long_item_w, 522));
+			X1Gui().ListBoxHeader(XorStr("##Gloves"), Vec2(long_item_w, 500));
 			for (int i = 0; i < sizeof(GlovesModels) / sizeof(GlovesModels[0]); i++)
 			{
 				bool selected = i == SelectedGloveCT;
@@ -505,7 +505,7 @@ void CSkins::Menu()
 		
 		else if (glvTeamSettingsMode == 1)
 		{
-			X1Gui().ListBoxHeader(XorStr("##Gloves"), Vec2(long_item_w, 522));
+			X1Gui().ListBoxHeader(XorStr("##Gloves"), Vec2(long_item_w, 500));
 			for (int i = 0; i < sizeof(GlovesModels) / sizeof(GlovesModels[0]); i++)
 			{
 				bool selected = i == SelectedGloveTT;

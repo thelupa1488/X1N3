@@ -82,6 +82,7 @@ public:
 		float seed = 0.000000001f;
 		bool auto_stat_track = false;
 		int stat_track = 0;
+		int rarity = 0;
 		int quality = 0;
 		char custom_name[32] = "";
 		int paint_kit_id = 0;
@@ -96,6 +97,7 @@ public:
 			CHECK_VAR(seed, seed);
 			CHECK_VAR(auto_stat_track, auto_stat_track);
 			CHECK_VAR(stat_track, stat_track);
+			CHECK_VAR(rarity, rarity);
 			CHECK_VAR(quality, quality);
 			CHECK_VAR(custom_name, custom_name);
 			CHECK_VAR(paint_kit_id, paint_kit_id);

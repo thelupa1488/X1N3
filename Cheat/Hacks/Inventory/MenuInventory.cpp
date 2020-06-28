@@ -77,6 +77,7 @@ void CInventory::Menu()
 	float long_item_w = X1Gui().GetThis()->Info.Size.x - (X1Gui().GetStyle().wndPadding.x * 2);
 	auto SkinParams = [&](SkinSettings &Item) -> void
 	{
+		Inventory invBuffer;
 		X1Gui().PushItemWidth(360);
 		SliderFloats("Seed", Item.seed, 0.f, 2.f);
 		SliderFloats("Wear", Item.wear, 0.f, 2.f, "%.9f");
@@ -87,15 +88,23 @@ void CInventory::Menu()
 
 		X1Gui().PushItemWidth(360);
 
-		vector<string> ItemsCSS = { lolc("Default"), lolc("Genuine"), lolc("Vintage"), lolc("Unusual"), lolc("Community"), lolc("Developer") ,
-			lolc("Self-Made"), lolc("Customized"), lolc("Strange"), lolc("Completed"), lolc("Tournament") };
+		vector<string> ItemsRarity = { lolc("Default"), lolc("Consumer"), lolc("Industrial"), lolc("Mil-Spec"), lolc("Restricted"), lolc("Classified") ,
+			lolc("Covert"), lolc("Contraband") };
 
-		VectorEx<const char* > itemsQQEng = { ItemsCSS[0].c_str() , ItemsCSS[1].c_str(), ItemsCSS[2].c_str(), ItemsCSS[3].c_str(), ItemsCSS[4].c_str() ,ItemsCSS[5].c_str() ,
-			ItemsCSS[6].c_str() ,ItemsCSS[6].c_str() ,ItemsCSS[7].c_str() , ItemsCSS[8].c_str() , ItemsCSS[9].c_str(), ItemsCSS[10].c_str() };
+		VectorEx<const char* > ItemsRR = { ItemsRarity[0].c_str(), ItemsRarity[1].c_str(), ItemsRarity[2].c_str(), ItemsRarity[3].c_str(), ItemsRarity[4].c_str(), ItemsRarity[5].c_str(),
+			ItemsRarity[6].c_str(), ItemsRarity[7].c_str() };
 
-		DComboBox("Quality", Item.quality, itemsQQEng);
-		static string lll = "";
-		TextEdit("Name##CustomName", lll, Item.custom_name, 128);
+		vector<string> ItemsQuality = { lolc("Default"), lolc("Genuine"), lolc("Vintage"), lolc("Knife Star"), lolc("Tournament"), lolc("Community") ,
+	        lolc("Valve"), lolc("Prototype"), lolc("Customized"), lolc("StatTrak"), lolc("Complited") };
+
+		VectorEx<const char* > ItemsQQ = { ItemsQuality[0].c_str(), ItemsQuality[1].c_str(), ItemsQuality[2].c_str(), ItemsQuality[3].c_str(), ItemsQuality[4].c_str(), ItemsQuality[5].c_str(),
+			ItemsQuality[6].c_str(), ItemsQuality[7].c_str(), ItemsQuality[8].c_str(), ItemsQuality[9].c_str(), ItemsQuality[10].c_str() };
+
+		DComboBox("Rarity", Item.rarity, ItemsRR);
+		DComboBox("Quality", Item.quality, ItemsQQ);
+
+		static string Name_Invchr = "";
+		TextEdit("Name##InvChr", Name_Invchr, Item.custom_name, 32);
 	};
 
 	if (WeaponNames.size() > 0)
@@ -168,8 +177,6 @@ void CInventory::Menu()
 					X1Gui().Spacing();
 
 					SkinParams(WItem->Skin);
-
-
 				}
 				else if (WeapSkinSettingsMode == 1)
 				{
@@ -256,7 +263,7 @@ void CInventory::Menu()
 							}
 						}
 
-						SliderFloats("Quality", SItem->wear, 0.f, 1.f);
+						SliderFloats("Wear", SItem->wear, 0.f, 1.f);
 						SliderFloats("Scale", SItem->scale, 0.f, 1.f);
 						SliderFloats("Rotation", SItem->rotation, 0.f, 360);
 					}
@@ -280,7 +287,8 @@ void CInventory::Menu()
 					invBuffer.Seed = WItem->Skin.seed;
 					invBuffer.StatTrack = WItem->Skin.stat_track;
 					invBuffer.AutoStatTrack = WItem->Skin.auto_stat_track;
-					invBuffer.Rarity = WItem->Skin.quality;
+					invBuffer.Rarity = WItem->Skin.rarity;
+					invBuffer.Quality = WItem->Skin.quality;
 
 					for (int si(0); si < 5; si++)
 					{
@@ -367,7 +375,8 @@ void CInventory::Menu()
 					invBuffer.Seed = WItem->Skin.seed;
 					invBuffer.StatTrack = WItem->Skin.stat_track;
 					invBuffer.AutoStatTrack = WItem->Skin.auto_stat_track;
-					invBuffer.Rarity = WItem->Skin.quality;
+					invBuffer.Rarity = WItem->Skin.rarity;
+					invBuffer.Quality = WItem->Skin.quality;
 
 					invBuffer.WeaponName = KnifeNamesCT[InvSelectedKnife].Name;
 					if (WItem->Skin.skins_mode == 0)

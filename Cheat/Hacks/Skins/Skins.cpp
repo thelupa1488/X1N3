@@ -397,8 +397,9 @@ void CSkins::ApplyCustomSkin(CBaseAttributableItem* pWeapon, int nWeaponIndex, b
 	{
 		if (Item->Skin.paint_kit_id != 0 && !IsTT)
 			SetSkin(pWeapon, &Item->Skin, Item->ID, false, bIsKnife);
-		if (Item->SkinTT.paint_kit_id != 0 && IsTT)
-			SetSkin(pWeapon, &Item->SkinTT, Item->ID, false, bIsKnife);
+
+		if (Item->Skin.paint_kit_id != 0 && IsTT)
+			SetSkin(pWeapon, &Item->Skin, Item->ID, false, bIsKnife);
 	}
 	else
 		SetSkin(pWeapon, &Item->Skin, Item->ID, false, bIsKnife);
@@ -429,7 +430,7 @@ void CSkins::SetSkin(CBaseAttributableItem* pWeapon, SkinSettings *SkinParam, in
 		*pWeapon->GetFallbackSeed() = SkinParam->seed;
 
 	if (SkinParam->custom_name)
-		snprintf(pWeapon->GetCustomName(), 32, XorStr("%s"), SkinParam->custom_name);
+		snprintf(pWeapon->GetCustomName(), 32, "%s", SkinParam->custom_name);
 
 	if (*pWeapon->GetItemDefinitionIndex() != id)
 	{
@@ -731,6 +732,7 @@ void CSkins::SaveSkins(nlohmann::json &j)
 			SV(sname, XorStr("paint_kit_id"), v.Skin.paint_kit_id);
 			SV(sname, XorStr("paint_kit_menu"), v.Skin.paint_kit_menu);
 			SV(sname, XorStr("skins_mode"), v.Skin.skins_mode);
+			SV(sname, XorStr("rarity"), v.Skin.rarity);
 			SV(sname, XorStr("quality"), v.Skin.quality);
 			SV(sname, XorStr("seed"), v.Skin.seed);
 			SV(sname, XorStr("auto_stat_track"), v.Skin.auto_stat_track);
@@ -796,6 +798,7 @@ void CSkins::LoadSkins(nlohmann::json &j)
 					LV(sname, XorStr("paint_kit_id"), v.Skin.paint_kit_id);
 					LV(sname, XorStr("paint_kit_menu"), v.Skin.paint_kit_menu);
 					LV(sname, XorStr("skins_mode"), v.Skin.skins_mode);
+					LV(sname, XorStr("rarity"), v.Skin.rarity);
 					LV(sname, XorStr("quality"), v.Skin.quality);
 					LV(sname, XorStr("seed"), v.Skin.seed);
 					LV(sname, XorStr("auto_stat_track"), v.Skin.auto_stat_track);

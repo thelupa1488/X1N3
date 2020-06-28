@@ -10,9 +10,9 @@
 #include "../../protobuf/steammessages.pb.h"
 
 #ifdef DEBUG_DLL
-#pragma comment(lib, "protobuf_release.lib")
-#else
 #pragma comment(lib, "protobuf_debug.lib")
+#else
+#pragma comment(lib, "protobuf_release.lib")
 #endif
 
 #pragma comment(lib, "libprotoc.lib")
@@ -33,7 +33,7 @@ protected:
 	virtual void SSendMessage(void* ecx, void* edx, uint32_t unMsgType, const void* pubData, uint32_t cubData) = 0;
 
 	virtual void AddMedals(CMsgSOCacheSubscribed::SubscribedType* pInventoryCacheObject, int Index, int MedalId) = 0;
-	virtual void AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int index, int itemDefIndex, int rarity, int paintKit, int seed, float wear, std::string name, int InventoryLIdx) = 0;
+	virtual void AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int index, int itemDefIndex, int rarity, int quality, int paintKit, int seed, float wear, std::string name, int InventoryLIdx) = 0;
 
 	virtual bool SendClientHello() = 0;
 	virtual bool SendMMHello() = 0;
@@ -64,7 +64,7 @@ public:
 		int Index = 0;
 		int Weapon = 0;
 		int WeaponSkinId = 0;
-		int Rarity = 5;
+		int Rarity = 0;
 		int Quality = 0;
 		int Style = 0;
 		int iTeam = CYRT_AUTO;
@@ -114,7 +114,7 @@ public:
 	int GetInventoryByGame(int IndGame, int Eqp, TeamID Team);
 
 	void AddMedals(CMsgSOCacheSubscribed::SubscribedType* pInventoryCacheObject, int Index, int MedalId);
-	void AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int index, int itemDefIndex, int rarity, int paintKit, int seed, float wear, std::string name, int InventoryLIdx);
+	void AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int index, int itemDefIndex, int rarity, int quality, int paintKit, int seed, float wear, std::string name, int InventoryLIdx);
 
 	bool SendClientHello();
 	bool SendMMHello();
