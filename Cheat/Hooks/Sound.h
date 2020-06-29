@@ -1,17 +1,21 @@
 #pragma once
 #include "Tables.h"
 
-void __stdcall hkEmitSound(SoundData data)
+void __fastcall hkEmitSound(IEngineSound* thisptr, int edx, IRecipientFilter& filter, int nEntityIndex, int iChannel, const char* szSoundEntry, 
+	unsigned int uSoundEntryHash, const char* szSample, float flVolume, float flAttenuation, int nSeed, int iFlags, int iPitch, const Vector* vecOrigin, 
+	const Vector* vecDirection, CUtlVector<Vector>* pUtlVecOrigins, bool bUpdatePositions, int flSoundTime, int nSpeakerEntity, SndInfo_t& parameters)
 {
-	if (!strcmp(data.soundEntry, XorStr("UIPanorama.popup_accept_match_beep")))
-		CGlobal::MatchBeep = true;
+	static auto oEmitSound = HookTables::pEmitSound->GetTrampoline();
 
-	HookTables::pEmitSound->GetTrampoline()(data);
+	// @note: for sound esp use: "player/footsteps", "player/land", "clipout" sounds check
+
+	oEmitSound(thisptr, edx, filter, nEntityIndex, iChannel, szSoundEntry, uSoundEntryHash, szSample, flVolume, flAttenuation, nSeed, iFlags, iPitch, 
+		vecOrigin, vecDirection, pUtlVecOrigins, bUpdatePositions, flSoundTime, nSpeakerEntity, parameters);
 }
 
 void __fastcall hkPlaySound(void* thisptr, int edx, const char* pszSoundName)
 {
-//	if (GP_Misc)
-//		GP_Misc->PlaySound(pszSoundName); 
-	HookTables::pPlaySound->GetTrampoline()(thisptr, pszSoundName);
+	static auto oPlaySound = HookTables::pPlaySound->GetTrampoline();
+
+	oPlaySound(thisptr, pszSoundName);
 }

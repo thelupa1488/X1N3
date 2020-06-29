@@ -3,8 +3,8 @@
 #include <VMProtectSDK.h>
 
 //#define DEBUG_DLL
-//#define ENABLE_XOR_STR
-//#define ENABLE_VMP
+#define ENABLE_XOR_STR
+#define ENABLE_VMP
 //#define YOUGAMEBIZ
 
 #define PRESENT_ENABLE

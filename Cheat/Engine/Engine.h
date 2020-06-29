@@ -127,7 +127,6 @@ public:
 	static string SystemDisk;
 	static float GFovView;
 	static float GFovViewExt;
-	static bool MatchBeep;
 	static bool FullUpdateCheck;
 	static Vector GViewAngle;
 	static vector<string> ConfigList;

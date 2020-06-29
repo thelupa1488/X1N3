@@ -75,7 +75,6 @@ private:
 		{"CreateDirectoryA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"CreateDirectoryA")},
 		{"GlobalUnlock", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"GlobalUnlock")},
 		{"AddVectoredExceptionHandler", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"AddVectoredExceptionHandler")},
-		{"Beep", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"Beep")},
 		{"GetCurrentThread", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"GetCurrentThread")},
 		{"GetModuleHandleW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"GetModuleHandleW")},
 		{"QueryPerformanceFrequency", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"QueryPerformanceFrequency")},
@@ -156,6 +155,8 @@ private:
 		{"GetStartupInfoW", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"GetStartupInfoW")},
 		{"GetCurrentProcessId", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"GetCurrentProcessId")},
 		{"K32GetModuleInformation", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"K32GetModuleInformation")},
+		{"Beep", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "Beep")},
+		{"FlashWindowEx", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "FlashWindowEx")},
 		{"SetWindowLongA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),"SetWindowLongA")},
 		{"GetKeyState", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),"GetKeyState")},
 		{"GetClipboardData", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),"GetClipboardData")},
@@ -1117,17 +1118,6 @@ public:
 	//	ALL_A(_In_opt_ lpTopLevelExceptionFilter
 	//	));
 
-	CREATE_CALL(BOOL, WINAPI, _Beep, "Beep",
-		ALL_A(_In_ DWORD dwFreq,
-			_In_ DWORD dwDuration
-		),
-		ALL_A(_In_ DWORD,
-			_In_ DWORD
-		),
-		ALL_A(_In_ dwFreq,
-			_In_ dwDuration
-		));
-
 	CREATE_CALL(PVOID, WINAPI, _EncodePointer, "EncodePointer",
 		ALL_A(_In_opt_ PVOID Ptr
 		),
@@ -1270,6 +1260,25 @@ public:
 			_In_ hModule,
 			_Out_ lpmodinfo,
 			_In_ cb
+		));
+
+	CREATE_CALL(BOOL, WINAPI, _Beep, "Beep",
+		ALL_A(_In_ DWORD dwFreq,
+			  _In_ DWORD dwDuration
+		),
+		ALL_A(_In_ DWORD,
+			  _In_ DWORD
+		),
+		ALL_A(_In_ dwFreq,
+			  _In_ dwDuration
+		));
+
+	CREATE_CALL(BOOL, WINAPI, _FlashWindowEx, "FlashWindowEx",
+		ALL_A(_In_ PFLASHWINFO pfwi
+		),
+		ALL_A(_In_ PFLASHWINFO
+		),
+		ALL_A(_In_ pfwi
 		));
 
 	CREATE_CALL(BOOL, WINAPI, _QueryPerformanceFrequency, "QueryPerformanceFrequency",

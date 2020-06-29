@@ -5,17 +5,6 @@
 #include "../X1API/MinHook/hook.h"
 using namespace SDK;
 
-struct SoundData
-{
-	char pad[4];
-	int entityIndex;
-	int channel;
-	const char* soundEntry;
-	char pad1[8];
-	float volume;
-	char pad2[44];
-};
-
 namespace HookTables
 {
 	using CreateMoveFn = bool(__stdcall*)(float, CUserCmd*);
@@ -31,7 +20,9 @@ namespace HookTables
 	using RetrieveMessageFn = int(__thiscall*)(void*, uint32_t*, void*, uint32_t, uint32_t*);
 	using SendMessageFn = int(__thiscall*)(void*, uint32_t, const void*, uint32_t);
 	using PostDataUpdateFn = void(__stdcall*)(void*, int);
-	using EmitSoundFn = void(__stdcall*)(SoundData);
+	using EmitSoundFn = void(__fastcall*)(IEngineSound*, int, IRecipientFilter&, int, int, const char*, 
+		unsigned int, const char*, float, float, int, int, int, const Vector*, 
+		const Vector*, CUtlVector<Vector>*, bool, int, int, SndInfo_t&);
 
 	cDetour<CreateMoveFn>* pCreateMove;
 	cDetour<OverrideViewFn>* pOverrideView;

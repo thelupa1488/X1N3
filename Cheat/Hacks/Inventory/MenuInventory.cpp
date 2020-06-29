@@ -132,12 +132,8 @@ void CInventory::Menu()
 				if (WeapSkinSettingsMode == 0)
 				{
 					ItemsList(WeaponNames, InvSelectedWeapon, Vec2(225, 389), XorStr("##AllWeapons"));
-
 					WeaponPreview = WItem->CdnName;
-
-
 					X1Gui().SameLine();
-
 					X1Gui().BeginGroup();
 					{
 						X1Gui().PushItemWidth(185);
@@ -166,9 +162,10 @@ void CInventory::Menu()
 							}
 							else
 							{
-								X1Gui().Text(XorStr("Loading skins..."));
+								X1Gui().ListBoxHeader(XorStr("##AllSkinsEmpty"), Vec2(225, 389));
+								X1Gui().Text(XorStr("Loading Skins..."));
+								X1Gui().ListBoxFooter();
 							}
-
 						}
 					}
 					X1Gui().EndGroup();
@@ -254,10 +251,7 @@ void CInventory::Menu()
 								SItem->kit = GP_Skins->SortedStickers[SortSelectedS].Stckers[SItem->kit_menu_index].id;
 						}
 						else
-						{
-							X1Gui().Text(XorStr("Loading stickers..."));
-							X1Gui().ListBoxFooter();
-						}
+							X1Gui().Text(XorStr("Loading Stickers..."));
 					}
 
 					SliderFloats("Wear", SItem->wear, 0.f, 1.f);
@@ -343,7 +337,9 @@ void CInventory::Menu()
 						}
 						else
 						{
-							X1Gui().Text(XorStr("Loading skins..."));
+							X1Gui().ListBoxHeader(XorStr("##AllKnifSkinsEmpty"), Vec2(221, 370));
+							X1Gui().Text(XorStr("Loading Skins..."));
+							X1Gui().ListBoxFooter();
 						}
 					}
 				}
@@ -454,15 +450,23 @@ void CInventory::Menu()
 		else if (InvSettingsMode == 3)
 		{
 			static int SelectedMedal = 0;
-
-			X1Gui().ListBoxHeader(XorStr("##Medals"), Vec2(long_item_w, 535));
-			for (size_t i = 0; i < Medals.size(); i++)
+			if (GP_Skins->AllSkinsLoaded)
 			{
-				bool selected = i == SelectedMedal;
-				if (X1Gui().SelectLabel(Medals[i].Name.c_str(), selected))
-					SelectedMedal = i;
+				X1Gui().ListBoxHeader(XorStr("##Medals"), Vec2(long_item_w, 535));
+				for (size_t i = 0; i < Medals.size(); i++)
+				{
+					bool selected = i == SelectedMedal;
+					if (X1Gui().SelectLabel(Medals[i].Name.c_str(), selected))
+						SelectedMedal = i;
+				}
+				X1Gui().ListBoxFooter();
 			}
-			X1Gui().ListBoxFooter();
+			else
+			{
+				X1Gui().ListBoxHeader(XorStr("##MedalsEmpty"), Vec2(long_item_w, 535));
+				X1Gui().Text(XorStr("Loading Medals..."));
+				X1Gui().ListBoxFooter();
+			}
 			if (X1Gui().Button(XorStr("ADD##Medals"), Vec2(long_item_w, 22)))
 			{
 				Inventory invBuffer;

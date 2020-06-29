@@ -51,33 +51,33 @@ void CMisc::Menu()
 		X1Gui().SameLine(SAME_LINE_1);
 		X1Gui().PushItemWidth(PUSH_1);
 		SliderInts("Distance##ThirdPerson", ThirdPersonDistance, 50, 300);
-		DCheckBox("Angle Lines", AngleLines);
-		X1Gui().SameLine(SAME_LINE_1);
+		//DCheckBox("Angle Lines", AngleLines);
+		//X1Gui().SameLine(SAME_LINE_1);
 		X1Gui().PushItemWidth(PUSH_1);
 		HotsKey("Button##ThirdPerson", ThirdPersonBind.Button);
 		X1Gui().SameLine();
 		DCheckBox("Hold##ThirdPerson", ThirdPersonBind.Hold);
 	}
-	X1Gui().Spacing();
-	X1Gui().Separator();
-	X1Gui().Spacing();
-	DCheckBox("Desync [Beta]", Desync);
-	if (Desync)
-	{
-		X1Gui().SameLine(SAME_LINE_1);
-		X1Gui().PushItemWidth(PUSH_1);
-		VectorEx<const char* >itemsCSS = {lolc("Off"), lolc("Static"), lolc("Balance") };
-		DComboBox("Type##Desync", DesyncType, itemsCSS);
-		DCheckBox("Auto direction", DesyncAd);
-		X1Gui().SameLine();
-		HotsKey("Button##Desync", DesyncBind.Button);
-		DCheckBox("Desync arrows", DesyncArrows);
-		if (DesyncArrows)
-		{
-			X1Gui().SameLine();
-			DColorEdit("Color##Arrows", ArrowsColor);
-		}
-	}
+	//X1Gui().Spacing();
+	//X1Gui().Separator();
+	//X1Gui().Spacing();
+	//DCheckBox("Desync [Beta]", Desync);
+	//if (Desync)
+	//{
+	//	X1Gui().SameLine(SAME_LINE_1);
+	//	X1Gui().PushItemWidth(PUSH_1);
+	//	VectorEx<const char* >itemsCSS = {lolc("Off"), lolc("Static"), lolc("Balance") };
+	//	DComboBox("Type##Desync", DesyncType, itemsCSS);
+	//	DCheckBox("Auto direction", DesyncAd);
+	//	X1Gui().SameLine();
+	//	HotsKey("Button##Desync", DesyncBind.Button);
+	//	DCheckBox("Desync arrows", DesyncArrows);
+	//	if (DesyncArrows)
+	//	{
+	//		X1Gui().SameLine();
+	//		DColorEdit("Color##Arrows", ArrowsColor);
+	//	}
+	//}
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();

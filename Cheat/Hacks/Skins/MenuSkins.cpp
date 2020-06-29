@@ -243,7 +243,7 @@ void CSkins::Menu()
 					else
 					{
 						X1Gui().ListBoxHeader(XorStr("##AllSkinsEmpty"), Vec2(KITS_LIST_X, KITS_LIST_Y));
-						X1Gui().Text(XorStr("Loading skins..."));
+						X1Gui().Text(XorStr("Loading Skins..."));
 						X1Gui().ListBoxFooter();
 					}
 
@@ -332,7 +332,7 @@ void CSkins::Menu()
 				}
 				else
 				{
-					X1Gui().Text(XorStr("Loading stickers..."));
+					X1Gui().Text(XorStr("Loading Stickers..."));
 				}
 			}
 
@@ -399,7 +399,7 @@ void CSkins::Menu()
 					else
 					{
 						X1Gui().ListBoxHeader(XorStr("##AllSkinsEmpty"), Vec2(KITS_LIST_X, KITS_LIST_Y));
-						X1Gui().Text(XorStr("Loading skins..."));
+						X1Gui().Text(XorStr("Loading Skins..."));
 						X1Gui().ListBoxFooter();
 					}
 				}
@@ -449,7 +449,7 @@ void CSkins::Menu()
 					else
 					{
 						X1Gui().ListBoxHeader(XorStr("##AllSkinsEmpty"), Vec2(KITS_LIST_X, KITS_LIST_Y));
-						X1Gui().Text(XorStr("Loading skins..."));
+						X1Gui().Text(XorStr("Loading Skins..."));
 						X1Gui().ListBoxFooter();
 					}
 				}

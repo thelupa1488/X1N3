@@ -174,66 +174,66 @@ void CMisc::Draw()
 			}
 		}
 
-		if (Desync)
-		{
-			if (DesyncArrows)
-			{
-				auto client_viewangles = QAngle();
-				I::Engine()->GetViewAngles(client_viewangles);
-				const auto screen_center = Vector2D(CGlobal::iScreenWidth / 2, CGlobal::iScreenHeight / 2);
+		//if (Desync)
+		//{
+		//	if (DesyncArrows)
+		//	{
+		//		auto client_viewangles = QAngle();
+		//		I::Engine()->GetViewAngles(client_viewangles);
+		//		const auto screen_center = Vector2D(CGlobal::iScreenWidth / 2, CGlobal::iScreenHeight / 2);
 
-				constexpr auto radius = 225.f;
-				auto DrawArrow = [&](float rot, Color color) -> void
-				{
-					vector<Vec2> vertices;
-					vertices.push_back((Vec2(screen_center.x + cosf(rot) * radius, screen_center.y + sinf(rot) * radius)));
-					vertices.push_back((Vec2(screen_center.x + cosf(rot + DEG2RAD(2)) * (radius - 6), screen_center.y + sinf(rot + DEG2RAD(2)) * (radius - 6)))); //25
-					vertices.push_back((Vec2(screen_center.x + cosf(rot - DEG2RAD(2)) * (radius - 6), screen_center.y + sinf(rot - DEG2RAD(2)) * (radius - 6)))); //25
+		//		constexpr auto radius = 225.f;
+		//		auto DrawArrow = [&](float rot, Color color) -> void
+		//		{
+		//			vector<Vec2> vertices;
+		//			vertices.push_back((Vec2(screen_center.x + cosf(rot) * radius, screen_center.y + sinf(rot) * radius)));
+		//			vertices.push_back((Vec2(screen_center.x + cosf(rot + DEG2RAD(2)) * (radius - 6), screen_center.y + sinf(rot + DEG2RAD(2)) * (radius - 6)))); //25
+		//			vertices.push_back((Vec2(screen_center.x + cosf(rot - DEG2RAD(2)) * (radius - 6), screen_center.y + sinf(rot - DEG2RAD(2)) * (radius - 6)))); //25
 
-					GP_Render->RenderTriangle(vertices.at(0), vertices.at(1), vertices.at(2), ArrowsColor, 2.f);
-				};
+		//			GP_Render->RenderTriangle(vertices.at(0), vertices.at(1), vertices.at(2), ArrowsColor, 2.f);
+		//		};
 
-				static auto alpha = 0.f;
-				static auto plus_or_minus = false;
-				if (alpha <= 0.f || alpha >= 255.f) plus_or_minus = !plus_or_minus;
-				alpha += plus_or_minus ? (255.f / 7 * 0.015) : -(255.f / 7 * 0.015); alpha = clamp(alpha, 0.f, 255.f);
+		//		static auto alpha = 0.f;
+		//		static auto plus_or_minus = false;
+		//		if (alpha <= 0.f || alpha >= 255.f) plus_or_minus = !plus_or_minus;
+		//		alpha += plus_or_minus ? (255.f / 7 * 0.015) : -(255.f / 7 * 0.015); alpha = clamp(alpha, 0.f, 255.f);
 
-				const auto FakeRot = DEG2RAD((side < 0.0f ? 90 : -90) - 90);
-				DrawArrow(FakeRot, ArrowsColor);
-			}
+		//		const auto FakeRot = DEG2RAD((side < 0.0f ? 90 : -90) - 90);
+		//		DrawArrow(FakeRot, ArrowsColor);
+		//	}
 
-			if (AngleLines && ThirdPersonBind.Check())
-			{
-				auto DrawAngleLines = [&](const Vector& origin, const Vector& w2sOrigin, const float& angle, const char* text, Color clr)
-				{
-					Vector forward;
-					AngleVectors(QAngle(0.f, angle, 0.f), forward);
-					float AngleLinesLength = 30.0f;
+		//	if (AngleLines && ThirdPersonBind.Check())
+		//	{
+		//		auto DrawAngleLines = [&](const Vector& origin, const Vector& w2sOrigin, const float& angle, const char* text, Color clr)
+		//		{
+		//			Vector forward;
+		//			AngleVectors(QAngle(0.f, angle, 0.f), forward);
+		//			float AngleLinesLength = 30.0f;
 
-					Vector w2sReal;
-					if (CGlobal::WorldToScreen(origin + forward * AngleLinesLength, w2sReal))
-					{
-						GP_Render->DrawLine(w2sOrigin.x, w2sOrigin.y, w2sReal.x, w2sReal.y, Color::White(), 1.0f);
-						GP_Render->DrawString(w2sReal.x, w2sReal.y /* - 5.0f, 14.f*/, clr, true, true, text);
-					}
-				};
+		//			Vector w2sReal;
+		//			if (CGlobal::WorldToScreen(origin + forward * AngleLinesLength, w2sReal))
+		//			{
+		//				GP_Render->DrawLine(w2sOrigin.x, w2sOrigin.y, w2sReal.x, w2sReal.y, Color::White(), 1.0f);
+		//				GP_Render->DrawString(w2sReal.x, w2sReal.y /* - 5.0f, 14.f*/, clr, true, true, text);
+		//			}
+		//		};
 
-				if (!CGlobal::LocalPlayer || !CGlobal::LocalPlayer->GetBasePlayerAnimState())
-					return;
+		//		if (!CGlobal::LocalPlayer || !CGlobal::LocalPlayer->GetBasePlayerAnimState())
+		//			return;
 
-				if (CGlobal::LocalPlayer->IsDead())
-					return;
+		//		if (CGlobal::LocalPlayer->IsDead())
+		//			return;
 
-				Vector w2sOrigin;
-				if (CGlobal::WorldToScreen(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin))
-				{
-					DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, anglefake, XorStr("fake"), Color::Orange());
-					DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, CGlobal::LocalPlayer->GetLowerBodyYawTarget(), XorStr("lby"), Color::Blue());
-					DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, anglereal, XorStr("real"), Color::Green());
-					DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, view, XorStr("view"), Color::Red());
-				}
-			}
-		}
+		//		Vector w2sOrigin;
+		//		if (CGlobal::WorldToScreen(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin))
+		//		{
+		//			DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, anglefake, XorStr("fake"), Color::Orange());
+		//			DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, CGlobal::LocalPlayer->GetLowerBodyYawTarget(), XorStr("lby"), Color::Blue());
+		//			DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, anglereal, XorStr("real"), Color::Green());
+		//			DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, view, XorStr("view"), Color::Red());
+		//		}
+		//	}
+		//}
 
 		HitWorker.Draw();
 	}
@@ -1087,92 +1087,92 @@ void CMisc::EnginePrediction(bool& bSendPacket, CUserCmd* pCmd)
 						pCmd->buttons |= IN_JUMP;
 				}
 
-				if (Desync)
-				{
-					if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
-						CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER || CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP
-						|| CGlobal::LocalPlayer->IsDead())
-						return;
+				//if (Desync)
+				//{
+				//	if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
+				//		CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER || CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP
+				//		|| CGlobal::LocalPlayer->IsDead())
+				//		return;
 
-					//if (I::GameRules() && I::GameRules()->IsFreezePeriod())
-					//	return;
+				//	//if (I::GameRules() && I::GameRules()->IsFreezePeriod())
+				//	//	return;
 
-					auto weapon = CGlobal::LocalPlayer->GetBaseWeapon();
+				//	auto weapon = CGlobal::LocalPlayer->GetBaseWeapon();
 
-					if (!weapon)
-						return;
+				//	if (!weapon)
+				//		return;
 
-					if ((CGlobal::GWeaponID == WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_FAMAS) && weapon->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
-						return;
+				//	if ((CGlobal::GWeaponID == WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_FAMAS) && weapon->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
+				//		return;
 
-					if (CGlobal::GWeaponType == WEAPON_TYPE_GRENADE) 
-					{
-						if (!weapon->GetPinPulled()) 
-						{
-							float throwTime = weapon->GetThrowTime();
-							if (throwTime > 0.f)
-								return;
-						}
-						if ((pCmd->buttons & IN_ATTACK) || (pCmd->buttons & IN_ATTACK2)) 
-						{
-							if (weapon->GetThrowTime() > 0.f)
-								return;
-						}
-					}
+				//	if (CGlobal::GWeaponType == WEAPON_TYPE_GRENADE) 
+				//	{
+				//		if (!weapon->GetPinPulled()) 
+				//		{
+				//			float throwTime = weapon->GetThrowTime();
+				//			if (throwTime > 0.f)
+				//				return;
+				//		}
+				//		if ((pCmd->buttons & IN_ATTACK) || (pCmd->buttons & IN_ATTACK2)) 
+				//		{
+				//			if (weapon->GetThrowTime() > 0.f)
+				//				return;
+				//		}
+				//	}
 
-					static bool broke_lby = false;
-					auto sideauto = GetBestHeadAngle(vangle.y);
+				//	static bool broke_lby = false;
+				//	auto sideauto = GetBestHeadAngle(vangle.y);
 
-					if (!DesyncAd) 
-					{
-						if (DesyncBind.Check())
-							side = 1.0f;
-						else
-							side = -1.0f;
-					}
-					else
-						side = sideauto;
+				//	if (!DesyncAd) 
+				//	{
+				//		if (DesyncBind.Check())
+				//			side = 1.0f;
+				//		else
+				//			side = -1.0f;
+				//	}
+				//	else
+				//		side = sideauto;
 
-					if (DesyncType == 1) 
-					{
-						float minimal_move = CGlobal::LocalPlayer->GetFlags() & IN_DUCK ? 3.0f : 1.0f;
+				//	if (DesyncType == 1) 
+				//	{
+				//		float minimal_move = CGlobal::LocalPlayer->GetFlags() & IN_DUCK ? 3.0f : 1.0f;
 
-						if (!bSendPacket)
-							pCmd->viewangles.y += 120.f * side;
+				//		if (!bSendPacket)
+				//			pCmd->viewangles.y += 120.f * side;
 
-						static bool flip = 1;
-						flip = !flip;
+				//		static bool flip = 1;
+				//		flip = !flip;
 
-						pCmd->sidemove += flip ? minimal_move : -minimal_move;
-					}
-					else if (DesyncType == 2) 
-					{
-						if (next_lby >= I::GlobalVars()->curtime) 
-						{
-							if (!broke_lby && bSendPacket)
-								return;
+				//		pCmd->sidemove += flip ? minimal_move : -minimal_move;
+				//	}
+				//	else if (DesyncType == 2) 
+				//	{
+				//		if (next_lby >= I::GlobalVars()->curtime) 
+				//		{
+				//			if (!broke_lby && bSendPacket)
+				//				return;
 
-							broke_lby = false;
-							bSendPacket = false;
-							pCmd->viewangles.y += 120.0f * side;
-						}
-						else 
-						{
-							broke_lby = true;
-							bSendPacket = false;
-							pCmd->viewangles.y += 120.0f * side;
-						}
-					}
-					else if (DesyncType == 3)
-					{
-						static bool switchaa = false;
-						switchaa = !switchaa;
+				//			broke_lby = false;
+				//			bSendPacket = false;
+				//			pCmd->viewangles.y += 120.0f * side;
+				//		}
+				//		else 
+				//		{
+				//			broke_lby = true;
+				//			bSendPacket = false;
+				//			pCmd->viewangles.y += 120.0f * side;
+				//		}
+				//	}
+				//	else if (DesyncType == 3)
+				//	{
+				//		static bool switchaa = false;
+				//		switchaa = !switchaa;
 
-						if (!bSendPacket)
-							pCmd->viewangles.y += switchaa ? 180.f : 0.f;
-					}
-					FixAngles(pCmd->viewangles);
-				}
+				//		if (!bSendPacket)
+				//			pCmd->viewangles.y += switchaa ? 180.f : 0.f;
+				//	}
+				//	FixAngles(pCmd->viewangles);
+				//}
 
 				if (AutoBlock && AutoBlockBind.Check())
 				{
@@ -1448,18 +1448,19 @@ void CMisc::GetViewModelFOV(float &Fov)
 //	}
 //}
 
-void CMisc::AutoAcceptEmit(bool MatchBeep)
+void CMisc::AutoAcceptEmit()
 {
-	if (AutoAccept && MatchBeep && !CGlobal::FullUpdateCheck)
+	if (AutoAccept && !CGlobal::FullUpdateCheck)
 	{
-		static auto fnAccept = reinterpret_cast<bool(__stdcall*)(const char*)>(Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12")));
-		if (fnAccept)
+		using SetLocalPlayerReadyFn = void(__stdcall*)(const char*);
+		static auto oSetLocalPlayerReady = (SetLocalPlayerReadyFn)(Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12"))); // @xref: "deffered"
+		if (oSetLocalPlayerReady != nullptr)
 		{
-			fnAccept("");
+			oSetLocalPlayerReady("");
 			HWND window = FastCall::G().t_FindWindowA(XorStr("Valve001"), 0);
 			FLASHWINFO flash{ sizeof(FLASHWINFO), window, FLASHW_TRAY | FLASHW_TIMERNOFG, 0, 0 };
-			FlashWindowEx(&flash);
-			CGlobal::MatchBeep = false;
+			FastCall::G().t_Beep(500, 800);
+			FastCall::G().t_FlashWindowEx(&flash);
 		}
 	}
 }
