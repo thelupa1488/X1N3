@@ -1454,6 +1454,7 @@ void CMisc::AutoAcceptEmit()
 	{
 		using SetLocalPlayerReadyFn = void(__stdcall*)(const char*);
 		static auto oSetLocalPlayerReady = (SetLocalPlayerReadyFn)(Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12"))); // @xref: "deffered"
+
 		if (oSetLocalPlayerReady != nullptr)
 		{
 			oSetLocalPlayerReady("");

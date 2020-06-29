@@ -20,8 +20,8 @@ int __fastcall hkRetrieveMessage(void* ecx, void* edx, uint32_t* punMsgType, voi
 
 	uint32_t messageType = *punMsgType & 0x7FFFFFFF;
 
-	if (GP_Misc && messageType == k_EMsgGCCStrike15_v2_GCToClientSteamdatagramTicket)
-		GP_Misc->AutoAcceptEmit();
+	//if (GP_Misc && messageType == k_EMsgGCCStrike15_v2_GCToClientSteamdatagramTicket)
+	//	GP_Misc->AutoAcceptEmit();
 
 	GP_Inventory->PostRetrieveMessage(punMsgType, pubDest, cubDest, pcubMsgSize);
 
