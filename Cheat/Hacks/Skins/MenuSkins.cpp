@@ -140,18 +140,6 @@ void CSkins::Menu()
 {
 	float long_item_w = X1Gui().GetThis()->Info.Size.x - (X1Gui().GetStyle().wndPadding.x * 2);
 
-#ifdef YOUGAMEBIZ
-#else
-	//X1Gui().Spacing();
-	//X1Gui().SameLine(333);
-	//if (X1Gui().Button(GP_Skins->ShowSkinPreview ? ("Preview <<<") : ("Preview >>>"), Vec2(129, 20)))
-	//	GP_Skins->ShowSkinPreview = !GP_Skins->ShowSkinPreview;
-
-	//X1Gui().Spacing();
-	//X1Gui().Separator();
-	//X1Gui().Spacing();
-#endif
-
 	auto SkinParams = [&](SkinSettings &Item) -> void
 	{
 		X1Gui().PushItemWidth(360);
@@ -529,36 +517,36 @@ void CSkins::Menu()
 
 void CSkins::Preview()
 {
-	int ImageSzX = 304;
-	int ImageSzY = 231;
+	//int ImageSzX = 304;
+	//int ImageSzY = 231;
 
-	Vec2 BackMin = X1Gui().GetCursorPos();
-	Vec2 BackMax = Vec2(BackMin.x + ImageSzX, BackMin.y + ImageSzY);
+	//Vec2 BackMin = X1Gui().GetCursorPos();
+	//Vec2 BackMax = Vec2(BackMin.x + ImageSzX, BackMin.y + ImageSzY);
 
-	color_t BackColor = color_t(185.f, 183.f, 185.f, 183.f);
-	X1Gui().DrawFilledBox(BackMin, BackMax, BackColor);
+	//color_t BackColor = color_t(185.f, 183.f, 185.f, 183.f);
+	//X1Gui().DrawFilledBox(BackMin, BackMax, BackColor);
 
-	static IDirect3DTexture9* skinImg = nullptr;
+	//static IDirect3DTexture9* skinImg = nullptr;
 
-	static string OldKit = SkinPreview;
-	string link = "";
+	//static string OldKit = SkinPreview;
+	//string link = "";
 
-	if (OldKit != SkinPreview)
-	{
-		skinImg = nullptr;
+	//if (OldKit != SkinPreview)
+	//{
+	//	skinImg = nullptr;
 
-		link = CGlobal::FindSkinURl(SkinPreview, WeaponPreview);
-		if (skinImg == nullptr)
-		{
-			std::string imData = CGlobal::DownloadSkinBytes(link.c_str());
+	//	link = CGlobal::FindSkinURl(SkinPreview, WeaponPreview);
+	//	if (skinImg == nullptr)
+	//	{
+	//		std::string imData = CGlobal::DownloadSkinBytes(link.c_str());
 
-			D3DXCreateTextureFromFileInMemoryEx(GP_Render->m_pDevice, imData.data(), imData.length(), 512, 384, D3DX_DEFAULT,
-				0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &skinImg);
-		}
-	}
+	//		D3DXCreateTextureFromFileInMemoryEx(GP_Render->m_pDevice, imData.data(), imData.length(), 512, 384, D3DX_DEFAULT,
+	//			0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &skinImg);
+	//	}
+	//}
 
-	if (skinImg)
-		X1Gui().DrawImage(skinImg, BackMin, BackMin + Vec2(ImageSzX, ImageSzY));
+	//if (skinImg)
+	//	X1Gui().DrawImage(skinImg, BackMin, BackMin + Vec2(ImageSzX, ImageSzY));
 
-	OldKit = SkinPreview;
+	//OldKit = SkinPreview;
 }

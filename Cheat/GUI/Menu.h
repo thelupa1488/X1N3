@@ -92,8 +92,10 @@ public:
 		X1Gui().SameLine(331);
 
 		if (ChangerMode == 0)
+		{
 			if (X1Gui().Button(GP_Skins->ShowSkinPreview ? XorStr("Preview <<<") : XorStr("Preview >>>"), Vec2(129, 20)))
-				GP_Skins->ShowSkinPreview = !GP_Skins->ShowSkinPreview;
+            	GP_Skins->ShowSkinPreview = !GP_Skins->ShowSkinPreview;
+		}
 
 		if (ChangerMode == 1)
 			if (X1Gui().Button(GP_Inventory->ShowInventoryList ? XorStr("Inv. list <<<") : XorStr("Inv. list >>>"), Vec2(129, 20)))
