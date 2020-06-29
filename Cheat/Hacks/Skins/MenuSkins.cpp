@@ -187,7 +187,7 @@ void CSkins::Menu()
 	X1Gui().Spacing();
 	if (SkinSettingsMode == 0)
 	{
-		VectorEx<const char*> WeapSkinArr = { lolc("Skin##545"), lolc("Stickers##545") };
+		VectorEx<const char*> WeapSkinArr = { lolc("Skin##Changer"), lolc("Stickers##Changer") };
 		static int WeapSkinSettingsMode = 0;
 
 		TabsLabels(WeapSkinSettingsMode, WeapSkinArr, Vec2(long_item_w, 0), false);
@@ -337,7 +337,7 @@ void CSkins::Menu()
 			}
 
 			X1Gui().PushItemWidth(380);
-			SliderFloats("Quality", SItem->wear, 0.f, 1.f);
+			SliderFloats("Wear", SItem->wear, 0.f, 1.f);
 			SliderFloats("Scale", SItem->scale, 0.f, 1.f);
 			SliderFloats("Rotation", SItem->rotation, 0.f, 360);
 		}
@@ -483,6 +483,7 @@ void CSkins::Menu()
 
 		X1Gui().Spacing();
 
+		StickerSettings* GloveParam;
 		if (glvTeamSettingsMode == 0)
 		{
 			X1Gui().ListBoxHeader(XorStr("##Gloves"), Vec2(long_item_w, 500));

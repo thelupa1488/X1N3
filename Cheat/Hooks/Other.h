@@ -10,32 +10,34 @@ int __fastcall hkDoPostScreenEffects(void* ecx, int edx, int a1)
 	return oDoPostScreenEffects(ecx, a1);
 }
 
-EGCResults __fastcall hkRetrieveMessage(void* ecx, void* edx, uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize)
+int __fastcall hkRetrieveMessage(void* ecx, void* edx, uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize)
 {
-	EGCResults status = HookTables::pRetrieveMessage->GetTrampoline()(ecx, punMsgType, pubDest, cubDest, pcubMsgSize);
+	static auto oRetrieveMessage = HookTables::pRetrieveMessage->GetTrampoline();
+	int iStatus = oRetrieveMessage(ecx, punMsgType, pubDest, cubDest, pcubMsgSize);
 
-	if (status != k_EGCResultOK)
-		return status;
+	if (iStatus != k_EGCResultOK)
+		return iStatus;
 
 	uint32_t messageType = *punMsgType & 0x7FFFFFFF;
 
 	GP_Inventory->PostRetrieveMessage(punMsgType, pubDest, cubDest, pcubMsgSize);
 
-	return status;
+	return iStatus;
 }
 
-EGCResults __fastcall hkSendMessage(void* ecx, void* edx, uint32_t unMsgType, const void* pubData, uint32_t cubData)
+int __fastcall hkSendMessage(void* ecx, void* edx, uint32_t unMsgType, const void* pubData, uint32_t cubData)
 {
-	EGCResults status;
+	static auto oSendMessage = HookTables::pSendMessage->GetTrampoline();
+
 	uint32_t messageType = unMsgType & 0x7FFFFFFF;
 	void* pubDataMutable = const_cast<void*>(pubData);
 
-	status = HookTables::pSendMessage->GetTrampoline()(ecx, unMsgType, pubDataMutable, cubData);
-
 	GP_Inventory->PreSendMessage(unMsgType, pubDataMutable, cubData);
 
-	if (status != k_EGCResultOK)
-		return status;
+	int iStatus = oSendMessage(ecx, unMsgType, pubDataMutable, cubData);
 
-	return status;
+	if (iStatus != k_EGCResultOK)
+		return iStatus;
+
+	return iStatus;
 }

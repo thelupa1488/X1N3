@@ -110,6 +110,13 @@ public:
 	virtual void CustomWalls();
 	virtual void FrameStageNotify();
 
+	QAngle vangle = QAngle();
+	float anglefake = 0.f;
+	float anglereal = 0.f;
+	float view = 0.f;
+	float side = 1.0f;
+	float next_lby = 0.0f;
+
 	bool Enable = true;
 	bool BHop = false;
 	int  BHopChance = 0;

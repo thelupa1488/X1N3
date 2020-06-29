@@ -134,13 +134,6 @@ public:
 	static CBaseEntity* LocalPlayer;
 	static CUserCmd* UserCmd;
 
-	static QAngle vangle;
-	static float side;
-	static float next_lby;
-	static float RealAngle;
-	static float FakeAngle;
-	static float View;
-
 	static ConVar* viewmodel_offset_convar_x;
 	static ConVar* viewmodel_offset_convar_y;
 	static ConVar* viewmodel_offset_convar_z;

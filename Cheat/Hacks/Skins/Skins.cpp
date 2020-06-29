@@ -179,7 +179,11 @@ void CSkins::PostDataUpdate()
 
 	bool IsTT = pLocal->GetTeam() == 2;
 
-	auto weapons = pLocal->m_hMyWeapons();
+	CBaseHandle* weapons = pLocal->m_hMyWeapons();
+
+	/* Need Fix */
+	/////////////////////////////////////////////////////////////////////////////////
+
 	for (size_t i = 0; weapons[i] != INVALID_EHANDLE_INDEX; i++)
 	{
 		CBaseEntity* pEntity = I::EntityList()->GetClientEntityFromHandle(weapons[i]);
@@ -228,23 +232,120 @@ void CSkins::PostDataUpdate()
 		}
 	}
 
+	/////////////////////////////////////////////////////////////////////////////////
+
+	//CBaseHandle* hWeapons = pLocal->GetWeapons();
+
+	//if(!hWeapons)
+	//	return;
+
+	//for (int nIndex = 0; hWeapons[nIndex]; nIndex++)
+	//{
+	//	CBaseAttributableItem* pWeapon = (CBaseAttributableItem*)I::EntityList()->GetClientEntityFromHandle((PVOID)hWeapons[nIndex]);
+
+	//	if (!pWeapon)
+	//		continue;
+
+	//	CBaseViewModel* pView = pWeapon->GetViewModel();
+	//	CBaseViewModel* pViewModel = pLocal->GetViewModel();
+
+	//	if (!pView || !pViewModel)
+	//		continue;
+
+	//	int nViewModelIndex = pView->GetModelIndex(); // текущее
+	//	int nViewLocalModelIndex = pViewModel->GetModelIndex(); // в руках
+
+	//	ApplyStickerHooks(pWeapon);
+
+	//	if (LocalPlayerInfo.xuid_low != *pWeapon->GetOriginalOwnerXuidLow())
+	//		continue;
+
+	//	if (LocalPlayerInfo.xuid_high != *pWeapon->GetOriginalOwnerXuidHigh())
+	//		continue;
+
+	//	int nWeaponIndex = *pWeapon->GetItemDefinitionIndex();
+
+	//	*pWeapon->GetItemIDHigh() = -1;
+	//	*pWeapon->GetAccountID() = LocalPlayerInfo.xuid_high;
+
+	//	ApplyCustomSkin(pWeapon, nWeaponIndex, IsTT);
+
+	//	//хуйня ебаная		
+	//	static int oldKnife = nViewLocalModelIndex;
+	//	
+	//	if (IsKnife(nWeaponIndex))
+	//	{	
+	//		if (!IsTT && SelectedKnifeModelCT)
+	//		{
+	//			int nOriginalKnifeCT = I::ModelInfo()->GetModelIndex(pszDefaultCtModel.c_str());
+
+	//			if (ForceUpdated && nViewLocalModelIndex != nOriginalKnifeCT)
+	//			{
+	//				ForceUpdated = false;
+	//				KnifeNextUpdate = true;
+	//			}
+
+	//			if (nViewLocalModelIndex == 391 || nViewLocalModelIndex == nOriginalKnifeCT)
+	//			{	
+	//				if (KnifeNextUpdate)
+	//				{
+	//					//UpdateSkins(false);
+	//					KnifeNextUpdate = false;
+	//				}
+
+	//				pView->SetModelIndex(GetKnifeModelIdx(SelectedKnifeModelCT, false));
+	//				pViewModel->SetModelIndex(GetKnifeModelIdx(SelectedKnifeModelCT, false));
+	//				pWeapon->SetModelIndex(GetKnifeModelIdx(SelectedKnifeModelCT, false));
+	//			}
+	//			*pWeapon->GetItemDefinitionIndex() = KnifeNamesCT[SelectedKnifeModelCT].ID;
+	//		}
+	//		if (IsTT && SelectedKnifeModelTT)
+	//		{
+	//			int nOriginalKnifeT = I::ModelInfo()->GetModelIndex(pszDefaultTtModel.c_str());
+
+	//			if (ForceUpdated && nViewLocalModelIndex != nOriginalKnifeT)
+	//			{
+	//				ForceUpdated = false;
+	//				KnifeNextUpdate = true;
+	//			}
+
+	//			if (nViewLocalModelIndex == 600 || nViewLocalModelIndex == 591 || nViewLocalModelIndex == nOriginalKnifeT)
+	//			{
+	//				if (KnifeNextUpdate)
+	//				{
+	//					//UpdateSkins(false);
+	//					KnifeNextUpdate = false;
+	//				}
+	//				pView->SetModelIndex(GetKnifeModelIdx(SelectedKnifeModelTT, true));
+	//				pViewModel->SetModelIndex(GetKnifeModelIdx(SelectedKnifeModelTT, true));
+	//				pWeapon->SetModelIndex(GetKnifeModelIdx(SelectedKnifeModelTT, true));
+
+	//			}
+	//			*pWeapon->GetItemDefinitionIndex() = KnifeNamesTT[SelectedKnifeModelTT].ID;
+	//		}
+
+
+	//	}
+	//	oldKnife = nViewLocalModelIndex;
+	//}
+
 	int CurGlove = IsTT ? SelectedGloveTT : SelectedGloveCT;
 	float CurGloveWear = IsTT ? GloveTTWear : GloveCTWear;
 
 	if (CurGlove)
 	{
-		UINT* wearables = pLocal->GetWearables();
+		CBaseHandle* wearables = pLocal->GetWearables();
 
 		if (!wearables)
 			return;
 
-		static auto glove_handle = UINT(0);
+		static auto glove_handle = CBaseHandle(0);
 
-		auto glove = (CBaseAttributableItem*)I::EntityList()->GetClientEntityFromHandle((PVOID)wearables[0]);
+		auto glove = (CBaseAttributableItem*)I::EntityList()->GetClientEntityFromHandle(wearables[0]);
 
 		if (!glove)
 		{
-			const auto our_glove = (CBaseAttributableItem*)I::EntityList()->GetClientEntityFromHandle((PVOID)glove_handle);
+			const auto our_glove = (CBaseAttributableItem*)I::EntityList()->GetClientEntityFromHandle(glove_handle);
 
 			if (our_glove)
 			{
@@ -398,8 +499,8 @@ void CSkins::ApplyCustomSkin(CBaseAttributableItem* pWeapon, int nWeaponIndex, b
 		if (Item->Skin.paint_kit_id != 0 && !IsTT)
 			SetSkin(pWeapon, &Item->Skin, Item->ID, false, bIsKnife);
 
-		if (Item->Skin.paint_kit_id != 0 && IsTT)
-			SetSkin(pWeapon, &Item->Skin, Item->ID, false, bIsKnife);
+		if (Item->SkinTT.paint_kit_id != 0 && IsTT) //need fix Item->SkinTT.paint_kit_id
+			SetSkin(pWeapon, &Item->SkinTT, Item->ID, false, bIsKnife);
 	}
 	else
 		SetSkin(pWeapon, &Item->Skin, Item->ID, false, bIsKnife);

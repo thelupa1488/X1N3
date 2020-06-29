@@ -198,7 +198,7 @@ void CMisc::Draw()
 				if (alpha <= 0.f || alpha >= 255.f) plus_or_minus = !plus_or_minus;
 				alpha += plus_or_minus ? (255.f / 7 * 0.015) : -(255.f / 7 * 0.015); alpha = clamp(alpha, 0.f, 255.f);
 
-				const auto FakeRot = DEG2RAD((CGlobal::side < 0.0f ? 90 : -90) - 90);
+				const auto FakeRot = DEG2RAD((side < 0.0f ? 90 : -90) - 90);
 				DrawArrow(FakeRot, ArrowsColor);
 			}
 
@@ -227,10 +227,10 @@ void CMisc::Draw()
 				Vector w2sOrigin;
 				if (CGlobal::WorldToScreen(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin))
 				{
-					DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, CGlobal::LocalPlayer->GetBasePlayerAnimState()->m_flGoalFeetYaw, XorStr("fake"), Color::Orange());
+					DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, anglefake, XorStr("fake"), Color::Orange());
 					DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, CGlobal::LocalPlayer->GetLowerBodyYawTarget(), XorStr("lby"), Color::Blue());
-					DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, CGlobal::RealAngle, XorStr("real"), Color::Green()); //need fix
-					DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, CGlobal::View, XorStr("view"), Color::Red());
+					DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, anglereal, XorStr("real"), Color::Green());
+					DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, view, XorStr("view"), Color::Red());
 				}
 			}
 		}
@@ -422,15 +422,12 @@ int CMisc::GetBestHeadAngle(float yaw)
 
 void CMisc::UpdateLBY(CCSGOPlayerAnimState* animstate)
 {
-	if (animstate->speed_2d > 0.1f || fabsf(animstate->flUpVelocity))
-	{
-		CGlobal::next_lby = I::GlobalVars()->curtime + 0.22f;
-	}
-	else if (I::GlobalVars()->curtime > CGlobal::next_lby)
-	{
-		if (fabsf(CGlobal::AngleDiff(animstate->m_flGoalFeetYaw, animstate->m_flEyeYaw)) > 35.0f) 
-			CGlobal::next_lby = I::GlobalVars()->curtime + 1.1f;
-	}
+	if (animstate->speed_2d > 0.1f || std::fabsf(animstate->flUpVelocity))
+		next_lby = I::GlobalVars()->curtime + 0.22f;
+
+	else if (I::GlobalVars()->curtime > next_lby) 
+		if (std::fabsf(CGlobal::AngleDiff(animstate->m_flGoalFeetYaw, animstate->m_flEyeYaw)) > 35.0f)
+			next_lby = I::GlobalVars()->curtime + 1.1f;
 }
 
 int CMisc::MaxChokeTicks() 
@@ -1090,123 +1087,92 @@ void CMisc::EnginePrediction(bool& bSendPacket, CUserCmd* pCmd)
 						pCmd->buttons |= IN_JUMP;
 				}
 
-				//QAngle angleold = pCmd->viewangles;
-				//if (Desync)
-				//{
-				//	if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
-				//		CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER || CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP
-				//		|| CGlobal::LocalPlayer->IsDead())
-				//		return;
+				if (Desync)
+				{
+					if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
+						CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER || CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP
+						|| CGlobal::LocalPlayer->IsDead())
+						return;
 
-				//	if (I::GameRules() && I::GameRules()->IsFreezePeriod()) //need fix
-				//		return;
+					//if (I::GameRules() && I::GameRules()->IsFreezePeriod())
+					//	return;
 
-				//	CBaseWeapon* weapon = CGlobal::LocalPlayer->GetBaseWeapon();
+					auto weapon = CGlobal::LocalPlayer->GetBaseWeapon();
 
-				//	if (!weapon)
-				//		return;
+					if (!weapon)
+						return;
 
-				//	if ((CGlobal::GWeaponID == WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_FAMAS) && weapon->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
-				//		return;
+					if ((CGlobal::GWeaponID == WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_FAMAS) && weapon->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
+						return;
 
-				//	if (CGlobal::GWeaponType == WEAPON_TYPE_GRENADE)
-				//	{
-				//		if (!weapon->GetPinPulled())
-				//		{
-				//			float throwTime = weapon->GetThrowTime();
-				//			if (throwTime > 0.f)
-				//				return;
-				//		}
+					if (CGlobal::GWeaponType == WEAPON_TYPE_GRENADE) 
+					{
+						if (!weapon->GetPinPulled()) 
+						{
+							float throwTime = weapon->GetThrowTime();
+							if (throwTime > 0.f)
+								return;
+						}
+						if ((pCmd->buttons & IN_ATTACK) || (pCmd->buttons & IN_ATTACK2)) 
+						{
+							if (weapon->GetThrowTime() > 0.f)
+								return;
+						}
+					}
 
-				//		if ((pCmd->buttons & IN_ATTACK) || (pCmd->buttons & IN_ATTACK2))
-				//		{
-				//			if (weapon->GetThrowTime() > 0.f)
-				//				return;
-				//		}
-				//	}
+					static bool broke_lby = false;
+					auto sideauto = GetBestHeadAngle(vangle.y);
 
-				//	if (fabsf(CGlobal::LocalPlayer->GetSpawnTime() - I::GlobalVars()->curtime) < 1.0f)
-				//		return;
+					if (!DesyncAd) 
+					{
+						if (DesyncBind.Check())
+							side = 1.0f;
+						else
+							side = -1.0f;
+					}
+					else
+						side = sideauto;
 
-				//	static bool broke_lby = false;
+					if (DesyncType == 1) 
+					{
+						float minimal_move = CGlobal::LocalPlayer->GetFlags() & IN_DUCK ? 3.0f : 1.0f;
 
-				//	auto sideauto = GetBestHeadAngle(CGlobal::vangle.y);
+						if (!bSendPacket)
+							pCmd->viewangles.y += 120.f * side;
 
-				//	if (!DesyncAd)
-				//	{
-				//		if (DesyncBind.Check())
-				//		{
-				//			CGlobal::side = 1.0f;
-				//		}
-				//		else
-				//			CGlobal::side = -1.0f;
-				//	}
-				//	else
-				//		CGlobal::side = sideauto;
+						static bool flip = 1;
+						flip = !flip;
 
-				//	if (DesyncType == 1)
-				//	{
-				//		float minimal_move = CGlobal::LocalPlayer->GetFlags() & IN_DUCK ? 3.0f : 1.0f;
+						pCmd->sidemove += flip ? minimal_move : -minimal_move;
+					}
+					else if (DesyncType == 2) 
+					{
+						if (next_lby >= I::GlobalVars()->curtime) 
+						{
+							if (!broke_lby && bSendPacket)
+								return;
 
-				//		if (!bSendPacket)
-				//			pCmd->viewangles.y += 120.f * CGlobal::side;
+							broke_lby = false;
+							bSendPacket = false;
+							pCmd->viewangles.y += 120.0f * side;
+						}
+						else 
+						{
+							broke_lby = true;
+							bSendPacket = false;
+							pCmd->viewangles.y += 120.0f * side;
+						}
+					}
+					else if (DesyncType == 3)
+					{
+						static bool switchaa = false;
+						switchaa = !switchaa;
 
-				//		static bool flip = 1;
-				//		flip = !flip;
-
-				//		pCmd->sidemove += flip ? minimal_move : -minimal_move;
-				//	}
-				//	else if (DesyncType == 2)
-				//	{
-				//		if (CGlobal::next_lby >= I::GlobalVars()->curtime)
-				//		{
-				//			if (!broke_lby && bSendPacket)
-				//				return;
-
-				//			broke_lby = false;
-				//			bSendPacket = false;
-				//			pCmd->viewangles.y += 120.0f * CGlobal::side;
-				//		}
-				//		else
-				//		{
-				//			broke_lby = true;
-				//			bSendPacket = false;
-				//			pCmd->viewangles.y += 120.0f * -(CGlobal::side);
-				//		}
-				//	}
-				//	else if (DesyncType == 3)
-				//	{
-				//		static bool switchaa = false;
-				//		switchaa = !switchaa;
-
-				//		if (!bSendPacket)
-				//			pCmd->viewangles.y += switchaa ? 180.f : 0.f;
-				//	}
-				//	FixAngles(pCmd->viewangles);
-				//}
-				//CGlobal::CorrectMouse(pCmd);
-				//auto anim_state = CGlobal::LocalPlayer->GetBasePlayerAnimState();
-				//if (anim_state)
-				//{
-				//	CCSGOPlayerAnimState anim_state_backup = *anim_state;
-				//	*anim_state = g_AnimState;
-				//	CGlobal::LocalPlayer->GetVAngles() = pCmd->viewangles;
-				//	CGlobal::LocalPlayer->UpdateClientSideAnimation();
-
-				//	GP_Misc->UpdateLBY(anim_state);
-
-				//	g_AnimState = *anim_state;
-				//	*anim_state = anim_state_backup;
-				//}
-				//if (CGlobal::bSendPacket)
-				//{
-				//	CGlobal::RealAngle = g_AnimState.m_flGoalFeetYaw;
-				//	if (anim_state)
-				//		CGlobal::FakeAngle = anim_state->m_flGoalFeetYaw;
-				//	CGlobal::vangle = pCmd->viewangles;
-                //  CGlobal::View = CGlobal::UserCmd->viewangles.y;
-				//}
-				//FixMovement(pCmd, angleold);
+						if (!bSendPacket)
+							pCmd->viewangles.y += switchaa ? 180.f : 0.f;
+					}
+					FixAngles(pCmd->viewangles);
+				}
 
 				if (AutoBlock && AutoBlockBind.Check())
 				{

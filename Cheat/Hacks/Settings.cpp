@@ -27,6 +27,12 @@ void CGSettings::SaveEx(nlohmann::json &j)
 		GP_Esp->SaveVisuals(j);
 	}
 
+	if (GP_Inventory)
+	{
+		GP_Inventory->Config.Save(j);
+		GP_Inventory->SaveInventory(j);
+	}
+
 	if (GP_LegitAim)
 	{
 		GP_LegitAim->Config.Save(j);
@@ -71,6 +77,12 @@ void CGSettings::LoadEx(nlohmann::json &j)
 	{
 		GP_Esp->Config.Load(j);
 		GP_Esp->LoadVisuals(j);
+	}
+
+	if (GP_Inventory)
+	{
+		GP_Inventory->Config.Load(j);
+		GP_Inventory->LoadInventory(j);
 	}
 
 	if (GP_LegitAim)
@@ -135,6 +147,7 @@ bool CGSettings::Load()
 	LoadEx(JFile);
 
 	JFile.clear();
+	GP_Inventory->SendClientHello();
 	GP_Skins->UpdateSkins();
 
 	return true;

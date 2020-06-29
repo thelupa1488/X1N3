@@ -88,7 +88,6 @@ namespace Engine
 		float m_flUnknown3;
 		char pad10[528];
 	}; //Size=0x344
-	static CCSGOPlayerAnimState g_AnimState;
 
 	class CBaseEntity : public IClientEntity
 	{
@@ -153,9 +152,9 @@ namespace Engine
 
 		PVOID			GetActiveWeapon();
 		CBaseWeapon*	GetBaseWeapon();
-		UINT*			GetWeapons();
 		CBaseHandle*    m_hMyWeapons();
-		UINT*			GetWearables();
+		CBaseHandle*    GetWeapons();
+		CBaseHandle*    GetWearables();
 		CBaseViewModel* GetViewModel();
 
 		Vector	GetAimPunchAngle();

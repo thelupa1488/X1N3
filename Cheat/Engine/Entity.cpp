@@ -353,19 +353,20 @@ namespace Engine
 		return (CBaseWeapon*)I::EntityList()->GetClientEntityFromHandle((PVOID) * (PDWORD)GetActiveWeapon());
 	}
 
-	UINT* CBaseEntity::GetWeapons()
-	{
-		return (UINT*)((DWORD)this + offsets["m_hMyWeapons"]);
-	}
-
 	CBaseHandle* CBaseEntity::m_hMyWeapons()
 	{
 		return (CBaseHandle*)((uintptr_t)this + 0x2DF8);
 	}
 
-	UINT* CBaseEntity::GetWearables()
+	//For Changer Auto Offset
+	CBaseHandle* CBaseEntity::GetWeapons()
 	{
-		return (UINT*)((DWORD)this + offsets["m_hMyWearables"]);
+		return (CBaseHandle*)((DWORD)this + offsets["m_hMyWeapons"]);
+	}
+
+	CBaseHandle* CBaseEntity::GetWearables()
+	{
+		return (CBaseHandle*)((DWORD)this + offsets["m_hMyWearables"]);
 	}
 
 	CBaseViewModel* CBaseEntity::GetViewModel()

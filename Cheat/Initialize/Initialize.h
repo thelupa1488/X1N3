@@ -185,8 +185,8 @@ public:
 				ADD_LOG("2-1-9-0\n");
 				ADD_LOG("======================Init Offsets:\n");
 
-				offsets["m_hMyWeapons"] =  mGetOffset("DT_BasePlayer", "m_hActiveWeapon") / 2;
-				offsets["m_hMyWearables"] = mGetOffset("DT_BasePlayer", "m_hMyWearables");
+				offsets["m_hMyWeapons"] = mGetOffset("DT_BaseCombatCharacter", "m_hMyWeapons");
+				offsets["m_hMyWearables"] = mGetOffset("DT_BaseCombatCharacter", "m_hMyWearables");
 				offsets["m_vecOrigin"] = mGetOffset("DT_BasePlayer", "m_vecOrigin");
 				offsets["m_hViewModel"] = mGetOffset("DT_BasePlayer", "m_hViewModel[0]");
 				offsets["m_nTickBase"] = mGetOffset("DT_BasePlayer", "m_nTickBase");
@@ -230,7 +230,7 @@ public:
 				offsets["m_iClip2"] = mGetOffset("DT_BaseCombatWeapon", "m_iPrimaryReserveAmmoCount");
 				offsets["m_flNextPrimaryAttack"] = mGetOffset("DT_BaseCombatWeapon", "m_flNextPrimaryAttack");
 				offsets["m_flLowerBodyYawTarget"] = mGetOffset("DT_CSPlayer", "m_flLowerBodyYawTarget");
-				offsets["m_bCanReload"] = offsets["m_flNextPrimaryAttack"] + 0x6D;
+				offsets["m_bCanReload"] = offsets["m_flNextPrimaryAttack"] + 0x6D; //
 				offsets["m_bGunGameImmunity"] = mGetOffset("DT_CSPlayer", "m_bGunGameImmunity");
 				offsets["m_bPinPulled"] = mGetOffset("DT_BaseCSGrenade", "m_bPinPulled");
 				offsets["m_fThrowTime"] = mGetOffset("DT_BaseCSGrenade", "m_fThrowTime");

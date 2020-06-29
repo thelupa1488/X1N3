@@ -88,7 +88,6 @@ public:
 		int paint_kit_id = 0;
 		int paint_kit_menu = 0;
 		int skins_mode = 1;
-		bool striker_enable = false;
 
 #define CHECK_VAR(l, r) if(l != src.##r) return false;
 		bool operator==(const SkinSettings& src) const
@@ -103,7 +102,6 @@ public:
 			CHECK_VAR(paint_kit_id, paint_kit_id);
 			CHECK_VAR(paint_kit_menu, paint_kit_menu);
 			CHECK_VAR(skins_mode, skins_mode);
-			CHECK_VAR(striker_enable, striker_enable);
 
 			return true;
 		}

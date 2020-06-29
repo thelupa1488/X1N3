@@ -12,12 +12,14 @@ void CInventory::SSendMessage(void* ecx, void* edx, uint32_t unMsgType, const vo
 
 int CInventory::GetInventoryByGame(int IndGame, int Eqp, TeamID Team)
 {
-	if (IndGame < 0) {
+	if (IndGame < 0) 
+	{
 		for (size_t i(0); i < InventoryList.size(); i++)
 			if (InventoryList[i].GetEquippedState == Eqp && InventoryList[i].Team == Team)
 				return i;
 	}
-	else {
+	else 
+	{
 		for (size_t i(0); i < InventoryList.size(); i++)
 			if (InventoryList[i].Index == IndGame)
 				return i;
@@ -181,8 +183,6 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 					WBuffer->Skin.quality = IBuffer->Quality;
 					for (int si(0); si < 5; si++)
 					{
-						if (IBuffer->Stickers[si].kit != 0)
-							WBuffer->Skin.striker_enable = true;
 						WBuffer->Skin.Stickers[si] = IBuffer->Stickers[si];
 					}
 				}
@@ -199,8 +199,6 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 
 					for (int si(0); si < 5; si++)
 					{
-						if (IBuffer->Stickers[si].kit != 0)
-							WBuffer->Skin.striker_enable = true;
 						WBuffer->SkinTT.Stickers[si] = IBuffer->Stickers[si];
 					}
 				}
@@ -216,8 +214,6 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 					WBuffer->SkinTT.quality = IBuffer->Quality;
 					for (int si(0); si < 5; si++)
 					{
-						if (IBuffer->Stickers[si].kit != 0)
-							WBuffer->Skin.striker_enable = true;
 						WBuffer->SkinTT.Stickers[si] = IBuffer->Stickers[si];
 					}
 
@@ -230,8 +226,6 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 					WBuffer->Skin.quality = IBuffer->Quality;
 					for (int si(0); si < 5; si++)
 					{
-						if (IBuffer->Stickers[si].kit != 0)
-							WBuffer->Skin.striker_enable = true;
 						WBuffer->Skin.Stickers[si] = IBuffer->Stickers[si];
 					}
 				}
@@ -575,7 +569,7 @@ void CInventory::AddMedals(CMsgSOCacheSubscribed::SubscribedType* pInventoryCach
 
 bool CInventory::SendClientHello()
 {
-	if (!CGlobal::IsGameReady)
+	if(!CGlobal::IsGameReady)
 		I::Engine()->ExecuteClientCmd("econ_clear_inventory_images");
 
 	CMsgClientHello Message;
@@ -714,7 +708,6 @@ void CInventory::InitalizeMedals()
 
 void CInventory::SaveInventory(nlohmann::json& j)
 {
-
 	j[XorStr("Inventory")][XorStr("LastIdx")] = Inventory::LastIndex;
 
 	for (auto& v : InventoryList)

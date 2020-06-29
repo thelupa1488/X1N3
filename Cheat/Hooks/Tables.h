@@ -28,8 +28,8 @@ namespace HookTables
 		const ModelRenderInfo_t&, matrix3x4_t*);
 	using PlaySoundFn = bool(__thiscall*)(void*, const char*);
 	using LockCursorFn = bool(__thiscall*)(void*);
-	using RetrieveMessageFn = EGCResults(__thiscall*)(void*, uint32_t*, void*, uint32_t, uint32_t*);
-	using SendMessageFn = EGCResults(__thiscall*)(void*, uint32_t, const void*, uint32_t);
+	using RetrieveMessageFn = int(__thiscall*)(void*, uint32_t*, void*, uint32_t, uint32_t*);
+	using SendMessageFn = int(__thiscall*)(void*, uint32_t, const void*, uint32_t);
 	using PostDataUpdateFn = void(__stdcall*)(void*, int);
 	using EmitSoundFn = void(__stdcall*)(SoundData);
 

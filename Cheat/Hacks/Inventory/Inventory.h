@@ -10,9 +10,9 @@
 #include "../../protobuf/steammessages.pb.h"
 
 #ifdef DEBUG_DLL
-#pragma comment(lib, "protobuf_debug.lib")
+#pragma comment(lib, "../protobuf/protobuf_debug.lib")
 #else
-#pragma comment(lib, "protobuf_release.lib")
+#pragma comment(lib, "../protobuf/protobuf_release.lib")
 #endif
 
 #pragma comment(lib, "libprotoc.lib")

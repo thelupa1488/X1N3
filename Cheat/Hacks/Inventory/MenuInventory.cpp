@@ -180,94 +180,91 @@ void CInventory::Menu()
 				}
 				else if (WeapSkinSettingsMode == 1)
 				{
-					DCheckBox("Stikers", WItem->Skin.striker_enable);
-					if (WItem->Skin.striker_enable)
+					X1Gui().Spacing();
+					X1Gui().PushItemWidth(192);
+					X1Gui().Spacing();
+
+					X1Gui().PushItemWidth(320);
+
+					static int iSlot = 0;
+
+					VectorEx<const char* > Slots = { lolc("1"),lolc("2"), lolc("3"), lolc("4") };
+					DComboBox("Slot##InvChrSS", iSlot, Slots, Slots);
+
+					static int StikersMode = 1;
+					static int SortSelectedS = 0;
+
+					VectorEx<const char* > ItemsSM = { lolc("All") ,lolc("Distributed") };
+					DComboBox("Stickers##InvChrSS", StikersMode, ItemsSM);
+					static char FindBuf[128] = { 0 };
+					static string FindSticker = "";
+
+					X1Gui().Spacing();
+
+					StickerSettings* SItem = &WItem->Skin.Stickers[iSlot];
+
+					if (StikersMode == 0)
 					{
-						X1Gui().Spacing();
-						X1Gui().PushItemWidth(192);
-						X1Gui().Spacing();
-
-						X1Gui().PushItemWidth(320);
-
-						static int iSlot = 0;
-
-						VectorEx<const char* > Slots = { lolc("1"),lolc("2"), lolc("3"), lolc("4") };
-						DComboBox("Slot##InvChrSS", iSlot, Slots, Slots);
-
-						static int StikersMode = 1;
-						static int SortSelectedS = 0;
-
-						VectorEx<const char* > ItemsSM = { lolc("All") ,lolc("Distributed") };
-						DComboBox("Stickers##InvChrSS", StikersMode, ItemsSM);
-						static char FindBuf[128] = { 0 };
-						static string FindSticker = "";
-
-						X1Gui().Spacing();
-
-						StickerSettings *SItem = &WItem->Skin.Stickers[iSlot];
-
-						if (StikersMode == 0)
+						TextEdit("Find##InvChrSS", FindSticker, FindBuf, 128);
+						X1Gui().ListBoxHeader(XorStr("##StikerSerials"), Vec2(453, 326));
+						for (size_t i = 0; i < GP_Skins->sticker_kits.size(); i++)
 						{
-							TextEdit("Find##InvChrSS", FindSticker, FindBuf, 128);
-							X1Gui().ListBoxHeader(XorStr("##StikerSerials"), Vec2(453, 326));
-							for (size_t i = 0; i < GP_Skins->sticker_kits.size(); i++)
-							{
-								if (!FindLower(GP_Skins->sticker_kits[i].name, FindSticker))
-									continue;
+							if (!FindLower(GP_Skins->sticker_kits[i].name, FindSticker))
+								continue;
 
-								bool selected = i == SItem->kit_menu_index;
-								if (X1Gui().SelectLabel(GP_Skins->sticker_kits[i].name.c_str(), selected))
-									SItem->kit_menu_index = i;
+							bool selected = i == SItem->kit_menu_index;
+							if (X1Gui().SelectLabel(GP_Skins->sticker_kits[i].name.c_str(), selected))
+								SItem->kit_menu_index = i;
+						}
+						X1Gui().ListBoxFooter();
+						SItem->kit = GP_Skins->sticker_kits[SItem->kit_menu_index].id;
+					}
+					else if (StikersMode == 1)
+					{
+						if (GP_Skins->AllSkinsLoaded)
+						{
+							X1Gui().ListBoxHeader(XorStr("##SortStikerSerials"), Vec2(71, 363));
+							for (size_t i = 0; i < GP_Skins->SortedStickers.size(); i++)
+							{
+								bool selected = i == SortSelectedS;
+								if (X1Gui().SelectLabel(GP_Skins->SortedStickers[i].sub_name.c_str(), selected))
+									SortSelectedS = i;
 							}
 							X1Gui().ListBoxFooter();
-							SItem->kit = GP_Skins->sticker_kits[SItem->kit_menu_index].id;
+							X1Gui().SameLine();
+							X1Gui().BeginGroup();
+							{
+								TextEdit("Find##InvChrSS", FindSticker, FindBuf, 128);
+								X1Gui().ListBoxHeader(XorStr("##StikerSerials"), Vec2(376, 340));
+								for (size_t i = 0; i < GP_Skins->SortedStickers[SortSelectedS].Stckers.size(); i++)
+								{
+									if (!FindLower(GP_Skins->SortedStickers[SortSelectedS].Stckers[i].name, FindSticker))
+										continue;
+
+									bool selected = i == SItem->kit_menu_index;
+
+									if (X1Gui().SelectLabel(GP_Skins->SortedStickers[SortSelectedS].Stckers[i].name.c_str(), selected))
+										SItem->kit_menu_index = i;
+								}
+								X1Gui().ListBoxFooter();
+							}
+							X1Gui().EndGroup();
+
+							if (SItem->kit_menu_index > 0 && SItem->kit_menu_index < (int)GP_Skins->SortedStickers[SortSelectedS].Stckers.size())
+								SItem->kit = GP_Skins->SortedStickers[SortSelectedS].Stckers[SItem->kit_menu_index].id;
 						}
-						else if (StikersMode == 1)
+						else
 						{
-							if (GP_Skins->AllSkinsLoaded)
-							{
-								X1Gui().ListBoxHeader(XorStr("##SortStikerSerials"), Vec2(71, 363));
-								for (size_t i = 0; i < GP_Skins->SortedStickers.size(); i++)
-								{
-									bool selected = i == SortSelectedS;
-									if (X1Gui().SelectLabel(GP_Skins->SortedStickers[i].sub_name.c_str(), selected))
-										SortSelectedS = i;
-								}
-								X1Gui().ListBoxFooter();
-								X1Gui().SameLine();
-								X1Gui().BeginGroup();
-								{
-									TextEdit("Find##InvChrSS", FindSticker, FindBuf, 128);
-									X1Gui().ListBoxHeader(XorStr("##StikerSerials"), Vec2(376, 340));
-									for (size_t i = 0; i < GP_Skins->SortedStickers[SortSelectedS].Stckers.size(); i++)
-									{
-										if (!FindLower(GP_Skins->SortedStickers[SortSelectedS].Stckers[i].name, FindSticker))
-											continue;
-
-										bool selected = i == SItem->kit_menu_index;
-
-										if (X1Gui().SelectLabel(GP_Skins->SortedStickers[SortSelectedS].Stckers[i].name.c_str(), selected))
-											SItem->kit_menu_index = i;
-									}
-									X1Gui().ListBoxFooter();
-								}
-								X1Gui().EndGroup();
-
-								if (SItem->kit_menu_index > 0 && SItem->kit_menu_index < (int)GP_Skins->SortedStickers[SortSelectedS].Stckers.size())
-									SItem->kit = GP_Skins->SortedStickers[SortSelectedS].Stckers[SItem->kit_menu_index].id;
-							}
-							else
-							{
-								X1Gui().Text(XorStr("Loading stickers..."));
-								X1Gui().ListBoxFooter();
-							}
+							X1Gui().Text(XorStr("Loading stickers..."));
+							X1Gui().ListBoxFooter();
 						}
-
-						SliderFloats("Wear", SItem->wear, 0.f, 1.f);
-						SliderFloats("Scale", SItem->scale, 0.f, 1.f);
-						SliderFloats("Rotation", SItem->rotation, 0.f, 360);
 					}
+
+					SliderFloats("Wear", SItem->wear, 0.f, 1.f);
+					SliderFloats("Scale", SItem->scale, 0.f, 1.f);
+					SliderFloats("Rotation", SItem->rotation, 0.f, 360);
 				}
+				
 
 				if (X1Gui().Button(XorStr("ADD##Sticker"), Vec2(long_item_w, 22)))
 				{
@@ -446,6 +443,9 @@ void CInventory::Menu()
 
 				invBuffer.WeaponName = IGlovesModels[InvSelectedGlove];
 
+				invBuffer.Rarity = 6;
+				invBuffer.Quality = 4;
+
 				InventoryList.push_back(invBuffer);
 
 				SendClientHello();
@@ -607,9 +607,8 @@ void CInventory::InvListMenu()
 		}
 
 		if (X1Gui().Button(XorStr("Update Inventory"), Vec2(long_item_w, 22)))
-		{
 			SendClientHello();
-		}
+
 		X1Gui().Spacing();
 		if (X1Gui().Button(XorStr("Remove"), Vec2(175, 22)))
 		{
@@ -629,7 +628,6 @@ void CInventory::InvListMenu()
 			}
 
 			InventoryList.erase(InventoryList.begin() + InventSelectItem);
-
 
 			InventSelectItem--;
 			SendClientHello();
