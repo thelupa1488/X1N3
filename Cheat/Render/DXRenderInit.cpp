@@ -28,8 +28,8 @@ void CRender::IRender::DX_Init(DWORD* table)
 	{
 		WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, MsgProc, 0L, 0L, FastCall::G().t_GetModuleHandleA(NULL), NULL, NULL, NULL, NULL, XorStr("SEGUARD_Window"), NULL };
 		RegisterClassEx(&wc);
-		HWND hWnd = CreateWindowA(XorStr("SEGUARD_Window"), NULL, WS_OVERLAPPEDWINDOW, 100, 100, 300, 300, GetDesktopWindow(), NULL, wc.hInstance, NULL);
-		LPDIRECT3D9 pD3D = Direct3DCreate9(D3D_SDK_VERSION);
+		HWND hWnd = CreateWindowA(XorStr("SEGUARD_Window"), NULL, WS_OVERLAPPEDWINDOW, 100, 100, 300, 300, FastCall::G().t_GetDesktopWindow(), NULL, wc.hInstance, NULL);
+		LPDIRECT3D9 pD3D = FastCall::G().t_Direct3DCreate9(D3D_SDK_VERSION);
 		D3DPRESENT_PARAMETERS d3dpp;
 		ZeroMemory(&d3dpp, sizeof(d3dpp));
 		d3dpp.Windowed = TRUE;
@@ -43,15 +43,15 @@ void CRender::IRender::DX_Init(DWORD* table)
 		HRESULT res = pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, &pd3dDevice);
 
 		if (res == D3D_OK)
-			int tt = GetLastError();
+			int tt = FastCall::G().t_GetLastError();
 		else if (res == D3DERR_DEVICELOST)
-			int tt = GetLastError();
+			int tt = FastCall::G().t_GetLastError();
 		else if (res == D3DERR_INVALIDCALL)
-			int tt = GetLastError();
+			int tt = FastCall::G().t_GetLastError();
 		else if (res == D3DERR_NOTAVAILABLE)
-			int tt = GetLastError();
+			int tt = FastCall::G().t_GetLastError();
 		else if (res == D3DERR_OUTOFVIDEOMEMORY)
-			int tt = GetLastError();
+			int tt = FastCall::G().t_GetLastError();
 
 		FastCall::G().t_DestroyWindow(hWnd);
 
@@ -61,11 +61,11 @@ void CRender::IRender::DX_Init(DWORD* table)
 
 	DWORD* pVTable = (DWORD*)pd3dDevice;
 	pVTable = (DWORD*)pVTable[0];
-	table[0] = pVTable[16];
+	table[0] = pVTable[ResetIndex];
 #ifdef PRESENT_ENABLE
-	table[1] = pVTable[17];
+	table[1] = pVTable[PresentIndex];
 #else
-	table[2] = pVTable[42];
+	table[2] = pVTable[EndSceneIndex];
 #endif
 }
 
@@ -83,7 +83,7 @@ DWORD WINAPI VMT_Patching(LPVOID  Param)
 {
 	while (1)
 	{
-		Sleep(100);
+		FastCall::G().t_Sleep(100);
 		HookVTable((PDWORD*)nm_pD3Ddev, (PBYTE)MyReset, ResetIndex);
 #ifdef PRESENT_ENABLE
 		HookVTable((PDWORD*)nm_pD3Ddev, (PBYTE)MyPresent, PresentIndex);

@@ -183,7 +183,6 @@ void CSkins::PostDataUpdate()
 
 	/* Need Fix */
 	/////////////////////////////////////////////////////////////////////////////////
-
 	for (size_t i = 0; weapons[i] != INVALID_EHANDLE_INDEX; i++)
 	{
 		CBaseEntity* pEntity = I::EntityList()->GetClientEntityFromHandle(weapons[i]);
@@ -231,7 +230,6 @@ void CSkins::PostDataUpdate()
 			*pWeapon->fixItemIDHigh() = 1;
 		}
 	}
-
 	/////////////////////////////////////////////////////////////////////////////////
 
 	//CBaseHandle* hWeapons = pLocal->GetWeapons();
@@ -973,6 +971,7 @@ void CSkins::LoadSkins(nlohmann::json &j)
 #define WEAPON_SCAR20_STR	lol("scar20")			// 30
 #define WEAPON_AWP_STR		lol("awp")				// 31
 #define WEAPON_SSG08_STR	lol("ssg08")			// 32
+
 string pWeaponData[34] =
 {
 	WEAPON_DEAGLE_STR,WEAPON_ELITE_STR,WEAPON_FIVESEVEN_STR,

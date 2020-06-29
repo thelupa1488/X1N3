@@ -9,8 +9,8 @@ void __fastcall hkEmitSound(IEngineSound* thisptr, int edx, IRecipientFilter& fi
 
 	// @note: for sound esp use: "player/footsteps", "player/land", "clipout" sounds check
 
-	if (GP_Misc && !strcmp(szSoundEntry, XorStr("UIPanorama.popup_accept_match_beep")))
-		GP_Misc->AutoAcceptEmit();
+	//if (GP_Misc && !strcmp(szSoundEntry, XorStr("UIPanorama.popup_accept_match_beep")))
+	//	GP_Misc->AutoAcceptEmit();
 
 	oEmitSound(thisptr, edx, filter, nEntityIndex, iChannel, szSoundEntry, uSoundEntryHash, szSample, flVolume, flAttenuation, nSeed, iFlags, iPitch, 
 		vecOrigin, vecDirection, pUtlVecOrigins, bUpdatePositions, flSoundTime, nSpeakerEntity, parameters);

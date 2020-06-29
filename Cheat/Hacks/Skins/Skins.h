@@ -215,6 +215,29 @@ public:
 	{ WEAPON_KNIFE_WIDOWMAKER,	  lol("Talon"), lol("knife_widowmaker"), SkinSettings() },
 	{ WEAPON_KNIFE_SKELETON, lol("Skeleton"), lol("knife_skeleton"), SkinSettings() },
 	};
+
+	//vector<ItemSettings> GloveNamesCT =
+	//{
+	//{ GLOVE_CT_SIDE, lol("Default"), lol("Default"), SkinSettings() },
+	//{ GLOVE_SPORTY, lol("Sporty"), lol("glove_sporty"), SkinSettings() },
+	//{ GLOVE_SLICK, lol("Slick"), lol("glove_slick"), SkinSettings() },
+	//{ GLOVE_LEATHER_WRAP, lol("Handwrap"), lol("glove_handwrap_leathery"), SkinSettings() },
+	//{ GLOVE_MOTORCYCLE, lol("Motorcycle"), lol("glove_motorcycle"), SkinSettings() },
+	//{ GLOVE_SPECIALIST, lol("Specialist"), lol("glove_specialist"), SkinSettings() },
+	//{ GLOVE_HYDRA, lol("Hydra"), lol("glove_bloodhound"), SkinSettings() },
+	//};
+
+	//vector<ItemSettings> GloveNamesTT =
+	//{
+	//{ GLOVE_T_SIDE, lol("Default"), lol("Default"), SkinSettings() },
+	//{ GLOVE_SPORTY, lol("Sporty"), lol("glove_sporty"), SkinSettings() },
+	//{ GLOVE_SLICK, lol("Slick"), lol("glove_slick"), SkinSettings() },
+	//{ GLOVE_LEATHER_WRAP, lol("Handwrap"), lol("glove_handwrap_leathery"), SkinSettings() },
+	//{ GLOVE_MOTORCYCLE, lol("Motorcycle"), lol("glove_motorcycle"), SkinSettings() },
+	//{ GLOVE_SPECIALIST, lol("Specialist"), lol("glove_specialist"), SkinSettings() },
+	//{ GLOVE_HYDRA, lol("Hydra"), lol("glove_bloodhound"), SkinSettings() },
+	//};
+
 	struct GlovesSkins_s
 	{
 		int ItemIndex;
@@ -378,6 +401,7 @@ public:
 
 	vector<SortedWeapons_s> SortedWeapons;
 	vector<SortedWeapons_s> SortedKnives;
+	vector<SortedWeapons_s> SortedGloves;
 	vector<SortedStickers_s> SortedStickers;
 
 	virtual void SetSkin(CBaseAttributableItem* pWeapon, SkinSettings *SkinParam, int id, bool IsCT, bool IsKnife);

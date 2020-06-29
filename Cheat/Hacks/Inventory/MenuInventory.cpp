@@ -439,8 +439,8 @@ void CInventory::Menu()
 
 				invBuffer.WeaponName = IGlovesModels[InvSelectedGlove];
 
-				invBuffer.Rarity = 6;
-				invBuffer.Quality = 4;
+				//invBuffer.Rarity = 6;
+				//invBuffer.Quality = 4;
 
 				InventoryList.push_back(invBuffer);
 
@@ -616,8 +616,8 @@ void CInventory::InvListMenu()
 		X1Gui().Spacing();
 		if (X1Gui().Button(XorStr("Remove"), Vec2(175, 22)))
 		{
-			Inventory DeletedItem = InventoryList[InventSelectItem];
-			
+			Inventory DeletedItem = InventoryList[InventSelectItem];		
+
 			if (InventoryList[InventSelectItem].ItemType == IT_WEAPON)
 			{
 				bool IsReset = true;
@@ -625,10 +625,10 @@ void CInventory::InvListMenu()
 				for (Inventory I : InventoryList)
 					if (I.Weapon == DeletedItem.Weapon) { IsReset = false; break; }
 
-				if (IsReset)
-				{
-					//AllSkins.at(g_pSkin->GetRealIndx(DeletedItem.Weapon)).IsInInvent = false;
-				}
+				//if (IsReset)
+				//{
+				//	AllSkins.at(g_pSkin->GetRealIndx(DeletedItem.Weapon)).IsInInvent = false;
+				//}
 			}
 
 			InventoryList.erase(InventoryList.begin() + InventSelectItem);
@@ -639,9 +639,7 @@ void CInventory::InvListMenu()
 		X1Gui().SameLine();
 		if (X1Gui().Button(XorStr("Remove all"), Vec2(176, 22)) && InventoryList.size() > 0)
 		{
-			SendClientHello();
 			InventoryList.clear();
-
 			for (int i(0); i < (int)WeaponNames.size(); i++)
 			{
 				WeaponNames[i].IsInventory = false;
@@ -655,6 +653,7 @@ void CInventory::InvListMenu()
 				KnifeNamesTT[i].IsInventory = false;
 			}
 
+			SendClientHello();
 		}
 
 	}

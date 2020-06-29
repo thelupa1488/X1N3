@@ -310,7 +310,7 @@ public:
 	virtual void Update() = 0;
 	virtual void Cleanup() = 0;
 	virtual void Start() = 0;
-	virtual bool WndProcHandler(HWND, UINT msg, WPARAM wParam, LPARAM lParam, bool DefProc) = 0;
+	virtual bool WndProcHandler(HWND, UINT msg, WPARAM wParam, LPARAM lParam) = 0;
 	virtual void DrawFilledBox(Rect rect, color_t color, float rounding) = 0;
 	virtual void DrawFilledBox(Vec2 a, Vec2 b, color_t color, float rounding = 0) = 0;
 	virtual void DrawBox(Rect rect, int16_t thickness, color_t color, float rounding) = 0;
@@ -569,7 +569,7 @@ public:
 	virtual void Cleanup();
 	virtual void Start();
 
-	virtual bool WndProcHandler(HWND, UINT msg, WPARAM wParam, LPARAM lParam, bool DefProc);
+	virtual bool WndProcHandler(HWND, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	virtual void DrawFilledBox(Rect rect, color_t color, float rounding);
 	virtual void DrawFilledBox(Vec2 a, Vec2 b, color_t color, float rounding = 0);

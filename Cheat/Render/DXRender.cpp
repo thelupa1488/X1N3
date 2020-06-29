@@ -273,10 +273,8 @@ LRESULT WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			check_closed = true;
 	}
 
-	bool Is3DEnabled = false;
-
-	if ((CGlobal::IsGuiVisble || Is3DEnabled) && X1Gui().WndProcHandler(hWnd, msg, wParam, lParam, Is3DEnabled))
-		return (CGlobal::IsGuiVisble && !Is3DEnabled) ? true : FastCall::G().t_CallWindowProcA(WndProc_o, hWnd, msg, wParam, lParam);
+	if ((CGlobal::IsGuiVisble) && X1Gui().WndProcHandler(hWnd, msg, wParam, lParam))
+		return (CGlobal::IsGuiVisble) ? true : FastCall::G().t_CallWindowProcA(WndProc_o, hWnd, msg, wParam, lParam);
 
 	return FastCall::G().t_CallWindowProcA(WndProc_o, hWnd, msg, wParam, lParam);
 }

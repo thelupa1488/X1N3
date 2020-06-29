@@ -339,7 +339,7 @@ void CGui::Update()
 	X1Gui().ClosePopup = false;
 }
 
-bool CGui::WndProcHandler(HWND, UINT msg, WPARAM wParam, LPARAM lParam, bool DefProc)
+bool CGui::WndProcHandler(HWND, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	GuiIO &IO = X1Gui().G_IO;
 
@@ -349,37 +349,37 @@ bool CGui::WndProcHandler(HWND, UINT msg, WPARAM wParam, LPARAM lParam, bool Def
 	case WM_LBUTTONDOWN:
 		IO.MouseDown[0] = true;
 		IO.LMPress = true;
-		return !DefProc ? true : false;
+		return true;
 	case WM_LBUTTONUP:
 		IO.MouseDown[0] = false;
 		IO.LMPress = false;
-		return !DefProc ? true : false;
+		return true;
 	case WM_RBUTTONDOWN:
 		IO.MouseDown[1] = true;
-		return !DefProc ? true : false;
+		return true;
 	case WM_RBUTTONUP:
 		IO.MouseDown[1] = false;
-		return !DefProc ? true : false;
+		return true;
 	case WM_MBUTTONDOWN:
 		IO.MouseDown[2] = true;
-		return !DefProc ? true : false;
+		return true;
 	case WM_MBUTTONUP:
 		IO.MouseDown[2] = false;
 	case WM_MOUSEMOVE:
 		IO.MousePos.x = (signed short)(lParam);
 		IO.MousePos.y = (signed short)(lParam >> 16);
-		return !DefProc ? true : false;
+		return true;
 	case WM_MOUSEWHEEL:
 		IO.MouseWheel += GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? +1.0f : -1.0f;
-		return !DefProc ? true : false;
+		return true;
 	case WM_KEYDOWN:
 		if (wParam < 256)
 			IO.KeysDown[wParam] = 1;
-		return !DefProc ? true : false;
+		return true;
 	case WM_KEYUP:
 		if (wParam < 256)
 			IO.KeysDown[wParam] = 0;
-		return !DefProc ? true : false;
+		return true;
 	case WM_CHAR:
 		if (wParam > 0 && wParam < 0x10000)
 		{
@@ -388,7 +388,7 @@ bool CGui::WndProcHandler(HWND, UINT msg, WPARAM wParam, LPARAM lParam, bool Def
 			IO.AddInputCharacter(wch);
 			
 		}
-		return !DefProc ? true : false;
+		return true;
 	}
 	return false;
 }

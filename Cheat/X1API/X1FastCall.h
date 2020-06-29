@@ -156,7 +156,7 @@ private:
 		{"GetCurrentProcessId", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"GetCurrentProcessId")},
 		{"K32GetModuleInformation", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()),"K32GetModuleInformation")},
 		{"Beep", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "Beep")},
-		{"FlashWindowEx", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("kernel32.dll").c_str()), "FlashWindowEx")},
+		{"FlashWindowEx", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()), "FlashWindowEx")},
 		{"SetWindowLongA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),"SetWindowLongA")},
 		{"GetKeyState", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),"GetKeyState")},
 		{"GetClipboardData", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),"GetClipboardData")},
@@ -167,6 +167,8 @@ private:
 		{"SetClipboardData", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),"SetClipboardData")},
 		{"EmptyClipboard", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),"EmptyClipboard")},
 		{"CallWindowProcA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),"CallWindowProcA")},
+		{"GetDesktopWindow", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),"GetDesktopWindow")},
+		{"DestroyWindow", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),"DestroyWindow")},
 		//{"VMProtectBeginVirtualization", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("VMProtectSDK32.dll").c_str()),"VMProtectBeginVirtualization")},
 		//{"VMProtectBeginMutation", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("VMProtectSDK32.dll").c_str()),"VMProtectBeginMutation")},
 		//{"VMProtectBeginUltra", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("VMProtectSDK32.dll").c_str()),"VMProtectBeginUltra")},
@@ -191,7 +193,7 @@ private:
 		{"D3DXCreateTextureFromFileInMemoryEx", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("d3dx9_43.dll").c_str()),"D3DXCreateTextureFromFileInMemoryEx")},
 		{"D3DXCreateTextureFromFileExA", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("d3dx9_43.dll").c_str()),"D3DXCreateTextureFromFileExA")},
 		{"CreateDXGIFactory1", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("dxgi.dll").c_str()),"CreateDXGIFactory1")},
-		{"DestroyWindow", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("User32.dll").c_str()),"DestroyWindow")},
+		{"Direct3DCreate9", pHideMe._GetProcAddress(pHideMe._GetModuleHandle(pHideMe.UTF8ToWstring("D3d9.dll").c_str()),"Direct3DCreate9")},
 	};
 public:
 	void Start()
@@ -1467,6 +1469,14 @@ public:
 			_In_ lParam
 		));
 
+	CREATE_CALL(HWND, WINAPI, _GetDesktopWindow, "GetDesktopWindow",
+		ALL_A(
+		),
+		ALL_A(
+		),
+		ALL_A(
+		));
+
 	CREATE_CALL(BOOL, WINAPI, _DestroyWindow, "DestroyWindow",
 		ALL_A(_In_ HWND hWnd
 		),
@@ -1570,5 +1580,13 @@ public:
 			_Inout_ pSrcInfo,
 			_Out_ pPalette,
 			_Out_ ppTexture
+		));
+
+	CREATE_CALL(IDirect3D9*, WINAPI, _Direct3DCreate9, "Direct3DCreate9",
+		ALL_A(_In_ UINT SDKVersion
+		),
+		ALL_A(_In_ UINT
+		),
+		ALL_A(_In_ SDKVersion
 		));
 };

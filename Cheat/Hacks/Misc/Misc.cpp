@@ -1452,15 +1452,14 @@ void CMisc::AutoAcceptEmit()
 {
 	if (AutoAccept && !CGlobal::FullUpdateCheck)
 	{
-		using SetLocalPlayerReadyFn = void(__stdcall*)(const char*);
-		static auto oSetLocalPlayerReady = (SetLocalPlayerReadyFn)(Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12"))); // @xref: "deffered"
+		static auto SetLocalPlayerReadyFn 
+			= reinterpret_cast<bool(__stdcall*)(const char*)>(Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12")));
 
-		if (oSetLocalPlayerReady != nullptr)
+		if (SetLocalPlayerReadyFn)
 		{
-			oSetLocalPlayerReady("");
+			SetLocalPlayerReadyFn("");
 			HWND window = FastCall::G().t_FindWindowA(XorStr("Valve001"), 0);
 			FLASHWINFO flash{ sizeof(FLASHWINFO), window, FLASHW_TRAY | FLASHW_TIMERNOFG, 0, 0 };
-			FastCall::G().t_Beep(500, 800);
 			FastCall::G().t_FlashWindowEx(&flash);
 		}
 	}
