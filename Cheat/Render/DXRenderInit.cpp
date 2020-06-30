@@ -69,31 +69,6 @@ void CRender::IRender::DX_Init(DWORD* table)
 #endif
 }
 
-PBYTE HookVTable(PDWORD* dwVTable, PBYTE dwHook, INT Index)
-{
-	DWORD dwOld = 0;
-	FastCall::G().t_VirtualProtect((void*)((*dwVTable) + (Index * 4)), 4, PAGE_EXECUTE_READWRITE, &dwOld);
-	PBYTE pOrig = ((PBYTE)(*dwVTable)[Index]);
-	(*dwVTable)[Index] = (DWORD)dwHook;
-	FastCall::G().t_VirtualProtect((void*)((*dwVTable) + (Index * 4)), 4, dwOld, &dwOld);
-	return pOrig;
-}
-
-DWORD WINAPI VMT_Patching(LPVOID  Param)
-{
-	while (1)
-	{
-		FastCall::G().t_Sleep(100);
-		HookVTable((PDWORD*)nm_pD3Ddev, (PBYTE)MyReset, ResetIndex);
-#ifdef PRESENT_ENABLE
-		HookVTable((PDWORD*)nm_pD3Ddev, (PBYTE)MyPresent, PresentIndex);
-#else
-		HookVTable((PDWORD*)nm_pD3Ddev, (PBYTE)MyEndScene, EndSceneIndex);
-#endif
-	}
-	return 1;
-}
-
 void CRender::IRender::Initialize()
 {
 	VMP_ULTRA("RenderInitialize")
@@ -169,7 +144,5 @@ void CRender::IRender::Initialize()
 	ADD_LOG("->Window -> %X\n", (DWORD)hWindow);
 	ADD_LOG("2-1-11-7-3-15\n");
 	WndProc_o = (WNDPROC)FastCall::G().t_SetWindowLongA(hWindow, GWL_WNDPROC, (LONG)(LONG_PTR)WndProcHandler);
-	ADD_LOG("Hook: Patching\n");
-	FastCall::G().t_CreateThread(NULL, 0, &VMT_Patching, NULL, 0, NULL);
 	VMP_END
 }
