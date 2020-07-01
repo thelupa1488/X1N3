@@ -498,7 +498,7 @@ void CSkins::ApplyCustomSkin(CBaseAttributableItem* pWeapon, int nWeaponIndex, b
 			SetSkin(pWeapon, &Item->Skin, Item->ID, false, bIsKnife);
 
 		if (Item->SkinTT.paint_kit_id != 0 && IsTT)
-			SetSkin(pWeapon, &Item->SkinTT, Item->ID, false, bIsKnife);
+			SetSkin(pWeapon, &Item->Skin, Item->ID, false, bIsKnife);
 	}
 	else
 		SetSkin(pWeapon, &Item->Skin, Item->ID, false, bIsKnife);
@@ -752,20 +752,20 @@ float __fastcall Hooked_GetStickerAttributeBySlotIndexFloat(void* thisptr, void*
 
 	int iID = *pItem->GetItemDefinitionIndex();
 	bool IsTT = CGlobal::LocalPlayer->GetTeam() == 2;
-	CSkins::ItemSettings* WItem = &GP_Skins->WeaponNames[GP_Skins->StickWeaponByDefIndex(iID)];
+	CSkins::ItemSettings* SItem = &GP_Skins->WeaponNames[GP_Skins->StickWeaponByDefIndex(iID)];
 
-	if (WItem->IsInventory)
+	if (SItem->IsInventory)
 	{
 		if (IsTT)
 		{
 			switch (iAttribute)
 			{
 			case EStickerAttributeType::Wear:
-				return min(1.f, WItem->SkinTT.Stickers[iSlot].wear + 0.0000000001f);
+				return min(1.f, SItem->SkinTT.Stickers[iSlot].wear + 0.0000000001f);
 			case EStickerAttributeType::Scale:
-				return WItem->SkinTT.Stickers[iSlot].scale;
+				return SItem->SkinTT.Stickers[iSlot].scale;
 			case EStickerAttributeType::Rotation:
-				return WItem->SkinTT.Stickers[iSlot].rotation;
+				return SItem->SkinTT.Stickers[iSlot].rotation;
 			default:
 				break;
 			}
@@ -775,11 +775,11 @@ float __fastcall Hooked_GetStickerAttributeBySlotIndexFloat(void* thisptr, void*
 			switch (iAttribute)
 			{
 			case EStickerAttributeType::Wear:
-				return min(1.f, WItem->Skin.Stickers[iSlot].wear + 0.0000000001f);
+				return min(1.f, SItem->Skin.Stickers[iSlot].wear + 0.0000000001f);
 			case EStickerAttributeType::Scale:
-				return  WItem->Skin.Stickers[iSlot].scale;
+				return  SItem->Skin.Stickers[iSlot].scale;
 			case EStickerAttributeType::Rotation:
-				return  WItem->Skin.Stickers[iSlot].rotation;
+				return  SItem->Skin.Stickers[iSlot].rotation;
 			default:
 				break;
 			}
@@ -790,11 +790,11 @@ float __fastcall Hooked_GetStickerAttributeBySlotIndexFloat(void* thisptr, void*
 		switch (iAttribute)
 		{
 		case EStickerAttributeType::Wear:
-			return min(1.f, WItem->Skin.Stickers[iSlot].wear + 0.0000000001f);
+			return min(1.f, SItem->Skin.Stickers[iSlot].wear + 0.0000000001f);
 		case EStickerAttributeType::Scale:
-			return  WItem->Skin.Stickers[iSlot].scale;
+			return  SItem->Skin.Stickers[iSlot].scale;
 		case EStickerAttributeType::Rotation:
-			return  WItem->Skin.Stickers[iSlot].rotation;
+			return  SItem->Skin.Stickers[iSlot].rotation;
 		default:
 			break;
 		}
@@ -817,17 +817,17 @@ UINT __fastcall Hooked_GetStickerAttributeBySlotIndexInt(void* thisptr, void* ed
 
 	int iID = *pItem->GetItemDefinitionIndex();
 	bool IsTT = CGlobal::LocalPlayer->GetTeam() == 2;
-	CSkins::ItemSettings* WItem = &GP_Skins->WeaponNames[GP_Skins->StickWeaponByDefIndex(iID)];
+	CSkins::ItemSettings* SItem = &GP_Skins->WeaponNames[GP_Skins->StickWeaponByDefIndex(iID)];
 
-	if (WItem->IsInventory)
+	if (SItem->IsInventory)
 	{
 		if (IsTT)
-			return WItem->SkinTT.Stickers[iSlot].kit;
+			return SItem->SkinTT.Stickers[iSlot].kit;
 		else
-			return WItem->Skin.Stickers[iSlot].kit;
+			return SItem->Skin.Stickers[iSlot].kit;
 	}
 	else
-		return WItem->Skin.Stickers[iSlot].kit;
+		return SItem->Skin.Stickers[iSlot].kit;
 }
 bool IsCodePtr(void* ptr)
 {
@@ -880,7 +880,7 @@ int CSkins::StickWeaponByDefIndex(int DefIdx)
 
 void CSkins::SaveSkins(nlohmann::json &j)
 {
-#define SV(o,a,b) j[XorStr("Skins")][o][v.Name][/*XorStr*/(a)] = b;
+#define SV(o,a,b) j[XorStr("Skins")][o][v.Name][XorStr(a)] = b;
 
 	StickerSettings emptyEntryStricker;
 	SkinSettings emptyEntry;
@@ -891,35 +891,36 @@ void CSkins::SaveSkins(nlohmann::json &j)
 		{
 			if (emptyEntry == v.Skin)
 			{
-				SV(sname, XorStr("Emp"), true);
+				SV(sname, ("Emp"), true);
 				continue;
 			}
 
-			SV(sname, XorStr("custom_name"), v.Skin.custom_name);
-			SV(sname, XorStr("paint_kit_id"), v.Skin.paint_kit_id);
-			SV(sname, XorStr("paint_kit_menu"), v.Skin.paint_kit_menu);
-			SV(sname, XorStr("skins_mode"), v.Skin.skins_mode);
-			SV(sname, XorStr("rarity"), v.Skin.rarity);
-			SV(sname, XorStr("quality"), v.Skin.quality);
-			SV(sname, XorStr("seed"), v.Skin.seed);
-			SV(sname, XorStr("auto_stat_track"), v.Skin.auto_stat_track);
-			SV(sname, XorStr("stat_track"), v.Skin.stat_track);
-			SV(sname, XorStr("wear"), v.Skin.wear);
+			SV(sname, "custom_name", v.Skin.custom_name);
+			SV(sname, "paint_kit_id", v.Skin.paint_kit_id);
+			SV(sname, "paint_kit_menu", v.Skin.paint_kit_menu);
+			SV(sname, "skins_mode", v.Skin.skins_mode);
+			SV(sname, "rarity", v.Skin.rarity);
+			SV(sname, "quality", v.Skin.quality);
+			SV(sname, "seed", v.Skin.seed);
+			SV(sname, "auto_stat_track", v.Skin.auto_stat_track);
+			SV(sname, "stat_track", v.Skin.stat_track);
+			SV(sname, "wear", v.Skin.wear);
+
 			if (SaveSticker)
 			{
 				for (int i(0); i < 5; i++)
 				{
 					if (emptyEntryStricker == v.Skin.Stickers[i])
 					{
-						SV(sname, string(XorStr("SRE") + to_string(i)), true);
+						SV(sname, string(("SRE") + to_string(i)), true);
 						continue;
 					}
 
-					SV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("kit")), v.Skin.Stickers[i].kit);
-					SV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("kit_menu_index")), v.Skin.Stickers[i].kit_menu_index);
-					SV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("rotation")), v.Skin.Stickers[i].rotation);
-					SV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("scale")), v.Skin.Stickers[i].scale);
-					SV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("wear")), v.Skin.Stickers[i].wear);
+					SV(sname, string("Stiker" + to_string(i) + "kit"), v.Skin.Stickers[i].kit);
+					SV(sname, string("Stiker" + to_string(i) + "kit_menu_index"), v.Skin.Stickers[i].kit_menu_index);
+					SV(sname, string("Stiker" + to_string(i) + "rotation"), v.Skin.Stickers[i].rotation);
+					SV(sname, string("Stiker" + to_string(i) + "scale"), v.Skin.Stickers[i].scale);
+					SV(sname, string("Stiker" + to_string(i) + "wear"), v.Skin.Stickers[i].wear);
 				}
 			}
 		}
@@ -932,7 +933,7 @@ void CSkins::SaveSkins(nlohmann::json &j)
 
 void CSkins::LoadSkins(nlohmann::json &j)
 {
-#define LV(o,a,b) if(!j[XorStr("Skins")][o][v.Name][/*XorStr*/(a)].is_null()) {b = j[XorStr("Skins")][o][v.Name][/*XorStr*/(a)];}
+#define LV(o,a,b) if(!j[XorStr("Skins")][o][v.Name][XorStr(a)].is_null()) {b = j[XorStr("Skins")][o][v.Name][XorStr(a)];}
 
 	StickerSettings emptyEntryStricker;
 	SkinSettings emptyEntry;
@@ -962,15 +963,16 @@ void CSkins::LoadSkins(nlohmann::json &j)
 							v.Skin.custom_name[i] = buf[i];
 					}
 
-					LV(sname, XorStr("paint_kit_id"), v.Skin.paint_kit_id);
-					LV(sname, XorStr("paint_kit_menu"), v.Skin.paint_kit_menu);
-					LV(sname, XorStr("skins_mode"), v.Skin.skins_mode);
-					LV(sname, XorStr("rarity"), v.Skin.rarity);
-					LV(sname, XorStr("quality"), v.Skin.quality);
-					LV(sname, XorStr("seed"), v.Skin.seed);
-					LV(sname, XorStr("auto_stat_track"), v.Skin.auto_stat_track);
-					LV(sname, XorStr("stat_track"), v.Skin.stat_track);
-					LV(sname, XorStr("wear"), v.Skin.wear);
+					LV(sname, "paint_kit_id", v.Skin.paint_kit_id);
+					LV(sname, "paint_kit_menu", v.Skin.paint_kit_menu);
+					LV(sname, "skins_mode", v.Skin.skins_mode);
+					LV(sname, "rarity", v.Skin.rarity);
+					LV(sname, "quality", v.Skin.quality);
+					LV(sname, "seed", v.Skin.seed);
+					LV(sname, "auto_stat_track", v.Skin.auto_stat_track);
+					LV(sname, "stat_track", v.Skin.stat_track);
+					LV(sname, "wear", v.Skin.wear);
+
 					if (LoadSticker)
 					{
 						for (int i(0); i < 5; i++)
@@ -983,11 +985,11 @@ void CSkins::LoadSkins(nlohmann::json &j)
 								continue;
 							}
 
-							LV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("kit")), v.Skin.Stickers[i].kit);
-							LV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("kit_menu_index")), v.Skin.Stickers[i].kit_menu_index);
-							LV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("rotation")), v.Skin.Stickers[i].rotation);
-							LV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("scale")), v.Skin.Stickers[i].scale);
-							LV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("wear")), v.Skin.Stickers[i].wear);
+							LV(sname, string("Stiker" + to_string(i) + "kit"), v.Skin.Stickers[i].kit);
+							LV(sname, string("Stiker" + to_string(i) + "kit_menu_index"), v.Skin.Stickers[i].kit_menu_index);
+							LV(sname, string("Stiker" + to_string(i) + "rotation"), v.Skin.Stickers[i].rotation);
+							LV(sname, string("Stiker" + to_string(i) + "scale"), v.Skin.Stickers[i].scale);
+							LV(sname, string("Stiker" + to_string(i) + "wear"), v.Skin.Stickers[i].wear);
 						}
 					}
 				}

@@ -171,7 +171,7 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 					if (IsRemCt)
 						WBuffer->Skin.paint_kit_id = 0;
 					else
-						WBuffer->SkinTT.paint_kit_id = 0;
+						WBuffer->Skin.paint_kit_id = 0;
 				}
 				else if ((CyrTeamID)IBuffer->iTeam == CYRT_CT)
 				{
@@ -191,32 +191,32 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 				else if ((CyrTeamID)IBuffer->iTeam == CYRT_TT)
 				{
 					WBuffer->IsInventory = true;
-					WBuffer->SkinTT.paint_kit_id = IBuffer->WeaponSkinId;
-					WBuffer->SkinTT.wear = IBuffer->Wear;
-					WBuffer->SkinTT.seed = IBuffer->Seed;
-					WBuffer->SkinTT.stat_track = IBuffer->StatTrack;
-					WBuffer->SkinTT.auto_stat_track = IBuffer->AutoStatTrack;
-					WBuffer->SkinTT.rarity = IBuffer->Rarity;
-					WBuffer->SkinTT.quality = IBuffer->Quality;
+					WBuffer->Skin.paint_kit_id = IBuffer->WeaponSkinId;
+					WBuffer->Skin.wear = IBuffer->Wear;
+					WBuffer->Skin.seed = IBuffer->Seed;
+					WBuffer->Skin.stat_track = IBuffer->StatTrack;
+					WBuffer->Skin.auto_stat_track = IBuffer->AutoStatTrack;
+					WBuffer->Skin.rarity = IBuffer->Rarity;
+					WBuffer->Skin.quality = IBuffer->Quality;
 
 					for (int si(0); si < 5; si++)
 					{
-						WBuffer->SkinTT.Stickers[si] = IBuffer->Stickers[si];
+						WBuffer->Skin.Stickers[si] = IBuffer->Stickers[si];
 					}
 				}
 				else if ((CyrTeamID)IBuffer->iTeam == CYRT_ALL)
 				{
 					WBuffer->IsInventory = true;
-					WBuffer->SkinTT.paint_kit_id = IBuffer->WeaponSkinId;
-					WBuffer->SkinTT.wear = IBuffer->Wear;
-					WBuffer->SkinTT.seed = IBuffer->Seed;
-					WBuffer->SkinTT.stat_track = IBuffer->StatTrack;
-					WBuffer->SkinTT.auto_stat_track = IBuffer->AutoStatTrack;
-					WBuffer->SkinTT.rarity = IBuffer->Rarity;
-					WBuffer->SkinTT.quality = IBuffer->Quality;
+					WBuffer->Skin.paint_kit_id = IBuffer->WeaponSkinId;
+					WBuffer->Skin.wear = IBuffer->Wear;
+					WBuffer->Skin.seed = IBuffer->Seed;
+					WBuffer->Skin.stat_track = IBuffer->StatTrack;
+					WBuffer->Skin.auto_stat_track = IBuffer->AutoStatTrack;
+					WBuffer->Skin.rarity = IBuffer->Rarity;
+					WBuffer->Skin.quality = IBuffer->Quality;
 					for (int si(0); si < 5; si++)
 					{
-						WBuffer->SkinTT.Stickers[si] = IBuffer->Stickers[si];
+						WBuffer->Skin.Stickers[si] = IBuffer->Stickers[si];
 					}
 
 					WBuffer->Skin.paint_kit_id = IBuffer->WeaponSkinId;
