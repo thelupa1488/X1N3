@@ -352,9 +352,9 @@ void CSkins::Menu()
 
 		if (KnfTeamSettingsMode == 0)
 		{
-			ItemsList(KnifeNamesCT, SelectedKnifeModelCT, Vec2(ITEM_LIST_X, ITEM_LIST_Y), XorStr("##AllKnifes"));
+			ItemsList(KnifeNames, SelectedKnifeModelCT, Vec2(ITEM_LIST_X, ITEM_LIST_Y), XorStr("##AllKnifes"));
 			X1Gui().SameLine();
-			ItemSettings* WItem = &KnifeNamesCT[SelectedKnifeModelCT];
+			ItemSettings* WItem = &KnifeNames[SelectedKnifeModelCT];
 
 			WeaponPreview = WItem->CdnName;
 
@@ -397,14 +397,14 @@ void CSkins::Menu()
 
 			SkinParams(WItem->Skin);
 
-			WeaponPreview = KnifeNamesCT[SelectedKnifeModelCT].CdnName;
-			SkinPreview = skin_kits[KnifeNamesCT[SelectedKnifeModelCT].Skin.paint_kit_menu].cdn_name;
+			WeaponPreview = KnifeNames[SelectedKnifeModelCT].CdnName;
+			SkinPreview = skin_kits[KnifeNames[SelectedKnifeModelCT].Skin.paint_kit_menu].cdn_name;
 		}
 		else if (KnfTeamSettingsMode == 1)
 		{
-			ItemsList(KnifeNamesTT, SelectedKnifeModelTT, Vec2(ITEM_LIST_X, ITEM_LIST_Y), XorStr("##AllKnifes"));
+			ItemsList(KnifeNames, SelectedKnifeModelTT, Vec2(ITEM_LIST_X, ITEM_LIST_Y), XorStr("##AllKnifes"));
 			X1Gui().SameLine();
-			ItemSettings* WItem = &KnifeNamesTT[SelectedKnifeModelTT];
+			ItemSettings* WItem = &KnifeNames[SelectedKnifeModelTT];
 
 			WeaponPreview = WItem->CdnName;
 
@@ -447,8 +447,8 @@ void CSkins::Menu()
 
 			SkinParams(WItem->Skin);
 
-			WeaponPreview = KnifeNamesTT[SelectedKnifeModelTT].CdnName;
-			SkinPreview = skin_kits[KnifeNamesTT[SelectedKnifeModelTT].Skin.paint_kit_menu].cdn_name;
+			WeaponPreview = KnifeNames[SelectedKnifeModelTT].CdnName;
+			SkinPreview = skin_kits[KnifeNames[SelectedKnifeModelTT].Skin.paint_kit_menu].cdn_name;
 		}
 	}
 	else if (SkinSettingsMode == 2)

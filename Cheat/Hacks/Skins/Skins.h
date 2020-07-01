@@ -110,9 +110,7 @@ public:
 	struct ItemSettings
 	{
 		ItemSettings(WEAPON_ID _ID, string _Name, string _CdnName, SkinSettings _Skin) :
-			ID(_ID), Name(_Name), CdnName(_CdnName), Skin(_Skin), SkinTT(_Skin), IsInventory(false)
-		{
-		}
+			ID(_ID), Name(_Name), CdnName(_CdnName), Skin(_Skin), SkinTT(_Skin), IsInventory(false){}
 		WEAPON_ID ID;
 		string Name = "";
 		string CdnName = "";
@@ -168,7 +166,7 @@ public:
 	};
 
 
-	vector<ItemSettings> KnifeNamesCT =
+	vector<ItemSettings> KnifeNames =
 	{
 	{ WEAPON_KNIFE, lol("Default"), lol("Default"), SkinSettings() },
 	{ WEAPON_KNIFE_BAYONET, lol("Bayonet"), lol("bayonet"), SkinSettings() },
@@ -190,30 +188,6 @@ public:
 	{ WEAPON_KNIFE_STILETTO, lol("Stiletto"),lol("knife_stiletto"), SkinSettings() },
 	{ WEAPON_KNIFE_WIDOWMAKER,	  lol("Talon"), lol("knife_widowmaker"), SkinSettings() },
 	{ WEAPON_KNIFE_SKELETON,	  lol("Skeleton"), lol("knife_skeleton"), SkinSettings() },
-	};
-
-	vector<ItemSettings> KnifeNamesTT =
-	{
-	{ WEAPON_KNIFE_T,	lol("Default"), lol("Default"), SkinSettings() },
-	{ WEAPON_KNIFE_BAYONET, lol("Bayonet"), lol("bayonet"), SkinSettings() },
-	{ WEAPON_KNIFE_CSS,	lol("Classic"), lol("knife_css"), SkinSettings() },
-	{ WEAPON_KNIFE_FLIP,	lol("Flip"), lol("knife_flip"), SkinSettings() },
-	{ WEAPON_KNIFE_GUT,		lol("Gut Knife"), lol("knife_gut"), SkinSettings() },
-	{ WEAPON_KNIFE_KARAMBIT,lol("Karambit"), lol("knife_karambit"), SkinSettings() },
-	{ WEAPON_KNIFE_M9_BAYONET,	  lol("M9 Bayonet"), lol("knife_m9_bayonet"), SkinSettings() },
-	{ WEAPON_KNIFE_TACTICAL,	   lol("Huntsman"), lol("knife_tactical"), SkinSettings() },
-	{ WEAPON_KNIFE_FALCHION,	  lol("Falchion"), lol("knife_falchion"), SkinSettings() },
-	{ WEAPON_KNIFE_SURVIVAL_BOWIE,lol("Bowie"), lol("knife_survival_bowie"), SkinSettings() },
-	{ WEAPON_KNIFE_BUTTERFLY, lol("Butterfly"), lol("knife_butterfly"), SkinSettings() },
-	{ WEAPON_KNIFE_PUSH,	  lol("Shadow"), lol("knife_push"), SkinSettings() },
-	{ WEAPON_KNIFE_CORD,	  lol("Paracord"), lol("knife_cord"), SkinSettings() },
-	{ WEAPON_KNIFE_CANIS,	  lol("Survivak"), lol("knife_canis"), SkinSettings() },
-	{ WEAPON_KNIFE_URSUS, lol("Ursus"), lol("knife_ursus"), SkinSettings() },
-	{ WEAPON_KNIFE_GYPSY_JACKKNIFE,	  lol("Navaja"), lol("knife_gypsy_jackknife"), SkinSettings() },
-	{ WEAPON_KNIFE_OUTDOOR,	  lol("Nomad"), lol("knife_outdoor"), SkinSettings() },
-	{ WEAPON_KNIFE_STILETTO, lol("Stiletto"),lol("knife_stiletto"), SkinSettings() },
-	{ WEAPON_KNIFE_WIDOWMAKER,	  lol("Talon"), lol("knife_widowmaker"), SkinSettings() },
-	{ WEAPON_KNIFE_SKELETON, lol("Skeleton"), lol("knife_skeleton"), SkinSettings() },
 	};
 
 	//vector<ItemSettings> GloveNamesCT =

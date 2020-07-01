@@ -146,6 +146,8 @@ void CEsp::SoundFrameStage()
 	}
 }
 
+//Доделать!
+
 static IMaterial* Texture = nullptr;
 static IMaterial* Flat = nullptr;
 static IMaterial* Wireframe = nullptr;

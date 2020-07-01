@@ -147,6 +147,7 @@ bool CGSettings::Load()
 	LoadEx(JFile);
 
 	JFile.clear();
+
 	GP_Inventory->SendClientHello();
 	GP_Skins->UpdateSkins();
 

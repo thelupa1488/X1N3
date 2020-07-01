@@ -300,12 +300,12 @@ void CInventory::Menu()
 		}
 		else if (InvSettingsMode == 1)
 		{
-			ItemsList(GP_Skins->KnifeNamesCT, InvSelectedKnife, Vec2(225, 419), XorStr("##AllKnifes"));
+			ItemsList(GP_Skins->KnifeNames, InvSelectedKnife, Vec2(225, 419), XorStr("##AllKnifes"));
 			X1Gui().SameLine();
 
 			if (GP_Skins)
 			{
-				ItemSettings* WItem = &GP_Skins->KnifeNamesCT[InvSelectedKnife];
+				ItemSettings* WItem = &GP_Skins->KnifeNames[InvSelectedKnife];
 
 				WeaponPreview = WItem->CdnName;
 
@@ -371,9 +371,9 @@ void CInventory::Menu()
 					invBuffer.Rarity = WItem->Skin.rarity;
 					invBuffer.Quality = WItem->Skin.quality;
 
-					invBuffer.WeaponName = KnifeNamesCT[InvSelectedKnife].Name;
+					invBuffer.WeaponName = KnifeNames[InvSelectedKnife].Name;
 					if (WItem->Skin.skins_mode == 0)
-						invBuffer.SkinName = GP_Skins->skin_kits[KnifeNamesCT[InvSelectedKnife].Skin.paint_kit_menu].name_eng;
+						invBuffer.SkinName = GP_Skins->skin_kits[KnifeNames[InvSelectedKnife].Skin.paint_kit_menu].name_eng;
 					else if (WItem->Skin.skins_mode == 1)
 						invBuffer.SkinName = GP_Skins->SortedKnives[InvSelectedKnife].kits[WItem->Skin.paint_kit_menu].name;
 
@@ -644,13 +644,13 @@ void CInventory::InvListMenu()
 			{
 				WeaponNames[i].IsInventory = false;
 			}
-			for (int i(0); i < (int)KnifeNamesCT.size(); i++)
+			for (int i(0); i < (int)KnifeNames.size(); i++)
 			{
-				KnifeNamesCT[i].IsInventory = false;			
+				KnifeNames[i].IsInventory = false;
 			}
-			for (int i(0); i < (int)KnifeNamesTT.size(); i++)
+			for (int i(0); i < (int)KnifeNames.size(); i++)
 			{
-				KnifeNamesTT[i].IsInventory = false;
+				KnifeNames[i].IsInventory = false;
 			}
 
 			SendClientHello();
