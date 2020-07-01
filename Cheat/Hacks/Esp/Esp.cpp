@@ -146,17 +146,15 @@ void CEsp::SoundFrameStage()
 	}
 }
 
-void CEsp::OverrideMaterial(bool ignoreZ, int type, Color rgba)
+static IMaterial* Texture = nullptr;
+static IMaterial* Flat = nullptr;
+static IMaterial* Wireframe = nullptr;
+static IMaterial* Metallic = nullptr;
+static IMaterial* Pearlescent = nullptr;
+static IMaterial* Animated = nullptr;
+
+IMaterial* CEsp::InitalizeMaterials()
 {
-	static IMaterial* Texture = nullptr;
-	static IMaterial* Flat = nullptr;
-	static IMaterial* Wireframe = nullptr;
-	static IMaterial* Metallic = nullptr;
-	static IMaterial* Pearlescent = nullptr;
-	static IMaterial* Animated = nullptr;
-
-	static IMaterial* Material = nullptr;
-
 	if (!Texture)
 		Texture = I::MaterialSystem()->CreateMaterial("Texture", KeyValues::FromString("VertexLitGeneric", "$basetexture white"));
 
@@ -196,7 +194,7 @@ void CEsp::OverrideMaterial(bool ignoreZ, int type, Color rgba)
 
 	if (!Animated)
 	{
-		const auto kv = KeyValues::FromString("VertexLitGeneric", 
+		const auto kv = KeyValues::FromString("VertexLitGeneric",
 			"$basetexture white\
 			\"$envmap editor/cube_vertigo\
 			\$envmapcontrast 1\
@@ -206,8 +204,12 @@ void CEsp::OverrideMaterial(bool ignoreZ, int type, Color rgba)
 		Animated = I::MaterialSystem()->CreateMaterial("Animated", kv);
 	}
 
-	if (!Texture || !Flat || !Wireframe || !Metallic || !Pearlescent || !Animated)
-		return;
+	return nullptr;
+}
+
+void CEsp::OverrideMaterial(bool ignoreZ, int type, Color rgba)
+{
+	IMaterial* Material = nullptr;
 
 	switch (type)
 	{
@@ -220,8 +222,7 @@ void CEsp::OverrideMaterial(bool ignoreZ, int type, Color rgba)
 	default: Material = nullptr;
 	}
 
-	if (!Material)
-		return;
+	if (!Material) return;
 
 	Material->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, ignoreZ);
 
