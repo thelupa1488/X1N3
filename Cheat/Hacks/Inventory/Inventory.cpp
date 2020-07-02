@@ -118,7 +118,7 @@ void CInventory::SetWeapon(Inventory* Inv, bool IsCT)
 					snprintf(GP_Skins->WeaponNames[i].SkinTT.custom_name, 32, "%s", Inv->Name);
 
 				for (int si(0); si < 5; si++)
-					GP_Skins->WeaponNames[i].Skin.Stickers[si] = Inv->Stickers[si];
+					GP_Skins->WeaponNames[i].SkinTT.Stickers[si] = Inv->Stickers[si];
 			}
 }
 
@@ -216,12 +216,7 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 		TeamID Team = (TeamID)Message.new_class();
 
 		bool Reset = EquippedState == 65535 || GameIdx < 0;
-
 		int InventoryIndx = GetInventoryByGame(GameIdx, EquippedState, Team);
-
-		static int LastChangeWeapon = -1;
-		static int LastChangeKnife = -1;
-		static int LastChangeGlove = -1;
 
 		if (InventoryIndx < (int)InventoryList.size() && InventoryIndx != -1)
 		{
@@ -256,15 +251,15 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 				}
 			};
 
-			auto GetWeaponFromInv = [&](WEAPON_ID id) -> int
-			{
-				for (int i(0); i < (int)GP_Skins->WeaponNames.size(); i++)
-				{
-					if (GP_Skins->WeaponNames[i].ID == id)
-						return i;
-				}
-				return 0;
-			};
+			//auto GetWeaponFromInv = [&](WEAPON_ID id) -> int
+			//{
+			//	for (int i(0); i < (int)GP_Skins->WeaponNames.size(); i++)
+			//	{
+			//		if (GP_Skins->WeaponNames[i].ID == id)
+			//			return i;
+			//	}
+			//	return 0;
+			//};
 
 			Inventory *IBuffer = &InventoryList.at(InventoryIndx);
 
@@ -275,16 +270,16 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 			{
 				SetTeam(*IBuffer, Team, Reset, IsRemCt);
 
-				ItemSettings* WBuffer = &GP_Skins->WeaponNames[GetWeaponFromInv((WEAPON_ID)IBuffer->Weapon)];
+				//ItemSettings* WBuffer = &GP_Skins->WeaponNames[GetWeaponFromInv((WEAPON_ID)IBuffer->Weapon)];
 
-				if ((CyrTeamID)IBuffer->iTeam == CYRT_DISBLE)
-				{
-					if (IsRemCt)
-						WBuffer->Skin.paint_kit_id = 0;
-					else
-						WBuffer->SkinTT.paint_kit_id = 0;
-				}
-				else if ((CyrTeamID)IBuffer->iTeam == CYRT_CT)
+				//if ((CyrTeamID)IBuffer->iTeam == CYRT_DISBLE)
+				//{
+				//	if (IsRemCt)
+				//		WBuffer->Skin.paint_kit_id = 0;
+				//	else
+				//		WBuffer->SkinTT.paint_kit_id = 0;
+				//}
+				if ((CyrTeamID)IBuffer->iTeam == CYRT_CT)
 				{
 					SetWeapon(IBuffer, true);
 				}
