@@ -425,6 +425,7 @@ void CInventory::Menu()
 					InvSelectedGlove = i;
 			}
 			X1Gui().ListBoxFooter();
+
 			if (InvSelectedGlove > 0)
 			SliderFloats("Wear", InvGloveWear, 0.f, 1.f, XorStr("%.9f"));
 
@@ -625,6 +626,17 @@ void CInventory::InvListMenu()
 		{
 			InventoryList.erase(InventoryList.begin() + InventSelectItem);
 			SendClientHello();
+			if (InventoryList.size() < 0)
+			{
+				for (int i(0); i < (int)WeaponNames.size(); i++)
+				{
+					WeaponNames[i].IsInventory = false;
+				}
+				for (int i(0); i < (int)KnifeNames.size(); i++)
+				{
+					KnifeNames[i].IsInventory = false;
+				}
+			}
 		}
 		//X1Gui().SameLine();
 		//if (X1Gui().Button(XorStr("Remove all"), Vec2(176, 22)) && InventoryList.size() > 0) //need fix

@@ -2,7 +2,7 @@
 #include "../Engine/XorStr.h"
 #include <VMProtectSDK.h>
 
-//#define DEBUG_DLL //ON if build Debug 
+#define DEBUG_DLL //ON if build Debug 
 //#define ENABLE_XOR_STR
 //#define ENABLE_VMP
 //#define YOUGAMEBIZ

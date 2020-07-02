@@ -82,39 +82,39 @@ int CInventory::GetInventoryByGame(int IndGame, int Eqp, TeamID Team)
 void CInventory::SetKnife(Inventory* Inv, bool IsCT)
 {
 	if (IsCT)
-		for (int i(0); i < (int)KnifeNames.size(); i++)
-			if (KnifeNames[i].ID == (WEAPON_ID)Inv->Weapon)
+		for (int i(0); i < (int)GP_Skins->KnifeNames.size(); i++)
+			if (GP_Skins->KnifeNames[i].ID == (WEAPON_ID)Inv->Weapon)
 			{
-				KnifeNames[i].IsInventory = true;
-				SelectedKnifeModelCT = i;
-				KnifeNames[i].Skin.paint_kit_id = Inv->WeaponSkinId;
-				KnifeNames[i].Skin.seed = Inv->Seed;
-				KnifeNames[i].Skin.wear = Inv->Wear;
-				KnifeNames[i].Skin.stat_track = Inv->StatTrack;
-				KnifeNames[i].Skin.auto_stat_track = Inv->AutoStatTrack;
-				KnifeNames[i].Skin.rarity = Inv->Rarity;
-				KnifeNames[i].Skin.quality = Inv->Quality;
+				GP_Skins->KnifeNames[i].IsInventory = true;
+				GP_Skins->SelectedKnifeModelCT = i;
+				GP_Skins->KnifeNames[i].Skin.paint_kit_id = Inv->WeaponSkinId;
+				GP_Skins->KnifeNames[i].Skin.seed = Inv->Seed;
+				GP_Skins->KnifeNames[i].Skin.wear = Inv->Wear;
+				GP_Skins->KnifeNames[i].Skin.stat_track = Inv->StatTrack;
+				GP_Skins->KnifeNames[i].Skin.auto_stat_track = Inv->AutoStatTrack;
+				GP_Skins->KnifeNames[i].Skin.rarity = Inv->Rarity;
+				GP_Skins->KnifeNames[i].Skin.quality = Inv->Quality;
 
 				if (Inv->Name)
-					snprintf(KnifeNames[i].Skin.custom_name, 32, "%s", Inv->Name);
+					snprintf(GP_Skins->KnifeNames[i].Skin.custom_name, 32, "%s", Inv->Name);
 			}
 
 	if (!IsCT)
-		for (int i(0); i < (int)KnifeNames.size(); i++)
-			if (KnifeNames[i].ID == (WEAPON_ID)Inv->Weapon)
+		for (int i(0); i < (int)GP_Skins->KnifeNames.size(); i++)
+			if (GP_Skins->KnifeNames[i].ID == (WEAPON_ID)Inv->Weapon)
 			{
-				KnifeNames[i].IsInventory = true;
-				SelectedKnifeModelTT = i;
-				KnifeNames[i].SkinTT.paint_kit_id = Inv->WeaponSkinId;
-				KnifeNames[i].SkinTT.seed = Inv->Seed;
-				KnifeNames[i].SkinTT.wear = Inv->Wear;
-				KnifeNames[i].SkinTT.stat_track = Inv->StatTrack;
-				KnifeNames[i].SkinTT.auto_stat_track = Inv->AutoStatTrack;
-				KnifeNames[i].SkinTT.rarity = Inv->Rarity;
-				KnifeNames[i].SkinTT.quality = Inv->Quality;
+				GP_Skins->KnifeNames[i].IsInventory = true;
+				GP_Skins->SelectedKnifeModelTT = i;
+				GP_Skins->KnifeNames[i].SkinTT.paint_kit_id = Inv->WeaponSkinId;
+				GP_Skins->KnifeNames[i].SkinTT.seed = Inv->Seed;
+				GP_Skins->KnifeNames[i].SkinTT.wear = Inv->Wear;
+				GP_Skins->KnifeNames[i].SkinTT.stat_track = Inv->StatTrack;
+				GP_Skins->KnifeNames[i].SkinTT.auto_stat_track = Inv->AutoStatTrack;
+				GP_Skins->KnifeNames[i].SkinTT.rarity = Inv->Rarity;
+				GP_Skins->KnifeNames[i].SkinTT.quality = Inv->Quality;
 
 				if (Inv->Name)
-					snprintf(KnifeNames[i].SkinTT.custom_name, 32, "%s", Inv->Name);
+					snprintf(GP_Skins->KnifeNames[i].SkinTT.custom_name, 32, "%s", Inv->Name);
 			}
 }
 
@@ -123,23 +123,23 @@ void CInventory::SetGlove(Inventory* Inv, bool IsCT)
 	if (IsCT)
 		for (int i(0); i < 49; i++)
 		{
-			GlovesSkin_Array[i].ItemIndex = Inv->Weapon;
-			GlovesSkin_Array[i].PaintKit = Inv->WeaponSkinId;
-			GloveCTWear = Inv->Wear;
+			GP_Skins->GlovesSkin_Array[i].ItemIndex = Inv->Weapon;
+			GP_Skins->GlovesSkin_Array[i].PaintKit = Inv->WeaponSkinId;
+			GP_Skins->GloveCTWear = Inv->Wear;
 			Inv->Rarity = 6; //Covert
 			Inv->Quality = 3; //Knife star
-			SelectedGloveCT = i + 1;
+			GP_Skins->SelectedGloveCT = i + 1;
 		}
 
 	if (!IsCT)
 		for (int i(0); i < 49; i++)
 		{
-			GlovesSkin_Array[i].ItemIndex = Inv->Weapon;
-			GlovesSkin_Array[i].PaintKit = Inv->WeaponSkinId;
-			GloveTTWear = Inv->Wear;
+			GP_Skins->GlovesSkin_Array[i].ItemIndex = Inv->Weapon;
+			GP_Skins->GlovesSkin_Array[i].PaintKit = Inv->WeaponSkinId;
+			GP_Skins->GloveTTWear = Inv->Wear;
 			Inv->Rarity = 6; //Covert
 			Inv->Quality = 3; //Knife star
-			SelectedGloveTT = i + 1;
+			GP_Skins->SelectedGloveTT = i + 1;
 		}
 }
 
@@ -168,7 +168,7 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 			return;
 
 
-		int GameIdx = (int)((uint32_t)Message.item_id() - 20100);
+		int GameIdx = (int)((uint32_t)Message.item_id() - 20001);
 		int EquippedState = Message.new_slot();
 		TeamID Team = (TeamID)Message.new_class();
 
@@ -215,9 +215,9 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 
 			auto GetWeaponFromInv = [&](WEAPON_ID id) -> int
 			{
-				for (int i(0); i < (int)WeaponNames.size(); i++)
+				for (int i(0); i < (int)GP_Skins->WeaponNames.size(); i++)
 				{
-					if (WeaponNames[i].ID == id)
+					if (GP_Skins->WeaponNames[i].ID == id)
 						return i;
 				}
 				return 0;
@@ -232,7 +232,7 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 			{
 				SetTeam(*IBuffer, Team, Reset, IsRemCt);
 
-				ItemSettings* WBuffer = &WeaponNames[GetWeaponFromInv((WEAPON_ID)IBuffer->Weapon)];
+				ItemSettings* WBuffer = &GP_Skins->WeaponNames[GetWeaponFromInv((WEAPON_ID)IBuffer->Weapon)];
 
 				WBuffer->IsInventory = true;
 				if ((CyrTeamID)IBuffer->iTeam == CYRT_DISBLE)
@@ -314,12 +314,13 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 
 				if ((CyrTeamID)IBuffer->iTeam == CYRT_DISBLE)
 				{
-					SelectedKnifeModelCT = 0;
-					SelectedKnifeModelTT = 0;
+					if (IsRemCt)
+						GP_Skins->SelectedKnifeModelCT = 0;
+					else
+						GP_Skins->SelectedKnifeModelTT = 0;
 				}
 				else if ((CyrTeamID)IBuffer->iTeam == CYRT_CT)
 				{
-
 					SetKnife(IBuffer, true);
 				}
 				else if ((CyrTeamID)IBuffer->iTeam == CYRT_TT)
@@ -339,9 +340,9 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 				if ((CyrTeamID)IBuffer->iTeam == CYRT_DISBLE)
 				{
 					if (IsRemCt)
-						SelectedGloveCT = 0;
+						GP_Skins->SelectedGloveCT = 0;
 					else
-						SelectedGloveTT = 0;
+						GP_Skins->SelectedGloveTT = 0;
 				}
 				else if ((CyrTeamID)IBuffer->iTeam == CYRT_CT)
 				{
@@ -487,7 +488,8 @@ void CInventory::PostRetrieveMessage(uint32_t* punMsgType, void* pubDest, uint32
 				{
 					if (InventoryList[i].ItemType != IT_MEDAL)
 						AddItem(Object, InventoryList[i].Index, InventoryList[i].Weapon, InventoryList[i].Rarity, InventoryList[i].Quality, InventoryList[i].WeaponSkinId, InventoryList[i].Seed, InventoryList[i].Wear, InventoryList[i].Name, i);
-					else
+
+					else if (InventoryList[i].ItemType == IT_MEDAL)
 						AddMedals(Object, InventoryList[i].Index, InventoryList[i].WeaponSkinId);
 				}
 			}

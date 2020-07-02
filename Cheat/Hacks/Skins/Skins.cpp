@@ -328,7 +328,6 @@ void CSkins::PostDataUpdate()
 	//}
 
 	int CurGlove = IsTT ? SelectedGloveTT : SelectedGloveCT;
-	float CurGloveWear = IsTT ? GloveTTWear : GloveCTWear;
 
 	if (CurGlove)
 	{
@@ -378,7 +377,7 @@ void CSkins::PostDataUpdate()
 			*glove->GetAccountID() = LocalPlayerInfo.xuid_low;
 
 			*glove->GetEntityQuality() = 4;
-			*glove->GetFallbackWear() = CurGloveWear;
+			*glove->GetFallbackWear() = IsTT ? GloveTTWear : GloveCTWear;
 			*glove->GetFallbackSeed() = 0;
 			*glove->GetFallbackStatTrak() = -1;
 			*glove->GetFallbackPaintKit() = GlovesSkin_Array[CurGlove - 1].PaintKit;

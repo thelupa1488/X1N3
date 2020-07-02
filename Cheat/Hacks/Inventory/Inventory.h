@@ -125,7 +125,7 @@ public:
 	int InvSelectedWeapon = 0;
 	int InvSelectedKnife = 0;
 	int InvSelectedGlove = 0;
-	float InvGloveWear = 0.0f;
+	float InvGloveWear = 0.001f;
 
 	bool ShowInventoryList = true;
 
