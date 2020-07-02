@@ -123,22 +123,16 @@ void CInventory::SetGlove(Inventory* Inv, bool IsCT)
 	if (IsCT)
 		for (int i(0); i < 49; i++)
 		{
-			GP_Skins->GlovesSkin_Array[i].ItemIndex = Inv->Weapon;
-			GP_Skins->GlovesSkin_Array[i].PaintKit = Inv->WeaponSkinId;
-			GP_Skins->GloveCTWear = Inv->Wear;
-			Inv->Rarity = 6; //Covert
-			Inv->Quality = 3; //Knife star
+			if (GP_Skins->GlovesSkin_Array[i].ItemIndex == Inv->Weapon && GP_Skins->GlovesSkin_Array[i].PaintKit == Inv->WeaponSkinId && GP_Skins->GloveCTWear == Inv->Wear &&
+				Inv->Rarity == 6/*Covert*/ && Inv->Quality == 3/*Knife star*/)
 			GP_Skins->SelectedGloveCT = i + 1;
 		}
 
 	if (!IsCT)
 		for (int i(0); i < 49; i++)
 		{
-			GP_Skins->GlovesSkin_Array[i].ItemIndex = Inv->Weapon;
-			GP_Skins->GlovesSkin_Array[i].PaintKit = Inv->WeaponSkinId;
-			GP_Skins->GloveTTWear = Inv->Wear;
-			Inv->Rarity = 6; //Covert
-			Inv->Quality = 3; //Knife star
+			if (GP_Skins->GlovesSkin_Array[i].ItemIndex == Inv->Weapon && GP_Skins->GlovesSkin_Array[i].PaintKit == Inv->WeaponSkinId && GP_Skins->GloveCTWear == Inv->Wear &&
+				Inv->Rarity == 6/*Covert*/ && Inv->Quality == 3/*Knife star*/)
 			GP_Skins->SelectedGloveTT = i + 1;
 		}
 }
