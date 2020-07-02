@@ -94,7 +94,6 @@ public:
 
 	virtual void SaveInventory(nlohmann::json& j) = 0;
 	virtual void LoadInventory(nlohmann::json& j) = 0;
-	virtual void SetWeapon(Inventory* Inv, bool IsCT) = 0;
 	virtual void SetKnife(Inventory* Inv, bool IsCT) = 0;
 	virtual void SetGlove(Inventory* Inv, bool IsCT) = 0;
 };
@@ -137,7 +136,6 @@ public:
 
 	void SaveInventory(nlohmann::json& j);
 	void LoadInventory(nlohmann::json& j);
-	void SetWeapon(Inventory* Inv, bool IsCT);
 	void SetKnife(Inventory* Inv, bool IsCT);
 	void SetGlove(Inventory* Inv, bool IsCT);
 

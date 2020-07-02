@@ -10,37 +10,33 @@ int __fastcall hkDoPostScreenEffects(void* ecx, int edx, int a1)
 	return oDoPostScreenEffects(ecx, a1);
 }
 
-int __fastcall hkRetrieveMessage(void* ecx, void* edx, uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize)
+EGCResults __fastcall hkRetrieveMessage(void* ecx, void* edx, uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize)
 {
-	static auto oRetrieveMessage = HookTables::pRetrieveMessage->GetTrampoline();
-	int iStatus = oRetrieveMessage(ecx, punMsgType, pubDest, cubDest, pcubMsgSize);
+	EGCResults status = HookTables::pRetrieveMessage->GetTrampoline()(ecx, punMsgType, pubDest, cubDest, pcubMsgSize);
 
-	if (iStatus != k_EGCResultOK)
-		return iStatus;
+	if (status != k_EGCResultOK)
+		return status;
 
 	uint32_t messageType = *punMsgType & 0x7FFFFFFF;
 
-	//if (GP_Misc && messageType == k_EMsgGCCStrike15_v2_GCToClientSteamdatagramTicket)
-	//	GP_Misc->AutoAcceptEmit();
-
 	GP_Inventory->RetrieveMessage(ecx, edx, punMsgType, pubDest, cubDest, pcubMsgSize);
 
-	return iStatus;
+	return status;
 }
 
-int __fastcall hkSendMessage(void* ecx, void* edx, uint32_t unMsgType, const void* pubData, uint32_t cubData)
+EGCResults __fastcall hkSendMessage(void* ecx, void* edx, uint32_t unMsgType, const void* pubData, uint32_t cubData)
 {
-	static auto oSendMessage = HookTables::pSendMessage->GetTrampoline();
+	EGCResults status;
 
 	uint32_t messageType = unMsgType & 0x7FFFFFFF;
 	void* pubDataMutable = const_cast<void*>(pubData);
 
 	GP_Inventory->PreSendMessage(unMsgType, pubDataMutable, cubData);
 
-	int iStatus = oSendMessage(ecx, unMsgType, pubDataMutable, cubData);
+	status = HookTables::pSendMessage->GetTrampoline()(ecx, unMsgType, pubDataMutable, cubData);
 
-	if (iStatus != k_EGCResultOK)
-		return iStatus;
+	if (status != k_EGCResultOK)
+		return status;
 
-	return iStatus;
+	return status;
 }
