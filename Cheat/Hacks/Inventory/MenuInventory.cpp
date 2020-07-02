@@ -105,7 +105,7 @@ void CInventory::Menu()
 		X1Gui().InputText(XorStr("Name##InvChr"), Item.custom_name, 32);
 	};
 
-	if (WeaponNames.size() > 0)
+	if (GP_Skins->WeaponNames.size() > 0)
 	{
 		VectorEx<const char* > InvArr = { lolc("Weapon"), lolc("Knife"),lolc("Gloves"), lolc("Medals"), lolc ("Profile") };
 		static int InvSettingsMode = 0;
@@ -124,13 +124,13 @@ void CInventory::Menu()
 			X1Gui().Separator();
 			X1Gui().Spacing();
 
-			ItemSettings* WItem = &WeaponNames[InvSelectedWeapon];
+			ItemSettings* WItem = &GP_Skins->WeaponNames[InvSelectedWeapon];
 			if (GP_Skins)
 			{
 				if (WeapSkinSettingsMode == 0)
 				{
-					ItemsList(WeaponNames, InvSelectedWeapon, Vec2(225, 389), XorStr("##AllWeapons"));
-					WeaponPreview = WItem->CdnName;
+					ItemsList(GP_Skins->WeaponNames, InvSelectedWeapon, Vec2(225, 389), XorStr("##AllWeapons"));
+					GP_Skins->WeaponPreview = WItem->CdnName;
 					X1Gui().SameLine();
 					X1Gui().BeginGroup();
 					{
@@ -283,13 +283,11 @@ void CInventory::Menu()
 						snprintf(invBuffer.Name, 32, "%s", WItem->Skin.custom_name);
 
 					for (int si(0); si < 5; si++)
-					{
 						invBuffer.Stickers[si] = WItem->Skin.Stickers[si];
-					}
 
-					invBuffer.WeaponName = WeaponNames[InvSelectedWeapon].Name;
+					invBuffer.WeaponName = GP_Skins->WeaponNames[InvSelectedWeapon].Name;
 					if (WItem->Skin.skins_mode == 0)
-						invBuffer.SkinName = GP_Skins->skin_kits[WeaponNames[InvSelectedWeapon].Skin.paint_kit_menu].name_eng;
+						invBuffer.SkinName = GP_Skins->skin_kits[GP_Skins->WeaponNames[InvSelectedWeapon].Skin.paint_kit_menu].name_eng;
 					else if (WItem->Skin.skins_mode == 1)
 						invBuffer.SkinName = GP_Skins->SortedWeapons[InvSelectedWeapon].kits[WItem->Skin.paint_kit_menu].name;
 
@@ -375,9 +373,9 @@ void CInventory::Menu()
 					if (WItem->Skin.custom_name)
 						snprintf(invBuffer.Name, 32, "%s", WItem->Skin.custom_name);
 
-					invBuffer.WeaponName = KnifeNames[InvSelectedKnife].Name;
+					invBuffer.WeaponName = GP_Skins->KnifeNames[InvSelectedKnife].Name;
 					if (WItem->Skin.skins_mode == 0)
-						invBuffer.SkinName = GP_Skins->skin_kits[KnifeNames[InvSelectedKnife].Skin.paint_kit_menu].name_eng;
+						invBuffer.SkinName = GP_Skins->skin_kits[GP_Skins->KnifeNames[InvSelectedKnife].Skin.paint_kit_menu].name_eng;
 					else if (WItem->Skin.skins_mode == 1)
 						invBuffer.SkinName = GP_Skins->SortedKnives[InvSelectedKnife].kits[WItem->Skin.paint_kit_menu].name;
 
@@ -385,35 +383,7 @@ void CInventory::Menu()
 
 					SendClientHello();
 				}
-			}
-
-			/*X1Gui().ListBoxHeader("##AllKnifes", Vec2(225, 424));
-			for (size_t i = 0; i < KnifeNamesCT.size(); i++)
-			{
-				bool selected = i == InvSelectedKnife;
-				if (X1Gui().Selectable((string(KnifeNamesCT[i].Name) + "##" + to_string(i)).c_str(), selected, 0, Vec2(150, 0)))
-					InvSelectedKnife = i;
-			}
-			X1Gui().ListBoxFooter();
-			if (InvSelectedKnife < KnifeNamesCT.size())
-			{
-				X1Gui().SameLine();
-				X1Gui().ListBoxHeader("##AllKnifSkins", Vec2(225, 424));
-				for (size_t i = 0; i < GP_Skins->skin_kits.size(); i++)
-				{
-					bool selected = i == KnifeNamesCT[InvSelectedKnife].Skin.paint_kit_menu;
-					if (X1Gui().Selectable((GP_Skins->skin_kits[i].name + "##" + to_string(i)).c_str(), selected, 0, Vec2(150, 0)))
-						KnifeNamesCT[InvSelectedKnife].Skin.paint_kit_menu = i;
-
-					X1Gui().SameLine();
-
-					if (X1Gui().Selectable(("| " + to_string(GP_Skins->skin_kits[i].id)).c_str(), selected, 0, Vec2(75, 0)))
-						KnifeNamesCT[InvSelectedKnife].Skin.paint_kit_menu = i;
-				}
-				X1Gui().ListBoxFooter();
-
-			}*/
-			
+			}	
 		}
 		else if (InvSettingsMode == 2)
 		{
@@ -441,8 +411,8 @@ void CInventory::Menu()
 				if (invBuffer.Index == Inventory::LastIndex)
 					invBuffer.Index = Inventory::LastIndex + 1;
 
-				invBuffer.Weapon = GlovesSkin_Array[InvSelectedGlove - 1].ItemIndex;
-				invBuffer.WeaponSkinId = GlovesSkin_Array[InvSelectedGlove - 1].PaintKit;
+				invBuffer.Weapon = GP_Skins->GlovesSkin_Array[InvSelectedGlove - 1].ItemIndex;
+				invBuffer.WeaponSkinId = GP_Skins->GlovesSkin_Array[InvSelectedGlove - 1].PaintKit;
 				invBuffer.Wear = InvGloveWear;
 
 				invBuffer.Rarity = 6; //Covert
@@ -588,11 +558,6 @@ void CInventory::InvListMenu()
 	if ((int)InventoryList.size() > 0 && InventSelectItem > -1 && InventSelectItem < (int)InventoryList.size())
 	{
 		X1Gui().PushItemWidth(171);
-		//VectorEx<const char* > InventoryTypes = { lolc(u8"Ширпотреб"), lolc(u8"Промышленное качество"),lolc(u8"Армейское качество"), lolc(u8"Запрещенное"),
-		//	lolc(u8"Засекреченное"), lolc(u8"Тайное"), lolc(u8"Контрабанда") };
-		//X1Gui().Combo(!MainSettings().Russian ? XorStr("Rarity") : XorStr(u8"Раритетность"), &InventoryList[InventSelectItem].Rarity, InventoryTypes, IM_ARRAYSIZE(InventoryTypes));
-		////X1Gui().SameLine();
-		//X1Gui().SliderFloat(!MainSettings().Russian ? XorStr("Quality") : XorStr(u8"Качество"), &InventoryList[InventSelectItem].Wear, 0.000f, 1.f, "%.9f");
 		if (InventoryList[InventSelectItem].ItemType == IT_WEAPON)
 		{
 			X1Gui().Spacing();
@@ -624,19 +589,22 @@ void CInventory::InvListMenu()
 		X1Gui().Spacing();
 		if (X1Gui().Button(XorStr("Remove"), Vec2(long_item_w, 22)))
 		{
-			InventoryList.erase(InventoryList.begin() + InventSelectItem);
-			SendClientHello();
-			if (InventoryList.size() < 0)
+			if (InventoryList.size() > 0)
+				InventoryList.erase(InventoryList.begin() + InventSelectItem);
+
+			if (InventoryList.size() > 0)
 			{
-				for (int i(0); i < (int)WeaponNames.size(); i++)
+				for (int i(0); i < (int)GP_Skins->WeaponNames.size(); i++)
 				{
-					WeaponNames[i].IsInventory = false;
+					GP_Skins->WeaponNames[i].IsInventory = false;
 				}
-				for (int i(0); i < (int)KnifeNames.size(); i++)
+				for (int i(0); i < (int)GP_Skins->KnifeNames.size(); i++)
 				{
-					KnifeNames[i].IsInventory = false;
+					GP_Skins->KnifeNames[i].IsInventory = false;
 				}
 			}
+
+			SendClientHello();
 		}
 		//X1Gui().SameLine();
 		//if (X1Gui().Button(XorStr("Remove all"), Vec2(176, 22)) && InventoryList.size() > 0) //need fix
