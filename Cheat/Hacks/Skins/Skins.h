@@ -251,54 +251,54 @@ public:
 
 	GlovesSkins_s GlovesSkin_Array[49] =
 	{
-	{ 5030,10018,sporty,lol("sporty_gloves_sporty_light_blue") },
-	{ 5030,10037,sporty,lol("sporty_gloves_sporty_purple") },
-	{ 5030,10038,sporty,lol("sporty_gloves_sporty_green") },
-	{ 5030,10019,sporty,lol("sporty_gloves_sporty_military") },
-	{ 5030,10048,sporty,lol("sporty_gloves_sporty_blue_pink") },
-	{ 5030,10047,sporty,lol("sporty_gloves_sporty_black_webbing_yellow") },
-	{ 5030,10046,sporty,lol("sporty_gloves_sporty_poison_frog_red_green") },
-	{ 5030,10045,sporty,lol("sporty_gloves_sporty_poison_frog_blue_white") },
-	{ 5033,10024,motorcycle,lol("motorcycle_gloves_motorcycle_basic_black") },
-	{ 5033,10026,motorcycle,lol("motorcycle_gloves_motorcycle_mint_triangle") },
-	{ 5033,10027,motorcycle,lol("motorcycle_gloves_motorcycle_mono_boom") },
-	{ 5033,10028,motorcycle,lol("motorcycle_gloves_motorcycle_triangle_blue") },
-	{ 5033,10052,motorcycle,lol("motorcycle_gloves_motorcycle_trigrid_blue") },
-	{ 5033,10051,motorcycle,lol("motorcycle_gloves_motorcycle_yellow_camo") },
-	{ 5033,10050,motorcycle,lol("motorcycle_gloves_motorcycle_basic_green_orange") },
-	{ 5033,10049,motorcycle,lol("motorcycle_gloves_motorcycle_choco_boom") },
-	{ 5034,10033,specialist,lol("specialist_gloves_specialist_kimono_diamonds_red") },
-	{ 5034,10034,specialist,lol("specialist_gloves_specialist_emerald_web") },
-	{ 5034,10035,specialist,lol("specialist_gloves_specialist_orange_white") },
-	{ 5034,10030,specialist,lol("specialist_gloves_specialist_ddpat_green_camo") },
-	{ 5034,10064,specialist,lol("specialist_gloves_specialist_winterhex") },
-	{ 5034,10063,specialist,lol("specialist_gloves_specialist_fade") },
-	{ 5034,10062,specialist,lol("specialist_gloves_specialist_forest_brown") },
-	{ 5034,10061,specialist,lol("specialist_gloves_specialist_webs_red") },
-	{ 5031,10013,slick,lol("slick_gloves_slick_black") },
-	{ 5031,10015,slick,lol("slick_gloves_slick_military") },
-	{ 5031,10016,slick,lol("slick_gloves_slick_red") },
-	{ 5031,10040,slick,lol("slick_gloves_slick_snakeskin_yellow") },
-	{ 5031,10044,slick,lol("slick_gloves_slick_stitched_green_grey") },
-	{ 5031,10043,slick,lol("slick_gloves_slick_stitched_black_orange") },
-	{ 5031,10042,slick,lol("slick_gloves_slick_plaid_purple") },
-	{ 5031,10041,slick,lol("slick_gloves_slick_snakeskin_white") },
-	{ 5032,10009,handwrap,lol("leather_handwraps_handwrap_leathery") },
-	{ 5032,10010,handwrap,lol("leather_handwraps_handwrap_camo_grey") },
-	{ 5032,10036,handwrap,lol("leather_handwraps_handwrap_fabric_orange_camo") },
-	{ 5032,10021,handwrap,lol("leather_handwraps_handwrap_red_slaughter") },
-	{ 5032,10056,handwrap,lol("leather_handwraps_handwrap_leathery_fabric_green_camo") },
-	{ 5032,10055,handwrap,lol("leather_handwraps_handwrap_leathery_ducttape") },
-	{ 5032,10054,handwrap,lol("leather_handwraps_handwrap_leathery_fabric_geometric_blue") },
-	{ 5032,10053,handwrap,lol("leather_handwraps_handwrap_leathery_fabric_blue_skulls") },
-	{ 5027,10006,bloodhound,lol("studded_bloodhound_gloves_bloodhound_black_silver") },
-	{ 5027,10007,bloodhound,lol("studded_bloodhound_gloves_bloodhound_snakeskin_brass") },
-	{ 5027,10008,bloodhound,lol("studded_bloodhound_gloves_bloodhound_metallic") },
-	{ 5027,10039,bloodhound,lol("studded_bloodhound_gloves_bloodhound_guerrilla") },
-	{ 5035,10060,hydra,lol("studded_hydra_gloves_bloodhound_hydra_green_leather_mesh_brass") },
-	{ 5035,10059,hydra,lol("studded_hydra_gloves_bloodhound_hydra_snakeskin_brass") },
-	{ 5035,10058,hydra,lol("studded_hydra_gloves_bloodhound_hydra_green_leather_mesh_brass") },
-	{ 5035,10057,hydra,lol("studded_hydra_gloves_bloodhound_hydra_black_green") },
+	{ 5030,10018,  sporty, lol("sporty_gloves_sporty_light_blue") },
+	{ 5030,10037,  sporty,lol("sporty_gloves_sporty_purple") },
+	{ 5030,10038,  sporty,lol("sporty_gloves_sporty_green") },
+	{ 5030,10019,  sporty,lol("sporty_gloves_sporty_military") },
+	{ 5030,10048,  sporty,lol("sporty_gloves_sporty_blue_pink") },
+	{ 5030,10047,  sporty,lol("sporty_gloves_sporty_black_webbing_yellow") },
+	{ 5030,10046,  sporty,lol("sporty_gloves_sporty_poison_frog_red_green") },
+	{ 5030,10045,  sporty,lol("sporty_gloves_sporty_poison_frog_blue_white") },
+	{ 5033,10024,  motorcycle,lol("motorcycle_gloves_motorcycle_basic_black") },
+	{ 5033,10026,  motorcycle,lol("motorcycle_gloves_motorcycle_mint_triangle") },
+	{ 5033,10027,  motorcycle,lol("motorcycle_gloves_motorcycle_mono_boom") },
+	{ 5033,10028,  motorcycle,lol("motorcycle_gloves_motorcycle_triangle_blue") },
+	{ 5033,10052,  motorcycle,lol("motorcycle_gloves_motorcycle_trigrid_blue") },
+	{ 5033,10051,  motorcycle,lol("motorcycle_gloves_motorcycle_yellow_camo") },
+	{ 5033,10050,  motorcycle,lol("motorcycle_gloves_motorcycle_basic_green_orange") },
+	{ 5033,10049,  motorcycle,lol("motorcycle_gloves_motorcycle_choco_boom") },
+	{ 5034,10033,  specialist,lol("specialist_gloves_specialist_kimono_diamonds_red") },
+	{ 5034,10034,  specialist,lol("specialist_gloves_specialist_emerald_web") },
+	{ 5034,10035,  specialist,lol("specialist_gloves_specialist_orange_white") },
+	{ 5034,10030,  specialist,lol("specialist_gloves_specialist_ddpat_green_camo") },
+	{ 5034,10064,  specialist,lol("specialist_gloves_specialist_winterhex") },
+	{ 5034,10063,  specialist,lol("specialist_gloves_specialist_fade") },
+	{ 5034,10062,  specialist,lol("specialist_gloves_specialist_forest_brown") },
+	{ 5034,10061,  specialist,lol("specialist_gloves_specialist_webs_red") },
+	{ 5031,10013,  slick,lol("slick_gloves_slick_black") },
+	{ 5031,10015,  slick,lol("slick_gloves_slick_military") },
+	{ 5031,10016,  slick,lol("slick_gloves_slick_red") },
+	{ 5031,10040,  slick,lol("slick_gloves_slick_snakeskin_yellow") },
+	{ 5031,10044,  slick,lol("slick_gloves_slick_stitched_green_grey") },
+	{ 5031,10043,  slick,lol("slick_gloves_slick_stitched_black_orange") },
+	{ 5031,10042,  slick,lol("slick_gloves_slick_plaid_purple") },
+	{ 5031,10041,  slick,lol("slick_gloves_slick_snakeskin_white") },
+	{ 5032,10009,  handwrap,lol("leather_handwraps_handwrap_leathery") },
+	{ 5032,10010,  handwrap,lol("leather_handwraps_handwrap_camo_grey") },
+	{ 5032,10036,  handwrap,lol("leather_handwraps_handwrap_fabric_orange_camo") },
+	{ 5032,10021,  handwrap,lol("leather_handwraps_handwrap_red_slaughter") },
+	{ 5032,10056,  handwrap,lol("leather_handwraps_handwrap_leathery_fabric_green_camo") },
+	{ 5032,10055,  handwrap,lol("leather_handwraps_handwrap_leathery_ducttape") },
+	{ 5032,10054,  handwrap,lol("leather_handwraps_handwrap_leathery_fabric_geometric_blue") },
+	{ 5032,10053,  handwrap,lol("leather_handwraps_handwrap_leathery_fabric_blue_skulls") },
+	{ 5027,10006,  bloodhound,lol("studded_bloodhound_gloves_bloodhound_black_silver") },
+	{ 5027,10007,  bloodhound,lol("studded_bloodhound_gloves_bloodhound_snakeskin_brass") },
+	{ 5027,10008,  bloodhound,lol("studded_bloodhound_gloves_bloodhound_metallic") },
+	{ 5027,10039,  bloodhound,lol("studded_bloodhound_gloves_bloodhound_guerrilla") },
+	{ 5035,10060,  hydra,lol("studded_hydra_gloves_bloodhound_hydra_green_leather_mesh_brass") },
+	{ 5035,10059,  hydra,lol("studded_hydra_gloves_bloodhound_hydra_snakeskin_brass") },
+	{ 5035,10058,  hydra,lol("studded_hydra_gloves_bloodhound_hydra_green_leather_mesh_brass") },
+	{ 5035,10057,  hydra,lol("studded_hydra_gloves_bloodhound_hydra_black_green") },
 	};
 
 	virtual void SetSkin(CBaseAttributableItem* pWeapon, SkinSettings *SkinParam, int id, bool IsCT, bool IsKnife) = 0;
@@ -363,8 +363,8 @@ public:
 	int SelectedGloveCT = 0;
 	int SelectedGloveTT = 0;
 
-	float GloveCTWear = 0.000000001f;
-	float GloveTTWear = 0.000000001f;
+	float GloveCTWear = 0.0f;
+	float GloveTTWear = 0.0f;
 
 	bool ShowSkinPreview = false;
 
@@ -375,7 +375,6 @@ public:
 
 	vector<SortedWeapons_s> SortedWeapons;
 	vector<SortedWeapons_s> SortedKnives;
-	vector<SortedWeapons_s> SortedGloves;
 	vector<SortedStickers_s> SortedStickers;
 
 	virtual void SetSkin(CBaseAttributableItem* pWeapon, SkinSettings *SkinParam, int id, bool IsCT, bool IsKnife);

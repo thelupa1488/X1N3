@@ -82,37 +82,39 @@ int CInventory::GetInventoryByGame(int IndGame, int Eqp, TeamID Team)
 void CInventory::SetKnife(Inventory* Inv, bool IsCT)
 {
 	if (IsCT)
-		for (int i(0); i < (int)GP_Skins->KnifeNames.size(); i++)
-			if (GP_Skins->KnifeNames[i].ID == (WEAPON_ID)Inv->Weapon)
+		for (int i(0); i < (int)KnifeNames.size(); i++)
+			if (KnifeNames[i].ID == (WEAPON_ID)Inv->Weapon)
 			{
-				GP_Skins->KnifeNames[i].IsInventory = true;
-				GP_Skins->SelectedKnifeModelCT = i;
-				GP_Skins->KnifeNames[i].Skin.paint_kit_id = Inv->WeaponSkinId;
-				GP_Skins->KnifeNames[i].Skin.seed = Inv->Seed;
-				GP_Skins->KnifeNames[i].Skin.stat_track = Inv->StatTrack;
-				GP_Skins->KnifeNames[i].Skin.auto_stat_track = Inv->AutoStatTrack;
-				GP_Skins->KnifeNames[i].Skin.rarity = Inv->Rarity;
-				GP_Skins->KnifeNames[i].Skin.quality = Inv->Quality;
+				KnifeNames[i].IsInventory = true;
+				SelectedKnifeModelCT = i;
+				KnifeNames[i].Skin.paint_kit_id = Inv->WeaponSkinId;
+				KnifeNames[i].Skin.seed = Inv->Seed;
+				KnifeNames[i].Skin.wear = Inv->Wear;
+				KnifeNames[i].Skin.stat_track = Inv->StatTrack;
+				KnifeNames[i].Skin.auto_stat_track = Inv->AutoStatTrack;
+				KnifeNames[i].Skin.rarity = Inv->Rarity;
+				KnifeNames[i].Skin.quality = Inv->Quality;
 
 				if (Inv->Name)
-					snprintf(GP_Skins->KnifeNames[i].Skin.custom_name, 32, "%s", Inv->Name);
+					snprintf(KnifeNames[i].Skin.custom_name, 32, "%s", Inv->Name);
 			}
 
 	if (!IsCT)
-		for (int i(0); i < (int)GP_Skins->KnifeNames.size(); i++)
-			if (GP_Skins->KnifeNames[i].ID == (WEAPON_ID)Inv->Weapon)
+		for (int i(0); i < (int)KnifeNames.size(); i++)
+			if (KnifeNames[i].ID == (WEAPON_ID)Inv->Weapon)
 			{
-				GP_Skins->KnifeNames[i].IsInventory = true;
-				GP_Skins->SelectedKnifeModelTT = i;
-				GP_Skins->KnifeNames[i].SkinTT.paint_kit_id = Inv->WeaponSkinId;
-				GP_Skins->KnifeNames[i].SkinTT.seed = Inv->Seed;
-				GP_Skins->KnifeNames[i].SkinTT.stat_track = Inv->StatTrack;
-				GP_Skins->KnifeNames[i].SkinTT.auto_stat_track = Inv->AutoStatTrack;
-				GP_Skins->KnifeNames[i].SkinTT.rarity = Inv->Rarity;
-				GP_Skins->KnifeNames[i].SkinTT.quality = Inv->Quality;
+				KnifeNames[i].IsInventory = true;
+				SelectedKnifeModelTT = i;
+				KnifeNames[i].SkinTT.paint_kit_id = Inv->WeaponSkinId;
+				KnifeNames[i].SkinTT.seed = Inv->Seed;
+				KnifeNames[i].SkinTT.wear = Inv->Wear;
+				KnifeNames[i].SkinTT.stat_track = Inv->StatTrack;
+				KnifeNames[i].SkinTT.auto_stat_track = Inv->AutoStatTrack;
+				KnifeNames[i].SkinTT.rarity = Inv->Rarity;
+				KnifeNames[i].SkinTT.quality = Inv->Quality;
 
 				if (Inv->Name)
-					snprintf(GP_Skins->KnifeNames[i].SkinTT.custom_name, 32, "%s", Inv->Name);
+					snprintf(KnifeNames[i].SkinTT.custom_name, 32, "%s", Inv->Name);
 			}
 }
 
@@ -120,13 +122,25 @@ void CInventory::SetGlove(Inventory* Inv, bool IsCT)
 {
 	if (IsCT)
 		for (int i(0); i < 49; i++)
-			if (GP_Skins->GlovesSkin_Array[i].ItemIndex == Inv->Weapon && GP_Skins->GlovesSkin_Array[i].PaintKit == Inv->WeaponSkinId)
-				GP_Skins->SelectedGloveCT = i + 1;
+		{
+			GlovesSkin_Array[i].ItemIndex = Inv->Weapon;
+			GlovesSkin_Array[i].PaintKit = Inv->WeaponSkinId;
+			GloveCTWear = Inv->Wear;
+			Inv->Rarity = 6; //Covert
+			Inv->Quality = 3; //Knife star
+			SelectedGloveCT = i + 1;
+		}
 
 	if (!IsCT)
 		for (int i(0); i < 49; i++)
-			if (GP_Skins->GlovesSkin_Array[i].ItemIndex == Inv->Weapon && GP_Skins->GlovesSkin_Array[i].PaintKit == Inv->WeaponSkinId)
-				GP_Skins->SelectedGloveTT = i + 1;
+		{
+			GlovesSkin_Array[i].ItemIndex = Inv->Weapon;
+			GlovesSkin_Array[i].PaintKit = Inv->WeaponSkinId;
+			GloveTTWear = Inv->Wear;
+			Inv->Rarity = 6; //Covert
+			Inv->Quality = 3; //Knife star
+			SelectedGloveTT = i + 1;
+		}
 }
 
 void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cubData)
@@ -201,9 +215,9 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 
 			auto GetWeaponFromInv = [&](WEAPON_ID id) -> int
 			{
-				for (int i(0); i < (int)GP_Skins->WeaponNames.size(); i++)
+				for (int i(0); i < (int)WeaponNames.size(); i++)
 				{
-					if (GP_Skins->WeaponNames[i].ID == id)
+					if (WeaponNames[i].ID == id)
 						return i;
 				}
 				return 0;
@@ -218,7 +232,7 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 			{
 				SetTeam(*IBuffer, Team, Reset, IsRemCt);
 
-				ItemSettings* WBuffer = &GP_Skins->WeaponNames[GetWeaponFromInv((WEAPON_ID)IBuffer->Weapon)];
+				ItemSettings* WBuffer = &WeaponNames[GetWeaponFromInv((WEAPON_ID)IBuffer->Weapon)];
 
 				WBuffer->IsInventory = true;
 				if ((CyrTeamID)IBuffer->iTeam == CYRT_DISBLE)
@@ -300,8 +314,8 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 
 				if ((CyrTeamID)IBuffer->iTeam == CYRT_DISBLE)
 				{
-					GP_Skins->SelectedKnifeModelCT = 0;
-					GP_Skins->SelectedKnifeModelTT = 0;
+					SelectedKnifeModelCT = 0;
+					SelectedKnifeModelTT = 0;
 				}
 				else if ((CyrTeamID)IBuffer->iTeam == CYRT_CT)
 				{
@@ -325,9 +339,9 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 				if ((CyrTeamID)IBuffer->iTeam == CYRT_DISBLE)
 				{
 					if (IsRemCt)
-						GP_Skins->SelectedGloveCT = 0;
+						SelectedGloveCT = 0;
 					else
-						GP_Skins->SelectedGloveTT = 0;
+						SelectedGloveTT = 0;
 				}
 				else if ((CyrTeamID)IBuffer->iTeam == CYRT_CT)
 				{
@@ -505,7 +519,9 @@ void CInventory::AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int inde
 	Skin.set_original_id(0);
 	Skin.set_rarity(rarity);
 	Skin.set_quality(quality);
-	Skin.set_custom_name(name);
+
+	if (name)
+		Skin.set_custom_name(name);
 
 	if ((CyrTeamID)InventoryList[InventoryLIdx].iTeam != CYRT_AUTO && (CyrTeamID)InventoryList[InventoryLIdx].iTeam != CYRT_ALL)
 	{

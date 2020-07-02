@@ -485,6 +485,7 @@ void CSkins::Menu()
 				WeaponPreview = GlovesSkin_Array[SelectedGloveCT - 1].Url;
 			}
 			X1Gui().PushItemWidth(400);
+			if (SelectedGloveCT > 0)
 			SliderFloats("Wear", GloveCTWear, 0.f, 1.f, XorStr("%.9f"));
 		}
 		
@@ -505,6 +506,7 @@ void CSkins::Menu()
 				WeaponPreview = GlovesSkin_Array[SelectedGloveTT - 1].Url;
 			}
 			X1Gui().PushItemWidth(400);
+			if (SelectedGloveTT > 0)
 			SliderFloats("Wear", GloveTTWear, 0.f, 1.f, XorStr("%.9f"));
 		}
 		

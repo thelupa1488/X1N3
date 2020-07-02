@@ -417,7 +417,7 @@ void CInventory::Menu()
 		}
 		else if (InvSettingsMode == 2)
 		{
-			X1Gui().ListBoxHeader(XorStr("##Gloves"), Vec2(long_item_w, 535));
+			X1Gui().ListBoxHeader(XorStr("##Gloves"), Vec2(long_item_w, 525));
 			for (int i = 0; i < sizeof(IGlovesModels) / sizeof(IGlovesModels[0]); i++)
 			{
 				bool selected = i == InvSelectedGlove;
@@ -425,6 +425,8 @@ void CInventory::Menu()
 					InvSelectedGlove = i;
 			}
 			X1Gui().ListBoxFooter();
+			if (InvSelectedGlove > 0)
+			SliderFloats("Wear", InvGloveWear, 0.f, 1.f, XorStr("%.9f"));
 
 			if (X1Gui().Button(XorStr("ADD##Gloves"), Vec2(long_item_w, 22)) && InvSelectedGlove != 0)
 			{
@@ -440,9 +442,10 @@ void CInventory::Menu()
 
 				invBuffer.Weapon = GlovesSkin_Array[InvSelectedGlove - 1].ItemIndex;
 				invBuffer.WeaponSkinId = GlovesSkin_Array[InvSelectedGlove - 1].PaintKit;
+				invBuffer.Wear = InvGloveWear;
 
-				invBuffer.Rarity = 6;
-				invBuffer.Quality = 4;
+				invBuffer.Rarity = 6; //Covert
+				invBuffer.Quality = 3; //Knife Star
 
 				invBuffer.WeaponName = IGlovesModels[InvSelectedGlove];
 
