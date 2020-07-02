@@ -4,6 +4,58 @@
 int CInventory::Inventory::LastIndex = 100;
 vector<IInventory::Inventory> InventoryList;
 
+bool CInventory::SendClientHello()
+{
+	if (!CGlobal::IsGameReady)
+		I::Engine()->ExecuteClientCmd("econ_clear_inventory_images");
+
+	CMsgClientHello Message;
+
+	Message.set_client_session_need(1);
+	Message.clear_socache_have_versions();
+
+	void* ptr = malloc(Message.ByteSize() + 8);
+
+	if (!ptr)
+		return false;
+
+	((uint32_t*)ptr)[0] = k_EMsgGCClientHello | ((DWORD)1 << 31);
+	((uint32_t*)ptr)[1] = 0;
+
+	Message.SerializeToArray((void*)((DWORD)ptr + 8), Message.ByteSize());
+
+	bool result = I::SteamGameCoordinator()->SendMessage(k_EMsgGCClientHello | ((DWORD)1 << 31), ptr, Message.ByteSize() + 8) == k_EGCResultOK;
+
+	free(ptr);
+
+	return result;
+}
+
+bool CInventory::SendMMHello()
+{
+	CMsgGCCStrike15_v2_MatchmakingClient2GCHello Message;
+	void* ptr = malloc(Message.ByteSize() + 8);
+	if (!ptr)
+		return false;
+
+	auto unMsgType = k_EMsgGCCStrike15_v2_MatchmakingClient2GCHello | ((DWORD)1 << 31);
+	((uint32_t*)ptr)[0] = unMsgType;
+	((uint32_t*)ptr)[1] = 0;
+
+	Message.SerializeToArray((void*)((DWORD)ptr + 8), Message.ByteSize());
+
+	bool result = I::SteamGameCoordinator()->SendMessage(k_EMsgGCCStrike15_v2_MatchmakingClient2GCHello | ((DWORD)1 << 31), ptr, Message.ByteSize() + 8) == k_EGCResultOK;
+
+	free(ptr);
+	return result;
+}
+
+void CInventory::RetrieveMessage(void* ecx, void* edx, uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize)
+{
+	PostRetrieveMessage(punMsgType, pubDest, cubDest, pcubMsgSize);
+	PostRetrieveMessageProfile(punMsgType, pubDest, cubDest, pcubMsgSize);
+}
+
 void CInventory::SSendMessage(void* ecx, void* edx, uint32_t unMsgType, const void* pubData, uint32_t cubData)
 {
 	void* pubDataMutable = const_cast<void*>(pubData);
@@ -110,7 +162,7 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 
 		if (InventoryIndx < (int)InventoryList.size() && InventoryIndx != -1)
 		{
-			auto SetTeam = [](Inventory& Inv, TeamID Tm, bool Rest, bool& IsRemoveCT) -> void
+			auto SetTeam = [](Inventory &Inv, TeamID Tm, bool Rest, bool &IsRemoveCT) -> void
 			{
 				if (Rest)
 				{
@@ -151,16 +203,13 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 				return 0;
 			};
 
-			Inventory* IBuffer = &InventoryList.at(InventoryIndx);
+			Inventory *IBuffer = &InventoryList.at(InventoryIndx);
 
 			bool IsRemCt = false;
-
 			//pWeapon->PostDataUpdate(0);
 			//pWeapon->OnDataChanged(0);
-
 			if (IBuffer->ItemType == IT_WEAPON)
 			{
-
 				SetTeam(*IBuffer, Team, Reset, IsRemCt);
 
 				ItemSettings* WBuffer = &GP_Skins->WeaponNames[GetWeaponFromInv((WEAPON_ID)IBuffer->Weapon)];
@@ -171,7 +220,7 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 					if (IsRemCt)
 						WBuffer->Skin.paint_kit_id = 0;
 					else
-						WBuffer->Skin.paint_kit_id = 0;
+						WBuffer->SkinTT.paint_kit_id = 0;
 				}
 				else if ((CyrTeamID)IBuffer->iTeam == CYRT_CT)
 				{
@@ -183,41 +232,36 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 					WBuffer->Skin.auto_stat_track = IBuffer->AutoStatTrack;
 					WBuffer->Skin.rarity = IBuffer->Rarity;
 					WBuffer->Skin.quality = IBuffer->Quality;
+
 					for (int si(0); si < 5; si++)
-					{
 						WBuffer->Skin.Stickers[si] = IBuffer->Stickers[si];
-					}
 				}
 				else if ((CyrTeamID)IBuffer->iTeam == CYRT_TT)
 				{
 					WBuffer->IsInventory = true;
-					WBuffer->Skin.paint_kit_id = IBuffer->WeaponSkinId;
-					WBuffer->Skin.wear = IBuffer->Wear;
-					WBuffer->Skin.seed = IBuffer->Seed;
-					WBuffer->Skin.stat_track = IBuffer->StatTrack;
-					WBuffer->Skin.auto_stat_track = IBuffer->AutoStatTrack;
-					WBuffer->Skin.rarity = IBuffer->Rarity;
-					WBuffer->Skin.quality = IBuffer->Quality;
+					WBuffer->SkinTT.paint_kit_id = IBuffer->WeaponSkinId;
+					WBuffer->SkinTT.wear = IBuffer->Wear;
+					WBuffer->SkinTT.seed = IBuffer->Seed;
+					WBuffer->SkinTT.stat_track = IBuffer->StatTrack;
+					WBuffer->SkinTT.auto_stat_track = IBuffer->AutoStatTrack;
+					WBuffer->SkinTT.rarity = IBuffer->Rarity;
+					WBuffer->SkinTT.quality = IBuffer->Quality;
 
 					for (int si(0); si < 5; si++)
-					{
-						WBuffer->Skin.Stickers[si] = IBuffer->Stickers[si];
-					}
+						WBuffer->SkinTT.Stickers[si] = IBuffer->Stickers[si];
 				}
 				else if ((CyrTeamID)IBuffer->iTeam == CYRT_ALL)
 				{
 					WBuffer->IsInventory = true;
-					WBuffer->Skin.paint_kit_id = IBuffer->WeaponSkinId;
-					WBuffer->Skin.wear = IBuffer->Wear;
-					WBuffer->Skin.seed = IBuffer->Seed;
-					WBuffer->Skin.stat_track = IBuffer->StatTrack;
-					WBuffer->Skin.auto_stat_track = IBuffer->AutoStatTrack;
-					WBuffer->Skin.rarity = IBuffer->Rarity;
-					WBuffer->Skin.quality = IBuffer->Quality;
+					WBuffer->SkinTT.paint_kit_id = IBuffer->WeaponSkinId;
+					WBuffer->SkinTT.wear = IBuffer->Wear;
+					WBuffer->SkinTT.seed = IBuffer->Seed;
+					WBuffer->SkinTT.stat_track = IBuffer->StatTrack;
+					WBuffer->SkinTT.auto_stat_track = IBuffer->AutoStatTrack;
+					WBuffer->SkinTT.rarity = IBuffer->Rarity;
+					WBuffer->SkinTT.quality = IBuffer->Quality;
 					for (int si(0); si < 5; si++)
-					{
-						WBuffer->Skin.Stickers[si] = IBuffer->Stickers[si];
-					}
+						WBuffer->SkinTT.Stickers[si] = IBuffer->Stickers[si];
 
 					WBuffer->Skin.paint_kit_id = IBuffer->WeaponSkinId;
 					WBuffer->Skin.wear = IBuffer->Wear;
@@ -227,9 +271,7 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 					WBuffer->Skin.rarity = IBuffer->Rarity;
 					WBuffer->Skin.quality = IBuffer->Quality;
 					for (int si(0); si < 5; si++)
-					{
 						WBuffer->Skin.Stickers[si] = IBuffer->Stickers[si];
-					}
 				}
 			}
 			else if (IBuffer->ItemType == IT_KNIFE)
@@ -285,19 +327,14 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 			IBuffer->GetEquippedState = EquippedState;
 		}
 
-		//	/*ofstream file("ssp.txt", ios_base::app);
-		//	file << InventoryIndx << " () " << GameIdx << " | " << EquippedState << " : " << (int)Message.new_class() << "\n";
-		//	file.close();*/
-		//	return;
-		//}
-
+		/*ofstream file("ssp.txt", ios_base::app);
+		file << InventoryIndx << " () " << GameIdx << " | " << EquippedState << " : " << (int)Message.new_class() << "\n";
+		file.close();*/
 		return;
 	}
-
-	return;
 }
 
-void CInventory::PostRetrieveMessage(uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize)
+void CInventory::PostRetrieveMessageProfile(uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize)
 {
 	uint32_t MessageType = *punMsgType & 0x7FFFFFFF;
 
@@ -421,6 +458,85 @@ void CInventory::PostRetrieveMessage(uint32_t* punMsgType, void* pubDest, uint32
 
 			*pcubMsgSize = Message.ByteSize() + 8;
 		}
+	}
+}
+
+void CInventory::PostRetrieveMessage(uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize)
+{
+	uint32_t MessageType = *punMsgType & 0x7FFFFFFF;
+
+	if (InventoryList.empty())
+		return;
+
+	if ((EGCBaseClientMsg)MessageType != k_EMsgGCClientWelcome)
+		return;
+
+	CMsgClientWelcome Message;
+
+	try
+	{
+		if (!Message.ParsePartialFromArray((void*)((DWORD)pubDest + 8), *pcubMsgSize - 8))
+			return;
+	}
+	catch (...)
+	{
+		return;
+	}
+
+	if (Message.outofdate_subscribed_caches_size() <= 0)
+		return;
+
+	CMsgSOCacheSubscribed* Cache = Message.mutable_outofdate_subscribed_caches(0);
+
+	for (int i = 0; i < Cache->objects_size(); i++)
+	{
+		CMsgSOCacheSubscribed::SubscribedType* Object = Cache->mutable_objects(i);
+
+		if (!Object->has_type_id())
+			continue;
+
+		if (Object->type_id() == 1)
+		{
+			for (int j = 0; j < Object->object_data_size(); j++)
+			{
+				std::string* ObjectData = Object->mutable_object_data(j);
+
+				CSOEconItem Item;
+
+				if (!Item.ParseFromArray((void*)const_cast<char*>(ObjectData->data()), ObjectData->size()))
+					continue;
+
+				if (Item.equipped_state_size() <= 0)
+					continue;
+
+				for (int k = 0; k < Item.equipped_state_size(); k++)
+				{
+					auto EquippedState = Item.mutable_equipped_state(k);
+
+					EquippedState->set_new_class(0);
+					EquippedState->set_new_slot(0);
+				}
+
+			}
+
+			if (InventoryList.size() > 0)
+			{
+				for (size_t i(0); i < InventoryList.size(); i++)
+				{
+					if (InventoryList[i].ItemType != IT_MEDAL)
+						AddItem(Object, InventoryList[i].Index, InventoryList[i].Weapon, InventoryList[i].Rarity, InventoryList[i].Quality, InventoryList[i].WeaponSkinId, 38, InventoryList[i].Wear, "", i);
+					else
+						AddMedals(Object, InventoryList[i].Index, InventoryList[i].WeaponSkinId);
+				}
+			}
+		}
+	}
+
+	if ((uint32_t)Message.ByteSize() <= cubDest - 8)
+	{
+		Message.SerializeToArray((void*)((DWORD)pubDest + 8), Message.ByteSize());
+
+		*pcubMsgSize = Message.ByteSize() + 8;
 	}
 }
 
@@ -567,52 +683,6 @@ void CInventory::AddMedals(CMsgSOCacheSubscribed::SubscribedType* pInventoryCach
 	Medal.set_id(20000 + Index);
 
 	pInventoryCacheObject->add_object_data(Medal.SerializeAsString());
-}
-
-bool CInventory::SendClientHello()
-{
-	if(!CGlobal::IsGameReady)
-		I::Engine()->ExecuteClientCmd("econ_clear_inventory_images");
-
-	CMsgClientHello Message;
-
-	Message.set_client_session_need(1);
-	Message.clear_socache_have_versions();
-
-	void* ptr = malloc(Message.ByteSize() + 8);
-
-	if (!ptr)
-		return false;
-
-	((uint32_t*)ptr)[0] = k_EMsgGCClientHello | ((DWORD)1 << 31);
-	((uint32_t*)ptr)[1] = 0;
-
-	Message.SerializeToArray((void*)((DWORD)ptr + 8), Message.ByteSize());
-
-	bool result = I::SteamGameCoordinator()->SendMessage(k_EMsgGCClientHello | ((DWORD)1 << 31), ptr, Message.ByteSize() + 8) == k_EGCResultOK;
-
-	free(ptr);
-
-	return result;
-}
-
-bool CInventory::SendMMHello()
-{
-	CMsgGCCStrike15_v2_MatchmakingClient2GCHello Message;
-	void* ptr = malloc(Message.ByteSize() + 8);
-	if (!ptr)
-		return false;
-
-	auto unMsgType = k_EMsgGCCStrike15_v2_MatchmakingClient2GCHello | ((DWORD)1 << 31);
-	((uint32_t*)ptr)[0] = unMsgType;
-	((uint32_t*)ptr)[1] = 0;
-
-	Message.SerializeToArray((void*)((DWORD)ptr + 8), Message.ByteSize());
-
-	bool result = I::SteamGameCoordinator()->SendMessage(k_EMsgGCCStrike15_v2_MatchmakingClient2GCHello | ((DWORD)1 << 31), ptr, Message.ByteSize() + 8) == k_EGCResultOK;
-
-	free(ptr);
-	return result;
 }
 
 string __readFile(const string& fileName)

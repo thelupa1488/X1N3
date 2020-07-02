@@ -498,7 +498,7 @@ void CSkins::ApplyCustomSkin(CBaseAttributableItem* pWeapon, int nWeaponIndex, b
 			SetSkin(pWeapon, &Item->Skin, Item->ID, false, bIsKnife);
 
 		if (Item->SkinTT.paint_kit_id != 0 && IsTT)
-			SetSkin(pWeapon, &Item->Skin, Item->ID, false, bIsKnife);
+			SetSkin(pWeapon, &Item->SkinTT, Item->ID, false, bIsKnife);
 	}
 	else
 		SetSkin(pWeapon, &Item->Skin, Item->ID, false, bIsKnife);

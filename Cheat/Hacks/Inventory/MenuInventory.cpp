@@ -89,7 +89,7 @@ void CInventory::Menu()
 		X1Gui().PushItemWidth(360);
 
 		vector<string> ItemsRarity = { lolc("Default"), lolc("Consumer"), lolc("Industrial"), lolc("Mil-Spec"), lolc("Restricted"), lolc("Classified") ,
-			lolc("Covert"), lolc("Contraband") };
+	        lolc("Covert"), lolc("Contraband") };
 
 		VectorEx<const char* > ItemsRR = { ItemsRarity[0].c_str(), ItemsRarity[1].c_str(), ItemsRarity[2].c_str(), ItemsRarity[3].c_str(), ItemsRarity[4].c_str(), ItemsRarity[5].c_str(),
 			ItemsRarity[6].c_str(), ItemsRarity[7].c_str() };
@@ -162,7 +162,7 @@ void CInventory::Menu()
 							}
 							else
 							{
-								X1Gui().ListBoxHeader(XorStr("##AllSkinsEmpty"), Vec2(225, 389));
+								X1Gui().ListBoxHeader(XorStr("##AllSkinsEmpty"), Vec2(221, 340));
 								X1Gui().Text(XorStr("Loading Skins..."));
 								X1Gui().ListBoxFooter();
 							}
@@ -422,7 +422,7 @@ void CInventory::Menu()
 			}
 			X1Gui().ListBoxFooter();
 
-			if (X1Gui().Button(XorStr("ADD##Gloves"), Vec2(453, 22)) && InvSelectedGlove != 0)
+			if (X1Gui().Button(XorStr("ADD##Gloves"), Vec2(long_item_w, 22)) && InvSelectedGlove != 0)
 			{
 				Inventory invBuffer;
 				invBuffer.ItemType = IT_GLOVE;
@@ -437,10 +437,10 @@ void CInventory::Menu()
 				invBuffer.Weapon = GlovesSkin_Array[InvSelectedGlove - 1].ItemIndex;
 				invBuffer.WeaponSkinId = GlovesSkin_Array[InvSelectedGlove - 1].PaintKit;
 
-				invBuffer.WeaponName = IGlovesModels[InvSelectedGlove];
+				invBuffer.Rarity = 6;
+				invBuffer.Quality = 4;
 
-				//invBuffer.Rarity = 6;
-				//invBuffer.Quality = 4;
+				invBuffer.WeaponName = IGlovesModels[InvSelectedGlove];
 
 				InventoryList.push_back(invBuffer);
 
@@ -532,7 +532,7 @@ void CInventory::Menu()
 			X1Gui().Spacing();
 			X1Gui().Separator();
 			X1Gui().Spacing();
-			if (X1Gui().Button(XorStr("Update Profile"), Vec2(453, 22)))
+			if (X1Gui().Button(XorStr("Update Profile"), Vec2(long_item_w, 22)))
 			{
 				SendMMHello();
 			}
@@ -614,47 +614,17 @@ void CInventory::InvListMenu()
 			SendClientHello();
 
 		X1Gui().Spacing();
-		if (X1Gui().Button(XorStr("Remove"), Vec2(175, 22)))
+		if (X1Gui().Button(XorStr("Remove"), Vec2(long_item_w, 22)))
 		{
-			Inventory DeletedItem = InventoryList[InventSelectItem];		
-
-			if (InventoryList[InventSelectItem].ItemType == IT_WEAPON)
-			{
-				bool IsReset = true;
-
-				for (Inventory I : InventoryList)
-					if (I.Weapon == DeletedItem.Weapon) { IsReset = false; break; }
-
-				//if (IsReset)
-				//{
-				//	AllSkins.at(g_pSkin->GetRealIndx(DeletedItem.Weapon)).IsInInvent = false;
-				//}
-			}
-
 			InventoryList.erase(InventoryList.begin() + InventSelectItem);
-
-			InventSelectItem--;
 			SendClientHello();
 		}
-		X1Gui().SameLine();
-		if (X1Gui().Button(XorStr("Remove all"), Vec2(176, 22)) && InventoryList.size() > 0)
-		{
-			InventoryList.clear();
-			for (int i(0); i < (int)WeaponNames.size(); i++)
-			{
-				WeaponNames[i].IsInventory = false;
-			}
-			for (int i(0); i < (int)KnifeNames.size(); i++)
-			{
-				KnifeNames[i].IsInventory = false;
-			}
-			for (int i(0); i < (int)KnifeNames.size(); i++)
-			{
-				KnifeNames[i].IsInventory = false;
-			}
-
-			SendClientHello();
-		}
+		//X1Gui().SameLine();
+		//if (X1Gui().Button(XorStr("Remove all"), Vec2(176, 22)) && InventoryList.size() > 0) //need fix
+		//{
+		//	InventoryList.clear();
+		//	SendClientHello();
+		//}
 
 	}
 }

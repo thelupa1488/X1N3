@@ -24,11 +24,13 @@ class IInventory : protected CSkins
 {
 protected:
 	virtual void PostRetrieveMessage(uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize) = 0;
+	virtual void PostRetrieveMessageProfile(uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize) = 0;
 
 	virtual void Menu() = 0;
 	virtual void InvListMenu() = 0;
 
 	virtual int  GetInventoryByGame(int IndGame, int Eqp, TeamID Team) = 0;
+	virtual void RetrieveMessage(void* ecx, void* edx, uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize) = 0;
 	virtual void PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cubData) = 0;
 	virtual void SSendMessage(void* ecx, void* edx, uint32_t unMsgType, const void* pubData, uint32_t cubData) = 0;
 
@@ -105,6 +107,8 @@ public:
 
 	bool SkinsSyncEnable = false;
 	void PostRetrieveMessage(uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize);
+	void PostRetrieveMessageProfile(uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize);
+	void RetrieveMessage(void* ecx, void* edx, uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize);
 	void PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cubData);
 	void SSendMessage(void* ecx, void* edx, uint32_t unMsgType, const void* pubData, uint32_t cubData);
 
