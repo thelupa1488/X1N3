@@ -79,6 +79,49 @@ int CInventory::GetInventoryByGame(int IndGame, int Eqp, TeamID Team)
 	return -1;
 };
 
+void CInventory::SetWeapon(Inventory* Inv, bool IsCT)
+{
+	if (IsCT)
+		for (int i(0); i < (int)GP_Skins->WeaponNames.size(); i++)
+			if (GP_Skins->WeaponNames[i].ID == (WEAPON_ID)Inv->Weapon)
+			{
+				GP_Skins->WeaponNames[i].IsInventory = true;
+				GP_Skins->WeaponNames[i].Skin.paint_kit_id = Inv->WeaponSkinId;
+				GP_Skins->WeaponNames[i].Skin.seed = Inv->Seed;
+				GP_Skins->WeaponNames[i].Skin.wear = Inv->Wear;
+				GP_Skins->WeaponNames[i].Skin.stat_track = Inv->StatTrack;
+				GP_Skins->WeaponNames[i].Skin.auto_stat_track = Inv->AutoStatTrack;
+				GP_Skins->WeaponNames[i].Skin.rarity = Inv->Rarity;
+				GP_Skins->WeaponNames[i].Skin.quality = Inv->Quality;
+
+				if (Inv->Name)
+					snprintf(GP_Skins->WeaponNames[i].Skin.custom_name, 32, "%s", Inv->Name);
+
+				for (int si(0); si < 5; si++)
+					GP_Skins->WeaponNames[i].Skin.Stickers[si] = Inv->Stickers[si];
+			}
+
+	if (!IsCT)
+		for (int i(0); i < (int)GP_Skins->WeaponNames.size(); i++)
+			if (GP_Skins->WeaponNames[i].ID == (WEAPON_ID)Inv->Weapon)
+			{
+				GP_Skins->WeaponNames[i].IsInventory = true;
+				GP_Skins->WeaponNames[i].SkinTT.paint_kit_id = Inv->WeaponSkinId;
+				GP_Skins->WeaponNames[i].SkinTT.seed = Inv->Seed;
+				GP_Skins->WeaponNames[i].SkinTT.wear = Inv->Wear;
+				GP_Skins->WeaponNames[i].SkinTT.stat_track = Inv->StatTrack;
+				GP_Skins->WeaponNames[i].SkinTT.auto_stat_track = Inv->AutoStatTrack;
+				GP_Skins->WeaponNames[i].SkinTT.rarity = Inv->Rarity;
+				GP_Skins->WeaponNames[i].SkinTT.quality = Inv->Quality;
+
+				if (Inv->Name)
+					snprintf(GP_Skins->WeaponNames[i].SkinTT.custom_name, 32, "%s", Inv->Name);
+
+				for (int si(0); si < 5; si++)
+					GP_Skins->WeaponNames[i].Skin.Stickers[si] = Inv->Stickers[si];
+			}
+}
+
 void CInventory::SetKnife(Inventory* Inv, bool IsCT)
 {
 	if (IsCT)
@@ -123,17 +166,23 @@ void CInventory::SetGlove(Inventory* Inv, bool IsCT)
 	if (IsCT)
 		for (int i(0); i < 49; i++)
 		{
-			if (GP_Skins->GlovesSkin_Array[i].ItemIndex == Inv->Weapon && GP_Skins->GlovesSkin_Array[i].PaintKit == Inv->WeaponSkinId && GP_Skins->GloveCTWear == Inv->Wear &&
+			if (GP_Skins->GlovesSkin_Array[i].ItemIndex == Inv->Weapon && GP_Skins->GlovesSkin_Array[i].PaintKit == Inv->WeaponSkinId &&
 				Inv->Rarity == 6/*Covert*/ && Inv->Quality == 3/*Knife star*/)
-			GP_Skins->SelectedGloveCT = i + 1;
+			{
+				GP_Skins->GloveCTWear = Inv->Wear;
+				GP_Skins->SelectedGloveCT = i + 1;
+			}
 		}
 
 	if (!IsCT)
 		for (int i(0); i < 49; i++)
 		{
-			if (GP_Skins->GlovesSkin_Array[i].ItemIndex == Inv->Weapon && GP_Skins->GlovesSkin_Array[i].PaintKit == Inv->WeaponSkinId && GP_Skins->GloveCTWear == Inv->Wear &&
+			if (GP_Skins->GlovesSkin_Array[i].ItemIndex == Inv->Weapon && GP_Skins->GlovesSkin_Array[i].PaintKit == Inv->WeaponSkinId &&
 				Inv->Rarity == 6/*Covert*/ && Inv->Quality == 3/*Knife star*/)
-			GP_Skins->SelectedGloveTT = i + 1;
+			{
+				GP_Skins->GloveTTWear = Inv->Wear;
+				GP_Skins->SelectedGloveTT = i + 1;
+			}
 		}
 }
 
@@ -228,7 +277,6 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 
 				ItemSettings* WBuffer = &GP_Skins->WeaponNames[GetWeaponFromInv((WEAPON_ID)IBuffer->Weapon)];
 
-				WBuffer->IsInventory = true;
 				if ((CyrTeamID)IBuffer->iTeam == CYRT_DISBLE)
 				{
 					if (IsRemCt)
@@ -238,68 +286,16 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 				}
 				else if ((CyrTeamID)IBuffer->iTeam == CYRT_CT)
 				{
-					WBuffer->IsInventory = true;
-					WBuffer->Skin.paint_kit_id = IBuffer->WeaponSkinId;
-					WBuffer->Skin.wear = IBuffer->Wear;
-					WBuffer->Skin.seed = IBuffer->Seed;
-					WBuffer->Skin.stat_track = IBuffer->StatTrack;
-					WBuffer->Skin.auto_stat_track = IBuffer->AutoStatTrack;
-					WBuffer->Skin.rarity = IBuffer->Rarity;
-					WBuffer->Skin.quality = IBuffer->Quality;
-
-					if (IBuffer->Name)
-						snprintf(WBuffer->Skin.custom_name, 32, "%s", IBuffer->Name);
-
-					for (int si(0); si < 5; si++)
-						WBuffer->Skin.Stickers[si] = IBuffer->Stickers[si];
+					SetWeapon(IBuffer, true);
 				}
 				else if ((CyrTeamID)IBuffer->iTeam == CYRT_TT)
 				{
-					WBuffer->IsInventory = true;
-					WBuffer->SkinTT.paint_kit_id = IBuffer->WeaponSkinId;
-					WBuffer->SkinTT.wear = IBuffer->Wear;
-					WBuffer->SkinTT.seed = IBuffer->Seed;
-					WBuffer->SkinTT.stat_track = IBuffer->StatTrack;
-					WBuffer->SkinTT.auto_stat_track = IBuffer->AutoStatTrack;
-					WBuffer->SkinTT.rarity = IBuffer->Rarity;
-					WBuffer->SkinTT.quality = IBuffer->Quality;
-
-					if (IBuffer->Name)
-						snprintf(WBuffer->SkinTT.custom_name, 32, "%s", IBuffer->Name);
-
-					for (int si(0); si < 5; si++)
-						WBuffer->SkinTT.Stickers[si] = IBuffer->Stickers[si];
+					SetWeapon(IBuffer, false);
 				}
 				else if ((CyrTeamID)IBuffer->iTeam == CYRT_ALL)
 				{
-					WBuffer->IsInventory = true;
-					WBuffer->SkinTT.paint_kit_id = IBuffer->WeaponSkinId;
-					WBuffer->SkinTT.wear = IBuffer->Wear;
-					WBuffer->SkinTT.seed = IBuffer->Seed;
-					WBuffer->SkinTT.stat_track = IBuffer->StatTrack;
-					WBuffer->SkinTT.auto_stat_track = IBuffer->AutoStatTrack;
-					WBuffer->SkinTT.rarity = IBuffer->Rarity;
-					WBuffer->SkinTT.quality = IBuffer->Quality;
-
-					if (IBuffer->Name)
-						snprintf(WBuffer->SkinTT.custom_name, 32, "%s", IBuffer->Name);
-
-					for (int si(0); si < 5; si++)
-						WBuffer->SkinTT.Stickers[si] = IBuffer->Stickers[si];
-
-					WBuffer->Skin.paint_kit_id = IBuffer->WeaponSkinId;
-					WBuffer->Skin.wear = IBuffer->Wear;
-					WBuffer->Skin.seed = IBuffer->Seed;
-					WBuffer->Skin.stat_track = IBuffer->StatTrack;
-					WBuffer->Skin.auto_stat_track = IBuffer->AutoStatTrack;
-					WBuffer->Skin.rarity = IBuffer->Rarity;
-					WBuffer->Skin.quality = IBuffer->Quality;
-
-					if (IBuffer->Name)
-						snprintf(WBuffer->Skin.custom_name, 32, "%s", IBuffer->Name);
-
-					for (int si(0); si < 5; si++)
-						WBuffer->Skin.Stickers[si] = IBuffer->Stickers[si];
+					SetWeapon(IBuffer, true);
+					SetWeapon(IBuffer, false);
 				}
 			}
 			else if (IBuffer->ItemType == IT_KNIFE)

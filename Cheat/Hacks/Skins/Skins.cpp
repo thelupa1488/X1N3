@@ -328,6 +328,7 @@ void CSkins::PostDataUpdate()
 	//}
 
 	int CurGlove = IsTT ? SelectedGloveTT : SelectedGloveCT;
+	float CurGloveWear = IsTT ? GloveTTWear : GloveCTWear;
 
 	if (CurGlove)
 	{

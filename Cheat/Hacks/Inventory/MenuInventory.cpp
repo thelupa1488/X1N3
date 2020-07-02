@@ -426,11 +426,8 @@ void CInventory::Menu()
 			}
 			X1Gui().ListBoxFooter();
 
-			bool IsTT = CGlobal::LocalPlayer->GetTeam() == 2;
-			float invGloveWear = IsTT ? GloveTTWear : GloveCTWear;
-
 			if (InvSelectedGlove > 0)
-			SliderFloats("Wear", invGloveWear, 0.f, 1.f, XorStr("%.9f"));
+			SliderFloats("Wear", InvGloveWear, 0.f, 1.f, XorStr("%.9f"));
 
 			if (X1Gui().Button(XorStr("ADD##Gloves"), Vec2(long_item_w, 22)) && InvSelectedGlove != 0)
 			{
@@ -446,7 +443,7 @@ void CInventory::Menu()
 
 				invBuffer.Weapon = GlovesSkin_Array[InvSelectedGlove - 1].ItemIndex;
 				invBuffer.WeaponSkinId = GlovesSkin_Array[InvSelectedGlove - 1].PaintKit;
-				invBuffer.Wear = invGloveWear;
+				invBuffer.Wear = InvGloveWear;
 
 				invBuffer.Rarity = 6; //Covert
 				invBuffer.Quality = 3; //Knife Star
