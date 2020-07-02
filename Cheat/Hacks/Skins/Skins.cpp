@@ -895,7 +895,6 @@ void CSkins::SaveSkins(nlohmann::json &j)
 				continue;
 			}
 
-			SV(sname, "custom_name", v.Skin.custom_name);
 			SV(sname, "paint_kit_id", v.Skin.paint_kit_id);
 			SV(sname, "paint_kit_menu", v.Skin.paint_kit_menu);
 			SV(sname, "skins_mode", v.Skin.skins_mode);
@@ -905,6 +904,7 @@ void CSkins::SaveSkins(nlohmann::json &j)
 			SV(sname, "auto_stat_track", v.Skin.auto_stat_track);
 			SV(sname, "stat_track", v.Skin.stat_track);
 			SV(sname, "wear", v.Skin.wear);
+			SV(sname, "custom_name", v.Skin.custom_name);
 
 			if (SaveSticker)
 			{
@@ -954,15 +954,6 @@ void CSkins::LoadSkins(nlohmann::json &j)
 						continue;
 					}
 
-					if (!j[XorStr("Skins")][sname][v.Name][XorStr("custom_name")].is_null())
-					{
-						string buf = j[XorStr("Skins")][sname][v.Name][XorStr("custom_name")].get<string>();
-						for (int i(0); i < 32; i++)
-							v.Skin.custom_name[i] = '\0';
-						for (int i(0); i < (((int)buf.length() >= 32) ? 32 : (int)buf.length()); i++)
-							v.Skin.custom_name[i] = buf[i];
-					}
-
 					LV(sname, "paint_kit_id", v.Skin.paint_kit_id);
 					LV(sname, "paint_kit_menu", v.Skin.paint_kit_menu);
 					LV(sname, "skins_mode", v.Skin.skins_mode);
@@ -972,6 +963,14 @@ void CSkins::LoadSkins(nlohmann::json &j)
 					LV(sname, "auto_stat_track", v.Skin.auto_stat_track);
 					LV(sname, "stat_track", v.Skin.stat_track);
 					LV(sname, "wear", v.Skin.wear);
+					if (!j[XorStr("Skins")][sname][v.Name][XorStr("custom_name")].is_null())
+					{
+						string buf = j[XorStr("Skins")][sname][v.Name][XorStr("custom_name")].get<string>();
+						for (int i(0); i < 32; i++)
+							v.Skin.custom_name[i] = '\0';
+						for (int i(0); i < (((int)buf.length() >= 32) ? 32 : (int)buf.length()); i++)
+							v.Skin.custom_name[i] = buf[i];
+					}
 
 					if (LoadSticker)
 					{

@@ -35,7 +35,7 @@ protected:
 	virtual void SSendMessage(void* ecx, void* edx, uint32_t unMsgType, const void* pubData, uint32_t cubData) = 0;
 
 	virtual void AddMedals(CMsgSOCacheSubscribed::SubscribedType* pInventoryCacheObject, int Index, int MedalId) = 0;
-	virtual void AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int index, int itemDefIndex, int rarity, int quality, int paintKit, int seed, float wear, std::string name, int InventoryLIdx) = 0;
+	virtual void AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int index, int itemDefIndex, int rarity, int quality, int paintKit, int seed, float wear, const char* name, int InventoryLIdx) = 0;
 
 	virtual bool SendClientHello() = 0;
 	virtual bool SendMMHello() = 0;
@@ -84,8 +84,7 @@ public:
 		float Seed = 0.001f;
 		bool AutoStatTrack = false;
 		int StatTrack = 0;
-
-		string Name = "";
+		char Name[32] = "";
 
 		string WeaponName = "";
 		string SkinName = "";
@@ -118,7 +117,7 @@ public:
 	int GetInventoryByGame(int IndGame, int Eqp, TeamID Team);
 
 	void AddMedals(CMsgSOCacheSubscribed::SubscribedType* pInventoryCacheObject, int Index, int MedalId);
-	void AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int index, int itemDefIndex, int rarity, int quality, int paintKit, int seed, float wear, std::string name, int InventoryLIdx);
+	void AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int index, int itemDefIndex, int rarity, int quality, int paintKit, int seed, float wear, const char* name, int InventoryLIdx);
 
 	bool SendClientHello();
 	bool SendMMHello();

@@ -93,6 +93,9 @@ void CInventory::SetKnife(Inventory* Inv, bool IsCT)
 				GP_Skins->KnifeNames[i].Skin.auto_stat_track = Inv->AutoStatTrack;
 				GP_Skins->KnifeNames[i].Skin.rarity = Inv->Rarity;
 				GP_Skins->KnifeNames[i].Skin.quality = Inv->Quality;
+
+				if (Inv->Name)
+					snprintf(GP_Skins->KnifeNames[i].Skin.custom_name, 32, "%s", Inv->Name);
 			}
 
 	if (!IsCT)
@@ -107,6 +110,9 @@ void CInventory::SetKnife(Inventory* Inv, bool IsCT)
 				GP_Skins->KnifeNames[i].SkinTT.auto_stat_track = Inv->AutoStatTrack;
 				GP_Skins->KnifeNames[i].SkinTT.rarity = Inv->Rarity;
 				GP_Skins->KnifeNames[i].SkinTT.quality = Inv->Quality;
+
+				if (Inv->Name)
+					snprintf(GP_Skins->KnifeNames[i].SkinTT.custom_name, 32, "%s", Inv->Name);
 			}
 }
 
@@ -233,6 +239,9 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 					WBuffer->Skin.rarity = IBuffer->Rarity;
 					WBuffer->Skin.quality = IBuffer->Quality;
 
+					if (IBuffer->Name)
+						snprintf(WBuffer->Skin.custom_name, 32, "%s", IBuffer->Name);
+
 					for (int si(0); si < 5; si++)
 						WBuffer->Skin.Stickers[si] = IBuffer->Stickers[si];
 				}
@@ -247,6 +256,9 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 					WBuffer->SkinTT.rarity = IBuffer->Rarity;
 					WBuffer->SkinTT.quality = IBuffer->Quality;
 
+					if (IBuffer->Name)
+						snprintf(WBuffer->SkinTT.custom_name, 32, "%s", IBuffer->Name);
+
 					for (int si(0); si < 5; si++)
 						WBuffer->SkinTT.Stickers[si] = IBuffer->Stickers[si];
 				}
@@ -260,6 +272,10 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 					WBuffer->SkinTT.auto_stat_track = IBuffer->AutoStatTrack;
 					WBuffer->SkinTT.rarity = IBuffer->Rarity;
 					WBuffer->SkinTT.quality = IBuffer->Quality;
+
+					if (IBuffer->Name)
+						snprintf(WBuffer->SkinTT.custom_name, 32, "%s", IBuffer->Name);
+
 					for (int si(0); si < 5; si++)
 						WBuffer->SkinTT.Stickers[si] = IBuffer->Stickers[si];
 
@@ -270,6 +286,10 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 					WBuffer->Skin.auto_stat_track = IBuffer->AutoStatTrack;
 					WBuffer->Skin.rarity = IBuffer->Rarity;
 					WBuffer->Skin.quality = IBuffer->Quality;
+
+					if (IBuffer->Name)
+						snprintf(WBuffer->Skin.custom_name, 32, "%s", IBuffer->Name);
+
 					for (int si(0); si < 5; si++)
 						WBuffer->Skin.Stickers[si] = IBuffer->Stickers[si];
 				}
@@ -338,6 +358,9 @@ void CInventory::PostRetrieveMessageProfile(uint32_t* punMsgType, void* pubDest,
 {
 	uint32_t MessageType = *punMsgType & 0x7FFFFFFF;
 
+
+	if (InventoryList.empty())
+		return;
 	if ((ECsgoGCMsg)MessageType == k_EMsgGCCStrike15_v2_MatchmakingGC2ClientHello)
 	{
 		CMsgGCCStrike15_v2_MatchmakingGC2ClientHello Message;
@@ -376,81 +399,6 @@ void CInventory::PostRetrieveMessageProfile(uint32_t* punMsgType, void* pubDest,
 
 		if (ProfileTeacher)
 			Commendation->set_cmd_teaching(ProfileTeacher);
-
-		if ((uint32_t)Message.ByteSize() <= cubDest - 8)
-		{
-			Message.SerializeToArray((void*)((DWORD)pubDest + 8), Message.ByteSize());
-
-			*pcubMsgSize = Message.ByteSize() + 8;
-		}
-	}
-
-	if (InventoryList.empty())
-		return;
-
-	if ((EGCBaseClientMsg)MessageType == k_EMsgGCClientWelcome)
-	{
-
-		CMsgClientWelcome Message;
-
-		try
-		{
-			if (!Message.ParsePartialFromArray((void*)((DWORD)pubDest + 8), *pcubMsgSize - 8))
-				return;
-		}
-		catch (...)
-		{
-			return;
-		}
-
-		if (Message.outofdate_subscribed_caches_size() <= 0)
-			return;
-
-		CMsgSOCacheSubscribed* Cache = Message.mutable_outofdate_subscribed_caches(0);
-
-		for (int i = 0; i < Cache->objects_size(); i++)
-		{
-			CMsgSOCacheSubscribed::SubscribedType* Object = Cache->mutable_objects(i);
-
-			if (!Object->has_type_id())
-				continue;
-
-			if (Object->type_id() == 1)
-			{
-				for (int j = 0; j < Object->object_data_size(); j++)
-				{
-					std::string* ObjectData = Object->mutable_object_data(j);
-
-					CSOEconItem Item;
-
-					if (!Item.ParseFromArray((void*)const_cast<char*>(ObjectData->data()), ObjectData->size()))
-						continue;
-
-					if (Item.equipped_state_size() <= 0)
-						continue;
-
-					for (int k = 0; k < Item.equipped_state_size(); k++)
-					{
-						auto EquippedState = Item.mutable_equipped_state(k);
-
-						EquippedState->set_new_class(0);
-						EquippedState->set_new_slot(0);
-					}
-
-				}
-
-				if (InventoryList.size() > 0)	
-				{
-					for (size_t i(0); i < InventoryList.size(); i++)
-					{
-						if (InventoryList[i].ItemType != IT_MEDAL)
-							AddItem(Object, InventoryList[i].Index, InventoryList[i].Weapon, InventoryList[i].Rarity, InventoryList[i].Quality, InventoryList[i].WeaponSkinId, 38, InventoryList[i].Wear, "", i);
-						else
-							AddMedals(Object, InventoryList[i].Index, InventoryList[i].WeaponSkinId);
-					}
-				}
-			}
-		}
 
 		if ((uint32_t)Message.ByteSize() <= cubDest - 8)
 		{
@@ -524,7 +472,7 @@ void CInventory::PostRetrieveMessage(uint32_t* punMsgType, void* pubDest, uint32
 				for (size_t i(0); i < InventoryList.size(); i++)
 				{
 					if (InventoryList[i].ItemType != IT_MEDAL)
-						AddItem(Object, InventoryList[i].Index, InventoryList[i].Weapon, InventoryList[i].Rarity, InventoryList[i].Quality, InventoryList[i].WeaponSkinId, 38, InventoryList[i].Wear, "", i);
+						AddItem(Object, InventoryList[i].Index, InventoryList[i].Weapon, InventoryList[i].Rarity, InventoryList[i].Quality, InventoryList[i].WeaponSkinId, InventoryList[i].Seed, InventoryList[i].Wear, InventoryList[i].Name, i);
 					else
 						AddMedals(Object, InventoryList[i].Index, InventoryList[i].WeaponSkinId);
 				}
@@ -540,14 +488,14 @@ void CInventory::PostRetrieveMessage(uint32_t* punMsgType, void* pubDest, uint32
 	}
 }
 
-void CInventory::AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int index, int itemDefIndex, int rarity, int quality, int paintKit, int seed, float wear, std::string name, int InventoryLIdx)
+void CInventory::AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int index, int itemDefIndex, int rarity, int quality, int paintKit, int seed, float wear, const char* name, int InventoryLIdx)
 {
 	CSOEconItem Skin;
 
-	Skin.set_id(20100 + index);
+	Skin.set_id(20001 + index);
 	Skin.set_account_id(I::SteamUser()->GetSteamID().GetAccountID());
 	Skin.set_def_index(itemDefIndex);
-	Skin.set_inventory(20100 + index);
+	Skin.set_inventory(20001 + index);
 	Skin.set_origin(24);
 	Skin.set_quantity(1);
 	Skin.set_level(1);
@@ -557,9 +505,7 @@ void CInventory::AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int inde
 	Skin.set_original_id(0);
 	Skin.set_rarity(rarity);
 	Skin.set_quality(quality);
-
-	if (name.size() > 0)
-		Skin.set_custom_name(name.data());
+	Skin.set_custom_name(name);
 
 	if ((CyrTeamID)InventoryList[InventoryLIdx].iTeam != CYRT_AUTO && (CyrTeamID)InventoryList[InventoryLIdx].iTeam != CYRT_ALL)
 	{
@@ -582,42 +528,32 @@ void CInventory::AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int inde
 	// Paint Kit
 	auto PaintKitAttribute = Skin.add_attribute();
 	float PaintKitAttributeValue = (float)paintKit;
-
 	PaintKitAttribute->set_def_index(6);
-
 	PaintKitAttribute->set_value_bytes(&PaintKitAttributeValue, 4);
 
 	// Paint Seed
 	auto SeedAttribute = Skin.add_attribute();
 	float SeedAttributeValue = (float)seed;
-
 	SeedAttribute->set_def_index(7);
-
 	SeedAttribute->set_value_bytes(&SeedAttributeValue, 4);
 
 	// Paint Wear
 	auto WearAttribute = Skin.add_attribute();
 	float WearAttributeValue = wear;
-
 	WearAttribute->set_def_index(8);
-
 	WearAttribute->set_value_bytes(&WearAttributeValue, 4);
 
 	if (InventoryList[InventoryLIdx].StatTrack != 0)
 	{
 		CSOEconItemAttribute* StatTrakAttribute = Skin.add_attribute();
 		uint32_t StatTrakAttributeValue = 0;
-
 		StatTrakAttribute->set_def_index(81);
-
 		StatTrakAttribute->set_value_bytes(&StatTrakAttributeValue, 4);
 
 		// Counter Value
 		CSOEconItemAttribute* StatTrakCountAttribute = Skin.add_attribute();
 		uint32_t StatTrakCountAttributeValue = InventoryList[InventoryLIdx].StatTrack;
-
 		StatTrakCountAttribute->set_def_index(80);
-
 		StatTrakCountAttribute->set_value_bytes(&StatTrakCountAttributeValue, 4);
 	}
 
@@ -627,33 +563,25 @@ void CInventory::AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int inde
 		// Sticker Kit
 		CSOEconItemAttribute* StickerKitAttribute = Skin.add_attribute();
 		uint32_t StickerKitAttributeValue = InventoryList[InventoryLIdx].Stickers[j].kit;
-
 		StickerKitAttribute->set_def_index(113 + 4 * j);
-
 		StickerKitAttribute->set_value_bytes(&StickerKitAttributeValue, sizeof(StickerKitAttributeValue));
 
 		// Sticker Wear
 		CSOEconItemAttribute* StickerWearAttribute = Skin.add_attribute();
 		float StickerWearAttributeValue = InventoryList[InventoryLIdx].Stickers[j].wear;
-
 		StickerWearAttribute->set_def_index(114 + 4 * j);
-
 		StickerWearAttribute->set_value_bytes(&StickerWearAttributeValue, sizeof(StickerWearAttributeValue));
 
 		// Sticker Scale
 		CSOEconItemAttribute* StickerScaleAttribute = Skin.add_attribute();
 		float StickerScaleAttributeValue = InventoryList[InventoryLIdx].Stickers[j].scale;
-
 		StickerScaleAttribute->set_def_index(115 + 4 * j);
-
 		StickerScaleAttribute->set_value_bytes(&StickerScaleAttributeValue, sizeof(StickerScaleAttributeValue));
 
 		// Sticker Rotation
 		CSOEconItemAttribute* StickerRotationAttribute = Skin.add_attribute();
 		float StickerRotationAttributeValue = InventoryList[InventoryLIdx].Stickers[j].rotation;
-
 		StickerRotationAttribute->set_def_index(116 + 4 * j);
-
 		StickerRotationAttribute->set_value_bytes(&StickerRotationAttributeValue, sizeof(StickerRotationAttributeValue));
 	}
 
@@ -679,8 +607,8 @@ void CInventory::AddMedals(CMsgSOCacheSubscribed::SubscribedType* pInventoryCach
 	TimeAcquiredAttribute->set_value_bytes(&TimeAcquiredAttributeValue, 4);
 
 	Medal.set_def_index(MedalId);
-	Medal.set_inventory(20000 + Index);
-	Medal.set_id(20000 + Index);
+	Medal.set_inventory(10001 + Index);
+	Medal.set_id(10001 + Index);
 
 	pInventoryCacheObject->add_object_data(Medal.SerializeAsString());
 }
@@ -865,7 +793,13 @@ void CInventory::LoadInventory(nlohmann::json& j)
 				if (!j[XorStr("Inventory")][XorStr("Items")].at(i)[XorStr("WeaponName")].is_null())
 					InvEntry.WeaponName = j[XorStr("Inventory")][XorStr("Items")].at(i)[XorStr("WeaponName")].get<string>();
 				if (!j[XorStr("Inventory")][XorStr("Items")].at(i)[XorStr("Name")].is_null())
-					InvEntry.Name = j[XorStr("Inventory")][XorStr("Items")].at(i)[XorStr("Name")].get<string>();
+				{
+					string buf = j[XorStr("Inventory")][XorStr("Items")].at(i)[XorStr("Name")].get<string>();
+					for (int i(0); i < 32; i++)
+						InvEntry.Name[i] = '\0';
+					for (int i(0); i < (((int)buf.length() >= 32) ? 32 : (int)buf.length()); i++)
+						InvEntry.Name[i] = buf[i];
+				}
 
 				if (InvEntry.ItemType == _ItemType::IT_WEAPON)
 				{

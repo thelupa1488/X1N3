@@ -102,9 +102,7 @@ void CInventory::Menu()
 
 		DComboBox("Rarity", Item.rarity, ItemsRR);
 		DComboBox("Quality", Item.quality, ItemsQQ);
-
-		static string Name_Invchr = "";
-		TextEdit("Name##InvChr", Name_Invchr, Item.custom_name, 32);
+		X1Gui().InputText(XorStr("Name##InvChr"), Item.custom_name, 32);
 	};
 
 	if (WeaponNames.size() > 0)
@@ -281,6 +279,9 @@ void CInventory::Menu()
 					invBuffer.Rarity = WItem->Skin.rarity;
 					invBuffer.Quality = WItem->Skin.quality;
 
+					if (WItem->Skin.custom_name)
+						snprintf(invBuffer.Name, 32, "%s", WItem->Skin.custom_name);
+
 					for (int si(0); si < 5; si++)
 					{
 						invBuffer.Stickers[si] = WItem->Skin.Stickers[si];
@@ -370,6 +371,9 @@ void CInventory::Menu()
 					invBuffer.AutoStatTrack = WItem->Skin.auto_stat_track;
 					invBuffer.Rarity = WItem->Skin.rarity;
 					invBuffer.Quality = WItem->Skin.quality;
+
+					if (WItem->Skin.custom_name)
+						snprintf(invBuffer.Name, 32, "%s", WItem->Skin.custom_name);
 
 					invBuffer.WeaponName = KnifeNames[InvSelectedKnife].Name;
 					if (WItem->Skin.skins_mode == 0)

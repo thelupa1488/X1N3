@@ -160,11 +160,7 @@ void CSkins::Menu()
 
 		DComboBox("Quality", Item.quality, ItemsQQ);
 
-		string old_name = Item.custom_name;
 		X1Gui().InputText(XorStr("Name##custom_name"), Item.custom_name, 32);
-
-		if (old_name != (string)Item.custom_name)
-			IsNameChange = true;
 	};
 
 	VectorEx<const char*> SkinArr = { lolc("Weapon"), lolc("Knife"), lolc("Gloves") };
