@@ -338,6 +338,7 @@ void CSkins::PostDataUpdate()
 	//}
 
 	int CurGlove = IsTT ? SelectedGloveTT : SelectedGloveCT;
+	char* CurGloveName = IsTT ? GloveTTName : GloveCTName;
 	if (CurGlove)
 	{
 		CBaseHandle* wearables = pLocal->GetWearables();
@@ -388,6 +389,10 @@ void CSkins::PostDataUpdate()
 			*glove->GetEntityQuality() = GlovesSkin_Array[CurGlove - 1].IsInventory ? GlovesSkin_Array[CurGlove - 1].Quality : 4;
 			*glove->GetFallbackWear() = IsTT ? GloveTTWear : GloveCTWear;
 			*glove->GetFallbackSeed() = 0;
+
+			if (CurGloveName)
+				snprintf(glove->GetCustomName(), 32, "%s", CurGloveName);
+
 			*glove->GetFallbackStatTrak() = -1;
 			*glove->GetFallbackPaintKit() = GlovesSkin_Array[CurGlove - 1].PaintKit;
 
@@ -764,25 +769,31 @@ float __fastcall Hooked_GetStickerAttributeBySlotIndexFloat(void* thisptr, void*
 
 	if (SItem->IsInventory)
 	{
-		switch (iAttribute)
+		if (IsTT)
 		{
-		case EStickerAttributeType::Wear:
-			if (IsTT)
+			switch (iAttribute)
+			{
+			case EStickerAttributeType::Wear:
 				return min(1.f, SItem->SkinTT.Stickers[iSlot].wear + 0.0000000001f);
-			else
-				return min(1.f, SItem->Skin.Stickers[iSlot].wear + 0.0000000001f);
-		case EStickerAttributeType::Scale:
-			if (IsTT)
+			case EStickerAttributeType::Scale:
 				return  SItem->SkinTT.Stickers[iSlot].scale;
-			else
-				return  SItem->Skin.Stickers[iSlot].scale;
-		case EStickerAttributeType::Rotation:
-			if (IsTT)
+			case EStickerAttributeType::Rotation:
 				return  SItem->SkinTT.Stickers[iSlot].rotation;
-			else
+			default: break;
+			}
+		}
+		else
+		{
+			switch (iAttribute)
+			{
+			case EStickerAttributeType::Wear:
+				return min(1.f, SItem->Skin.Stickers[iSlot].wear + 0.0000000001f);
+			case EStickerAttributeType::Scale:
+				return  SItem->Skin.Stickers[iSlot].scale;
+			case EStickerAttributeType::Rotation:
 				return  SItem->Skin.Stickers[iSlot].rotation;
-		default:
-			break;
+			default: break;
+			}
 		}
 	}
 	else
@@ -795,8 +806,7 @@ float __fastcall Hooked_GetStickerAttributeBySlotIndexFloat(void* thisptr, void*
 			return  SItem->Skin.Stickers[iSlot].scale;
 		case EStickerAttributeType::Rotation:
 			return  SItem->Skin.Stickers[iSlot].rotation;
-		default:
-			break;
+		default: break;
 		}
 	}
 

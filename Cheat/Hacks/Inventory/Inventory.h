@@ -127,6 +127,7 @@ public:
 	int InvSelectedKnife = 0;
 	int InvSelectedGlove = 0;
 	float InvGloveWear = 0.001f;
+	char InvGloveName[32] = "";
 
 	bool ShowInventoryList = true;
 

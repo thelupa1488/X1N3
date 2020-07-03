@@ -387,7 +387,7 @@ void CInventory::Menu()
 		}
 		else if (InvSettingsMode == 2)
 		{
-			X1Gui().ListBoxHeader(XorStr("##Gloves"), Vec2(long_item_w, 525));
+			X1Gui().ListBoxHeader(XorStr("##Gloves"), Vec2(long_item_w, 505));
 			for (int i = 0; i < sizeof(IGlovesModels) / sizeof(IGlovesModels[0]); i++)
 			{
 				bool selected = i == InvSelectedGlove;
@@ -397,7 +397,10 @@ void CInventory::Menu()
 			X1Gui().ListBoxFooter();
 
 			if (InvSelectedGlove > 0)
-			SliderFloats("Wear", InvGloveWear, 0.f, 1.f, XorStr("%.9f"));
+			{
+				SliderFloats("Wear", InvGloveWear, 0.f, 1.f, XorStr("%.9f"));
+				X1Gui().InputText(XorStr("Name##Glove"), InvGloveName, 32);
+			}
 
 			if (X1Gui().Button(XorStr("ADD##Gloves"), Vec2(long_item_w, 22)) && InvSelectedGlove != 0)
 			{
@@ -414,6 +417,9 @@ void CInventory::Menu()
 				invBuffer.Weapon = GP_Skins->GlovesSkin_Array[InvSelectedGlove - 1].ItemIndex;
 				invBuffer.WeaponSkinId = GP_Skins->GlovesSkin_Array[InvSelectedGlove - 1].PaintKit;
 				invBuffer.Wear = InvGloveWear;
+
+				if (InvGloveName)
+					snprintf(invBuffer.Name, 32, "%s", InvGloveName);
 
 				invBuffer.Rarity = 6; //Covert
 				invBuffer.Quality = 3; //Knife Star
@@ -584,30 +590,15 @@ void CInventory::InvListMenu()
 		}
 
 		if (X1Gui().Button(XorStr("Update Inventory"), Vec2(long_item_w, 22)))
+		{
 			SendClientHello();
+			SendMMHello();
+		}
 
 		X1Gui().Spacing();
 		if (X1Gui().Button(XorStr("Remove"), Vec2(long_item_w, 22)))
 		{
-			if (InventoryList.size() > 0)
-				InventoryList.erase(InventoryList.begin() + InventSelectItem);
-
-			if (InventoryList.size() > 0)
-			{
-				for (int i(0); i < (int)GP_Skins->WeaponNames.size(); i++)
-				{
-					GP_Skins->WeaponNames[i].IsInventory = false;
-				}
-				for (int i(0); i < (int)GP_Skins->KnifeNames.size(); i++)
-				{
-					GP_Skins->KnifeNames[i].IsInventory = false;
-				}
-				for (int i(0); i < (int)KnifeNamesTT.size(); i++)
-				{
-					KnifeNamesTT[i].IsInventory = false;
-				}
-			}
-
+			InventoryList.erase(InventoryList.begin() + InventSelectItem);
 			SendClientHello();
 		}
 		//X1Gui().SameLine();

@@ -173,6 +173,9 @@ void CInventory::SetGlove(Inventory* Inv, bool IsCT)
 				GP_Skins->GloveCTWear = Inv->Wear;
 				GP_Skins->GlovesSkin_Array[i].Rarity = 6/*Covert*/;
 				GP_Skins->GlovesSkin_Array[i].Quality = 3/*Knife star*/;
+
+				if (Inv->Name)
+					snprintf(GP_Skins->GloveCTName, 32, "%s", Inv->Name);
 			}
 		}
 
@@ -186,6 +189,9 @@ void CInventory::SetGlove(Inventory* Inv, bool IsCT)
 				GP_Skins->GloveTTWear = Inv->Wear;
 				GP_Skins->GlovesSkin_Array[i].Rarity = 6/*Covert*/;
 				GP_Skins->GlovesSkin_Array[i].Quality = 3/*Knife star*/;
+
+				if (Inv->Name)
+					snprintf(GP_Skins->GloveTTName, 32, "%s", Inv->Name);
 			}
 		}
 }

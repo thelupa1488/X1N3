@@ -468,7 +468,7 @@ void CSkins::Menu()
 		StickerSettings* GloveParam;
 		if (glvTeamSettingsMode == 0)
 		{
-			X1Gui().ListBoxHeader(XorStr("##Gloves"), Vec2(long_item_w, 500));
+			X1Gui().ListBoxHeader(XorStr("##Gloves"), Vec2(long_item_w, 475));
 			for (int i = 0; i < sizeof(GlovesModels) / sizeof(GlovesModels[0]); i++)
 			{
 				bool selected = i == SelectedGloveCT;
@@ -482,14 +482,16 @@ void CSkins::Menu()
 				SkinPreview = GlovesSkin_Array[SelectedGloveCT - 1].Url;
 				WeaponPreview = GlovesSkin_Array[SelectedGloveCT - 1].Url;
 			}
-			X1Gui().PushItemWidth(400);
 			if (SelectedGloveCT > 0)
-			SliderFloats("Wear", GloveCTWear, 0.f, 1.f, XorStr("%.9f"));
+			{
+				SliderFloats("Wear", GloveCTWear, 0.f, 1.f, XorStr("%.9f"));
+				X1Gui().InputText(XorStr("Name##Glove"), GloveCTName, 32);
+			}
 		}
 		
 		else if (glvTeamSettingsMode == 1)
 		{
-			X1Gui().ListBoxHeader(XorStr("##Gloves"), Vec2(long_item_w, 500));
+			X1Gui().ListBoxHeader(XorStr("##Gloves"), Vec2(long_item_w, 475));
 			for (int i = 0; i < sizeof(GlovesModels) / sizeof(GlovesModels[0]); i++)
 			{
 				bool selected = i == SelectedGloveTT;
@@ -503,9 +505,11 @@ void CSkins::Menu()
 				SkinPreview = GlovesSkin_Array[SelectedGloveTT - 1].Url;
 				WeaponPreview = GlovesSkin_Array[SelectedGloveTT - 1].Url;
 			}
-			X1Gui().PushItemWidth(400);
 			if (SelectedGloveTT > 0)
-			SliderFloats("Wear", GloveTTWear, 0.f, 1.f, XorStr("%.9f"));
+			{
+				SliderFloats("Wear", GloveTTWear, 0.f, 1.f, XorStr("%.9f"));
+				X1Gui().InputText(XorStr("Name##Glove"), GloveTTName, 32);
+			}
 		}
 		
 	}

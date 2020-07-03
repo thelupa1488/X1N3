@@ -379,6 +379,9 @@ public:
 	int SelectedGloveCT = 0;
 	int SelectedGloveTT = 0;
 
+	char GloveCTName[32] = "";
+	char GloveTTName[32] = "";
+
 	float GloveCTWear = 0.001f;
 	float GloveTTWear = 0.001f;
 
@@ -412,6 +415,8 @@ public:
 		RV(SelectedKnifeModelTT, "SelectedKnifeModelTT");
 		RV(SelectedGloveCT, "SelectedGloveCT");
 		RV(SelectedGloveTT, "SelectedGloveTT");
+		RV(GloveCTName, "GloveCTName");
+		RV(GloveTTName, "GloveTTName");
 		RV(GloveCTWear, "GloveCTWear");
 		RV(GloveTTWear, "GloveTTWear");
 		RV(SkinsEnable, "SkinsEnable");
