@@ -205,6 +205,7 @@ void CSkins::PostDataUpdate()
 			if (pEntity->GetClientClass()->m_ClassID == (int)CLIENT_CLASS_ID::CKnife)
 			{
 				int sel_mod = IsTT ? SelectedKnifeModelTT : SelectedKnifeModelCT;
+				ItemSettings* Item = IsTT ? &KnifeNamesTT[sel_mod] : &KnifeNames[sel_mod];
 				if (sel_mod)
 				{
 					int mdl_idx = GetKnifeModelIdx(sel_mod, IsTT);
@@ -218,8 +219,17 @@ void CSkins::PostDataUpdate()
 					if (worldmodel)
 						* pWeapon->ModelIndex() = mdl_idx + 1;
 
-					*pWeapon->fixskins() = KnifeNames[sel_mod].ID;
-					*pAttrib->GetEntityQuality() = 3;
+					*pWeapon->fixskins() = Item->ID;
+
+					if (Item->IsInventory)
+					{
+						if (IsTT)
+							*pAttrib->GetEntityQuality() = Item->Skin.quality;
+						else
+							*pAttrib->GetEntityQuality() = Item->SkinTT.quality;
+					}
+					else
+						*pAttrib->GetEntityQuality() = Item->Skin.quality;
 				}
 			}
 
@@ -328,8 +338,6 @@ void CSkins::PostDataUpdate()
 	//}
 
 	int CurGlove = IsTT ? SelectedGloveTT : SelectedGloveCT;
-	float CurGloveWear = IsTT ? GloveTTWear : GloveCTWear;
-
 	if (CurGlove)
 	{
 		CBaseHandle* wearables = pLocal->GetWearables();
@@ -377,7 +385,7 @@ void CSkins::PostDataUpdate()
 			*glove->GetItemIDHigh() = -1;
 			*glove->GetAccountID() = LocalPlayerInfo.xuid_low;
 
-			*glove->GetEntityQuality() = 4;
+			*glove->GetEntityQuality() = GlovesSkin_Array[CurGlove - 1].IsInventory ? GlovesSkin_Array[CurGlove - 1].Quality : 4;
 			*glove->GetFallbackWear() = IsTT ? GloveTTWear : GloveCTWear;
 			*glove->GetFallbackSeed() = 0;
 			*glove->GetFallbackStatTrak() = -1;
@@ -484,7 +492,7 @@ void CSkins::ApplyCustomSkin(CBaseAttributableItem* pWeapon, int nWeaponIndex, b
 	if (!GetWeaponByDefIdx(nWeaponIndex, ListIdx, bIsKnife, IsTT))
 		return;
 
-	ItemSettings *Item = bIsKnife ? (IsTT ? &KnifeNames[SelectedKnifeModelTT] : &KnifeNames[SelectedKnifeModelCT]) : &WeaponNames[ListIdx];
+	ItemSettings *Item = bIsKnife ? (IsTT ? &KnifeNamesTT[SelectedKnifeModelTT] : &KnifeNames[SelectedKnifeModelCT]) : &WeaponNames[ListIdx];
 
 	if (!Item)
 		return;
@@ -649,31 +657,31 @@ void CSkinListener::FireGameEvent(IGameEvent *event)
 						int ListIdx = 0;
 						if (GP_Skins->GetWeaponByDefIdx((int)CGlobal::GWeaponID, ListIdx, true, IsTT))
 						{
-							CSkins::ItemSettings* WItem = (IsTT ? &GP_Skins->KnifeNames[ListIdx] : &GP_Skins->KnifeNames[ListIdx]);
-							if (WItem->IsInventory)
+							CSkins::ItemSettings* KItem = (IsTT ? &GP_Skins->KnifeNamesTT[ListIdx] : &GP_Skins->KnifeNames[ListIdx]);
+							if (KItem->IsInventory)
 							{
 								if (IsTT)
 								{
-									if (WItem->SkinTT.auto_stat_track)
+									if (KItem->SkinTT.auto_stat_track)
 									{
-										WItem->SkinTT.stat_track++;
+										KItem->SkinTT.stat_track++;
 										ForceItemUpdate(CGlobal::LocalPlayer->GetBaseWeapon());
 									}
 								}
 								else
 								{
-									if (WItem->Skin.auto_stat_track)
+									if (KItem->Skin.auto_stat_track)
 									{
-										WItem->Skin.stat_track++;
+										KItem->Skin.stat_track++;
 										ForceItemUpdate(CGlobal::LocalPlayer->GetBaseWeapon());
 									}
 								}
 							}
 							else
 							{
-								if (WItem->Skin.auto_stat_track)
+								if (KItem->Skin.auto_stat_track)
 								{
-									WItem->Skin.stat_track++;
+									KItem->Skin.stat_track++;
 									ForceItemUpdate(CGlobal::LocalPlayer->GetBaseWeapon());
 								}
 							}
@@ -756,33 +764,25 @@ float __fastcall Hooked_GetStickerAttributeBySlotIndexFloat(void* thisptr, void*
 
 	if (SItem->IsInventory)
 	{
-		if (IsTT)
+		switch (iAttribute)
 		{
-			switch (iAttribute)
-			{
-			case EStickerAttributeType::Wear:
+		case EStickerAttributeType::Wear:
+			if (IsTT)
 				return min(1.f, SItem->SkinTT.Stickers[iSlot].wear + 0.0000000001f);
-			case EStickerAttributeType::Scale:
-				return SItem->SkinTT.Stickers[iSlot].scale;
-			case EStickerAttributeType::Rotation:
-				return SItem->SkinTT.Stickers[iSlot].rotation;
-			default:
-				break;
-			}
-		}
-		else
-		{
-			switch (iAttribute)
-			{
-			case EStickerAttributeType::Wear:
+			else
 				return min(1.f, SItem->Skin.Stickers[iSlot].wear + 0.0000000001f);
-			case EStickerAttributeType::Scale:
+		case EStickerAttributeType::Scale:
+			if (IsTT)
+				return  SItem->SkinTT.Stickers[iSlot].scale;
+			else
 				return  SItem->Skin.Stickers[iSlot].scale;
-			case EStickerAttributeType::Rotation:
+		case EStickerAttributeType::Rotation:
+			if (IsTT)
+				return  SItem->SkinTT.Stickers[iSlot].rotation;
+			else
 				return  SItem->Skin.Stickers[iSlot].rotation;
-			default:
-				break;
-			}
+		default:
+			break;
 		}
 	}
 	else
@@ -885,7 +885,7 @@ void CSkins::SaveSkins(nlohmann::json &j)
 	StickerSettings emptyEntryStricker;
 	SkinSettings emptyEntry;
 
-	auto SaveItem = [&](string sname, vector<ItemSettings> &It, bool SaveSticker = false) -> void
+	auto SaveItem = [&](string sname, vector<ItemSettings>& It, bool SaveSticker = false) -> void
 	{
 		for (auto &v : It)
 		{
@@ -927,8 +927,8 @@ void CSkins::SaveSkins(nlohmann::json &j)
 	};
 
 	SaveItem(XorStr("Weapons"), WeaponNames, true);
-	SaveItem(XorStr("KnifesCT"), KnifeNames);
-	SaveItem(XorStr("KnifesTT"), KnifeNames);
+	SaveItem(XorStr("Knifes CT"), KnifeNames);
+	SaveItem(XorStr("Knifes TT"), KnifeNamesTT);
 }
 
 void CSkins::LoadSkins(nlohmann::json &j)
@@ -938,11 +938,11 @@ void CSkins::LoadSkins(nlohmann::json &j)
 	StickerSettings emptyEntryStricker;
 	SkinSettings emptyEntry;
 
-	auto LoadItem = [&](string sname, vector<ItemSettings> &It, bool LoadSticker = false) -> void
+	auto LoadItem = [&](string sname, vector<ItemSettings>& It, bool LoadSticker = false) -> void
 	{
 		if (!j[XorStr("Skins")][sname].is_null())
 		{
-			for (auto &v : It)
+			for (auto& v : It)
 			{
 				if (!j[XorStr("Skins")][sname][v.Name].is_null())
 				{
@@ -977,7 +977,7 @@ void CSkins::LoadSkins(nlohmann::json &j)
 						for (int i(0); i < 5; i++)
 						{
 							bool IsEmptyStick = false;
-							LV(sname, string(XorStr("SRE") + to_string(i)), IsEmptyStick);
+							LV(sname, string("SRE" + to_string(i)), IsEmptyStick);
 							if (IsEmptyStick)
 							{
 								v.Skin.Stickers[i] = emptyEntryStricker;
@@ -998,8 +998,8 @@ void CSkins::LoadSkins(nlohmann::json &j)
 	if (!j[XorStr("Skins")].is_null())
 	{
 		LoadItem(XorStr("Weapons"), WeaponNames, true);
-		LoadItem(XorStr("KnifesCT"), KnifeNames);
-		LoadItem(XorStr("KnifesTT"), KnifeNames);
+		LoadItem(XorStr("Knifes CT"), KnifeNames);
+		LoadItem(XorStr("Knifes TT"), KnifeNamesTT);
 	}
 }
 

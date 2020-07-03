@@ -186,7 +186,31 @@ public:
 	{ WEAPON_KNIFE_OUTDOOR,	  lol("Nomad"), lol("knife_outdoor"), SkinSettings() },
 	{ WEAPON_KNIFE_STILETTO, lol("Stiletto"),lol("knife_stiletto"), SkinSettings() },
 	{ WEAPON_KNIFE_WIDOWMAKER,	  lol("Talon"), lol("knife_widowmaker"), SkinSettings() },
-	{ WEAPON_KNIFE_SKELETON,	  lol("Skeleton"), lol("knife_skeleton"), SkinSettings() },
+	{ WEAPON_KNIFE_SKELETON,	  lol("Skeleton"), lol("knife_skeleton"), SkinSettings() }
+	};
+
+	vector<ItemSettings> KnifeNamesTT =
+	{
+	{ WEAPON_KNIFE_T, lol("Default"), lol("Default"), SkinSettings() },
+	{ WEAPON_KNIFE_BAYONET, lol("Bayonet"), lol("bayonet"), SkinSettings() },
+	{ WEAPON_KNIFE_CSS,	lol("Classic"), lol("knife_css"), SkinSettings() },
+	{ WEAPON_KNIFE_FLIP,	lol("Flip"), lol("knife_flip"), SkinSettings() },
+	{ WEAPON_KNIFE_GUT,		lol("Gut Knife"), lol("knife_gut"), SkinSettings() },
+	{ WEAPON_KNIFE_KARAMBIT,lol("Karambit"), lol("knife_karambit"), SkinSettings() },
+	{ WEAPON_KNIFE_M9_BAYONET,	  lol("M9 Bayonet"), lol("knife_m9_bayonet"), SkinSettings() },
+	{ WEAPON_KNIFE_TACTICAL,	   lol("Huntsman"), lol("knife_tactical"), SkinSettings() },
+	{ WEAPON_KNIFE_FALCHION,	  lol("Falchion"), lol("knife_falchion"), SkinSettings() },
+	{ WEAPON_KNIFE_SURVIVAL_BOWIE,lol("Bowie"), lol("knife_survival_bowie"), SkinSettings() },
+	{ WEAPON_KNIFE_BUTTERFLY, lol("Butterfly"), lol("knife_butterfly"), SkinSettings() },
+	{ WEAPON_KNIFE_PUSH,	  lol("Shadow"), lol("knife_push"), SkinSettings() },
+	{ WEAPON_KNIFE_CORD,	  lol("Paracord"), lol("knife_cord"), SkinSettings() },
+	{ WEAPON_KNIFE_CANIS,	  lol("Survivak"), lol("knife_canis"), SkinSettings() },
+	{ WEAPON_KNIFE_URSUS, lol("Ursus"), lol("knife_ursus"), SkinSettings() },
+	{ WEAPON_KNIFE_GYPSY_JACKKNIFE,	  lol("Navaja"), lol("knife_gypsy_jackknife"), SkinSettings() },
+	{ WEAPON_KNIFE_OUTDOOR,	  lol("Nomad"), lol("knife_outdoor"), SkinSettings() },
+	{ WEAPON_KNIFE_STILETTO, lol("Stiletto"),lol("knife_stiletto"), SkinSettings() },
+	{ WEAPON_KNIFE_WIDOWMAKER,	  lol("Talon"), lol("knife_widowmaker"), SkinSettings() },
+	{ WEAPON_KNIFE_SKELETON,	  lol("Skeleton"), lol("knife_skeleton"), SkinSettings() }
 	};
 
 	//vector<ItemSettings> GloveNames =
@@ -204,8 +228,11 @@ public:
 	{
 		int ItemIndex;
 		int PaintKit;
+		int Rarity;
+		int Quality;
 		const char* szModel;
 		string Url;
+		bool IsInventory;
 	};
 
 	struct SortedKits_s
@@ -236,57 +263,58 @@ public:
 	const char* motorcycle = lol("models/weapons/w_models/arms/w_glove_motorcycle.mdl").c_str();
 	const char* specialist = lol("models/weapons/w_models/arms/w_glove_specialist.mdl").c_str();
 	const char* hydra = lol("models/weapons/w_models/arms/w_glove_bloodhound_hydra.mdl").c_str();
+	int rarity = 0; int quality = 0; bool IsInventory = false;
 
 	GlovesSkins_s GlovesSkin_Array[49] =
 	{
-	{ GLOVE_SPORTY,10018,sporty,lol("sporty_gloves_sporty_light_blue") },
-	{ GLOVE_SPORTY,10037,sporty,lol("sporty_gloves_sporty_purple") },
-	{ GLOVE_SPORTY,10038,sporty,lol("sporty_gloves_sporty_green") },
-	{ GLOVE_SPORTY,10019,sporty,lol("sporty_gloves_sporty_military") },
-	{ GLOVE_SPORTY,10048,sporty,lol("sporty_gloves_sporty_blue_pink") },
-	{ GLOVE_SPORTY,10047,sporty,lol("sporty_gloves_sporty_black_webbing_yellow") },
-	{ GLOVE_SPORTY,10046,sporty,lol("sporty_gloves_sporty_poison_frog_red_green") },
-	{ GLOVE_SPORTY,10045,sporty,lol("sporty_gloves_sporty_poison_frog_blue_white") },
-	{ GLOVE_MOTORCYCLE,10024,motorcycle,lol("motorcycle_gloves_motorcycle_basic_black") },
-	{ GLOVE_MOTORCYCLE,10026,motorcycle,lol("motorcycle_gloves_motorcycle_mint_triangle") },
-	{ GLOVE_MOTORCYCLE,10027,motorcycle,lol("motorcycle_gloves_motorcycle_mono_boom") },
-	{ GLOVE_MOTORCYCLE,10028,motorcycle,lol("motorcycle_gloves_motorcycle_triangle_blue") },
-	{ GLOVE_MOTORCYCLE,10052,motorcycle,lol("motorcycle_gloves_motorcycle_trigrid_blue") },
-	{ GLOVE_MOTORCYCLE,10051,motorcycle,lol("motorcycle_gloves_motorcycle_yellow_camo") },
-	{ GLOVE_MOTORCYCLE,10050,motorcycle,lol("motorcycle_gloves_motorcycle_basic_green_orange") },
-	{ GLOVE_MOTORCYCLE,10049,motorcycle,lol("motorcycle_gloves_motorcycle_choco_boom") },
-	{ GLOVE_SPECIALIST,10033,specialist,lol("specialist_gloves_specialist_kimono_diamonds_red") },
-	{ GLOVE_SPECIALIST,10034,specialist,lol("specialist_gloves_specialist_emerald_web") },
-	{ GLOVE_SPECIALIST,10035,specialist,lol("specialist_gloves_specialist_orange_white") },
-	{ GLOVE_SPECIALIST,10030,specialist,lol("specialist_gloves_specialist_ddpat_green_camo") },
-	{ GLOVE_SPECIALIST,10064,specialist,lol("specialist_gloves_specialist_winterhex") },
-	{ GLOVE_SPECIALIST,10063,specialist,lol("specialist_gloves_specialist_fade") },
-	{ GLOVE_SPECIALIST,10062,specialist,lol("specialist_gloves_specialist_forest_brown") },
-	{ GLOVE_SPECIALIST,10061,specialist,lol("specialist_gloves_specialist_webs_red") },
-	{ GLOVE_SLICK,10013,slick,lol("slick_gloves_slick_black") },
-	{ GLOVE_SLICK,10015,slick,lol("slick_gloves_slick_military") },
-	{ GLOVE_SLICK,10016,slick,lol("slick_gloves_slick_red") },
-	{ GLOVE_SLICK,10040,slick,lol("slick_gloves_slick_snakeskin_yellow") },
-	{ GLOVE_SLICK,10044,slick,lol("slick_gloves_slick_stitched_green_grey") },
-	{ GLOVE_SLICK,10043,slick,lol("slick_gloves_slick_stitched_black_orange") },
-	{ GLOVE_SLICK,10042,slick,lol("slick_gloves_slick_plaid_purple") },
-	{ GLOVE_SLICK,10041,slick,lol("slick_gloves_slick_snakeskin_white") },
-	{ GLOVE_LEATHER_WRAP,10009,handwrap,lol("leather_handwraps_handwrap_leathery") },
-	{ GLOVE_LEATHER_WRAP,10010,handwrap,lol("leather_handwraps_handwrap_camo_grey") },
-	{ GLOVE_LEATHER_WRAP,10036,handwrap,lol("leather_handwraps_handwrap_fabric_orange_camo") },
-	{ GLOVE_LEATHER_WRAP,10021,handwrap,lol("leather_handwraps_handwrap_red_slaughter") },
-	{ GLOVE_LEATHER_WRAP,10056,handwrap,lol("leather_handwraps_handwrap_leathery_fabric_green_camo") },
-	{ GLOVE_LEATHER_WRAP,10055,handwrap,lol("leather_handwraps_handwrap_leathery_ducttape") },
-	{ GLOVE_LEATHER_WRAP,10054,handwrap,lol("leather_handwraps_handwrap_leathery_fabric_geometric_blue") },
-	{ GLOVE_LEATHER_WRAP,10053,handwrap,lol("leather_handwraps_handwrap_leathery_fabric_blue_skulls") },
-	{ GLOVE_STUDDED_BLOODHOUND,10006,bloodhound,lol("studded_bloodhound_gloves_bloodhound_black_silver") },
-	{ GLOVE_STUDDED_BLOODHOUND,10007,bloodhound,lol("studded_bloodhound_gloves_bloodhound_snakeskin_brass") },
-	{ GLOVE_STUDDED_BLOODHOUND,10008,bloodhound,lol("studded_bloodhound_gloves_bloodhound_metallic") },
-	{ GLOVE_STUDDED_BLOODHOUND,10039,bloodhound,lol("studded_bloodhound_gloves_bloodhound_guerrilla") },
-	{ GLOVE_HYDRA,10060,hydra,lol("studded_hydra_gloves_bloodhound_hydra_green_leather_mesh_brass") },
-	{ GLOVE_HYDRA,10059,hydra,lol("studded_hydra_gloves_bloodhound_hydra_snakeskin_brass") },
-	{ GLOVE_HYDRA,10058,hydra,lol("studded_hydra_gloves_bloodhound_hydra_green_leather_mesh_brass") },
-	{ GLOVE_HYDRA,10057,hydra,lol("studded_hydra_gloves_bloodhound_hydra_black_green") },
+	{ GLOVE_SPORTY,10018,rarity,quality,sporty,lol("sporty_gloves_sporty_light_blue"),IsInventory },
+	{ GLOVE_SPORTY,10037,rarity,quality,sporty,lol("sporty_gloves_sporty_purple"),IsInventory },
+	{ GLOVE_SPORTY,10038,rarity,quality,sporty,lol("sporty_gloves_sporty_green"),IsInventory },
+	{ GLOVE_SPORTY,10019,rarity,quality,sporty,lol("sporty_gloves_sporty_military"),IsInventory },
+	{ GLOVE_SPORTY,10048,rarity,quality,sporty,lol("sporty_gloves_sporty_blue_pink"),IsInventory },
+	{ GLOVE_SPORTY,10047,rarity,quality,sporty,lol("sporty_gloves_sporty_black_webbing_yellow"),IsInventory },
+	{ GLOVE_SPORTY,10046,rarity,quality,sporty,lol("sporty_gloves_sporty_poison_frog_red_green"),IsInventory },
+	{ GLOVE_SPORTY,10045,rarity,quality,sporty,lol("sporty_gloves_sporty_poison_frog_blue_white"),IsInventory },
+	{ GLOVE_MOTORCYCLE,10024,rarity,quality,motorcycle,lol("motorcycle_gloves_motorcycle_basic_black"),IsInventory },
+	{ GLOVE_MOTORCYCLE,10026,rarity,quality,motorcycle,lol("motorcycle_gloves_motorcycle_mint_triangle"),IsInventory },
+	{ GLOVE_MOTORCYCLE,10027,rarity,quality,motorcycle,lol("motorcycle_gloves_motorcycle_mono_boom"),IsInventory },
+	{ GLOVE_MOTORCYCLE,10028,rarity,quality,motorcycle,lol("motorcycle_gloves_motorcycle_triangle_blue"),IsInventory },
+	{ GLOVE_MOTORCYCLE,10052,rarity,quality,motorcycle,lol("motorcycle_gloves_motorcycle_trigrid_blue"),IsInventory },
+	{ GLOVE_MOTORCYCLE,10051,rarity,quality,motorcycle,lol("motorcycle_gloves_motorcycle_yellow_camo"),IsInventory },
+	{ GLOVE_MOTORCYCLE,10050,rarity,quality,motorcycle,lol("motorcycle_gloves_motorcycle_basic_green_orange"),IsInventory },
+	{ GLOVE_MOTORCYCLE,10049,rarity,quality,motorcycle,lol("motorcycle_gloves_motorcycle_choco_boom"),IsInventory },
+	{ GLOVE_SPECIALIST,10033,rarity,quality,specialist,lol("specialist_gloves_specialist_kimono_diamonds_red"),IsInventory },
+	{ GLOVE_SPECIALIST,10034,rarity,quality,specialist,lol("specialist_gloves_specialist_emerald_web"),IsInventory },
+	{ GLOVE_SPECIALIST,10035,rarity,quality,specialist,lol("specialist_gloves_specialist_orange_white"),IsInventory },
+	{ GLOVE_SPECIALIST,10030,rarity,quality,specialist,lol("specialist_gloves_specialist_ddpat_green_camo"),IsInventory },
+	{ GLOVE_SPECIALIST,10064,rarity,quality,specialist,lol("specialist_gloves_specialist_winterhex"),IsInventory },
+	{ GLOVE_SPECIALIST,10063,rarity,quality,specialist,lol("specialist_gloves_specialist_fade"),IsInventory },
+	{ GLOVE_SPECIALIST,10062,rarity,quality,specialist,lol("specialist_gloves_specialist_forest_brown"),IsInventory },
+	{ GLOVE_SPECIALIST,10061,rarity,quality,specialist,lol("specialist_gloves_specialist_webs_red"),IsInventory },
+	{ GLOVE_SLICK,10013,rarity,quality,slick,lol("slick_gloves_slick_black"),IsInventory },
+	{ GLOVE_SLICK,10015,rarity,quality,slick,lol("slick_gloves_slick_military"),IsInventory },
+	{ GLOVE_SLICK,10016,rarity,quality,slick,lol("slick_gloves_slick_red"),IsInventory },
+	{ GLOVE_SLICK,10040,rarity,quality,slick,lol("slick_gloves_slick_snakeskin_yellow"),IsInventory },
+	{ GLOVE_SLICK,10044,rarity,quality,slick,lol("slick_gloves_slick_stitched_green_grey"),IsInventory },
+	{ GLOVE_SLICK,10043,rarity,quality,slick,lol("slick_gloves_slick_stitched_black_orange"),IsInventory },
+	{ GLOVE_SLICK,10042,rarity,quality,slick,lol("slick_gloves_slick_plaid_purple"),IsInventory },
+	{ GLOVE_SLICK,10041,rarity,quality,slick,lol("slick_gloves_slick_snakeskin_white"),IsInventory },
+	{ GLOVE_LEATHER_WRAP,10009,rarity,quality,handwrap,lol("leather_handwraps_handwrap_leathery"),IsInventory },
+	{ GLOVE_LEATHER_WRAP,10010,rarity,quality,handwrap,lol("leather_handwraps_handwrap_camo_grey"),IsInventory },
+	{ GLOVE_LEATHER_WRAP,10036,rarity,quality,handwrap,lol("leather_handwraps_handwrap_fabric_orange_camo") },
+	{ GLOVE_LEATHER_WRAP,10021,rarity,quality,handwrap,lol("leather_handwraps_handwrap_red_slaughter"),IsInventory },
+	{ GLOVE_LEATHER_WRAP,10056,rarity,quality,handwrap,lol("leather_handwraps_handwrap_leathery_fabric_green_camo"),IsInventory },
+	{ GLOVE_LEATHER_WRAP,10055,rarity,quality,handwrap,lol("leather_handwraps_handwrap_leathery_ducttape"),IsInventory },
+	{ GLOVE_LEATHER_WRAP,10054,rarity,quality,handwrap,lol("leather_handwraps_handwrap_leathery_fabric_geometric_blue"),IsInventory },
+	{ GLOVE_LEATHER_WRAP,10053,rarity,quality,handwrap,lol("leather_handwraps_handwrap_leathery_fabric_blue_skulls"),IsInventory },
+	{ GLOVE_STUDDED_BLOODHOUND,10006,rarity,quality,bloodhound,lol("studded_bloodhound_gloves_bloodhound_black_silver"),IsInventory },
+	{ GLOVE_STUDDED_BLOODHOUND,10007,rarity,quality,bloodhound,lol("studded_bloodhound_gloves_bloodhound_snakeskin_brass"),IsInventory },
+	{ GLOVE_STUDDED_BLOODHOUND,10008,rarity,quality,bloodhound,lol("studded_bloodhound_gloves_bloodhound_metallic"),IsInventory },
+	{ GLOVE_STUDDED_BLOODHOUND,10039,rarity,quality,bloodhound,lol("studded_bloodhound_gloves_bloodhound_guerrilla"),IsInventory },
+	{ GLOVE_HYDRA,10060,rarity,quality,hydra,lol("studded_hydra_gloves_bloodhound_hydra_green_leather_mesh_brass"),IsInventory },
+	{ GLOVE_HYDRA,10059,rarity,quality,hydra,lol("studded_hydra_gloves_bloodhound_hydra_snakeskin_brass"),IsInventory },
+	{ GLOVE_HYDRA,10058,rarity,quality,hydra,lol("studded_hydra_gloves_bloodhound_hydra_green_leather_mesh_brass"),IsInventory },
+	{ GLOVE_HYDRA,10057,rarity,quality,hydra,lol("studded_hydra_gloves_bloodhound_hydra_black_green"),IsInventory },
 	};
 
 	virtual void SetSkin(CBaseAttributableItem* pWeapon, SkinSettings *SkinParam, int id, bool IsCT, bool IsKnife) = 0;
@@ -324,7 +352,7 @@ public:
 	virtual void ApplyCustomSkin(CBaseAttributableItem* pWeapon, int nWeaponIndex, bool IsTT);
 	virtual void ApplyCustomModel(CBaseEntity* pLocal, CBaseAttributableItem* pWeapon);
 	virtual bool IsKnife(int idx);
-	virtual bool GetWeaponByDefIdx(int Idx, int &ListIdx, bool IsKnife, bool IsTT);
+	virtual bool GetWeaponByDefIdx(int Idx, int& ListIdx, bool IsKnife, bool IsTT);
 
 	virtual void ApplyStickerHooks(CBaseAttributableItem* pItem);
 	virtual int StickWeaponByDefIndex(int DefIdx);

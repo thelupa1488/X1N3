@@ -329,7 +329,6 @@ void CSkins::Menu()
 	else if (SkinSettingsMode == 1)
 	{
 		VectorEx<const char*> KnfTeamArr = { lolc("CT"), lolc("T") };
-
 		static int KnfTeamSettingsMode = 0;
 
 		TabsLabels(KnfTeamSettingsMode, KnfTeamArr, Vec2(long_item_w, 0), false);
@@ -398,9 +397,9 @@ void CSkins::Menu()
 		}
 		else if (KnfTeamSettingsMode == 1)
 		{
-			ItemsList(KnifeNames, SelectedKnifeModelTT, Vec2(ITEM_LIST_X, ITEM_LIST_Y), XorStr("##AllKnifes"));
+			ItemsList(KnifeNamesTT, SelectedKnifeModelTT, Vec2(ITEM_LIST_X, ITEM_LIST_Y), XorStr("##AllKnifes"));
 			X1Gui().SameLine();
-			ItemSettings* WItem = &KnifeNames[SelectedKnifeModelTT];
+			ItemSettings* WItem = &KnifeNamesTT[SelectedKnifeModelTT];
 
 			WeaponPreview = WItem->CdnName;
 
@@ -443,13 +442,12 @@ void CSkins::Menu()
 
 			SkinParams(WItem->Skin);
 
-			WeaponPreview = KnifeNames[SelectedKnifeModelTT].CdnName;
-			SkinPreview = skin_kits[KnifeNames[SelectedKnifeModelTT].Skin.paint_kit_menu].cdn_name;
+			WeaponPreview = KnifeNamesTT[SelectedKnifeModelTT].CdnName;
+			SkinPreview = skin_kits[KnifeNamesTT[SelectedKnifeModelTT].Skin.paint_kit_menu].cdn_name;
 		}
 	}
 	else if (SkinSettingsMode == 2)
 	{
-
 		VectorEx<const char*> glvTeamArr = { lolc("CT"), lolc("T") };
 		static int glvTeamSettingsMode = 0;
 

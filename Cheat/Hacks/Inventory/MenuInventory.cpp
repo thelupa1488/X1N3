@@ -602,6 +602,10 @@ void CInventory::InvListMenu()
 				{
 					GP_Skins->KnifeNames[i].IsInventory = false;
 				}
+				for (int i(0); i < (int)KnifeNamesTT.size(); i++)
+				{
+					KnifeNamesTT[i].IsInventory = false;
+				}
 			}
 
 			SendClientHello();

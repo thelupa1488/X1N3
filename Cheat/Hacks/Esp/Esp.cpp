@@ -146,15 +146,6 @@ void CEsp::SoundFrameStage()
 	}
 }
 
-//Доделать!
-
-static IMaterial* Texture = nullptr;
-static IMaterial* Flat = nullptr;
-static IMaterial* Wireframe = nullptr;
-static IMaterial* Metallic = nullptr;
-static IMaterial* Pearlescent = nullptr;
-static IMaterial* Animated = nullptr;
-
 IMaterial* CEsp::InitalizeMaterials()
 {
 	if (!Texture)
@@ -221,9 +212,8 @@ void CEsp::OverrideMaterial(bool ignoreZ, int type, Color rgba)
 	case 3: Material = Metallic; break;
 	case 4: Material = Pearlescent; break;
 	case 5: Material = Animated; break;
-	default: Material = nullptr;
+	default: Material = nullptr; break;
 	}
-
 	if (!Material) return;
 
 	Material->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, ignoreZ);

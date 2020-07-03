@@ -54,6 +54,13 @@ public:
 
 class CEsp : public IEsp
 {
+private:
+	IMaterial* Texture = nullptr;
+	IMaterial* Flat = nullptr;
+	IMaterial* Wireframe = nullptr;
+	IMaterial* Metallic = nullptr;
+	IMaterial* Pearlescent = nullptr;
+	IMaterial* Animated = nullptr;
 public:
 	enum Sides
 	{
