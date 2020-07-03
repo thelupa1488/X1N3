@@ -355,9 +355,13 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 			}
 
 			IBuffer->GetEquippedState = EquippedState;
+
+			return;
 		}
+
 		return;
 	}
+
 	return;
 }
 

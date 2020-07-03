@@ -415,8 +415,6 @@ public:
 		RV(SelectedKnifeModelTT, "SelectedKnifeModelTT");
 		RV(SelectedGloveCT, "SelectedGloveCT");
 		RV(SelectedGloveTT, "SelectedGloveTT");
-		RV(GloveCTName, "GloveCTName");
-		RV(GloveTTName, "GloveTTName");
 		RV(GloveCTWear, "GloveCTWear");
 		RV(GloveTTWear, "GloveTTWear");
 		RV(SkinsEnable, "SkinsEnable");

@@ -338,7 +338,7 @@ void CSkins::PostDataUpdate()
 	//}
 
 	int CurGlove = IsTT ? SelectedGloveTT : SelectedGloveCT;
-	char* CurGloveName = IsTT ? GloveTTName : GloveCTName;
+	//char* CurGloveName = IsTT ? GloveTTName : GloveCTName;
 	if (CurGlove)
 	{
 		CBaseHandle* wearables = pLocal->GetWearables();
@@ -390,8 +390,8 @@ void CSkins::PostDataUpdate()
 			*glove->GetFallbackWear() = IsTT ? GloveTTWear : GloveCTWear;
 			*glove->GetFallbackSeed() = 0;
 
-			if (CurGloveName)
-				snprintf(glove->GetCustomName(), 32, "%s", CurGloveName);
+			//if (CurGloveName)
+			//	snprintf(glove->GetCustomName(), 32, "%s", CurGloveName);
 
 			*glove->GetFallbackStatTrak() = -1;
 			*glove->GetFallbackPaintKit() = GlovesSkin_Array[CurGlove - 1].PaintKit;

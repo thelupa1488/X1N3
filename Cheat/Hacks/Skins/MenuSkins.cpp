@@ -468,7 +468,7 @@ void CSkins::Menu()
 		StickerSettings* GloveParam;
 		if (glvTeamSettingsMode == 0)
 		{
-			X1Gui().ListBoxHeader(XorStr("##Gloves"), Vec2(long_item_w, 475));
+			X1Gui().ListBoxHeader(XorStr("##Gloves"), Vec2(long_item_w, 500));
 			for (int i = 0; i < sizeof(GlovesModels) / sizeof(GlovesModels[0]); i++)
 			{
 				bool selected = i == SelectedGloveCT;
@@ -485,13 +485,13 @@ void CSkins::Menu()
 			if (SelectedGloveCT > 0)
 			{
 				SliderFloats("Wear", GloveCTWear, 0.f, 1.f, XorStr("%.9f"));
-				X1Gui().InputText(XorStr("Name##Glove"), GloveCTName, 32);
+				//X1Gui().InputText(XorStr("Name##Glove"), GloveCTName, 32);
 			}
 		}
 		
 		else if (glvTeamSettingsMode == 1)
 		{
-			X1Gui().ListBoxHeader(XorStr("##Gloves"), Vec2(long_item_w, 475));
+			X1Gui().ListBoxHeader(XorStr("##Gloves"), Vec2(long_item_w, 500));
 			for (int i = 0; i < sizeof(GlovesModels) / sizeof(GlovesModels[0]); i++)
 			{
 				bool selected = i == SelectedGloveTT;
@@ -508,7 +508,7 @@ void CSkins::Menu()
 			if (SelectedGloveTT > 0)
 			{
 				SliderFloats("Wear", GloveTTWear, 0.f, 1.f, XorStr("%.9f"));
-				X1Gui().InputText(XorStr("Name##Glove"), GloveTTName, 32);
+			//	X1Gui().InputText(XorStr("Name##Glove"), GloveTTName, 32);
 			}
 		}
 		
