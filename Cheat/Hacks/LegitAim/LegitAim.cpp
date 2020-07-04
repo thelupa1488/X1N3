@@ -747,7 +747,7 @@ bool CLegitAim::CheckOpportWork(CUserCmd* pCmd)
 	if (!(pLocalPlayer->GetFlags() & FL_ONGROUND) && JumpCheck)
 		return false;
 
-	if ((CGlobal::GWeaponID == WEAPON_AWP || CGlobal::GWeaponID == WEAPON_SSG08) && OnlyZoom && !pLocalPlayer->GetIsScoped())
+	if ((CGlobal::GWeaponType == WEAPON_TYPE_SNIPER) && OnlyZoom && !pLocalPlayer->GetIsScoped())
 		return false;
 
 	if (pLocalPlayer->IsFlashed() && FlashCheck)
@@ -1637,13 +1637,13 @@ void CLegitAim::TriggerCreateMove(CUserCmd* pCmd)
 	if (pLocalWeapon->GetWeaponReload())
 		return;
 
-	if (pLocalWeapon->GetZoomLevel() == 0 && OnlyZoom && SelectedWeapon >= 30)
-		return;
-
 	if (pLocalPlayer->IsFlashed() && TriggerFlashCheck)
 		return;
 
 	if (!(pLocalPlayer->GetFlags() & FL_ONGROUND) && TriggerJumpCheck)
+		return;
+
+	if ((CGlobal::GWeaponType == WEAPON_TYPE_SNIPER) && TriggerOnlyZoom && !pLocalPlayer->GetIsScoped())
 		return;
 
 	Vector MyAngle = pCmd->viewangles + pLocalPlayer->GetPunchAngles();
@@ -1881,7 +1881,23 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 			if (!entity->IsDead())
 			{
 				float simtime = entity->GetSimTime();
-				Vector hitboxPos = entity->GetHitboxPosition(0 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 16 & 17 & 18 & 19 & 10 & 11);
+				Vector hitboxPos = entity->GetHitboxPosition(
+					HITBOX_HEAD & 
+					HITBOX_NECK &
+					HITBOX_PELVIS &
+					HITBOX_BELLY & 
+					HITBOX_THORAX & 
+					HITBOX_LOWER_CHEST & 
+					HITBOX_UPPER_CHEST & 
+					HITBOX_RIGHT_THIGH & 
+					HITBOX_LEFT_THIGH & 
+					HITBOX_RIGHT_CALF & 
+					HITBOX_LEFT_CALF &
+					HITBOX_RIGHT_FOOT &
+					HITBOX_RIGHT_FOREARM & 
+					HITBOX_LEFT_UPPER_ARM & 
+					HITBOX_LEFT_FOREARM & 
+					HITBOX_MAX);
 				backtrackData bfg = { simtime, hitboxPos };
 
 				if (ShowBacktrack && Weapons[GetWeap(SelectedWeapon)].BacktrackTicks)

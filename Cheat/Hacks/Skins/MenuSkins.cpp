@@ -142,15 +142,15 @@ void CSkins::Menu()
 
 	auto SkinParams = [&](SkinSettings &Item) -> void
 	{
-		X1Gui().PushItemWidth(360);
+		X1Gui().PushItemWidth(400);
 		SliderFloats("Seed", Item.seed, 0.f, 2.f);
 		SliderFloats("Wear", Item.wear, 0.f, 1.f, XorStr("%.9f"));
-		X1Gui().PushItemWidth(230);
+		X1Gui().PushItemWidth(270);
 		SliderInts("StatTrak", Item.stat_track, 0, 5000);
 		X1Gui().SameLine();
 		DCheckBox("Auto StatTrak", Item.auto_stat_track);
 
-		X1Gui().PushItemWidth(360);
+		X1Gui().PushItemWidth(400);
 
 		vector<string> ItemsQuality = { lolc("Default"), lolc("Genuine"), lolc("Vintage"), lolc("Knife Star"), lolc("Tournament"), lolc("Community") ,
 			lolc("Valve"), lolc("Prototype"), lolc("Customized"), lolc("StatTrak"), lolc("Complited") };
@@ -267,7 +267,7 @@ void CSkins::Menu()
 			if (StikersMode == 0)
 			{
 				TextEdit("Find", FindSticker, FindBuf, 128);
-				X1Gui().ListBoxHeader(XorStr("##StikerSerials"), Vec2(453, 326));
+				X1Gui().ListBoxHeader(XorStr("##StikerSerials"), Vec2(453, 380));
 				for (size_t i = 0; i < sticker_kits.size(); i++)
 				{
 					if (!FindLower(sticker_kits[i].name, FindSticker))
@@ -284,7 +284,7 @@ void CSkins::Menu()
 			{
 				if (AllSkinsLoaded)
 				{
-					X1Gui().ListBoxHeader(XorStr("##SortStikerSerials"), Vec2(71, 363));
+					X1Gui().ListBoxHeader(XorStr("##SortStikerSerials"), Vec2(71, 402));
 					for (size_t i = 0; i < SortedStickers.size(); i++)
 					{
 						bool selected = i == SortSelectedS;
@@ -296,23 +296,23 @@ void CSkins::Menu()
 					X1Gui().BeginGroup();
 					{
 						TextEdit("Find", FindSticker, FindBuf, 128);
-						X1Gui().ListBoxHeader(XorStr("##StikerSerials"), Vec2(376, 340));
-						for (size_t i = 0; i < SortedStickers[SortSelectedS].Stckers.size(); i++)
+						X1Gui().ListBoxHeader(XorStr("##StikerSerials"), Vec2(386, 380));
+						for (size_t i = 0; i < SortedStickers[SortSelectedS].Stickers.size(); i++)
 						{
-							if (!FindLower(SortedStickers[SortSelectedS].Stckers[i].name, FindSticker))
+							if (!FindLower(SortedStickers[SortSelectedS].Stickers[i].name, FindSticker))
 								continue;
 
 							bool selected = i == SItem->kit_menu_index;
 
-							if (X1Gui().SelectLabel(SortedStickers[SortSelectedS].Stckers[i].name.c_str(), selected))
+							if (X1Gui().SelectLabel(SortedStickers[SortSelectedS].Stickers[i].name.c_str(), selected))
 								SItem->kit_menu_index = i;
 						}
 						X1Gui().ListBoxFooter();
 					}
 					X1Gui().EndGroup();
 
-					if (SItem->kit_menu_index > 0 && SItem->kit_menu_index < (int)SortedStickers[SortSelectedS].Stckers.size())
-						SItem->kit = SortedStickers[SortSelectedS].Stckers[SItem->kit_menu_index].id;
+					if (SItem->kit_menu_index > 0 && SItem->kit_menu_index < (int)SortedStickers[SortSelectedS].Stickers.size())
+						SItem->kit = SortedStickers[SortSelectedS].Stickers[SItem->kit_menu_index].id;
 				}
 				else
 				{
@@ -320,7 +320,7 @@ void CSkins::Menu()
 				}
 			}
 
-			X1Gui().PushItemWidth(380);
+			X1Gui().PushItemWidth(400);
 			SliderFloats("Wear", SItem->wear, 0.f, 1.f);
 			SliderFloats("Scale", SItem->scale, 0.f, 1.f);
 			SliderFloats("Rotation", SItem->rotation, 0.f, 360);
@@ -482,6 +482,9 @@ void CSkins::Menu()
 				SkinPreview = GlovesSkin_Array[SelectedGloveCT - 1].Url;
 				WeaponPreview = GlovesSkin_Array[SelectedGloveCT - 1].Url;
 			}
+
+			X1Gui().PushItemWidth(400);
+
 			if (SelectedGloveCT > 0)
 			{
 				SliderFloats("Wear", GloveCTWear, 0.f, 1.f, XorStr("%.9f"));
@@ -505,6 +508,9 @@ void CSkins::Menu()
 				SkinPreview = GlovesSkin_Array[SelectedGloveTT - 1].Url;
 				WeaponPreview = GlovesSkin_Array[SelectedGloveTT - 1].Url;
 			}
+
+			X1Gui().PushItemWidth(400);
+
 			if (SelectedGloveTT > 0)
 			{
 				SliderFloats("Wear", GloveTTWear, 0.f, 1.f, XorStr("%.9f"));

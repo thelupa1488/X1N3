@@ -432,9 +432,9 @@ auto CSkins::initialize_kits() -> void
 
 			auto sticker_name_ptr = sticker_kit->item_name.buffer + 1;
 
-			if (strstr(sticker_name_ptr, XorStr("StickerKit_dhw2014_dignitas")))
+			if (strstr(sticker_name_ptr, "StickerKit_dhw2014_dignitas"))
 			{
-				strcpy_s(sticker_name_if_valve_fucked_up_their_translations, XorStr("StickerKit_dhw2014_teamdignitas"));
+				strcpy_s(sticker_name_if_valve_fucked_up_their_translations, "StickerKit_dhw2014_teamdignitas");
 				strcat_s(sticker_name_if_valve_fucked_up_their_translations, sticker_name_ptr + 27);
 				sticker_name_ptr = sticker_name_if_valve_fucked_up_their_translations;
 			}
@@ -443,10 +443,10 @@ auto CSkins::initialize_kits() -> void
 			char name[256];
 			V_UCS2ToUTF8(wide_name, name, sizeof(name));
 
-			sticker_kits.push_back({ sticker_kit->id, name, name, "" });
+			sticker_kits.push_back({ sticker_kit->id, name, name, ""});
 		}
 
-		sticker_kits.insert(sticker_kits.begin(), { 0, XorStr("None"), "", "" });
+		sticker_kits.insert(sticker_kits.begin(), { 0, "None", "", ""});
 	}
 
 	SetKillIconCfg();

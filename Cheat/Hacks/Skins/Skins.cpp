@@ -1190,25 +1190,26 @@ void CSkins::PrepareSortedSkins()
 	}
 
 	SortedStickers_s SSEntry;
-	SSEntry.sub_name = XorStr("2019");// 0
+	SSEntry.sub_name = XorStr("2019");
 	SortedStickers.push_back(SSEntry);
-	SSEntry.sub_name = XorStr("2018");// 1
+	SSEntry.sub_name = XorStr("2018");
 	SortedStickers.push_back(SSEntry);
-	SSEntry.sub_name = XorStr("2017");// 2
+	SSEntry.sub_name = XorStr("2017");
 	SortedStickers.push_back(SSEntry);
-	SSEntry.sub_name = XorStr("2016");// 3
+	SSEntry.sub_name = XorStr("2016");
 	SortedStickers.push_back(SSEntry);
-	SSEntry.sub_name = XorStr("2015");// 4
+	SSEntry.sub_name = XorStr("2015");
 	SortedStickers.push_back(SSEntry);
-	SSEntry.sub_name = XorStr("2014");// 5
+	SSEntry.sub_name = XorStr("2014");
 	SortedStickers.push_back(SSEntry);
-	SSEntry.sub_name = XorStr("Other");// 6
+	SSEntry.sub_name = XorStr("Other");
 	SortedStickers.push_back(SSEntry);
+
 
 	for (size_t i(0); i < SortedStickers.size() - 1; i++)
 		for (size_t j(0); j < sticker_kits.size(); j++)
 			if (sticker_kits[j].name.find(SortedStickers[i].sub_name) != string::npos)
-				SortedStickers[i].Stckers.push_back(sticker_kits[j]);
+				SortedStickers[i].Stickers.push_back(sticker_kits[j]);
 
 	for (size_t j(0); j < sticker_kits.size(); j++)
 		if (sticker_kits[j].name.find(XorStr("2019")) == string::npos &&
@@ -1217,7 +1218,7 @@ void CSkins::PrepareSortedSkins()
 			sticker_kits[j].name.find(XorStr("2016")) == string::npos &&
 			sticker_kits[j].name.find(XorStr("2015")) == string::npos &&
 			sticker_kits[j].name.find(XorStr("2014")) == string::npos)
-			SortedStickers.back().Stckers.push_back(sticker_kits[j]);
+			SortedStickers.back().Stickers.push_back(sticker_kits[j]);
 
 	ADD_LOG("Setup: All skins sorted sucessful\n");
 }

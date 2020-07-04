@@ -252,7 +252,7 @@ public:
 
 	struct SortedStickers_s
 	{
-		vector<paint_kit> Stckers;
+		vector<paint_kit> Stickers;
 		string sub_name = "";
 	};
 

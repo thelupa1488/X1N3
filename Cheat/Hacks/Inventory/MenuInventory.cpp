@@ -78,15 +78,15 @@ void CInventory::Menu()
 	auto SkinParams = [&](SkinSettings &Item) -> void
 	{
 		Inventory invBuffer;
-		X1Gui().PushItemWidth(360);
+		X1Gui().PushItemWidth(400);
 		SliderFloats("Seed", Item.seed, 0.f, 2.f);
 		SliderFloats("Wear", Item.wear, 0.f, 2.f, "%.9f");
-		X1Gui().PushItemWidth(230);
+		X1Gui().PushItemWidth(270);
 		SliderInts("StatTrak", Item.stat_track, 0, 5000);
 		X1Gui().SameLine();
 		DCheckBox("Auto StatTrak", Item.auto_stat_track);
 
-		X1Gui().PushItemWidth(360);
+		X1Gui().PushItemWidth(400);
 
 		vector<string> ItemsRarity = { lolc("Default"), lolc("Consumer"), lolc("Industrial"), lolc("Mil-Spec"), lolc("Restricted"), lolc("Classified") ,
 	        lolc("Covert"), lolc("Contraband") };
@@ -110,7 +110,7 @@ void CInventory::Menu()
 		VectorEx<const char* > InvArr = { lolc("Weapon"), lolc("Knife"),lolc("Gloves"), lolc("Medals"), lolc ("Profile") };
 		static int InvSettingsMode = 0;
 
-		TabsLabels(InvSettingsMode, InvArr, Vec2(long_item_w-4,20), false);
+		TabsLabels(InvSettingsMode, InvArr, Vec2(long_item_w-10,20), false);
 		X1Gui().Spacing();
 
 		if (InvSettingsMode == 0)
@@ -129,7 +129,7 @@ void CInventory::Menu()
 			{
 				if (WeapSkinSettingsMode == 0)
 				{
-					ItemsList(GP_Skins->WeaponNames, InvSelectedWeapon, Vec2(225, 389), XorStr("##AllWeapons"));
+					ItemsList(GP_Skins->WeaponNames, InvSelectedWeapon, Vec2(231, 388), XorStr("##AllWeapons"));
 					GP_Skins->WeaponPreview = WItem->CdnName;
 					X1Gui().SameLine();
 					X1Gui().BeginGroup();
@@ -143,7 +143,7 @@ void CInventory::Menu()
 						X1Gui().Spacing();
 						if (WItem->Skin.skins_mode == 0)
 						{
-							SkinsList(GP_Skins->skin_kits, WItem->Skin.paint_kit_menu, Vec2(221, 340), XorStr("##AllSkins"), FindSkin);
+							SkinsList(GP_Skins->skin_kits, WItem->Skin.paint_kit_menu, Vec2(229, 342), XorStr("##AllSkins"), FindSkin);
 							WItem->Skin.paint_kit_id = GP_Skins->skin_kits[WItem->Skin.paint_kit_menu].id;
 							GP_Skins->SkinPreview = GP_Skins->skin_kits[WItem->Skin.paint_kit_menu].cdn_name;
 						}
@@ -151,7 +151,7 @@ void CInventory::Menu()
 						{
 							if (GP_Skins->AllSkinsLoaded)
 							{
-								SortSkinsList(GP_Skins->SortedWeapons[InvSelectedWeapon].kits, WItem->Skin.paint_kit_menu, Vec2(221, 340), XorStr("##AllSkins"), FindSkin);
+								SortSkinsList(GP_Skins->SortedWeapons[InvSelectedWeapon].kits, WItem->Skin.paint_kit_menu, Vec2(229, 342), XorStr("##AllSkins"), FindSkin);
 								if (WItem->Skin.paint_kit_menu < (int)GP_Skins->SortedWeapons[InvSelectedWeapon].kits.size())
 								{
 									WItem->Skin.paint_kit_id = GP_Skins->SortedWeapons[InvSelectedWeapon].kits[WItem->Skin.paint_kit_menu].kit;
@@ -160,7 +160,7 @@ void CInventory::Menu()
 							}
 							else
 							{
-								X1Gui().ListBoxHeader(XorStr("##AllSkinsEmpty"), Vec2(221, 340));
+								X1Gui().ListBoxHeader(XorStr("##AllSkinsEmpty"), Vec2(229, 342));
 								X1Gui().Text(XorStr("Loading Skins..."));
 								X1Gui().ListBoxFooter();
 							}
@@ -201,7 +201,7 @@ void CInventory::Menu()
 					if (StikersMode == 0)
 					{
 						TextEdit("Find##InvChrSS", FindSticker, FindBuf, 128);
-						X1Gui().ListBoxHeader(XorStr("##StikerSerials"), Vec2(453, 326));
+						X1Gui().ListBoxHeader(XorStr("##StikerSerials"), Vec2(453, 380));
 						for (size_t i = 0; i < GP_Skins->sticker_kits.size(); i++)
 						{
 							if (!FindLower(GP_Skins->sticker_kits[i].name, FindSticker))
@@ -218,7 +218,7 @@ void CInventory::Menu()
 					{
 						if (GP_Skins->AllSkinsLoaded)
 						{
-							X1Gui().ListBoxHeader(XorStr("##SortStikerSerials"), Vec2(71, 363));
+							X1Gui().ListBoxHeader(XorStr("##SortStikerSerials"), Vec2(71, 402));
 							for (size_t i = 0; i < GP_Skins->SortedStickers.size(); i++)
 							{
 								bool selected = i == SortSelectedS;
@@ -230,28 +230,29 @@ void CInventory::Menu()
 							X1Gui().BeginGroup();
 							{
 								TextEdit("Find##InvChrSS", FindSticker, FindBuf, 128);
-								X1Gui().ListBoxHeader(XorStr("##StikerSerials"), Vec2(376, 340));
-								for (size_t i = 0; i < GP_Skins->SortedStickers[SortSelectedS].Stckers.size(); i++)
+								X1Gui().ListBoxHeader(XorStr("##StikerSerials"), Vec2(386, 380));
+								for (size_t i = 0; i < GP_Skins->SortedStickers[SortSelectedS].Stickers.size(); i++)
 								{
-									if (!FindLower(GP_Skins->SortedStickers[SortSelectedS].Stckers[i].name, FindSticker))
+									if (!FindLower(GP_Skins->SortedStickers[SortSelectedS].Stickers[i].name, FindSticker))
 										continue;
 
 									bool selected = i == SItem->kit_menu_index;
 
-									if (X1Gui().SelectLabel(GP_Skins->SortedStickers[SortSelectedS].Stckers[i].name.c_str(), selected))
+									if (X1Gui().SelectLabel(GP_Skins->SortedStickers[SortSelectedS].Stickers[i].name.c_str(), selected))
 										SItem->kit_menu_index = i;
 								}
 								X1Gui().ListBoxFooter();
 							}
 							X1Gui().EndGroup();
 
-							if (SItem->kit_menu_index > 0 && SItem->kit_menu_index < (int)GP_Skins->SortedStickers[SortSelectedS].Stckers.size())
-								SItem->kit = GP_Skins->SortedStickers[SortSelectedS].Stckers[SItem->kit_menu_index].id;
+							if (SItem->kit_menu_index > 0 && SItem->kit_menu_index < (int)GP_Skins->SortedStickers[SortSelectedS].Stickers.size())
+								SItem->kit = GP_Skins->SortedStickers[SortSelectedS].Stickers[SItem->kit_menu_index].id;
 						}
 						else
 							X1Gui().Text(XorStr("Loading Stickers..."));
 					}
 
+					X1Gui().PushItemWidth(400);
 					SliderFloats("Wear", SItem->wear, 0.f, 1.f);
 					SliderFloats("Scale", SItem->scale, 0.f, 1.f);
 					SliderFloats("Rotation", SItem->rotation, 0.f, 360);
@@ -299,7 +300,7 @@ void CInventory::Menu()
 		}
 		else if (InvSettingsMode == 1)
 		{
-			ItemsList(GP_Skins->KnifeNames, InvSelectedKnife, Vec2(225, 419), XorStr("##AllKnifes"));
+			ItemsList(GP_Skins->KnifeNames, InvSelectedKnife, Vec2(231, 392), XorStr("##AllKnifes"));
 			X1Gui().SameLine();
 
 			if (GP_Skins)
@@ -319,7 +320,7 @@ void CInventory::Menu()
 					X1Gui().Spacing();
 					if (WItem->Skin.skins_mode == 0)
 					{
-						SkinsList(GP_Skins->skin_kits, WItem->Skin.paint_kit_menu, Vec2(221, 370), XorStr("##AllKnifSkins"), FindSkin);
+						SkinsList(GP_Skins->skin_kits, WItem->Skin.paint_kit_menu, Vec2(229, 346), XorStr("##AllKnifSkins"), FindSkin);
 						WItem->Skin.paint_kit_id = GP_Skins->skin_kits[WItem->Skin.paint_kit_menu].id;
 						SkinPreview = GP_Skins->skin_kits[WItem->Skin.paint_kit_menu].cdn_name;
 					}
@@ -327,7 +328,7 @@ void CInventory::Menu()
 					{
 						if (GP_Skins->AllSkinsLoaded)
 						{
-							SortSkinsList(GP_Skins->SortedKnives[InvSelectedKnife].kits, WItem->Skin.paint_kit_menu, Vec2(221, 370), XorStr("##AllKnifSkins"), FindSkin);
+							SortSkinsList(GP_Skins->SortedKnives[InvSelectedKnife].kits, WItem->Skin.paint_kit_menu, Vec2(229, 346), XorStr("##AllKnifSkins"), FindSkin);
 							if (WItem->Skin.paint_kit_menu < (int)GP_Skins->SortedKnives[InvSelectedKnife].kits.size())
 							{
 								WItem->Skin.paint_kit_id = GP_Skins->SortedKnives[InvSelectedKnife].kits[WItem->Skin.paint_kit_menu].kit;
@@ -336,7 +337,7 @@ void CInventory::Menu()
 						}
 						else
 						{
-							X1Gui().ListBoxHeader(XorStr("##AllKnifSkinsEmpty"), Vec2(221, 370));
+							X1Gui().ListBoxHeader(XorStr("##AllKnifSkinsEmpty"), Vec2(229, 346));
 							X1Gui().Text(XorStr("Loading Skins..."));
 							X1Gui().ListBoxFooter();
 						}
@@ -396,6 +397,8 @@ void CInventory::Menu()
 			}
 			X1Gui().ListBoxFooter();
 
+			X1Gui().PushItemWidth(400);
+
 			if (InvSelectedGlove > 0)
 			{
 				SliderFloats("Wear", InvGloveWear, 0.f, 1.f, XorStr("%.9f"));
@@ -436,7 +439,7 @@ void CInventory::Menu()
 			static int SelectedMedal = 0;
 			if (GP_Skins->AllSkinsLoaded)
 			{
-				X1Gui().ListBoxHeader(XorStr("##Medals"), Vec2(long_item_w, 535));
+				X1Gui().ListBoxHeader(XorStr("##Medals"), Vec2(long_item_w, 545));
 				for (size_t i = 0; i < Medals.size(); i++)
 				{
 					bool selected = i == SelectedMedal;
@@ -447,7 +450,7 @@ void CInventory::Menu()
 			}
 			else
 			{
-				X1Gui().ListBoxHeader(XorStr("##MedalsEmpty"), Vec2(long_item_w, 535));
+				X1Gui().ListBoxHeader(XorStr("##MedalsEmpty"), Vec2(long_item_w, 545));
 				X1Gui().Text(XorStr("Loading Medals..."));
 				X1Gui().ListBoxFooter();
 			}

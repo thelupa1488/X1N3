@@ -203,7 +203,9 @@ public:
 	bool TriggerFlashCheck = false;
 	bool TriggerSmokeCheck = false;
 	bool TriggerJumpCheck = false;
+	bool TriggerMoveCheck = false;
 	bool TriggerJumpEnemyCheck = false;
+	bool TriggerOnlyZoom = false;
 
 	struct backtrackData
 	{
@@ -433,6 +435,7 @@ public:
 		RV(TriggerSmokeCheck, "TriggerSmokeCheck");
 		RV(TriggerJumpCheck, "TriggerJumpCheck");
 		RV(TriggerJumpEnemyCheck, "TriggerJumpEnemyCheck");
+		RV(TriggerOnlyZoom, "TriggerOnlyZoom");
 
 		ADD_LOG("Setup: CLegitAim sucessful\n");
 	}

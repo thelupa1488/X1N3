@@ -409,6 +409,8 @@ void CLegitAim::Menu()
 			DCheckBox("Jump check##Trigger", TriggerJumpCheck);
 			X1Gui().SameLine(163);
 			DCheckBox("Enemy jump check##Trigger", TriggerJumpEnemyCheck);
+			if (SelectedWeapon >= 30 || WeaponCustomTypes == 3 || WeaponCustomTypes == 2 || WeaponCustomTypes)
+				DCheckBox("Only Zoom##Trigger", TriggerOnlyZoom);
 
 			X1Gui().Spacing();
 
@@ -418,7 +420,6 @@ void CLegitAim::Menu()
 			X1Gui().Spacing();
 
 			SliderIntsProc("Hit chance##Trigger", Weapons[GetWeap(SelectedWeapon)].TriggerChanse, 0, 100);
-
 			SliderFloats("Delay##trig", Weapons[GetWeap(SelectedWeapon)].TriggerDelay, 0, 1.f);
 		}
 		else if (SubtabTrigMiscSelected == 1)
