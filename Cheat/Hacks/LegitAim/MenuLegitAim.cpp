@@ -420,7 +420,7 @@ void CLegitAim::Menu()
 			X1Gui().Spacing();
 
 			SliderIntsProc("Hit chance##Trigger", Weapons[GetWeap(SelectedWeapon)].TriggerChanse, 0, 100);
-			SliderFloats("Delay##trig", Weapons[GetWeap(SelectedWeapon)].TriggerDelay, 0, 1.f);
+			SliderFloats("Delay##Trigger", Weapons[GetWeap(SelectedWeapon)].TriggerDelay, 0, 1.f);
 		}
 		else if (SubtabTrigMiscSelected == 1)
 		{
