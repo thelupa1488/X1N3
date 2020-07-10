@@ -811,6 +811,7 @@
     <ClInclude Include="protobuf\network_connection.pb.h" />
     <ClInclude Include="protobuf\steamdatagram_messages.pb.h" />
     <ClInclude Include="protobuf\steammessages.pb.h" />
+    <ClInclude Include="Engine\SDK\CItemSystem.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">

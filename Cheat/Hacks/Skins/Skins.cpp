@@ -179,7 +179,7 @@ void CSkins::PostDataUpdate()
 
 	bool IsTT = pLocal->GetTeam() == 2;
 
-	CBaseHandle* weapons = pLocal->m_hMyWeapons();
+	CBaseHandle* weapons = pLocal->GetWeapons();
 
 	/* Need Fix */
 	/////////////////////////////////////////////////////////////////////////////////

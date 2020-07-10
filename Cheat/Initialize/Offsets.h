@@ -18,6 +18,8 @@ namespace Offsets
 	extern DWORD m_vecOrigin;
 	extern DWORD deadflag;
 
+	extern DWORD m_nRenderMode;
+	extern DWORD m_MoveType;
 	extern DWORD m_bIsDefusing;
 
 	extern DWORD m_lifeState;

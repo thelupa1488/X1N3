@@ -1,11 +1,10 @@
 #include "Skins.h"
 #include "../Setup.h"
+#include "../../Engine/SDK/CItemSystem.hpp"
 #include <algorithm>
 #include "../../X1API/MinHook/hook.h"
 
 unordered_map<int, const char*> g_ViewModelCfg;
-class CCStrike15ItemSchema;
-class CCStrike15ItemSystem;
 
 template <typename Key, typename Value>
 struct Node_t

@@ -87,7 +87,7 @@ namespace SDK
 		if (!g_pClient)
 		{
 			g_pClient = GetInterface<IBaseClientDLL>(clientFactory, XorStr("VClient0"));
-			while (!((DWORD) * *(IClientMode***)((*(uint32_t**)Client())[10] + 0x5)) || !((DWORD) * *(CGlobalVarsBase***)((*(uint32_t**)Client())[0] + 0x1B)))
+			while (!((DWORD) * *(IClientMode***)((*(uint32_t**)Client())[10] + 0x5)) || !((DWORD) * *(CGlobalVarsBase***)((*(uint32_t**)Client())[0] + 0x1F)))
 			{
 				FastCall::G().t_Sleep(1000);
 			}
@@ -283,7 +283,7 @@ namespace SDK
 		if (!g_pGlobals)
 		{
 			auto pClientVFTable = *(uint32_t**)Client();
-			g_pGlobals = **(CGlobalVarsBase***)(pClientVFTable[0] + 0x1B);
+			g_pGlobals = **(CGlobalVarsBase***)(pClientVFTable[0] + 0x1F);
 			ADD_LOG("->Globals -> %X\n", (DWORD)g_pGlobals);
 		}
 

@@ -54,15 +54,11 @@ namespace Engine
 
 	bool CBaseEntity::IsWeapon()
 	{
-		//index: 160
-		//ref: "CNewParticleEffect::DrawModel"
-		//sig: 8B 80 ? ? ? ? FF D0 84 C0 74 6F 8B 4D A4
 		return GetMethod<bool(__thiscall*)(CBaseEntity*)>(this, 165)(this);
 	}
 
 	bool CBaseEntity::IsDefusing()
 	{
-
 		return *(bool*)((DWORD)this + offsets["m_bIsDefusing"]);
 	}
 
@@ -174,17 +170,17 @@ namespace Engine
 
 	float CBaseEntity::GetC4BlowTime()
 	{
-		return *(float*)((uintptr_t)this + offsets["m_flC4Blow"]);
+		return *(float*)((DWORD)this + offsets["m_flC4Blow"]);
 	}
 
 	float CBaseEntity::GetC4DefuseCountDown()
 	{
-		return *(float*)((uintptr_t)this + offsets["m_flDefuseCountDown"]);
+		return *(float*)((DWORD)this + offsets["m_flDefuseCountDown"]);
 	}
 
 	float CBaseEntity::GetLowerBodyYawTarget()
 	{
-		return *(float*)((uintptr_t)this + offsets["m_flLowerBodyYawTarget"]);
+		return *(float*)((DWORD)this + offsets["m_flLowerBodyYawTarget"]);
 	}
 
 	Vector CBaseEntity::GetPredicted(Vector p0)
@@ -195,7 +191,7 @@ namespace Engine
 	QAngle& CBaseEntity::GetVAngles()
 	{
 		static auto deadflag = offsets["deadflag"];
-		return *(QAngle*)((uintptr_t)this + deadflag + 0x4);
+		return *(QAngle*)((DWORD)this + deadflag + 0x4);
 	}
 
 	void CBaseEntity::UpdateClientSideAnimation()
@@ -210,7 +206,7 @@ namespace Engine
 
 	AnimationLayer* CBaseEntity::GetAnimOverlays()
 	{
-		return *reinterpret_cast<AnimationLayer**>(uintptr_t(this) + 0x2990);
+		return *reinterpret_cast<AnimationLayer**>(DWORD(this) + 0x2990);
 	}
 
 	AnimationLayer* CBaseEntity::GetAnimOverlay(int i)
@@ -222,37 +218,32 @@ namespace Engine
 	CUserCmd*& CBaseEntity::GetCurrentCommand() 
 	{
 		static auto currentCommand = *(uint32_t*)(Utils::PatternScan(clientFactory, XorStr("89 BE ? ? ? ? E8 ? ? ? ? 85 FF")) + 2);
-		return *(CUserCmd**)((uintptr_t)this + currentCommand);
+		return *(CUserCmd**)((DWORD)this + currentCommand);
 	}
 
 	float CBaseEntity::GetSpawnTime()
 	{
-		return *(float*)((uintptr_t)this + offsets["m_flSpawnTime"]);
+		return *(float*)((DWORD)this + offsets["m_flSpawnTime"]);
 	}
 
 	int CBaseEntity::GetBombDefuser()
 	{
-		return *(int*)((uintptr_t)this + offsets["m_hBombDefuser"]);
+		return *(int*)((DWORD)this + offsets["m_hBombDefuser"]);
 	}
 
 	int CBaseEntity::GetBombSite()
 	{
-		return *(int*)((uintptr_t)this + offsets["m_nBombSite"]);
-	}
-
-	int CBaseEntity::GetMoveType()
-	{
-		return *(int*)((uintptr_t)this + 0x25C);
+		return *(int*)((DWORD)this + offsets["m_nBombSite"]);
 	}
 
 	bool CBaseEntity::IsBombDefused()
 	{
-		return *(bool*)((uintptr_t)this + offsets["m_bBombDefused"]);
+		return *(bool*)((DWORD)this + offsets["m_bBombDefused"]);
 	}
 
 	bool CBaseEntity::GetGunGameImmunity()
 	{
-		return *(bool*)((uintptr_t)this + offsets["m_bGunGameImmunity"]);
+		return *(bool*)((DWORD)this + offsets["m_bGunGameImmunity"]);
 	}
 
 	bool CBaseEntity::HasHelmet()
@@ -278,6 +269,11 @@ namespace Engine
 	int	CBaseEntity::GetFlags()
 	{
 		return *(PINT)((DWORD)this + offsets["m_fFlags"]);
+	}
+
+	int CBaseEntity::GetMoveType()
+	{
+		return *(int*)((DWORD)this + offsets["m_MoveType"]);
 	}
 
 	int CBaseEntity::GetOwner()
@@ -353,12 +349,6 @@ namespace Engine
 		return (CBaseWeapon*)I::EntityList()->GetClientEntityFromHandle((PVOID) * (PDWORD)GetActiveWeapon());
 	}
 
-	CBaseHandle* CBaseEntity::m_hMyWeapons()
-	{
-		return (CBaseHandle*)((uintptr_t)this + 0x2DF8);
-	}
-
-	//For Changer Auto Offset
 	CBaseHandle* CBaseEntity::GetWeapons()
 	{
 		return (CBaseHandle*)((DWORD)this + offsets["m_hMyWeapons"]);

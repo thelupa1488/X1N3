@@ -61,6 +61,8 @@ namespace Offsets
 
 	DWORD m_vecOrigin = 0;
 
+	DWORD m_nRenderMode = 0;
+	DWORD m_MoveType = 0;
 	DWORD m_bIsDefusing = 0;
 
 	DWORD m_angEyeAngles = 0;

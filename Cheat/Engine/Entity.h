@@ -124,7 +124,6 @@ namespace Engine
 
 		int     GetBombDefuser();
 		int     GetBombSite();
-		int     GetMoveType();
 		bool    IsBombDefused();
 		bool    GetGunGameImmunity();
 
@@ -134,6 +133,7 @@ namespace Engine
 
 		int		GetFovStart();
 		int		GetFlags();
+		int     GetMoveType();
 		int		GetOwner();
 		int		GetHealth();
 		int		GetArmor();
@@ -152,7 +152,6 @@ namespace Engine
 
 		PVOID			GetActiveWeapon();
 		CBaseWeapon*	GetBaseWeapon();
-		CBaseHandle*    m_hMyWeapons();
 		CBaseHandle*    GetWeapons();
 		CBaseHandle*    GetWearables();
 		CBaseViewModel* GetViewModel();

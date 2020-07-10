@@ -10,7 +10,7 @@ namespace Engine
 	float CBaseWeapon::GetInaccuracy()
 	{
 		typedef float(__thiscall* OriginalFn)(void*);
-		return GetVFunc<OriginalFn>(this, 482)(this); //481
+		return GetVFunc<OriginalFn>(this, 482)(this);
 	}
 
 	HANDLE* CBaseWeapon::GetWeaponWorldModel()
@@ -20,37 +20,37 @@ namespace Engine
 
 	int* CBaseWeapon::ModelIndex()
 	{
-		return (int*)((uintptr_t)this + offsets["m_nModelIndex"]);
+		return (int*)((DWORD)this + offsets["m_nModelIndex"]);
 	}
 
 	int* CBaseWeapon::ViewModelIndex()
 	{
-		return (int*)((uintptr_t)this + offsets["m_iViewModelIndex"]);
+		return (int*)((DWORD)this + offsets["m_iViewModelIndex"]);
 	}
 
 	int* CBaseWeapon::fixItemIDHigh()
 	{
-		return (int*)((uintptr_t)this + offsets["m_iItemIDHigh"]);
+		return (int*)((DWORD)this + offsets["m_iItemIDHigh"]);
 	}
 
 	short* CBaseWeapon::fixskins()
 	{
-		return (short*)((uintptr_t)this + offsets["m_iItemDefinitionIndex"]);
+		return (short*)((DWORD)this + offsets["m_iItemDefinitionIndex"]);
 	}
 
 	int* CBaseWeapon::GetEntityQuality()
 	{
-		return (int*)((uintptr_t)this + offsets["m_iEntityQuality"]);
+		return (int*)((DWORD)this + offsets["m_iEntityQuality"]);
 	}
 
 	int* CBaseWeapon::OwnerXuidLow()
 	{
-		return (int*)((uintptr_t)this + offsets["m_OriginalOwnerXuidLow"]);
+		return (int*)((DWORD)this + offsets["m_OriginalOwnerXuidLow"]);
 	}
 
 	int* CBaseWeapon::OwnerXuidHigh()
 	{
-		return (int*)((uintptr_t)this + offsets["m_OriginalOwnerXuidHigh"]);
+		return (int*)((DWORD)this + offsets["m_OriginalOwnerXuidHigh"]);
 	}
 
 	int CBaseWeapon::GetWeaponAmmoClp2()
@@ -62,7 +62,7 @@ namespace Engine
 	{
 		static auto inReload = *reinterpret_cast<uint32_t*>(
 			Utils::PatternScan(clientFactory, XorStr("C6 87 ? ? ? ? ? 8B 06 8B CE FF 90")));
-		return *reinterpret_cast<bool*>(uintptr_t(this) + inReload);
+		return *reinterpret_cast<bool*>(DWORD(this) + inReload);
 	}
 
 	bool CBaseWeapon::CanFire()
@@ -114,7 +114,7 @@ namespace Engine
 	CCSWeaponInfo* CBaseWeapon::GetWeaponInfo()
 	{
 		typedef CCSWeaponInfo*(__thiscall* GetWeaponDataFn)(void*);
-		return GetMethod< GetWeaponDataFn >(this, 460)(this);  //459
+		return GetMethod< GetWeaponDataFn >(this, 460)(this);
 	}
 
 	CBaseAttributableItem* CBaseWeapon::GeteAttributableItem()
@@ -125,7 +125,7 @@ namespace Engine
 	const char*	CBaseWeapon::GetName()
 	{
 		typedef const char* (__thiscall* GetNameFn)(void*);
-		return GetMethod<GetNameFn>(this, 386)(this); //385
+		return GetMethod<GetNameFn>(this, 386)(this);
 	}
 
 	const char*	CBaseWeapon::GetPrintName()
@@ -146,11 +146,11 @@ namespace Engine
 
 	int* CBaseAttributableItem::ModelIndex()
 	{
-		return (int*)((uintptr_t)this + offsets["m_nModelIndex"]);
+		return (int*)((DWORD)this + offsets["m_nModelIndex"]);
 	}
 	int* CBaseAttributableItem::ViewModelIndex()
 	{
-		return (int*)((uintptr_t)this + offsets["m_iViewModelIndex"]);
+		return (int*)((DWORD)this + offsets["m_iViewModelIndex"]);
 	}
 
 	int* CBaseAttributableItem::GetItemIDHigh()
@@ -199,7 +199,7 @@ namespace Engine
 	}
 
 	char* CBaseAttributableItem::GetCustomName() {
-		return reinterpret_cast<char*>(uintptr_t(this) + offsets["m_szCustomName"]);
+		return reinterpret_cast<char*>(DWORD(this) + offsets["m_szCustomName"]);
 	}
 
 	CBaseViewModel* CBaseAttributableItem::GetViewModel()
