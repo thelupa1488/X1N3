@@ -4,7 +4,7 @@ namespace Engine
 {
 	int CBaseWeapon::GetWeaponAmmo()
 	{
-		return *(PINT)((DWORD)this + offsets["m_iClip1"]);
+		return ptr(*(PINT), this, offsets["m_iClip1"]);
 	}
 
 	float CBaseWeapon::GetInaccuracy()
@@ -15,47 +15,47 @@ namespace Engine
 
 	HANDLE* CBaseWeapon::GetWeaponWorldModel()
 	{
-		return (HANDLE*)((DWORD)this + offsets["m_hWeaponWorldModel"]);
+		return ptr((HANDLE*), this, offsets["m_hWeaponWorldModel"]);
 	}
 
 	int* CBaseWeapon::ModelIndex()
 	{
-		return (int*)((DWORD)this + offsets["m_nModelIndex"]);
+		return ptr((int*), this, offsets["m_nModelIndex"]);
 	}
 
 	int* CBaseWeapon::ViewModelIndex()
 	{
-		return (int*)((DWORD)this + offsets["m_iViewModelIndex"]);
+		return ptr((int*), this, offsets["m_iViewModelIndex"]);
 	}
 
 	int* CBaseWeapon::fixItemIDHigh()
 	{
-		return (int*)((DWORD)this + offsets["m_iItemIDHigh"]);
+		return ptr((int*), this, offsets["m_iItemIDHigh"]);
 	}
 
 	short* CBaseWeapon::fixskins()
 	{
-		return (short*)((DWORD)this + offsets["m_iItemDefinitionIndex"]);
+		return ptr((short*), this, offsets["m_iItemDefinitionIndex"]);
 	}
 
 	int* CBaseWeapon::GetEntityQuality()
 	{
-		return (int*)((DWORD)this + offsets["m_iEntityQuality"]);
+		return ptr((int*), this, offsets["m_iEntityQuality"]);
 	}
 
 	int* CBaseWeapon::OwnerXuidLow()
 	{
-		return (int*)((DWORD)this + offsets["m_OriginalOwnerXuidLow"]);
+		return ptr((int*), this, offsets["m_OriginalOwnerXuidLow"]);
 	}
 
 	int* CBaseWeapon::OwnerXuidHigh()
 	{
-		return (int*)((DWORD)this + offsets["m_OriginalOwnerXuidHigh"]);
+		return ptr((int*), this, offsets["m_OriginalOwnerXuidHigh"]);
 	}
 
 	int CBaseWeapon::GetWeaponAmmoClp2()
 	{
-		return *(PINT)((DWORD)this + offsets["m_iClip2"]);
+		return ptr(*(PINT), this, offsets["m_iClip2"]);
 	}
 
 	bool CBaseWeapon::IsReloading()
@@ -88,27 +88,27 @@ namespace Engine
 		if (!this)
 			return 0;
 
-		return *(PINT)((DWORD)this + offsets["m_zoomLevel"]);
+		return ptr(*(PINT), this, offsets["m_zoomLevel"]);
 	}
 
 	bool CBaseWeapon::GetWeaponReload()
 	{
-		return *(bool*)((DWORD)this + offsets["m_bCanReload"]);
+		return ptr(*(bool*), this, offsets["m_bCanReload"]);
 	}
 
 	float CBaseWeapon::GetNextPrimaryAttack()
 	{
-		return *(float*)((DWORD)this + offsets["m_flNextPrimaryAttack"]);
+		return ptr(*(float*), this, offsets["m_flNextPrimaryAttack"]);
 	}
 
 	bool CBaseWeapon::GetPinPulled()
 	{
-		return *(bool*)((DWORD)this + offsets["m_bPinPulled"]);
+		return ptr(*(bool*), this, offsets["m_bPinPulled"]);
 	}
 
 	float CBaseWeapon::GetThrowTime()
 	{
-		return *(float*)((DWORD)this + offsets["m_fThrowTime"]);
+		return ptr(*(float*), this, offsets["m_fThrowTime"]);
 	}
 
 	CCSWeaponInfo* CBaseWeapon::GetWeaponInfo()
@@ -119,7 +119,7 @@ namespace Engine
 
 	CBaseAttributableItem* CBaseWeapon::GeteAttributableItem()
 	{
-		return (CBaseAttributableItem*)(DWORD)this;
+		return ptr((CBaseAttributableItem*), this, 0);
 	}
 
 	const char*	CBaseWeapon::GetName()
@@ -136,74 +136,70 @@ namespace Engine
 
 	short* CBaseAttributableItem::GetItemDefinitionIndex()
 	{
-		return (short*)((DWORD)this + offsets["m_iItemDefinitionIndex"]);
+		return ptr((short*), this, offsets["m_iItemDefinitionIndex"]);
 	}
 
 	int* CBaseAttributableItem::GetIndex()
 	{
-		return (int*)((DWORD)this + offsets["m_bIsAutoaimTarget"]);
+		return ptr((int*), this, offsets["m_bIsAutoaimTarget"]);
 	}
 
 	int* CBaseAttributableItem::ModelIndex()
 	{
-		return (int*)((DWORD)this + offsets["m_nModelIndex"]);
+		return ptr((int*), this, offsets["m_nModelIndex"]);
 	}
 	int* CBaseAttributableItem::ViewModelIndex()
 	{
-		return (int*)((DWORD)this + offsets["m_iViewModelIndex"]);
+		return ptr((int*), this, offsets["m_iViewModelIndex"]);
 	}
 
 	int* CBaseAttributableItem::GetItemIDHigh()
 	{
-		return (int*)((DWORD)this + offsets["m_iItemIDHigh"]);
+		return ptr((int*), this, offsets["m_iItemIDHigh"]);
 	}
 
 	int* CBaseAttributableItem::GetAccountID()
 	{
-		return (int*)((DWORD)this + offsets["m_iAccountID"]);
+		return ptr((int*), this, offsets["m_iAccountID"]);
 	}
 
 	int* CBaseAttributableItem::GetEntityQuality()
 	{
-		return (int*)((DWORD)this + offsets["m_iEntityQuality"]);
+		return ptr((int*), this, offsets["m_iEntityQuality"]);
 	}
 
 	int* CBaseAttributableItem::GetOriginalOwnerXuidLow()
 	{
-		return (int*)((DWORD)this + offsets["m_OriginalOwnerXuidLow"]);
+		return ptr((int*), this, offsets["m_OriginalOwnerXuidLow"]);
 	}
 
 	int* CBaseAttributableItem::GetOriginalOwnerXuidHigh()
 	{
-		return (int*)((DWORD)this + offsets["m_OriginalOwnerXuidHigh"]);
+		return ptr((int*), this, offsets["m_OriginalOwnerXuidHigh"]);
 	}
 
 	int* CBaseAttributableItem::GetFallbackPaintKit()
 	{
-		return (int*)((DWORD)this + offsets["m_nFallbackPaintKit"]);
+		return ptr((int*), this, offsets["m_nFallbackPaintKit"]);
 	}
 
 	float* CBaseAttributableItem::GetFallbackWear()
 	{
-		return (float*)((DWORD)this + offsets["m_flFallbackWear"]);
+		return ptr((float*), this, offsets["m_flFallbackWear"]);
 	}
 
 	int* CBaseAttributableItem::GetFallbackSeed()
 	{
-		return (int*)((DWORD)this + offsets["m_nFallbackSeed"]);
+		return ptr((int*), this, offsets["m_nFallbackSeed"]);
 	}
 
 	int* CBaseAttributableItem::GetFallbackStatTrak()
 	{
-		return (int*)((DWORD)this + offsets["m_nFallbackStatTrak"]);
+		return ptr((int*), this, offsets["m_nFallbackStatTrak"]);
 	}
 
-	char* CBaseAttributableItem::GetCustomName() {
-		return reinterpret_cast<char*>(DWORD(this) + offsets["m_szCustomName"]);
-	}
-
-	CBaseViewModel* CBaseAttributableItem::GetViewModel()
+	char* CBaseAttributableItem::GetCustomName() 
 	{
-		return (CBaseViewModel*)(DWORD)this;
+		return ptr(reinterpret_cast<char*>, this, offsets["m_szCustomName"]);
 	}
 }     

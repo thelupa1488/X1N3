@@ -232,7 +232,7 @@ public:
 				offsets["m_iClip2"] = mGetOffset("DT_BaseCombatWeapon", "m_iPrimaryReserveAmmoCount");
 				offsets["m_flNextPrimaryAttack"] = mGetOffset("DT_BaseCombatWeapon", "m_flNextPrimaryAttack");
 				offsets["m_flLowerBodyYawTarget"] = mGetOffset("DT_CSPlayer", "m_flLowerBodyYawTarget");
-				offsets["m_bCanReload"] = offsets["m_flNextPrimaryAttack"] + 113;
+				offsets["m_bCanReload"] = offsets["m_flNextPrimaryAttack"] + 0x6D;
 				offsets["m_bGunGameImmunity"] = mGetOffset("DT_CSPlayer", "m_bGunGameImmunity");
 				offsets["m_bPinPulled"] = mGetOffset("DT_BaseCSGrenade", "m_bPinPulled");
 				offsets["m_fThrowTime"] = mGetOffset("DT_BaseCSGrenade", "m_fThrowTime");
@@ -248,6 +248,7 @@ public:
 				offsets["m_nFallbackSeed"] = mGetOffset("DT_BaseAttributableItem", "m_nFallbackSeed");
 				offsets["m_szCustomName"] = mGetOffset("DT_BaseAttributableItem", "m_szCustomName");
 				offsets["m_nFallbackStatTrak"] = mGetOffset("DT_BaseAttributableItem", "m_nFallbackStatTrak");
+				offsets["m_Item"] = mGetOffset("DT_BaseAttributableItem", "m_Item");
 				offsets["m_nModelIndex"] = mGetOffset("DT_BaseViewModel", "m_nModelIndex");
 				offsets["m_nSequence"] = mGetOffset("DT_BaseViewModel", "m_nSequence");
 				offsets["m_iViewModelIndex"] = mGetOffset("DT_BaseCombatWeapon", "m_iViewModelIndex");
@@ -259,7 +260,7 @@ public:
 				offsets["m_flDuckAmount"] = mGetOffset("DT_BaseEntity", "m_flDuckAmount");
 				offsets["m_hWeaponWorldModel"] = mGetOffset("DT_BaseCombatWeapon", "m_hWeaponWorldModel");
 				offsets["m_iWorldModelIndex"] = mGetOffset("DT_BaseCombatWeapon", "m_iWorldModelIndex");
-				offsets["m_Item"] = mGetOffset("DT_BaseAttributableItem", "m_Item");
+//				offsets["FindW2Matrix"] = (reinterpret_cast<DWORD>(&I::Engine()->WorldToScreenMatrix()) + 0x40);
 				ADD_LOG("All Offsets sucessful\n");
 				ADD_LOG("2-1-9-1\n");
 	 		};

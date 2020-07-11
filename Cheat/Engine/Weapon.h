@@ -58,7 +58,6 @@ namespace Engine
 		int* GetFallbackSeed();
 		int* GetFallbackStatTrak();
 		char* GetCustomName();
-		CBaseViewModel* GetViewModel();
 		int* GetIndex();
 		int* ModelIndex();
 		int* ViewModelIndex();

@@ -604,25 +604,45 @@ namespace SDK
 	//--------------------------------------------------------------------------------
 	static bool screen_transform(const Vector& in, Vector& out)
 	{
-		static auto& w2sMatrix = I::Engine()->WorldToScreenMatrix();
+		auto exception_filter = [](int code, PEXCEPTION_POINTERS ex)
+		{
+			return EXCEPTION_EXECUTE_HANDLER;
+		};
 
-		out.x = w2sMatrix.m[0][0] * in.x + w2sMatrix.m[0][1] * in.y + w2sMatrix.m[0][2] * in.z + w2sMatrix.m[0][3];
-		out.y = w2sMatrix.m[1][0] * in.x + w2sMatrix.m[1][1] * in.y + w2sMatrix.m[1][2] * in.z + w2sMatrix.m[1][3];
-		out.z = 0.0f;
+		__try
+		{
+			auto result = *(PDWORD)(offsets["FindW2Matrix"]) + 988;
+			if (!result)
+			{
+				return false;
+			}
 
-		float w = w2sMatrix.m[3][0] * in.x + w2sMatrix.m[3][1] * in.y + w2sMatrix.m[3][2] * in.z + w2sMatrix.m[3][3];
+			const auto& world_matrix = *(_D3DMATRIX*)result;
 
-		if (w < 0.001f)
+			const auto w = world_matrix.m[3][0] * in.x + world_matrix.m[3][1] * in.y + world_matrix.m[3][2] * in.z + world_matrix.m[3][3];
+			if (w < 0.001f)
+			{
+				out.x *= 100000;
+				out.y *= 100000;
+				return false;
+			}
+
+			out.x = world_matrix.m[0][0] * in.x + world_matrix.m[0][1] * in.y + world_matrix.m[0][2] * in.z + world_matrix.m[0][3];
+			out.y = world_matrix.m[1][0] * in.x + world_matrix.m[1][1] * in.y + world_matrix.m[1][2] * in.z + world_matrix.m[1][3];
+			out.z = 0.0f;
+
+			out.x /= w;
+			out.y /= w;
+
+			return true;
+
+		}
+		__except (exception_filter(GetExceptionCode(), GetExceptionInformation()))
 		{
 			out.x *= 100000;
 			out.y *= 100000;
 			return false;
 		}
-
-		out.x /= w;
-		out.y /= w;
-
-		return true;
 	}
 	//--------------------------------------------------------------------------------
 	bool WorldToScreen(const Vector& in, Vector& out)

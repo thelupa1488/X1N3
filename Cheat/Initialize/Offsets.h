@@ -110,6 +110,6 @@ namespace Offsets
 
 	extern DWORD m_Item;
 
-//	extern float* FindW2Matrix();
+//	extern DWORD FindW2Matrix;
 }
 

@@ -76,7 +76,7 @@ void CSoundEsp::Draw(CEntityPlayer* Local)
 
 			if (Sounds[i].Team != Local->Team ? GP_Esp->Enemy : GP_Esp->Team)
 			{
-				if (CGlobal::WorldToScreen(Sounds[i].Pos, ScreenPos))
+				if (WorldToScreen(Sounds[i].Pos, ScreenPos))
 				{
 					float Size = GP_Esp->SoundEspSize;
 

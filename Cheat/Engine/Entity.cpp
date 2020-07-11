@@ -1,17 +1,14 @@
 #include "Entity.h"
 #include "../Initialize/Offsets.h"
-
-#define ptr( x, x1, x2 ) *(x*)( (DWORD)x1 + (DWORD)x2 )
-
 using namespace Engine;
 
 namespace SDK
 {
 	int& IClientEntity::GetModelIndex()
 	{
-		return *(int*)((DWORD)this + offsets["m_nModelIndex"]);
+		return ptr(*(int*), this, offsets["m_nModelIndex"]);
 	}
-
+	 
 	CBaseEntity* IClientEntityList::GetClientEntityFromHandleknife(HANDLE hEnt)
 	{
 		typedef CBaseEntity* (__thiscall * OriginalFn)(PVOID, HANDLE);
@@ -59,12 +56,12 @@ namespace Engine
 
 	bool CBaseEntity::IsDefusing()
 	{
-		return *(bool*)((DWORD)this + offsets["m_bIsDefusing"]);
+		return ptr(*(bool*), this, offsets["m_bIsDefusing"]);
 	}
 
 	Vector CBaseEntity::GetOrigin()
 	{
-		return *(Vector*)((DWORD)this + offsets["m_vecOrigin"]);
+		return ptr(*(Vector*), this, offsets["m_vecOrigin"]);
 	}
 
 	bool CBaseEntity::IsValid()
@@ -77,13 +74,13 @@ namespace Engine
 
 	bool CBaseEntity::IsDead()
 	{
-		BYTE LifeState = *(PBYTE)((DWORD)this + offsets["m_lifeState"]);
+		BYTE LifeState = ptr(*(PBYTE), this, offsets["m_lifeState"]);
 		return (LifeState != LIFE_ALIVE);
 	}
 
 	float CBaseEntity::GetFlashDuration()
 	{
-		return *(float*)((DWORD)this + offsets["m_flFlashDuration"]);
+		return ptr(*(float*), this, offsets["m_flFlashDuration"]);
 	}
 
 	bool CBaseEntity::IsFlashed()
@@ -93,7 +90,7 @@ namespace Engine
 
 	int CBaseEntity::GetMoney()
 	{
-		return *(int*)((DWORD)this + offsets["m_iAccount"]);
+		return ptr(*(int*), this, offsets["m_iAccount"]);
 	}
 
 	bool CBaseEntity::IsVisible(CBaseEntity* pLocalEntity)
@@ -170,17 +167,17 @@ namespace Engine
 
 	float CBaseEntity::GetC4BlowTime()
 	{
-		return *(float*)((DWORD)this + offsets["m_flC4Blow"]);
+		return ptr(*(float*), this, offsets["m_flC4Blow"]);
 	}
 
 	float CBaseEntity::GetC4DefuseCountDown()
 	{
-		return *(float*)((DWORD)this + offsets["m_flDefuseCountDown"]);
+		return ptr(*(float*), this, offsets["m_flDefuseCountDown"]);
 	}
 
 	float CBaseEntity::GetLowerBodyYawTarget()
 	{
-		return *(float*)((DWORD)this + offsets["m_flLowerBodyYawTarget"]);
+		return ptr(*(float*), this, offsets["m_flLowerBodyYawTarget"]);
 	}
 
 	Vector CBaseEntity::GetPredicted(Vector p0)
@@ -190,8 +187,7 @@ namespace Engine
 
 	QAngle& CBaseEntity::GetVAngles()
 	{
-		static auto deadflag = offsets["deadflag"];
-		return *(QAngle*)((DWORD)this + deadflag + 0x4);
+		return ptr(*(QAngle*), this, offsets["deadflag"] + 0x4);
 	}
 
 	void CBaseEntity::UpdateClientSideAnimation()
@@ -201,12 +197,14 @@ namespace Engine
 
 	CCSGOPlayerAnimState* CBaseEntity::GetBasePlayerAnimState()
 	{
-		return *(CCSGOPlayerAnimState**)((DWORD)this + 0x3914);
+		//return *(CCSGOPlayerAnimState**)((DWORD)this + 0x3914);
+		return ptr(*(CCSGOPlayerAnimState**), this, 0x3914);
 	}
 
 	AnimationLayer* CBaseEntity::GetAnimOverlays()
 	{
-		return *reinterpret_cast<AnimationLayer**>(DWORD(this) + 0x2990);
+		//return *reinterpret_cast<AnimationLayer**>(DWORD(this) + 0x2990);
+		return ptr(*reinterpret_cast<AnimationLayer**>, this, 0x2990);
 	}
 
 	AnimationLayer* CBaseEntity::GetAnimOverlay(int i)
@@ -223,114 +221,114 @@ namespace Engine
 
 	float CBaseEntity::GetSpawnTime()
 	{
-		return *(float*)((DWORD)this + offsets["m_flSpawnTime"]);
+		return ptr(*(float*), this, offsets["m_flSpawnTime"]);
 	}
 
 	int CBaseEntity::GetBombDefuser()
 	{
-		return *(int*)((DWORD)this + offsets["m_hBombDefuser"]);
+		return ptr(*(int*), this, offsets["m_hBombDefuser"]);
 	}
 
 	int CBaseEntity::GetBombSite()
 	{
-		return *(int*)((DWORD)this + offsets["m_nBombSite"]);
+		return ptr(*(int*), this, offsets["m_nBombSite"]);
 	}
 
 	bool CBaseEntity::IsBombDefused()
 	{
-		return *(bool*)((DWORD)this + offsets["m_bBombDefused"]);
+		return ptr(*(bool*), this, offsets["m_bBombDefused"]);
 	}
 
 	bool CBaseEntity::GetGunGameImmunity()
 	{
-		return *(bool*)((DWORD)this + offsets["m_bGunGameImmunity"]);
+		return ptr(*(bool*), this, offsets["m_bGunGameImmunity"]);
 	}
 
 	bool CBaseEntity::HasHelmet()
 	{
-		return *(bool*)((DWORD)this + offsets["m_bHasHelmet"]);
+		return ptr(*(bool*), this, offsets["m_bHasHelmet"]);
 	}
 
 	bool CBaseEntity::HasDefuser()
 	{
-		return *(bool*)((DWORD)this + offsets["m_bHasDefuser"]);
+		return ptr(*(bool*), this, offsets["m_bHasDefuser"]);
 	}
 
 	bool* CBaseEntity::IsSpotted()
 	{
-		return (bool*)((DWORD)this + offsets["m_bSpotted"]);
+		return ptr((bool*), this, offsets["m_bSpotted"]);
 	}
 
 	int	CBaseEntity::GetFovStart()
 	{
-		return *(PINT)((DWORD)this + offsets["m_iFOVStart"]);
+		return ptr(*(PINT), this, offsets["m_iFOVStart"]);
 	}
 
 	int	CBaseEntity::GetFlags()
 	{
-		return *(PINT)((DWORD)this + offsets["m_fFlags"]);
+		return ptr(*(PINT), this, offsets["m_fFlags"]);
 	}
 
 	int CBaseEntity::GetMoveType()
 	{
-		return *(int*)((DWORD)this + offsets["m_MoveType"]);
+		return ptr(*(int*), this, offsets["m_MoveType"]);
 	}
 
 	int CBaseEntity::GetOwner()
 	{
-		return *(PINT)((DWORD)this + offsets["m_hOwnerEntity"]);
+		return ptr(*(PINT), this, offsets["m_hOwnerEntity"]);
 	}
 
 	int CBaseEntity::GetHealth()
 	{
-		return *(PINT)((DWORD)this + offsets["m_iHealth"]);
+		return ptr(*(PINT), this, offsets["m_iHealth"]);
 	}
 
 	int	CBaseEntity::GetArmor()
 	{
-		return *(PINT)((DWORD)this + offsets["m_ArmorValue"]);
+		return ptr(*(PINT), this, offsets["m_ArmorValue"]);
 	}
 
 	int	CBaseEntity::GetTeam()
 	{
-		return *(PINT)((DWORD)this + offsets["m_iTeamNum"]);
+		return ptr(*(PINT), this, offsets["m_iTeamNum"]);
 	}
 
 	int CBaseEntity::GetShotsFired()
 	{
-		return *(PINT)((DWORD)this + (DWORD)offsets["m_iShotsFired"]);
+		return ptr(*(PINT), this, offsets["m_iShotsFired"]);
 	}
 
 	int CBaseEntity::GetIsScoped()
 	{
-		return *(PINT)((DWORD)this + (DWORD)offsets["m_bIsScoped"]);
+		return ptr(*(PINT), this, offsets["m_bIsScoped"]);
 	}
 
 	int CBaseEntity::GetGlowIndex()
 	{
-		return *(PINT)((DWORD)this + (DWORD)offsets["m_iGlowIndex"]);
+		return ptr(*(PINT), this, offsets["m_iGlowIndex"]);
 	}
 
 	int	CBaseEntity::GetTickBase()
 	{
 		if (this == nullptr)
 			return 0;
-		return *(PINT)((DWORD)this + (DWORD)offsets["m_nTickBase"]);
+		return ptr(*(PINT), this, offsets["m_nTickBase"]);
 	}
 
 	float* CBaseEntity::GetFlashMaxAlpha()
 	{
-		return (float*)((DWORD)this + (DWORD)offsets["m_flFlashMaxAlpha"]);
+		return ptr((float*), this, offsets["m_flFlashMaxAlpha"]);
 	}
 
 	ObserverMode_t CBaseEntity::GetObserverMode()
 	{
-		return *(ObserverMode_t*)((DWORD)this + (DWORD)offsets["m_iObserverMode"]);
+		return ptr(*(ObserverMode_t*), this, offsets["m_iObserverMode"]);
 	}
 
 	PVOID CBaseEntity::GetObserverTarget()
 	{
-		return (PVOID) * (PDWORD)((DWORD)this + (DWORD)offsets["m_hObserverTarget"]);
+		return (PVOID)ptr(*(PDWORD), this, offsets["m_hObserverTarget"]);
 	}
 
 	PVOID CBaseEntity::GetActiveWeapon()
@@ -338,7 +336,7 @@ namespace Engine
 		if (!this)
 			return nullptr;
 
-		return (PVOID)((DWORD)this + (DWORD)offsets["m_hActiveWeapon"]);
+		return ptr((PVOID), this, offsets["m_hActiveWeapon"]);
 	}
 
 	CBaseWeapon* CBaseEntity::GetBaseWeapon()
@@ -351,42 +349,42 @@ namespace Engine
 
 	CBaseHandle* CBaseEntity::GetWeapons()
 	{
-		return (CBaseHandle*)((DWORD)this + offsets["m_hMyWeapons"]);
+		return ptr((CBaseHandle*), this, offsets["m_hMyWeapons"]);
 	}
 
 	CBaseHandle* CBaseEntity::GetWearables()
 	{
-		return (CBaseHandle*)((DWORD)this + offsets["m_hMyWearables"]);
+		return ptr((CBaseHandle*), this, offsets["m_hMyWearables"]);
 	}
 
 	CBaseViewModel* CBaseEntity::GetViewModel()
 	{
-		return (CBaseViewModel*)I::EntityList()->GetClientEntityFromHandle((PVOID) * (PDWORD)((DWORD)this + offsets["m_hViewModel"]));
+		return (CBaseViewModel*)I::EntityList()->GetClientEntityFromHandle((PVOID) ptr(*(PDWORD), this, offsets["m_hViewModel"]));
 	}
 
 	Vector CBaseEntity::GetAimPunchAngle()
 	{
-		return *(Vector*)((DWORD)this + offsets["m_aimPunchAngle"]);
+		return ptr(*(Vector*), this, offsets["m_aimPunchAngle"]);
 	}
 
 	float CBaseEntity::GetSimTime()
 	{
-		return *(float*)((DWORD)this + offsets["m_flSimulationTime"]);
+		return ptr(*(float*), this, offsets["m_flSimulationTime"]);
 	}
 
 	float CBaseEntity::GetDuckAmount()
 	{
-		return *(float*)((DWORD)this + offsets["m_flDuckAmount"]);
+		return ptr(*(float*), this, offsets["m_flDuckAmount"]);
 	}
 
 	Vector CBaseEntity::GetViewPunchAngle()
 	{
-		return *(Vector*)((DWORD)this + offsets["m_viewPunchAngle"]);
+		return ptr(*(Vector*), this, offsets["m_viewPunchAngle"]);
 	}
 
 	Vector CBaseEntity::GetVelocity()
 	{
-		return *(Vector*)((DWORD)this + offsets["m_vecVelocity"]);
+		return ptr(*(Vector*), this, offsets["m_vecVelocity"]);
 	}
 
 	Vector CBaseEntity::GetViewOffset()
@@ -397,7 +395,7 @@ namespace Engine
 		if (this == (CBaseEntity*)0xE)
 			return Vector(0, 0, 0);
 
-		return *(Vector*)((DWORD)this + offsets["m_vecViewOffset"]);
+		return ptr(*(Vector*), this, offsets["m_vecViewOffset"]);
 	}
 
 	Vector CBaseEntity::GetEyePosition()
@@ -410,12 +408,12 @@ namespace Engine
 		if (!this)
 			return Vector(0, 0, 0);
 
-		return *(Vector*)((DWORD)this + offsets["m_vecPunchAngles"]);
+		return ptr(*(Vector*), this, offsets["m_vecPunchAngles"]);
 	}
 
 	QAngle CBaseEntity::GetEyeAngles()
 	{
-		return *reinterpret_cast<QAngle*>((DWORD)this + offsets["m_angEyeAngles"]);
+		return ptr(*reinterpret_cast<QAngle*>, this, offsets["m_angEyeAngles"]);
 	}
 
 	Vector CBaseEntity::GetBonePosition(int nBone)
@@ -543,7 +541,7 @@ namespace Engine
 
 	int CBaseViewModel::GetSequence()
 	{
-		return *(int*)((DWORD)this + offsets["m_nSequence"]);
+		return ptr(*(int*), this, offsets["m_nSequence"]);
 	}
 
 	void CBaseViewModel::SendViewModelMatchingSequence(int Sequence)
@@ -560,12 +558,12 @@ namespace Engine
 
 	DWORD CBaseViewModel::GetOwner()
 	{
-		return *(PDWORD)((DWORD)this + offsets["m_hOwner"]);
+		return ptr(*(PDWORD), this, offsets["m_hOwner"]);
 	}
 
 	DWORD CBaseViewModel::GetWeapon()
 	{
-		return *(PDWORD)((DWORD)this + offsets["m_hWeapon"]);
+		return ptr(*(PDWORD), this, offsets["m_hWeapon"]);
 	}
 
 	template <class T>

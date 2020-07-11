@@ -1,11 +1,9 @@
 #include "LegitAim.h"
 #include "../Setup.h"
 
-
-#define MAXBACKTRACKTICKS (Weapons[SelectedWeapon].BacktrackTicks)
-#define TICK_INTERVAL			(I::GlobalVars()->interval_per_tick)
-#define TIME_TO_TICKS( dt )		( (int)( 0.5f + (float)(dt) / TICK_INTERVAL ) )
-#define GetWeap(a) ((a < 0) ? 0 : (a >= (int)Weapons.size() ? (int)Weapons.size()-1 : a))
+#define TICK_INTERVAL (I::GlobalVars()->interval_per_tick)
+#define TIME_TO_TICKS(dt) ((int)(0.5f + (float)(dt) / TICK_INTERVAL))
+#define GetWeap(a) ((a < 0) ? 0 : (a >= (int)GP_LegitAim->Weapons.size() ? (int)GP_LegitAim->Weapons.size()-1 : a))
 
 int SelectedWeapon = 0;
 
@@ -87,9 +85,14 @@ void DrawHitBoxLine(Vector* vHitBoxArray, Color color)
 			vHitBoxTwoScreen.x, vHitBoxTwoScreen.y, color);
 	}
 }
-
-
 float TestMouse = 0;
+
+int BacktrackTicks()
+{
+	int ret = ((float)GP_LegitAim->Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit / 1000) / I::GlobalVars()->interval_per_tick;
+	return (ret < 1 ? 1 : ret);
+}
+
 void CLegitAim::Draw()
 {
 	/*if (Debug)
@@ -203,7 +206,7 @@ void CLegitAim::Draw()
 		}
 	}
 
-	if (ShowBacktrack && Weapons[GetWeap(SelectedWeapon)].Backtrack && Weapons[GetWeap(SelectedWeapon)].BacktrackTicks)
+	if (ShowBacktrack && Weapons[GetWeap(SelectedWeapon)].Backtrack && Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit)
 	{
 		for (int i = 0; i < I::EntityList()->GetHighestEntityIndex(); i++)
 		{
@@ -222,15 +225,14 @@ void CLegitAim::Draw()
 			{
 				if (!CGlobal::LocalPlayer->IsDead())
 				{
-					for (int t = 0; t < Weapons[GetWeap(SelectedWeapon)].BacktrackTicks; ++t)
+					for (int t = 0; t < BacktrackTicks(); ++t)
 					{
-						Vector screenbacktrack[64][12];
+						Vector screenbacktrack[64][25];
 
 						if (headPositions[i][t].simtime && headPositions[i][t].simtime + 1 > CGlobal::LocalPlayer->GetSimTime())
 						{
 							for (BYTE IndexArray = 0; IndexArray < 18; IndexArray++)
 							{
-
 								DrawHitBoxLine(headPositions[i][t].vHitboxSkeletonArray[IndexArray], ShowBacktrackColor);
 							}
 						}
@@ -278,8 +280,6 @@ void CLegitAim::Draw()
 				}
 			}
 		}
-
-#define GetWeap(a) ((a < 0) ? 0 : (a >= (int)Weapons.size() ? (int)Weapons.size()-1 : a))
 
 		if ((DrawFov || DrawSilentFov) && pLocalPlayer && AimWorking && SelectedWeapon > -1)
 		{
@@ -1855,18 +1855,19 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 	if (SelectedWeapon < 0)
 		return;
 
-	if (Weapons[GetWeap(SelectedWeapon)].Backtrack && !FaceIt && Weapons[GetWeap(SelectedWeapon)].BacktrackTicks)
+	if (Weapons[GetWeap(SelectedWeapon)].Backtrack && !FaceIt && Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit)
 	{
 		float bestFov = FLT_MAX;
+		CBaseEntity* local = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
 		PlayerInfo info;
 		for (int i = 0; i < SDK::I::Engine()->GetMaxClients(); i++)
 		{
 			auto entity = (CBaseEntity*)SDK::I::EntityList()->GetClientEntity(i);
 
-			if (!entity || !CGlobal::LocalPlayer)
+			if (!entity || !local)
 				continue;
 
-			if (entity == CGlobal::LocalPlayer)
+			if (entity == local)
 				continue;
 
 			if (!I::Engine()->GetPlayerInfo(i, &info))
@@ -1875,57 +1876,40 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 			if (entity->IsDormant())
 				continue;
 
-			if (CGlobal::LocalPlayer->GetTeam() == entity->GetTeam())
+			if (local->GetTeam() == entity->GetTeam())
 				continue;
 
 			if (!entity->IsDead())
 			{
 				float simtime = entity->GetSimTime();
-				Vector hitboxPos = entity->GetHitboxPosition(
-					HITBOX_HEAD & 
-					HITBOX_NECK &
-					HITBOX_PELVIS &
-					HITBOX_BELLY & 
-					HITBOX_THORAX & 
-					HITBOX_LOWER_CHEST & 
-					HITBOX_UPPER_CHEST & 
-					HITBOX_RIGHT_THIGH & 
-					HITBOX_LEFT_THIGH & 
-					HITBOX_RIGHT_CALF & 
-					HITBOX_LEFT_CALF &
-					HITBOX_RIGHT_FOOT &
-					HITBOX_RIGHT_FOREARM & 
-					HITBOX_LEFT_UPPER_ARM & 
-					HITBOX_LEFT_FOREARM & 
-					HITBOX_MAX);
+				Vector hitboxPos = entity->GetHitboxPosition(0 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 16 & 17 & 18 & 19 & 10 & 11);
 				backtrackData bfg = { simtime, hitboxPos };
 
-				if (ShowBacktrack && Weapons[GetWeap(SelectedWeapon)].BacktrackTicks)
+				if (ShowBacktrack && Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit)
 				{
 					Vector	vHitboxSkeletonArrayBuf[18][2];
-
-					// Body
+					// BODY
 					GetHitBoxSkeleton(HITBOX_HEAD, HITBOX_NECK, entity, vHitboxSkeletonArrayBuf[0]);
 					GetHitBoxSkeleton(HITBOX_NECK, HITBOX_UPPER_CHEST, entity, vHitboxSkeletonArrayBuf[1]);
 					GetHitBoxSkeleton(HITBOX_UPPER_CHEST, HITBOX_THORAX, entity, vHitboxSkeletonArrayBuf[2]);
 					GetHitBoxSkeleton(HITBOX_THORAX, HITBOX_BELLY, entity, vHitboxSkeletonArrayBuf[3]);
 
-					// Right leg
+					// RIGHT LEG
 					GetHitBoxSkeleton(HITBOX_BELLY, HITBOX_LEFT_THIGH, entity, vHitboxSkeletonArrayBuf[4]);
 					GetHitBoxSkeleton(HITBOX_LEFT_THIGH, HITBOX_LEFT_CALF, entity, vHitboxSkeletonArrayBuf[5]);
 					GetHitBoxSkeleton(HITBOX_LEFT_CALF, HITBOX_LEFT_FOOT, entity, vHitboxSkeletonArrayBuf[6]);
 
-					// Left leg
+					// LEFT LEG
 					GetHitBoxSkeleton(HITBOX_BELLY, HITBOX_RIGHT_THIGH, entity, vHitboxSkeletonArrayBuf[7]);
 					GetHitBoxSkeleton(HITBOX_RIGHT_THIGH, HITBOX_RIGHT_CALF, entity, vHitboxSkeletonArrayBuf[8]);
 					GetHitBoxSkeleton(HITBOX_RIGHT_CALF, HITBOX_RIGHT_FOOT, entity, vHitboxSkeletonArrayBuf[9]);
 
-					// Right arm
+					// RIGHT ARM
 					GetHitBoxSkeleton(HITBOX_UPPER_CHEST, HITBOX_LEFT_UPPER_ARM, entity, vHitboxSkeletonArrayBuf[10]);
 					GetHitBoxSkeleton(HITBOX_LEFT_UPPER_ARM, HITBOX_LEFT_FOREARM, entity, vHitboxSkeletonArrayBuf[11]);
 					GetHitBoxSkeleton(HITBOX_LEFT_FOREARM, HITBOX_LEFT_HAND, entity, vHitboxSkeletonArrayBuf[12]);
 
-					// Left arm
+					// LEFT ARM
 					GetHitBoxSkeleton(HITBOX_UPPER_CHEST, HITBOX_RIGHT_UPPER_ARM, entity, vHitboxSkeletonArrayBuf[13]);
 					GetHitBoxSkeleton(HITBOX_RIGHT_UPPER_ARM, HITBOX_RIGHT_FOREARM, entity, vHitboxSkeletonArrayBuf[14]);
 					GetHitBoxSkeleton(HITBOX_RIGHT_FOREARM, HITBOX_RIGHT_HAND, entity, vHitboxSkeletonArrayBuf[15]);
@@ -1937,12 +1921,12 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 					}
 				}
 
-				if (Weapons[GetWeap(SelectedWeapon)].BacktrackTicks)
+				if (Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit)
 				{
-					headPositions[i][pCmd->command_number % MAXBACKTRACKTICKS] = bfg;
+					headPositions[i][pCmd->command_number % (BacktrackTicks() + 1)] = bfg;
 
-					Vector ViewDir = AngleVector(pCmd->viewangles + (CGlobal::LocalPlayer->GetAimPunchAngle() * 2.f));
-					float FOVDistance = DistancePointToLine(hitboxPos, CGlobal::LocalPlayer->GetEyePosition(), ViewDir);
+					Vector ViewDir = AngleVector(pCmd->viewangles + (local->GetAimPunchAngle() * 2.f));
+					float FOVDistance = DistancePointToLine(hitboxPos, local->GetEyePosition(), ViewDir);
 
 					if (bestFov > FOVDistance)
 					{
@@ -1959,13 +1943,13 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 		{
 			float tempFloat = FLT_MAX;
 
-			Vector ViewDir = AngleVector(pCmd->viewangles + (CGlobal::LocalPlayer->GetAimPunchAngle() * 2.f));
+			Vector ViewDir = AngleVector(pCmd->viewangles + (local->GetAimPunchAngle() * 2.f));
 
-			for (int t = 0; t <= MAXBACKTRACKTICKS - 1; ++t)
+			for (int t = 0; t < BacktrackTicks(); ++t)
 			{
-				float tempFOVDistance = DistancePointToLine(headPositions[iBackTrackbestTarget][t].hitboxPos, CGlobal::LocalPlayer->GetEyePosition(), ViewDir);
+				float tempFOVDistance = DistancePointToLine(headPositions[iBackTrackbestTarget][t].hitboxPos, local->GetEyePosition(), ViewDir);
 
-				if (tempFloat > tempFOVDistance && headPositions[iBackTrackbestTarget][t].simtime > I::GlobalVars()->curtime - 1)
+				if (tempFloat > tempFOVDistance&& headPositions[iBackTrackbestTarget][t].simtime > I::GlobalVars()->curtime - 1)
 				{
 					tempFloat = tempFOVDistance;
 					bestTargetSimTime = headPositions[iBackTrackbestTarget][t].simtime;
@@ -2049,7 +2033,7 @@ void CLegitAim::SaveWeapons(nlohmann::json &j)
 		SV("TriggerRcsY", v.TriggerRcsY);
 		SV("TriggerDelay", v.TriggerDelay);
 		SV("Backtrack", v.Backtrack);
-		SV("BacktrackTicks", v.BacktrackTicks);
+		SV("BacktrackTimeLimit", v.BacktrackTimeLimit);
 		SV("SmoothMoveFactor", v.SmoothMoveFactor);
 	}
 }
@@ -2177,7 +2161,7 @@ void CLegitAim::LoadWeapons(nlohmann::json &j)
 				LV("TriggerRcsY", v.TriggerRcsY);
 				LV("TriggerDelay", v.TriggerDelay);
 				LV("Backtrack", v.Backtrack);
-				LV("BacktrackTicks", v.BacktrackTicks);
+				LV("BacktrackTimeLimit", v.BacktrackTimeLimit);
 				LV("SmoothMoveFactor", v.SmoothMoveFactor);
 			}
 		}

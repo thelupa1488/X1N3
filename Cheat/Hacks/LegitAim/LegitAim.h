@@ -300,7 +300,7 @@ public:
 		float TriggerDelay = 0;
 
 		bool Backtrack = false;
-		int BacktrackTicks = 0;
+		int BacktrackTimeLimit = 0;
 
 		int SmoothMoveFactor = 0;
 
@@ -356,7 +356,7 @@ public:
 			CHECK_VAR(TriggerRcsX);
 			CHECK_VAR(TriggerDelay);
 			CHECK_VAR(Backtrack);
-			CHECK_VAR(BacktrackTicks);
+			CHECK_VAR(BacktrackTimeLimit);
 			CHECK_VAR(SmoothMoveFactor);
 
 			return true;

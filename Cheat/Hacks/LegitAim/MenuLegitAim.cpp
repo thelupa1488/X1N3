@@ -218,7 +218,7 @@ void CLegitAim::Menu()
 						X1Gui().SameLine();
 						DColorEdit("Color##Backtrack", ShowBacktrackColor);
 
-						SliderInts("Ticks", Weapons[GetWeap(SelectedWeapon)].BacktrackTicks, 0, 16);
+						SliderInts("Time (ms)", Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit, 1, 200);
 					}
 				}
 			}

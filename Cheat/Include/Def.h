@@ -2,7 +2,7 @@
 #include "../Engine/XorStr.h"
 #include <VMProtectSDK.h>
 
-#define DEBUG_DLL 
+//#define DEBUG_DLL 
 //#define ENABLE_XOR_STR
 //#define ENABLE_VMP
 //#define YOUGAMEBIZ
@@ -54,3 +54,6 @@
 #define EX_ARRAYSIZE(_ARR)      ((int)(sizeof(_ARR)/sizeof(*_ARR)))
 #define EX_PI                   3.14159265358979323846f
 #define EX_OFFSETOF(_TYPE,_ELM) ((size_t)&(((_TYPE*)0)->_ELM))
+
+//offsets def
+#define ptr(x, x1, x2) x((DWORD)x1 + (DWORD)x2)
