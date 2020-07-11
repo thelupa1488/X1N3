@@ -369,12 +369,12 @@ public:
 
 			const auto screenTransform = [&origin, &screen]() -> bool
 			{
-				static _D3DMATRIX* pViewMatrix;
+				static std::uintptr_t pViewMatrix;
 				if (!pViewMatrix)
 				{
-					pViewMatrix = *(PDWORD)(offsets["FindW2Matrix"]) + 988;
+					pViewMatrix = static_cast<std::uintptr_t>(Utils::PatternScan(clientFactory, XorStr("0F 10 05 ? ? ? ? 8D 85 ? ? ? ? B9")));
 					pViewMatrix += 3;
-					pViewMatrix = *reinterpret_cast<_D3DMATRIX**>(pViewMatrix);
+					pViewMatrix = *reinterpret_cast<std::uintptr_t*>(pViewMatrix);
 					pViewMatrix += 176;
 
 					return true;
