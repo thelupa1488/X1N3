@@ -66,7 +66,6 @@ protected:
 	virtual void Draw() = 0;
 	virtual void UpdateLBY(CCSGOPlayerAnimState* animstate) = 0;
 	virtual int  MaxChokeTicks() = 0;
-	virtual void RankReveal() = 0;
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd) = 0;
 	virtual void EnginePrediction(bool& bSendPacket, CUserCmd* pCmd) = 0;
 	virtual void OverrideView(CViewSetup* pSetup) = 0;
@@ -94,7 +93,6 @@ public:
 	virtual int  GetBestHeadAngle(float yaw);
 	virtual void UpdateLBY(CCSGOPlayerAnimState* animstate);
 	virtual int  MaxChokeTicks();
-	virtual void RankReveal();
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd);
 	virtual void EnginePrediction(bool& bSendPacket, CUserCmd* pCmd);
 	virtual void OverrideView(CViewSetup* pSetup);
@@ -218,6 +216,7 @@ public:
 	int DamageInfoSpeed = 30;
 
 	bool ViewModelXYZ = false;
+
 	float ViewModelX = 0;
 	float ViewModelY = 0;
 	float ViewModelZ = 0;

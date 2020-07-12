@@ -216,7 +216,7 @@ public:
 		bool VisbleBones[18];
 	};
 
-	backtrackData headPositions[64][16];
+	backtrackData headPositions[64][25];
 
 	struct CustomSub
 	{

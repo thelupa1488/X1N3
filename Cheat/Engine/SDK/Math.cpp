@@ -602,7 +602,7 @@ namespace SDK
 		angles[2] = 0;
 	}
 	//--------------------------------------------------------------------------------
-	static bool screen_transform(const Vector& in, Vector& out)
+	/*static bool screen_transform(const Vector& in, Vector& out)
 	{
 		auto exception_filter = [](int code, PEXCEPTION_POINTERS ex)
 		{
@@ -643,22 +643,22 @@ namespace SDK
 			out.y *= 100000;
 			return false;
 		}
-	}
+	}*/
 	//--------------------------------------------------------------------------------
-	bool WorldToScreen(const Vector& in, Vector& out)
-	{
-		if (screen_transform(in, out))
-		{
-			int w, h;
-			I::Engine()->GetScreenSize(w, h);
+	//bool WorldToScreen(const Vector& in, Vector& out)
+	//{
+	//	if (screen_transform(in, out))
+	//	{
+	//		int w, h;
+	//		I::Engine()->GetScreenSize(w, h);
 
-			out.x = (w / 2.0f) + (out.x * w) / 2.0f;
-			out.y = (h / 2.0f) - (out.y * h) / 2.0f;
+	//		out.x = (w / 2.0f) + (out.x * w) / 2.0f;
+	//		out.y = (h / 2.0f) - (out.y * h) / 2.0f;
 
-			return true;
-		}
-		return false;
-	}
+	//		return true;
+	//	}
+	//	return false;
+	//}
 	//--------------------------------------------------------------------------------
 	QAngle calculate_angle(Vector src, Vector dst) {
 		QAngle angles;

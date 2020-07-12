@@ -26,13 +26,12 @@ EGCResults __fastcall hkRetrieveMessage(void* ecx, void* edx, uint32_t* punMsgTy
 
 EGCResults __fastcall hkSendMessage(void* ecx, void* edx, uint32_t unMsgType, const void* pubData, uint32_t cubData)
 {
-	EGCResults status;
 	uint32_t messageType = unMsgType & 0x7FFFFFFF;
 	void* pubDataMutable = const_cast<void*>(pubData);
 
 	GP_Inventory->SSendMessage(ecx, edx, unMsgType, pubDataMutable, cubData);
 
-	status = HookTables::pSendMessage->GetTrampoline()(ecx, unMsgType, pubDataMutable, cubData);
+	EGCResults status = HookTables::pSendMessage->GetTrampoline()(ecx, unMsgType, pubDataMutable, cubData);
 
 	if (status != k_EGCResultOK)
 		return status;

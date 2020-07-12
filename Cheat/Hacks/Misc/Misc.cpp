@@ -447,22 +447,12 @@ int CMisc::MaxChokeTicks()
 	return max_choke_ticks;
 }
 
-void CMisc::RankReveal()
-{
-	using ServerRankRevealAll = bool(__cdecl*)(int*);
-
-	static auto fnServerRankRevealAll = reinterpret_cast<int(__thiscall*)(ServerRankRevealAll*, DWORD, void*)>
-		(Utils::PatternScan(clientFactory,
-			XorStr("55 8B EC 8B 0D ? ? ? ? 85 C9 75 28 A1 ? ? ? ? 68 ? ? ? ? 8B 08 8B 01 FF 50 04 85 C0 74 0B 8B C8 E8 ? ? ? ? 8B C8 EB 02 33 C9 89 0D ? ? ? ? 8B 45 08")));
-
-	int v[3] = { 0,0,0 };
-
-	reinterpret_cast<ServerRankRevealAll>(fnServerRankRevealAll)(v);
-}
-
 void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCmd)
 {
 	ConVar* cl_righthand = I::GetConVar()->FindVar(XorStr("cl_righthand"));
+	ConVar* viewmodel_offset_x = I::GetConVar()->FindVar(XorStr("viewmodel_offset_x"));
+	ConVar* viewmodel_offset_y = I::GetConVar()->FindVar(XorStr("viewmodel_offset_y"));
+	ConVar* viewmodel_offset_z = I::GetConVar()->FindVar(XorStr("viewmodel_offset_z"));
 
 	if (CGlobal::LocalPlayer && CGlobal::IsGameReady)
 	{
@@ -646,6 +636,11 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 						*(int*)smoke_count = 1;
 				}
 				NoSmokeReset = false;
+			}
+
+			if (ShowCompetitiveRank && pCmd->buttons & IN_SCORE)
+			{
+				I::Client()->DispatchUserMessage(CS_UM_ServerRankRevealAll, 0, 0, nullptr);
 			}
 
 			if (NameStealer)
@@ -843,19 +838,30 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					I::Engine()->ExecuteClientCmd(msg.c_str());
 				}
 			}
-			static int ticks = 0;
 
 			if (ViewModelXYZ)
 			{
-				CGlobal::viewmodel_offset_convar_x->SetValue(ViewModelX);
-				CGlobal::viewmodel_offset_convar_y->SetValue(ViewModelY);
-				CGlobal::viewmodel_offset_convar_z->SetValue(ViewModelZ);
+				if (ViewModelX > 0 || ViewModelX < 0) 
+				{
+					*(float*)((DWORD)&viewmodel_offset_x->fnChangeCallback + 0xC) = NULL;
+					viewmodel_offset_x->SetValue(ViewModelX);
+				}
+				if (ViewModelY > 0 || ViewModelY < 0)
+				{
+					*(float*)((DWORD)&viewmodel_offset_y->fnChangeCallback + 0xC) = NULL;
+					viewmodel_offset_y->SetValue(ViewModelY);
+				}
+				if (ViewModelZ > 0 || ViewModelZ < 0) 
+				{
+					*(float*)((DWORD)&viewmodel_offset_z->fnChangeCallback + 0xC) = NULL;
+					viewmodel_offset_z->SetValue(ViewModelZ);
+				}
 			}
 			else
 			{
-				CGlobal::viewmodel_offset_convar_x->SetValue(-CGlobal::old_viewmodel_offset_x);
-				CGlobal::viewmodel_offset_convar_y->SetValue(-CGlobal::old_viewmodel_offset_y);
-				CGlobal::viewmodel_offset_convar_z->SetValue(-CGlobal::old_viewmodel_offset_z);
+				viewmodel_offset_x->SetValue(CGlobal::OrigViewModelX);
+				viewmodel_offset_y->SetValue(CGlobal::OrigViewModelY);
+				viewmodel_offset_z->SetValue(CGlobal::OrigViewModelZ);
 			}
 
 			if (FakeLag && FakeLagBind.Check())

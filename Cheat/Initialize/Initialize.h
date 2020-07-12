@@ -65,15 +65,9 @@ public:
 				PVOID* ModelRenderTable = *reinterpret_cast<PVOID**>(I::ModelRender());
 				PVOID* SteamTable = *reinterpret_cast<PVOID**>(I::SteamGameCoordinator());
 
-				CGlobal::viewmodel_offset_convar_x = I::GetConVar()->FindVar(XorStr("viewmodel_offset_x"));
-				CGlobal::viewmodel_offset_convar_y = I::GetConVar()->FindVar(XorStr("viewmodel_offset_y"));
-				CGlobal::viewmodel_offset_convar_z = I::GetConVar()->FindVar(XorStr("viewmodel_offset_z"));
-				*(int*)((DWORD)&CGlobal::viewmodel_offset_convar_x->fnChangeCallback + 0xC) = NULL;
-				*(int*)((DWORD)&CGlobal::viewmodel_offset_convar_y->fnChangeCallback + 0xC) = NULL;
-				*(int*)((DWORD)&CGlobal::viewmodel_offset_convar_z->fnChangeCallback + 0xC) = NULL;
-				CGlobal::old_viewmodel_offset_x = -CGlobal::viewmodel_offset_convar_x->GetFloat();
-				CGlobal::old_viewmodel_offset_y = -CGlobal::viewmodel_offset_convar_y->GetFloat();
-				CGlobal::old_viewmodel_offset_z = -CGlobal::viewmodel_offset_convar_z->GetFloat();
+				CGlobal::OrigViewModelX = I::GetConVar()->FindVar(XorStr("viewmodel_offset_x"))->GetFloat();
+				CGlobal::OrigViewModelY = I::GetConVar()->FindVar(XorStr("viewmodel_offset_y"))->GetFloat();
+				CGlobal::OrigViewModelZ = I::GetConVar()->FindVar(XorStr("viewmodel_offset_z"))->GetFloat();
 
 				ADD_LOG("2-1-11-2\n");
 #ifndef ONLY_DRAW_HOOK
@@ -260,7 +254,7 @@ public:
 				offsets["m_flDuckAmount"] = mGetOffset("DT_BaseEntity", "m_flDuckAmount");
 				offsets["m_hWeaponWorldModel"] = mGetOffset("DT_BaseCombatWeapon", "m_hWeaponWorldModel");
 				offsets["m_iWorldModelIndex"] = mGetOffset("DT_BaseCombatWeapon", "m_iWorldModelIndex");
-//				offsets["FindW2Matrix"] = (reinterpret_cast<DWORD>(&I::Engine()->WorldToScreenMatrix()) + 0x40);
+				//offsets["FindW2Matrix"] = (reinterpret_cast<DWORD>(&I::Engine()->WorldToScreenMatrix()) + 0x40);
 				ADD_LOG("All Offsets sucessful\n");
 				ADD_LOG("2-1-9-1\n");
 	 		};

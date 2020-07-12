@@ -10,8 +10,8 @@ bool __stdcall hkCreateMove(float flInputSampleTime, CUserCmd* pCmd)
 		CGlobal::GViewAngle = pCmd->viewangles;
 		CGlobal::UserCmd = pCmd;
 		CGlobal::LocalPlayer = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
-		QAngle angleold = pCmd->viewangles;
-		CCSGOPlayerAnimState g_AnimState;
+		//QAngle angleold = pCmd->viewangles;
+		//CCSGOPlayerAnimState g_AnimState;
 
 		if (bReturn)
 			I::Prediction()->SetLocalViewangles(Vector(pCmd->viewangles.x, pCmd->viewangles.y, pCmd->viewangles.z));
@@ -47,44 +47,41 @@ bool __stdcall hkCreateMove(float flInputSampleTime, CUserCmd* pCmd)
 		}
 		if (GP_Misc)
 		{
-			if (GP_Misc->ShowCompetitiveRank && pCmd->buttons & IN_SCORE)
-				GP_Misc->RankReveal();
-
 			GP_Misc->CreateMove(bSendPacket, flInputSampleTime, pCmd);
 
-			if (GP_Misc->Desync && I::ClientState()->chokedcommands >= GP_Misc->MaxChokeTicks())
-			{
-				bSendPacket = true;
-				pCmd->viewangles = I::ClientState()->viewangles;
-			}
+			//if (GP_Misc->Desync && I::ClientState()->chokedcommands >= GP_Misc->MaxChokeTicks())
+			//{
+			//	bSendPacket = true;
+			//	pCmd->viewangles = I::ClientState()->viewangles; 
+			//}
 
 			GP_Misc->EnginePrediction(bSendPacket, pCmd);
 
-			CGlobal::CorrectMouse(pCmd);
+			//CGlobal::CorrectMouse(pCmd);
 
-			auto anim_state = CGlobal::LocalPlayer->GetBasePlayerAnimState();
-			if (anim_state) 
-			{
-				CCSGOPlayerAnimState anim_state_backup = *anim_state;
-				*anim_state = g_AnimState;
-				CGlobal::LocalPlayer->GetVAngles() = pCmd->viewangles;
-				//CGlobal::LocalPlayer->UpdateClientSideAnimation(); //need fix
+			//auto anim_state = CGlobal::LocalPlayer->GetBasePlayerAnimState();
+			//if (anim_state) 
+			//{
+			//	CCSGOPlayerAnimState anim_state_backup = *anim_state;
+			//	*anim_state = g_AnimState;
+			//	CGlobal::LocalPlayer->GetVAngles() = pCmd->viewangles;
+			//	//CGlobal::LocalPlayer->UpdateClientSideAnimation(); //need fix
 
-				GP_Misc->UpdateLBY(anim_state);
+			//	GP_Misc->UpdateLBY(anim_state);
 
-				g_AnimState = *anim_state;
-				*anim_state = anim_state_backup;
-			}
-			if (bSendPacket)
-			{
-				GP_Misc->anglereal = g_AnimState.m_flGoalFeetYaw;
-				GP_Misc->view = pCmd->viewangles.y;
-				if (anim_state)
-					GP_Misc->anglefake = anim_state->m_flGoalFeetYaw;
-				GP_Misc->vangle = pCmd->viewangles;
-			}
+			//	g_AnimState = *anim_state;
+			//	*anim_state = anim_state_backup;
+			//}
+			//if (bSendPacket)
+			//{
+			//	GP_Misc->anglereal = g_AnimState.m_flGoalFeetYaw;
+			//	GP_Misc->view = pCmd->viewangles.y;
+			//	if (anim_state)
+			//		GP_Misc->anglefake = anim_state->m_flGoalFeetYaw;
+			//	GP_Misc->vangle = pCmd->viewangles;
+			//}
 
-			FixMovement(pCmd, angleold);
+			//FixMovement(pCmd, angleold);
 		}
 
 		CGlobal::ClampAngles(pCmd->viewangles);

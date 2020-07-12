@@ -133,12 +133,9 @@ public:
 	static CBaseEntity* LocalPlayer;
 	static CUserCmd* UserCmd;
 
-	static ConVar* viewmodel_offset_convar_x;
-	static ConVar* viewmodel_offset_convar_y;
-	static ConVar* viewmodel_offset_convar_z;
-	static int old_viewmodel_offset_x;
-	static int old_viewmodel_offset_y;
-	static int old_viewmodel_offset_z;
+	static int OrigViewModelX;
+	static int OrigViewModelY;
+	static int OrigViewModelZ;
 
 	static string WeaponNames[34];
 
@@ -373,10 +370,7 @@ public:
 				if (!pViewMatrix)
 				{
 					pViewMatrix = static_cast<std::uintptr_t>(Utils::PatternScan(clientFactory, XorStr("0F 10 05 ? ? ? ? 8D 85 ? ? ? ? B9")));
-					pViewMatrix += 3;
-					pViewMatrix = *reinterpret_cast<std::uintptr_t*>(pViewMatrix);
-					pViewMatrix += 176;
-
+					pViewMatrix = *(std::uintptr_t*)(pViewMatrix + 0x3) + 0xB0;
 					return true;
 				}
 				else
@@ -402,7 +396,6 @@ public:
 					return false;
 				}
 			};
-
 			if (!screenTransform())
 			{
 				screen.x = (iScreenWidth * 0.5f) + (screen.x * iScreenWidth) * 0.5f;
@@ -416,4 +409,3 @@ public:
 		return LWorldToScreen();
 	}
 };
-

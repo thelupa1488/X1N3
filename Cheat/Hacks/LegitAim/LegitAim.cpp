@@ -26,7 +26,6 @@ void CLegitAim::SetSelectedWeapon(bool MenuCheck)
 			case WEAPON_TYPE_SNIPER: SelectedWeapon = 37; StandardSubSelected = 3; CheckAimCust = true;  break;
 			default: SelectedWeapon = -1; CheckAimCust = false;  break;
 			}
-
 		}
 		else if (WeaponCustomTypes == 2) // Custom
 		{
@@ -85,13 +84,14 @@ void DrawHitBoxLine(Vector* vHitBoxArray, Color color)
 			vHitBoxTwoScreen.x, vHitBoxTwoScreen.y, color);
 	}
 }
-float TestMouse = 0;
 
 int BacktrackTicks()
 {
-	int ret = ((float)GP_LegitAim->Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit / 1000) / I::GlobalVars()->interval_per_tick;
+	int ret = ((float)GP_LegitAim->Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit / 1000.f) / I::GlobalVars()->interval_per_tick;
 	return (ret < 1 ? 1 : ret);
 }
+
+float TestMouse = 0;
 
 void CLegitAim::Draw()
 {
@@ -1887,7 +1887,7 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 
 				if (ShowBacktrack && Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit)
 				{
-					Vector	vHitboxSkeletonArrayBuf[18][2];
+					Vector vHitboxSkeletonArrayBuf[18][2];
 					// BODY
 					GetHitBoxSkeleton(HITBOX_HEAD, HITBOX_NECK, entity, vHitboxSkeletonArrayBuf[0]);
 					GetHitBoxSkeleton(HITBOX_NECK, HITBOX_UPPER_CHEST, entity, vHitboxSkeletonArrayBuf[1]);

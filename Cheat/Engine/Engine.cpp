@@ -3,8 +3,8 @@
 
 bool CGlobal::IsGuiVisble = false;
 bool CGlobal::IsGameReady = false;
-int CGlobal::iScreenWidth = 1920;
-int CGlobal::iScreenHeight = 1080;
+int CGlobal::iScreenWidth;
+int CGlobal::iScreenHeight;
 string CGlobal::SystemDisk = "C:\\";
 WEAPON_TYPE CGlobal::GWeaponType = WEAPON_TYPE::WEAPON_TYPE_UNKNOWN;
 WEAPON_ID CGlobal::GWeaponID = WEAPON_ID::WEAPON_AK47;
@@ -16,12 +16,9 @@ vector<string> CGlobal::ConfigList;
 CBaseEntity* CGlobal::LocalPlayer;
 CUserCmd* CGlobal::UserCmd;
 
-ConVar* CGlobal::viewmodel_offset_convar_x = new ConVar();
-ConVar* CGlobal::viewmodel_offset_convar_y = new ConVar();
-ConVar* CGlobal::viewmodel_offset_convar_z = new ConVar();
-int CGlobal::old_viewmodel_offset_x = 1000;
-int CGlobal::old_viewmodel_offset_y = 1000;
-int CGlobal::old_viewmodel_offset_z = 1000;
+int CGlobal::OrigViewModelX;
+int CGlobal::OrigViewModelY;
+int CGlobal::OrigViewModelZ;
 
 void ReadConfigs(LPCTSTR lpszFileName)
 {

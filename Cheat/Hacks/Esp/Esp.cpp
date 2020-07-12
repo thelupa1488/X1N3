@@ -76,7 +76,7 @@ void CSoundEsp::Draw(CEntityPlayer* Local)
 
 			if (Sounds[i].Team != Local->Team ? GP_Esp->Enemy : GP_Esp->Team)
 			{
-				if (WorldToScreen(Sounds[i].Pos, ScreenPos))
+				if (CGlobal::WorldToScreen(Sounds[i].Pos, ScreenPos))
 				{
 					float Size = GP_Esp->SoundEspSize;
 
@@ -212,9 +212,11 @@ void CEsp::OverrideMaterial(bool ignoreZ, int type, Color rgba)
 	case 3: Material = Metallic; break;
 	case 4: Material = Pearlescent; break;
 	case 5: Material = Animated; break;
-	default: Material = nullptr; break;
+	default: Material = nullptr;
 	}
-	if (!Material) return;
+
+	if (!Material) 
+		return;
 
 	Material->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, ignoreZ);
 
