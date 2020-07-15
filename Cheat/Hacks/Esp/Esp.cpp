@@ -146,7 +146,7 @@ void CEsp::SoundFrameStage()
 	}
 }
 
-IMaterial* CEsp::InitalizeMaterials()
+IMaterial* CEsp::InitializeMaterials()
 {
 	if (!Texture)
 		Texture = I::MaterialSystem()->CreateMaterial("Texture", KeyValues::FromString("VertexLitGeneric", "$basetexture white"));
@@ -158,7 +158,6 @@ IMaterial* CEsp::InitalizeMaterials()
 		Wireframe = I::MaterialSystem()->CreateMaterial("Wireframe", KeyValues::FromString("VertexLitGeneric", "$basetexture white $wireframe 1"));
 
 	if (!Metallic)
-	{
 		Metallic = I::MaterialSystem()->CreateMaterial("Metallic", KeyValues::FromString("VertexLitGeneric",
 			"$basetexture white\
 			\$ignorez 0\
@@ -173,23 +172,19 @@ IMaterial* CEsp::InitalizeMaterials()
 			\$znearer 0\
 			\$flat 1\
 			\$rimlight 1 $rimlightexponent 2 $rimlightboost 0.2 $rimlightboost [ 1 1 1 ]"));
-	}
 
 	if (!Pearlescent)
-	{
 		Pearlescent = I::MaterialSystem()->CreateMaterial("Pearlescent", KeyValues::FromString("VertexLitGeneric",
-			"$basetexture white\
-			\$ambientonly 1\
+			"$ambientonly 1\
 			\$phong 1\
 			\$pearlescent 3\
 			\$basemapalphaphongmask 1"));
-	}
 
 	if (!Animated)
 	{
 		const auto kv = KeyValues::FromString("VertexLitGeneric",
 			"$basetexture white\
-			\"$envmap editor/cube_vertigo\
+			\$envmap editor/cube_vertigo\
 			\$envmapcontrast 1\
 			\$basetexture dev/zone_warning proxies\
 			\{ texturescroll { texturescrollvar $basetexturetransform texturescrollrate 0.6 texturescrollangle 90 } }");
@@ -215,15 +210,14 @@ void CEsp::OverrideMaterial(bool ignoreZ, int type, Color rgba)
 	default: Material = nullptr;
 	}
 
-	if (!Material) 
+	if (!Material || Material->IsErrorMaterial()) 
 		return;
 
 	Material->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, ignoreZ);
-
 	Material->ColorModulate(rgba.G1R(), rgba.G1G(), rgba.G1B());
 	Material->AlphaModulate(rgba.G1A());
-
 	Material->IncrementReferenceCount();
+
 	I::ModelRender()->ForcedMaterialOverride(Material);
 }
 

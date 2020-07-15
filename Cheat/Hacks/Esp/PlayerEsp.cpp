@@ -1,6 +1,8 @@
 #include "Esp.h"
 #include "../Setup.h"
 
+using namespace HookTables;
+
 void CEsp::DrawPlayerEx(CEntityPlayer* Entity, CEntityPlayer* Local, bool IsDormant)
 {
 	auto LDrawPlayerEx = [&]()->void

@@ -12,6 +12,9 @@ void __fastcall hkDrawModelExecute(void* thisptr, int edx, IMatRenderContext* ct
 	if (GP_Esp && CGlobal::IsGameReady && ctx && &state && &pInfo && pCustomBoneToWorld && !CGlobal::FullUpdateCheck)
 		GP_Esp->DrawModelExecute(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 
+	if (GP_LegitAim && CGlobal::IsGameReady && ctx && &state && &pInfo && pCustomBoneToWorld && !CGlobal::FullUpdateCheck)
+		GP_LegitAim->DrawModelExecute(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
+
 	if (GP_Misc && CGlobal::IsGameReady  && ctx && &state && &pInfo && pCustomBoneToWorld && !CGlobal::FullUpdateCheck)
 		GP_Misc->DrawModelExecute(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 

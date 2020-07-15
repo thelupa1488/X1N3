@@ -1486,12 +1486,19 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 		if (!ModelName)
 			return;
 
+		IMaterial* Material = I::MaterialSystem()->FindMaterial(ModelName, TEXTURE_GROUP_MODEL);
+
 		if (HandChams)
 		{
 			if (strstr(ModelName, XorStr("arms")))
 			{
 				HandChamsColor[4];
 				GP_Esp->OverrideMaterial(false, HandChamsStyle, HandChamsColor);
+				if (HandChamsStyle == 6) //disable hand
+				{
+					Material->SetMaterialVarFlag(MATERIAL_VAR_NO_DRAW, true);
+					I::ModelRender()->ForcedMaterialOverride(Material);
+				}
 				fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 			}
 		}
@@ -1501,6 +1508,11 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 			{
 				WeaponChamsColor[4];
 				GP_Esp->OverrideMaterial(false, WeaponChamsStyle, WeaponChamsColor);
+				if (WeaponChamsStyle == 6) //disable weapon
+				{
+					Material->SetMaterialVarFlag(MATERIAL_VAR_NO_DRAW, true);
+					I::ModelRender()->ForcedMaterialOverride(Material);
+				}
 				fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 			}
 		}

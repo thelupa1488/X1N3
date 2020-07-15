@@ -4,7 +4,7 @@
 int CInventory::Inventory::LastIndex = 100;
 vector<IInventory::Inventory> InventoryList;
 
-bool CInventory::SendClientHello()
+void CInventory::SendClientHello()
 {
 	if (!CGlobal::IsGameReady)
 		I::Engine()->ExecuteClientCmd("econ_clear_inventory_images");
@@ -15,39 +15,34 @@ bool CInventory::SendClientHello()
 	Message.clear_socache_have_versions();
 
 	void* ptr = malloc(Message.ByteSize() + 8);
-
 	if (!ptr)
-		return false;
+		return;
 
 	((uint32_t*)ptr)[0] = k_EMsgGCClientHello | ((DWORD)1 << 31);
 	((uint32_t*)ptr)[1] = 0;
 
 	Message.SerializeToArray((void*)((DWORD)ptr + 8), Message.ByteSize());
-
 	bool result = I::SteamGameCoordinator()->SendMessage(k_EMsgGCClientHello | ((DWORD)1 << 31), ptr, Message.ByteSize() + 8) == k_EGCResultOK;
 
 	free(ptr);
-
-	return result;
 }
 
-bool CInventory::SendMMHello()
+void CInventory::SendMMHello()
 {
 	CMsgGCCStrike15_v2_MatchmakingClient2GCHello Message;
+
 	void* ptr = malloc(Message.ByteSize() + 8);
 	if (!ptr)
-		return false;
+		return;
 
 	auto unMsgType = k_EMsgGCCStrike15_v2_MatchmakingClient2GCHello | ((DWORD)1 << 31);
 	((uint32_t*)ptr)[0] = unMsgType;
 	((uint32_t*)ptr)[1] = 0;
 
 	Message.SerializeToArray((void*)((DWORD)ptr + 8), Message.ByteSize());
-
-	bool result = I::SteamGameCoordinator()->SendMessage(k_EMsgGCCStrike15_v2_MatchmakingClient2GCHello | ((DWORD)1 << 31), ptr, Message.ByteSize() + 8) == k_EGCResultOK;
+	bool result = I::SteamGameCoordinator()->SendMessage(unMsgType, ptr, Message.ByteSize() + 8) == k_EGCResultOK;
 
 	free(ptr);
-	return result;
 }
 
 void CInventory::RetrieveMessage(void* ecx, void* edx, uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize)
@@ -221,7 +216,7 @@ void CInventory::PreSendMessage(uint32_t& unMsgType, void* pubData, uint32_t& cu
 			return;
 
 
-		int GameIdx = (int)((uint32_t)Message.item_id() - 20100);
+		int GameIdx = (uint32_t)Message.item_id() - 20100;
 		int EquippedState = Message.new_slot();
 		TeamID Team = (TeamID)Message.new_class();
 

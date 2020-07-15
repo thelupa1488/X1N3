@@ -21,6 +21,7 @@ public:
 	Vector OldHead;
 
 	Vector RenderOrigin;
+	Vector Origin;
 	Vector EyeAngle;
 	Vector EyePosition;
 	string Name;

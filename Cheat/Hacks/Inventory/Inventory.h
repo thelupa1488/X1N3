@@ -37,8 +37,8 @@ protected:
 	virtual void AddMedals(CMsgSOCacheSubscribed::SubscribedType* pInventoryCacheObject, int Index, int MedalId) = 0;
 	virtual void AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int index, int itemDefIndex, int rarity, int quality, int paintKit, int seed, float wear, const char* name, int InventoryLIdx) = 0;
 
-	virtual bool SendClientHello() = 0;
-	virtual bool SendMMHello() = 0;
+	virtual void SendClientHello() = 0;
+	virtual void SendMMHello() = 0;
 
 	struct MedalsInfo
 	{
@@ -102,7 +102,6 @@ public:
 class CInventory : public IInventory
 {
 public:
-
 	CConfig Config = CConfig(XorStr("Inventory"));
 
 	bool SkinsSyncEnable = true;
@@ -120,8 +119,8 @@ public:
 	void AddMedals(CMsgSOCacheSubscribed::SubscribedType* pInventoryCacheObject, int Index, int MedalId);
 	void AddItem(CMsgSOCacheSubscribed::SubscribedType* Object, int index, int itemDefIndex, int rarity, int quality, int paintKit, int seed, float wear, const char* name, int InventoryLIdx);
 
-	bool SendClientHello();
-	bool SendMMHello();
+	void SendClientHello();
+	void SendMMHello();
 
 	int InvSelectedWeapon = 0;
 	int InvSelectedKnife = 0;

@@ -5,9 +5,17 @@
 #include "../../Main.h"
 #include "../../Engine/Engine.h"
 #include "../Settings.h"
+#include "../../X1API/MinHook/hook.h"
 
 #define _180_PI 57.324840764331210191082802547771
 #define PI 3.14159265 
+
+namespace HookTables
+{
+	using DrawModelExecuteFn = void(__thiscall*)(void*, IMatRenderContext * ctx, const DrawModelState_t & state,
+		const ModelRenderInfo_t & pInfo, matrix3x4_t * pCustomBoneToWorld);
+	extern cDetour<DrawModelExecuteFn>* pDrawModelExecute;
+}
 
 namespace Engine
 {
@@ -114,6 +122,7 @@ protected:
 	virtual void Menu() = 0;
 	virtual void SubsectionsMenu() = 0;
 	virtual void Draw() = 0;
+	virtual void DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld) = 0;
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd) = 0;
 	virtual void SetSelectedWeapon(bool MenuCheck = true) = 0;
 	virtual void LegitResolver() = 0;
@@ -140,6 +149,7 @@ public:
 	virtual void Menu();
 	virtual void SubsectionsMenu();
 	virtual void Draw();
+	virtual void DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld);
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd);
 	virtual void SetSelectedWeapon(bool MenuCheck = true);
 	virtual void LegitResolver();
@@ -211,13 +221,11 @@ public:
 	{
 		float simtime;
 		Vector hitboxPos;
-		Vector vHitboxSkeletonArray[18][2];
-		Vector AimBackTrackHitBoxes[20];
-		bool VisbleBones[18];
+		Vector origin;
+		matrix3x4_t matrix[256];
+		//Vector vHitboxSkeletonArray[18][2]; //for skeleton
 	};
-
 	backtrackData headPositions[64][25];
-
 	struct CustomSub
 	{
 		int Idx;
@@ -418,6 +426,7 @@ public:
 		RV(FovColor, "FovColor");
 		RV(SilentFovColor, "SilentFovColor");
 		RV(ShowBacktrack, "ShowBacktrack");
+		//RV(ShowBacktrackType, "ShowBacktrackType");
 		RV(ShowBacktrackColor, "ShowBacktrackColor");
 		RV(ShowSpot, "ShowSpot");
 		RV(FaceIt, "FaceIt");
@@ -448,7 +457,8 @@ public:
 	CBaseEntity *pBestBacktrTarget;
 
 	bool ShowBacktrack = false;
-	Color ShowBacktrackColor = Color(0, 255, 255, 255);
+	int ShowBacktrackType = 0;
+	Color ShowBacktrackColor = Color(255, 255, 255, 255);
 
 	virtual float CalcFOV(Vector& viewangles, const Vector& vSrc, const Vector& vEnd);
 

@@ -355,7 +355,7 @@ public:
 	virtual bool GetWeaponByDefIdx(int Idx, int& ListIdx, bool IsKnife, bool IsTT);
 
 	virtual void ApplyStickerHooks(CBaseAttributableItem* pItem);
-	virtual int StickWeaponByDefIndex(int DefIdx);
+	virtual int  StickWeaponByDefIndex(int DefIdx);
 
 	CSkinListener FireEvent;
 

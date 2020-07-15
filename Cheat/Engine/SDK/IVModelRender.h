@@ -1,5 +1,4 @@
 #pragma once
-
 #include "SDK.h"
 
 namespace SDK
@@ -7,7 +6,6 @@ namespace SDK
     typedef unsigned short ModelInstanceHandle_t;
     typedef void* LightCacheHandle_t;
     typedef void* StudioDecalHandle_t;
-    typedef int OverrideType_t;
     typedef int ImageFormat;
     typedef int VertexFormat_t;
     typedef int MaterialPropertyTypes_t;
@@ -28,6 +26,15 @@ namespace SDK
     struct studiohwdata_t;
     struct MaterialLightingState_t;
     struct ColorMeshInfo_t;
+
+    enum OverrideType_t
+    {
+        Normal = 0,
+        BuildShadows,
+        DepthWrite,
+        CustomMaterial, // weapon skins
+        SsaoDepthWrite
+    };
 
     enum PreviewImageRetVal_t
     {
@@ -198,7 +205,7 @@ namespace SDK
     {
     public:
         virtual int                     DrawModel(int flags, IClientRenderable* pRenderable, ModelInstanceHandle_t instance, int entity_index, const model_t* model, Vector const& origin, QAngle const& angles, int skin, int body, int hitboxset, const matrix3x4_t* modelToWorld = NULL, const matrix3x4_t* pLightingOffset = NULL) = 0;
-        virtual void                    ForcedMaterialOverride(IMaterial* newMaterial, OverrideType_t nOverrideType = 0, int nOverrides = 0) = 0;
+        virtual void                    ForcedMaterialOverride(IMaterial* newMaterial, OverrideType_t nOverrideType = Normal, int nOverrides = 0) = 0;
         virtual bool                    IsForcedMaterialOverride(void) = 0;
         virtual void                    SetViewTarget(const CStudioHdr* pStudioHdr, int nBodyIndex, const Vector& target) = 0;
         virtual ModelInstanceHandle_t   CreateInstance(IClientRenderable* pRenderable, LightCacheHandle_t* pCache = NULL) = 0;
