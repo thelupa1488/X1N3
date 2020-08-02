@@ -165,6 +165,7 @@ namespace Engine
 		Vector      GetPunchAngles();
 
 		QAngle	            GetEyeAngles();
+		int                 HitboxSet();
 		//QAngle	        GetPunch();
 
 		Vector	GetBonePosition(int nBone);
@@ -176,6 +177,8 @@ namespace Engine
 		mstudiobbox_t* GetHitBox(int nHitbox);
 
 		mstudiohitboxset_t* GetHitBoxSet();
+		void InvalidateBoneCache();
+		bool IsNotTarget();
 	};
 
 	class CBaseViewModel : public IClientEntity

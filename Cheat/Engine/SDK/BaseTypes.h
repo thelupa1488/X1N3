@@ -74,7 +74,7 @@ struct colorVec
 
 struct color24
 {
-	byte r , g , b;
+	BYTE r , g , b;
 };
 
 #define DECLARE_POINTER_HANDLE(name) struct name##__ { int unused; }; typedef struct name##__ *name

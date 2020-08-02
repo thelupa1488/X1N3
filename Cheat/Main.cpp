@@ -19,7 +19,6 @@ DWORD WINAPI SetupThread(_In_ LPVOID lpThreadParameter)
 		ADD_LOG("2-1-3\n");
 		return FALSE;
 	};
-
 	return LSetupThread();
 	VMP_END
 }
@@ -38,8 +37,7 @@ BOOL WINAPI DllMain(_In_ HINSTANCE hinstDll, _In_ DWORD fdwReason, _In_opt_ LPVO
 		ADD_LOG("DLL BUILD: %s | %s\n", __TIME__, __DATE__);
 #endif
 		ADD_LOG("1\n");
-		FastCall::G().t_DisableThreadLibraryCalls(hinstDll);
-		std::make_unique<CreateThread_>((LPTHREAD_START_ROUTINE)SetupThread, hinstDll);
+		make_unique<CreateThread_>(&SetupThread, hinstDll);
 		ADD_LOG("2\n");
 		return TRUE;
 	case DLL_PROCESS_DETACH:

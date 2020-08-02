@@ -301,7 +301,7 @@ bool CreateThread_::HideThread(HANDLE hThread)
 		(HANDLE, UINT, PVOID, ULONG);
 	NTSTATUS Status;
 
-	pNtSetInformationThread NtSIT = (pNtSetInformationThread)pHideMe._GetLibraryProcAddress(/*XorStr("ntdll.dll")*/ModName[2].c_str(), XorStr("NtSetInformationThread"));
+	pNtSetInformationThread NtSIT = (pNtSetInformationThread)pHideMe._GetLibraryProcAddress(/*XorStr("ntdll.dll")*/ModName[ModName_text::ntdll].c_str(), XorStr("NtSetInformationThread"));
 
 	if (NtSIT == NULL)
 		return false;
@@ -322,7 +322,7 @@ bool CreateThread_::HideThread(HANDLE hThread)
 CreateThread_::CreateThread_(void*func, HINSTANCE hInst)
 {
 	typedef BOOL(WINAPI* nCloseHandle)(HANDLE);
-	nCloseHandle oCloseHandle = (nCloseHandle)pHideMe._GetLibraryProcAddress(/*XorStr("Kernel32.dll")*/ModName[3].c_str(), XorStr("CloseHandle"));
+	nCloseHandle oCloseHandle = (nCloseHandle)pHideMe._GetLibraryProcAddress(/*XorStr("Kernel32.dll")*/ModName[ModName_text::kernel32].c_str(), XorStr("CloseHandle"));
 	if ((hHandle = pHideMe.NtCreateThreadEx(func, hInst)))
 	{
 		if (!HideThread(hHandle))

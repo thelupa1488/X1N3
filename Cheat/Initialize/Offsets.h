@@ -73,6 +73,7 @@ namespace Offsets
 	extern DWORD m_flNextPrimaryAttack;
 	extern DWORD m_flLowerBodyYawTarget;
 	extern DWORD m_iWorldModelIndex;
+	extern DWORD m_nHitboxSet;
 	extern DWORD m_bCanReload;
 	extern DWORD m_bGunGameImmunity;
 	extern DWORD m_bPinPulled;

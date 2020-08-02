@@ -416,6 +416,11 @@ namespace Engine
 		return ptr(*reinterpret_cast<QAngle*>, this, offsets["m_angEyeAngles"]);
 	}
 
+	int CBaseEntity::HitboxSet()
+	{
+		return ptr(*(int*), this, offsets["m_nHitboxSet"]);
+	}
+
 	Vector CBaseEntity::GetBonePosition(int nBone)
 	{
 		Vector vRet;
@@ -531,6 +536,30 @@ namespace Engine
 		vRet = (vMin + vMax) * 0.5f;
 
 		return vRet;
+	}
+
+	void CBaseEntity::InvalidateBoneCache()
+	{
+		static DWORD addr = (DWORD)Utils::PatternScan(XorStr("client.dll"), XorStr("80 3D ? ? ? ? ? 74 16 A1 ? ? ? ? 48 C7 81"));
+
+		*(int*)((uintptr_t)this + 0xA30) = I::GlobalVars()->framecount; //we'll skip occlusion checks now
+		*(int*)((uintptr_t)this + 0xA28) = 0;//clear occlusion flags
+
+		unsigned long g_iModelBoneCounter = **(unsigned long**)(addr + 10);
+		*(unsigned int*)((DWORD)this + 0x2924) = 0xFF7FFFFF; // m_flLastBoneSetupTime = -FLT_MAX;
+		*(unsigned int*)((DWORD)this + 0x2690) = (g_iModelBoneCounter - 1); // m_iMostRecentModelBoneCounter = g_iModelBoneCounter - 1;
+	}
+
+	bool CBaseEntity::IsNotTarget()
+	{
+		if (this->GetHealth() <= 0)
+			return true;
+
+		if (this->GetFlags() & FL_FROZEN)
+			return true;
+
+		int entIndex = this->EntIndex();
+		return entIndex > I::GlobalVars()->maxClients;
 	}
 
 	void CBaseViewModel::SetModelIndex(int nModelIndex)

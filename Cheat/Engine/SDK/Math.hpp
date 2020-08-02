@@ -11,8 +11,8 @@
 #define Assert(_exp) ((void)0)
 
 #define TICK_INTERVAL			(I::GlobalVars()->interval_per_tick)
-#define TICKS_TO_TIME(t)        (I::GlobalVars()->interval_per_tick * (t) )
 #define TIME_TO_TICKS( dt )		( (int)( 0.5f + (float)(dt) / TICK_INTERVAL ) )
+#define TICKS_TO_TIME( t )		( I::GlobalVars()->interval_per_tick *( t ) )
 
 namespace SDK
 {
@@ -79,7 +79,6 @@ namespace SDK
 	void AngleVector(const Vector& angles, Vector& forward);
 	void MovementFix(CUserCmd* m_Cmd, QAngle wish_angle, QAngle old_angles);
 	void FixMovement(CUserCmd* cmd, QAngle& wishangle);
-	void VectorTransform(const Vector& in1, const matrix3x4_t& in2, Vector& out);
 	void Normalize(Vector& f);
 	//void correct_movement(CUserCmd* cmd, const QAngle& old_angles);
 	void CorrectMovement(QAngle vOldAngles, CUserCmd* pCmd, float fOldForward, float fOldSidemove);
@@ -89,7 +88,6 @@ namespace SDK
 	void gAngleVectors(const Vector& angles, Vector& forward);
 	void AngleVectors(const QAngle& angles, Vector& forward, Vector& right, Vector& up);
 	void VectorAngles(const Vector& forward, QAngle& angles);
-	bool WorldToScreen(const Vector& in, Vector& out);
 	QAngle calculate_angle(Vector src, Vector dst);
 	void VECTOR_Normalize(Vector& vIn, Vector& vOut);
 	void QANGLE_Normalize(QAngle& vIn, QAngle& vOut);

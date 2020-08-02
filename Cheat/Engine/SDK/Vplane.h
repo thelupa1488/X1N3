@@ -117,7 +117,7 @@ namespace SDK
 	inline SideType VPlane::BoxOnPlaneSide( const Vector &vMin , const Vector &vMax ) const
 	{
 		int i , firstSide , side;
-		TableVector vPoints[8] =
+		Vector vPoints[8] =
 		{
 			{ vMin.x, vMin.y, vMin.z },
 			{ vMin.x, vMin.y, vMax.z },

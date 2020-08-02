@@ -8,8 +8,10 @@ namespace SDK
 	{
 		return Vector(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
 	}
-	void MovementFix(CUserCmd* m_Cmd, QAngle wish_angle, QAngle old_angles) {
-		if (old_angles.x != wish_angle.x || old_angles.y != wish_angle.y || old_angles.z != wish_angle.z) {
+	void MovementFix(CUserCmd* m_Cmd, QAngle wish_angle, QAngle old_angles) 
+	{
+		if (old_angles.x != wish_angle.x || old_angles.y != wish_angle.y || old_angles.z != wish_angle.z) 
+		{
 			Vector wish_forward, wish_right, wish_up, cmd_forward, cmd_right, cmd_up;
 
 			auto viewangles = old_angles;
@@ -383,14 +385,6 @@ namespace SDK
 		forward.z = -sp;
 	}
 	//--------------------------------------------------------------------------------
-	//void VectorTransform(const Vector& in1, const matrix3x4_t& in2, Vector& out)
-	//{
-	//	//auto t = in2[0];
-	//	out[0] = in1.Dot(in2[0]) + in2[0][3];
-	//	out[1] = in1.Dot(in2[1]) + in2[1][3];
-	//	out[2] = in1.Dot(in2[2]) + in2[2][3];
-	//}
-	//--------------------------------------------------------------------------------
 	void Normalize(Vector& f)
 	{
 		while (f.y <= -180) f.y += 360;
@@ -602,64 +596,6 @@ namespace SDK
 		angles[2] = 0;
 	}
 	//--------------------------------------------------------------------------------
-	/*static bool screen_transform(const Vector& in, Vector& out)
-	{
-		auto exception_filter = [](int code, PEXCEPTION_POINTERS ex)
-		{
-			return EXCEPTION_EXECUTE_HANDLER;
-		};
-
-		__try
-		{
-			auto result = *(PDWORD)(offsets["FindW2Matrix"]) + 988;
-			if (!result)
-			{
-				return false;
-			}
-
-			const auto& world_matrix = *(_D3DMATRIX*)result;
-
-			const auto w = world_matrix.m[3][0] * in.x + world_matrix.m[3][1] * in.y + world_matrix.m[3][2] * in.z + world_matrix.m[3][3];
-			if (w < 0.001f)
-			{
-				out.x *= 100000;
-				out.y *= 100000;
-				return false;
-			}
-
-			out.x = world_matrix.m[0][0] * in.x + world_matrix.m[0][1] * in.y + world_matrix.m[0][2] * in.z + world_matrix.m[0][3];
-			out.y = world_matrix.m[1][0] * in.x + world_matrix.m[1][1] * in.y + world_matrix.m[1][2] * in.z + world_matrix.m[1][3];
-			out.z = 0.0f;
-
-			out.x /= w;
-			out.y /= w;
-
-			return true;
-
-		}
-		__except (exception_filter(GetExceptionCode(), GetExceptionInformation()))
-		{
-			out.x *= 100000;
-			out.y *= 100000;
-			return false;
-		}
-	}*/
-	//--------------------------------------------------------------------------------
-	//bool WorldToScreen(const Vector& in, Vector& out)
-	//{
-	//	if (screen_transform(in, out))
-	//	{
-	//		int w, h;
-	//		I::Engine()->GetScreenSize(w, h);
-
-	//		out.x = (w / 2.0f) + (out.x * w) / 2.0f;
-	//		out.y = (h / 2.0f) - (out.y * h) / 2.0f;
-
-	//		return true;
-	//	}
-	//	return false;
-	//}
-	//--------------------------------------------------------------------------------
 	QAngle calculate_angle(Vector src, Vector dst) {
 		QAngle angles;
 
@@ -676,7 +612,6 @@ namespace SDK
 		return angles;
 	}
 
-	
 	void VECTOR_Normalize(Vector& vIn, Vector& vOut)
 	{
 		float flLen = vIn.Length();

@@ -61,7 +61,7 @@ namespace SDK
 		int                    proctype;
 		int                    procindex;
 		mutable int            physicsbone;
-		inline void* pProcedure() const { if (procindex == 0) return NULL; else return  (void*)(((byte*)this) + procindex); };
+		inline void* pProcedure() const { if (procindex == 0) return NULL; else return  (void*)(((BYTE*)this) + procindex); };
 		int                    surfacepropidx;
 		inline char* const    pszSurfaceProp(void) const { return ((char*)this) + surfacepropidx; }
 		inline int             GetSurfaceProp(void) const { return surfacepropLookup; }

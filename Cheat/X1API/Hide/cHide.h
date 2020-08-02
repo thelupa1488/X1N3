@@ -111,7 +111,7 @@ using nGetAsyncKeyState = SHORT(WINAPI*)(int vKey);
 using nExitProcess = void(WINAPI*)(UINT);
 
 static std::vector<std::string>ModName = { XorStr("D3DX9_43.dll"), XorStr("USER32.dll"), XorStr("ntdll.dll"), XorStr("kernel32.dll") };
-enum ModName_text { D3DX9_43, USER32, ntdll };
+enum ModName_text { D3DX9_43, USER32, ntdll, kernel32 };
 
 static std::vector<std::string>Funcname =
 {

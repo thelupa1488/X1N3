@@ -46,7 +46,7 @@ public:
 	float flPenetrationModifier;
 	float flDamageModifier;
 	unsigned short material;
-	byte climbable;
+	BYTE climbable;
 };
 
 struct surfacedata_t

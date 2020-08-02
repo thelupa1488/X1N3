@@ -1,6 +1,9 @@
 #pragma once
 #include <math.h>
 #include <chrono>
+#include <map>
+#include <deque>
+#include <algorithm> 
 
 #include "../../Main.h"
 #include "../../Engine/Engine.h"
@@ -142,6 +145,10 @@ protected:
 
 class CLegitAim : public ILegitAim
 {
+private:
+	float correct_time = 0.0f;
+	float latency = 0.0f;
+	float lerp_time = 0.0f;
 public:
 
 	CConfig Config = CConfig(XorStr("LegitAim"));
@@ -217,15 +224,15 @@ public:
 	bool TriggerJumpEnemyCheck = false;
 	bool TriggerOnlyZoom = false;
 
-	struct backtrackData
+	struct BacktrackData
 	{
-		float simtime;
 		Vector hitboxPos;
-		Vector origin;
-		matrix3x4_t matrix[256];
-		//Vector vHitboxSkeletonArray[18][2]; //for skeleton
+		Vector Origin;
+		float simtime;
+		matrix3x4_t matrix[128];
 	};
-	backtrackData headPositions[64][25];
+	std::map<int, std::deque<BacktrackData>> records;
+
 	struct CustomSub
 	{
 		int Idx;
@@ -308,7 +315,7 @@ public:
 		float TriggerDelay = 0;
 
 		bool Backtrack = false;
-		int BacktrackTimeLimit = 0;
+		int BacktrackTicks = 0;
 
 		int SmoothMoveFactor = 0;
 
@@ -364,7 +371,7 @@ public:
 			CHECK_VAR(TriggerRcsX);
 			CHECK_VAR(TriggerDelay);
 			CHECK_VAR(Backtrack);
-			CHECK_VAR(BacktrackTimeLimit);
+			CHECK_VAR(BacktrackTicks);
 			CHECK_VAR(SmoothMoveFactor);
 
 			return true;
@@ -426,7 +433,7 @@ public:
 		RV(FovColor, "FovColor");
 		RV(SilentFovColor, "SilentFovColor");
 		RV(ShowBacktrack, "ShowBacktrack");
-		//RV(ShowBacktrackType, "ShowBacktrackType");
+		RV(ShowBacktrackType, "ShowBacktrackType");
 		RV(ShowBacktrackColor, "ShowBacktrackColor");
 		RV(ShowSpot, "ShowSpot");
 		RV(FaceIt, "FaceIt");

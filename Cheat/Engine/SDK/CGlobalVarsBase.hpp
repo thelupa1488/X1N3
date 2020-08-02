@@ -22,7 +22,6 @@ namespace SDK
         void*     pSaveData;                    // 0x0030
         bool      m_bClient;                    // 0x0031
         bool      m_bRemoteClient;              // 0x0032
-
     private:
         // 100 (i.e., tickcount is rounded down to this base and then the "delta" from this base is networked
         int       nTimestampNetworkingBase;

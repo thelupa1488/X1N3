@@ -254,6 +254,7 @@ public:
 				offsets["m_flDuckAmount"] = mGetOffset("DT_BaseEntity", "m_flDuckAmount");
 				offsets["m_hWeaponWorldModel"] = mGetOffset("DT_BaseCombatWeapon", "m_hWeaponWorldModel");
 				offsets["m_iWorldModelIndex"] = mGetOffset("DT_BaseCombatWeapon", "m_iWorldModelIndex");
+				offsets["m_nHitboxSet"] = mGetOffset("DT_BaseAnimating", "m_nHitboxSet");
 				//offsets["FindW2Matrix"] = (reinterpret_cast<DWORD>(&I::Engine()->WorldToScreenMatrix()) + 0x40);
 				ADD_LOG("All Offsets sucessful\n");
 				ADD_LOG("2-1-9-1\n");

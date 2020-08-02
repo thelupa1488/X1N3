@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\SDK\Vector.cpp" />
     <ClCompile Include="Engine\Utils\Utils.cpp" />
     <ClCompile Include="Engine\Engine.cpp" />
     <ClCompile Include="Engine\Entity.cpp" />
@@ -22,7 +23,6 @@
     <ClCompile Include="Engine\SDK\KeyValues.cpp" />
     <ClCompile Include="Engine\SDK\Math.cpp" />
     <ClCompile Include="Engine\SDK\SDK.cpp" />
-    <ClCompile Include="Engine\SDK\Vector.cpp" />
     <ClCompile Include="Engine\SDK\Vector2D.cpp" />
     <ClCompile Include="Engine\SDK\Vector4D.cpp" />
     <ClCompile Include="Engine\SDK\VMatrix.cpp" />
@@ -476,8 +476,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_WINDOWS;_USRDLL;X1N3_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <LanguageStandard>
-      </LanguageStandard>
+      <LanguageStandard>Default</LanguageStandard>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>

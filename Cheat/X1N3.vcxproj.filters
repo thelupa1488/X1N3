@@ -116,9 +116,6 @@
     <ClCompile Include="Engine\SDK\SDK.cpp">
       <Filter>Engine\SDK</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\SDK\Vector.cpp">
-      <Filter>Engine\SDK</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\SDK\Vector2D.cpp">
       <Filter>Engine\SDK</Filter>
     </ClCompile>
@@ -130,7 +127,6 @@
     </ClCompile>
     <ClCompile Include="Engine\SDK\CRC.cpp" />
     <ClCompile Include="Engine\SDK\SDK.cpp" />
-    <ClCompile Include="Engine\SDK\Vector.cpp" />
     <ClCompile Include="Engine\SDK\Vector2D.cpp" />
     <ClCompile Include="Engine\SDK\Vector4D.cpp" />
     <ClCompile Include="Engine\SDK\VMatrix.cpp" />
@@ -221,6 +217,7 @@
     <ClCompile Include="protobuf\network_connection.pb.cc" />
     <ClCompile Include="protobuf\steamdatagram_messages.pb.cc" />
     <ClCompile Include="protobuf\steammessages.pb.cc" />
+    <ClCompile Include="Engine\SDK\Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />

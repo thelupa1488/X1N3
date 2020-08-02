@@ -74,6 +74,7 @@ namespace Offsets
 	DWORD m_flNextPrimaryAttack = 0;
 	DWORD m_flLowerBodyYawTarget = 0;
 	DWORD m_iWorldModelIndex = 0;
+	DWORD m_nHitboxSet = 0;
 	DWORD m_bCanReload = 0;
 	DWORD m_bGunGameImmunity = 0;
 	DWORD m_bPinPulled = 0;

@@ -6,11 +6,13 @@
 
 namespace SDK 
 {
-	void VectorTransform( const Vector& in1 , const matrix3x4_t& in2 , Vector& out ) {
+	void VectorTransform( const Vector& in1 , const matrix3x4_t& in2 , Vector& out ) 
+	{
 		out.x = in1.x * in2[0][0] + in1.y * in2[0][1] + in1.z * in2[0][2] + in2[0][3];
 		out.y = in1.x * in2[1][0] + in1.y * in2[1][1] + in1.z * in2[1][2] + in2[1][3];
 		out.z = in1.x * in2[2][0] + in1.y * in2[2][1] + in1.z * in2[2][2] + in2[2][3];
 	}
+
 	void VectorCopy( const Vector& src, Vector& dst ) {
 		dst.x = src.x;
 		dst.y = src.y;
@@ -277,4 +279,4 @@ namespace SDK
 		VectorCrossProduct( *this, vOther, res );
 		return res;
 	}
-}             
+}                                                                                                                                                                                                                                                                                       

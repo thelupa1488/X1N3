@@ -12,9 +12,8 @@ namespace SDK
 	typedef float vec_t;
 	// 3D Vector
 
-	
-
-	class Vector  {
+	class Vector  
+	{
 	public:
 		// Members
 		vec_t x , y , z;
