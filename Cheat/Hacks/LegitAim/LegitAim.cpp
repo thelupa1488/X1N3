@@ -1832,16 +1832,16 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 	if (SelectedWeapon < 0)
 		return;
 
-	static ConVar* sv_maxunlag = I::GetConVar()->FindVar("sv_maxunlag");
-	static ConVar* sv_minupdaterate = I::GetConVar()->FindVar("sv_minupdaterate");
-	static ConVar* sv_maxupdaterate = I::GetConVar()->FindVar("sv_maxupdaterate");
+	static ConVar* sv_maxunlag = I::GetConVar()->FindVar(XorStr("sv_maxunlag"));
+	static ConVar* sv_minupdaterate = I::GetConVar()->FindVar(XorStr("sv_minupdaterate"));
+	static ConVar* sv_maxupdaterate = I::GetConVar()->FindVar(XorStr("sv_maxupdaterate"));
 
-	static ConVar* sv_client_min_interp_ratio = I::GetConVar()->FindVar("sv_client_min_interp_ratio");
-	static ConVar* sv_client_max_interp_ratio = I::GetConVar()->FindVar("sv_client_max_interp_ratio");
+	static ConVar* sv_client_min_interp_ratio = I::GetConVar()->FindVar(XorStr("sv_client_min_interp_ratio"));
+	static ConVar* sv_client_max_interp_ratio = I::GetConVar()->FindVar(XorStr("sv_client_max_interp_ratio"));
 
-	static ConVar* cl_interp_ratio = I::GetConVar()->FindVar("cl_interp_ratio");
-	static ConVar* cl_interp = I::GetConVar()->FindVar("cl_interp");
-	static ConVar* cl_updaterate = I::GetConVar()->FindVar("cl_updaterate");
+	static ConVar* cl_interp_ratio = I::GetConVar()->FindVar(XorStr("cl_interp_ratio"));
+	static ConVar* cl_interp = I::GetConVar()->FindVar(XorStr("cl_interp"));
+	static ConVar* cl_updaterate = I::GetConVar()->FindVar(XorStr("cl_updaterate"));
 
 	float updaterate = cl_updaterate->GetFloat();
 
