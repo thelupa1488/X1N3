@@ -3,72 +3,73 @@
 
 namespace EnginePrediction
 {
-	float _curtime_backup;
-	float _frametime_backup;
-	CMoveData _movedata;
-	CUserCmd* _prevcmd;
-	int _fixedtick;
+	float curtime_backup;
+	float frametime_backup;
+	CMoveData movedata;
+	CUserCmd* prevcmd;
+	int fixedtick;
 
-	int32_t* _prediction_seed;
-	CBaseEntity*** _prediction_player;
+	int32_t* prediction_seed;
+	CBaseEntity*** prediction_player;
 
 	void Begin(CUserCmd* pCmd)
 	{
-		_curtime_backup = I::GlobalVars()->curtime;
-		_frametime_backup = I::GlobalVars()->frametime;
+		curtime_backup = I::GlobalVars()->curtime;
+		frametime_backup = I::GlobalVars()->frametime;
 
-		if (!_prevcmd || _prevcmd->hasbeenpredicted)
-			_fixedtick = CGlobal::LocalPlayer->GetTickBase();
+		if (!prevcmd || prevcmd->hasbeenpredicted)
+			fixedtick = CGlobal::LocalPlayer->GetTickBase();
 		else 
-			_fixedtick++;
+			fixedtick++;
 
-		if (!_prediction_seed || !_prediction_player) 
+		if (!prediction_seed || !prediction_player) 
 		{
-			_prediction_seed = *(int32_t**)(Utils::PatternScan(clientFactory, XorStr("8B 0D ? ? ? ? BA ? ? ? ? E8 ? ? ? ? 83 C4 04")) + 2);
-			_prediction_player = (CBaseEntity***)(Utils::PatternScan(clientFactory, XorStr("89 35 ? ? ? ? F3 0F 10 48 20")) + 2);
+			prediction_seed = *(int32_t**)(Utils::PatternScan(clientFactory, XorStr("8B 0D ? ? ? ? BA ? ? ? ? E8 ? ? ? ? 83 C4 04")) + 2);
+			prediction_player = (CBaseEntity***)(Utils::PatternScan(clientFactory, XorStr("89 35 ? ? ? ? F3 0F 10 48 20")) + 2);
 		}
 
-		if (_prediction_seed)
-			*_prediction_seed = MD5_PseudoRandom(pCmd->command_number) & 0x7FFFFFFF;
+		if (prediction_seed)
+			*prediction_seed = MD5_PseudoRandom(pCmd->command_number) & 0x7FFFFFFF;
 
-		if (_prediction_player)			**_prediction_player = CGlobal::LocalPlayer;
+		if (prediction_player) 
+			**prediction_player = CGlobal::LocalPlayer;
 
 		CGlobal::LocalPlayer->GetCurrentCommand() = pCmd;
 
-		I::GlobalVars()->curtime = _fixedtick * I::GlobalVars()->interval_per_tick;
+		I::GlobalVars()->curtime = fixedtick * I::GlobalVars()->interval_per_tick;
 		I::GlobalVars()->frametime = I::GlobalVars()->interval_per_tick;
 
-		bool _inpred_backup = *(bool*)((uintptr_t)I::Prediction() + 8);
+		bool inpred_backup = *(bool*)((uintptr_t)I::Prediction() + 8);
 
-		memset(&_movedata, 0, sizeof(CMoveData));
+		memset(&movedata, 0, sizeof(CMoveData));
 
 		*(bool*)((uintptr_t)I::Prediction() + 8) = true;
 
 		I::MoveHelper()->SetHost(CGlobal::LocalPlayer);
 		I::GameMovement()->StartTrackPredictionErrors(CGlobal::LocalPlayer);
-		I::Prediction()->SetupMove(CGlobal::LocalPlayer, pCmd, I::MoveHelper(), &_movedata);
-		I::GameMovement()->ProcessMovement(CGlobal::LocalPlayer, &_movedata);
-		I::Prediction()->FinishMove(CGlobal::LocalPlayer, pCmd, &_movedata);
+		I::Prediction()->SetupMove(CGlobal::LocalPlayer, pCmd, I::MoveHelper(), &movedata);
+		I::GameMovement()->ProcessMovement(CGlobal::LocalPlayer, &movedata);
+		I::Prediction()->FinishMove(CGlobal::LocalPlayer, pCmd, &movedata);
 		I::GameMovement()->FinishTrackPredictionErrors(CGlobal::LocalPlayer);
 
-		*(bool*)((uintptr_t)I::GlobalVars() + 8) = _inpred_backup;
+		*(bool*)((uintptr_t)I::GlobalVars() + 8) = inpred_backup;
 
-		if (_prediction_player)
-			**_prediction_player = nullptr;
+		if (prediction_player)
+			**prediction_player = nullptr;
 
-		if (_prediction_seed)
-			*_prediction_seed = -1;
+		if (prediction_seed)
+			*prediction_seed = -1;
 
 	    CGlobal::LocalPlayer->GetCurrentCommand() = nullptr;
 		I::MoveHelper()->SetHost(nullptr);
 
-		_prevcmd = pCmd;
+		prevcmd = pCmd;
 	}
 
 	void End() 
 	{
-		I::GlobalVars()->curtime = _curtime_backup;
-		I::GlobalVars()->frametime = _frametime_backup;
+		I::GlobalVars()->curtime = curtime_backup;
+		I::GlobalVars()->frametime = frametime_backup;
 		I::GameMovement()->Reset();
 	}
 }

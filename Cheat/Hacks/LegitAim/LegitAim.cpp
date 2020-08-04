@@ -329,26 +329,27 @@ void CLegitAim::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const Dr
 			auto& data = records.at(Entity->Idx);
 			if (data.size() > 0)
 			{
-				if (ShowBacktrackType == 0)
+				switch (ShowBacktrackType)
 				{
+				case 0:
 					for (auto& record : data)
 					{
 						if (record.matrix && Entity->Origin.DistTo(record.origin) > 1.f)
 						{
 							GP_Esp->OverrideMaterial(false, 0/*Texture*/, ShowBacktrackColor);
-					        fnDME(thisptr, ctx, state, pInfo, record.matrix);
+							fnDME(thisptr, ctx, state, pInfo, record.matrix);
 							I::ModelRender()->ForcedMaterialOverride(nullptr);
 						}
 					}
-				}
-				if (ShowBacktrackType == 1)
-				{
+					break;
+				case 1:
 					if (data.back().matrix && Entity->Origin.DistTo(data.back().origin) > 1.f)
 					{
 						GP_Esp->OverrideMaterial(false, 0/*Texture*/, ShowBacktrackColor);
 						fnDME(thisptr, ctx, state, pInfo, data.back().matrix);
 						I::ModelRender()->ForcedMaterialOverride(nullptr);
 					}
+					break;
 				}
 			}
 		}
@@ -1857,16 +1858,16 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 	static ConVar* cl_interp = I::GetConVar()->FindVar(XorStr("cl_interp"));
 	static ConVar* cl_updaterate = I::GetConVar()->FindVar(XorStr("cl_updaterate"));
 
-	float updaterate = cl_updaterate->GetFloat();
-
 	float minupdaterate = sv_minupdaterate->GetFloat();
 	float maxupdaterate = sv_maxupdaterate->GetFloat();
 
 	float min_interp = sv_client_min_interp_ratio->GetFloat();
 	float max_interp = sv_client_max_interp_ratio->GetFloat();
 
-	float flLerpAmount = cl_interp->GetFloat();
 	float flLerpRatio = cl_interp_ratio->GetFloat();
+	float flLerpAmount = cl_interp->GetFloat();
+	float updaterate = cl_updaterate->GetFloat();
+
 	flLerpRatio = clamp(flLerpRatio, min_interp, max_interp);
 
 	if (flLerpRatio == 0.0f)
@@ -2061,7 +2062,6 @@ void CLegitAim::LoadWeapons(nlohmann::json &j)
 	Weapons.clear();
 
 	ReinitWeapons();
-
 
 	if (!j[XorStr("LegitAim")].is_null())
 	{
