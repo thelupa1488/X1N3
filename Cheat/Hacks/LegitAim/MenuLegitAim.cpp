@@ -1,8 +1,8 @@
 #include "LegitAim.h"
 #include "../../GUI/Gui.h"
 
+#define GetWeap(a) ((a < 0) ? 0 : (a >= GP_LegitAim->Weapons.size() ? GP_LegitAim->Weapons.size()-1 : a))
 
-#define GetWeap(a) ((a < 0) ? 0 : (a >= Weapons.size() ? Weapons.size()-1 : a))
 void CLegitAim::Menu()
 {
 	if (SelectedWeapon == -1)
@@ -213,14 +213,16 @@ void CLegitAim::Menu()
 					DCheckBox("Backtrack", Weapons[GetWeap(SelectedWeapon)].Backtrack);
 					if (Weapons[GetWeap(SelectedWeapon)].Backtrack)
 					{
-						X1Gui().SameLine();
+						X1Gui().SameLine(128.f);
 						DCheckBox("Show backtrack", ShowBacktrack);
 						if (ShowBacktrack)
 						{
-							X1Gui().SameLine();
+							X1Gui().Spacing();
+							X1Gui().SameLine(128.f);
 							X1Gui().PushItemWidth(175.f);
 							VectorEx<const char*> itemsSBT = { lolc("All Ticks"), lolc("Last Tick") };
 							DComboBox("Show Type##ShowBacktrack", ShowBacktrackType, itemsSBT);
+							X1Gui().SameLine();
 							DColorEdit("Color##ShowBacktrack", ShowBacktrackColor);
 						}
 						X1Gui().PushItemWidth(333.f);
