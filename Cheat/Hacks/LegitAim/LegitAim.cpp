@@ -1820,9 +1820,9 @@ float GetFovToPlayer(QAngle viewAngle, QAngle aimAngle)
 	return sqrtf(powf(delta.x, 2.0f) + powf(delta.y, 2.0f));
 }
 
-float correct_time = 0.0f;
-float latency = 0.0f;
-float lerp_time = 0.0f;
+float CorrectTime = 0;
+float Latency = 0;
+float LerpTime = 0;
 
 void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 {
@@ -1858,9 +1858,9 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 		flLerpRatio = 1.0f;
 
 	float updateRate = clamp(updaterate, minupdaterate, maxupdaterate);
-	lerp_time = std::fmaxf(flLerpAmount, flLerpRatio / updateRate);
-	latency = I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING) + I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_INCOMING);
-	correct_time = latency + lerp_time;
+	LerpTime = std::fmaxf(flLerpAmount, flLerpRatio / updateRate);
+	Latency = I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING) + I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_INCOMING);
+	CorrectTime = Latency + LerpTime;
 
 	if (SelectedWeapon < 0) {
 		records.clear();
@@ -1908,7 +1908,7 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 				while (!cur_records.empty())
 				{
 					auto& back = cur_records.back();
-					float deltaTime = correct_time - (I::GlobalVars()->curtime - back.simtime);
+					float deltaTime = CorrectTime - (I::GlobalVars()->curtime - back.simtime);
 					if (std::fabsf(deltaTime) <= 0.2f)
 						break;
 
@@ -1956,7 +1956,7 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 
 			for (auto& bd : cur_data)
 			{
-				float deltaTime = correct_time - (I::GlobalVars()->curtime - bd.simtime);
+				float deltaTime = CorrectTime - (I::GlobalVars()->curtime - bd.simtime);
 				if (std::fabsf(deltaTime) > MAXBACKTRACKTICKS(Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit))
 					continue;
 
@@ -1966,7 +1966,7 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 				if (bestFov > fov)
 				{
 					bestFov = fov;
-					tick_count = TIME_TO_TICKS(bd.simtime + lerp_time);
+					tick_count = TIME_TO_TICKS(bd.simtime + LerpTime);
 				}
 
 			}
