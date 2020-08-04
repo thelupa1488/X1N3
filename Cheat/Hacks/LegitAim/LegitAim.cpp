@@ -3,7 +3,6 @@
 using namespace HookTables;
 
 #define GetWeap(a) ((a < 0) ? 0 : (a >= (int)GP_LegitAim->Weapons.size() ? (int)GP_LegitAim->Weapons.size()-1 : a))
-#define MAXBACKTRACKTICKS static_cast<size_t>(TIME_TO_TICKS(static_cast<float>(Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit) / 1000.f))
 
 int SelectedWeapon = 0;
 
@@ -1832,11 +1831,6 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 		return;
 	}
 
-	if (SelectedWeapon < 0) {
-		records.clear();
-		return;
-	}
-
 	static ConVar* sv_maxunlag = I::GetConVar()->FindVar(XorStr("sv_maxunlag"));
 	static ConVar* sv_minupdaterate = I::GetConVar()->FindVar(XorStr("sv_minupdaterate"));
 	static ConVar* sv_maxupdaterate = I::GetConVar()->FindVar(XorStr("sv_maxupdaterate"));
@@ -1867,6 +1861,11 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 	lerp_time = std::fmaxf(flLerpAmount, flLerpRatio / updateRate);
 	latency = I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING) + I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_INCOMING);
 	correct_time = latency + lerp_time;
+
+	if (SelectedWeapon < 0) {
+		records.clear();
+		return;
+	}
 
 	if (Weapons[GetWeap(SelectedWeapon)].Backtrack && !FaceIt && Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit)
 	{
@@ -1941,7 +1940,7 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 
 				records[i].push_front(bd);
 
-				while (records[i].size() > 3 && records[i].size() > MAXBACKTRACKTICKS)
+				while (records[i].size() > 3 && records[i].size() > MAXBACKTRACKTICKS(Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit))
 					records[i].pop_back();
 			}
 		}
@@ -1958,7 +1957,7 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 			for (auto& bd : cur_data)
 			{
 				float deltaTime = correct_time - (I::GlobalVars()->curtime - bd.simtime);
-				if (std::fabsf(deltaTime) > MAXBACKTRACKTICKS)
+				if (std::fabsf(deltaTime) > MAXBACKTRACKTICKS(Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit))
 					continue;
 
 				VectorAngles(bd.hitboxPos - localEyePos, angles);
