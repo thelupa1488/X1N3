@@ -413,7 +413,6 @@ public:
 		pOldBestTarget = nullptr;
 		pLocalPlayer = nullptr;
 		pLocalWeapon = nullptr;
-		pBestBacktrTarget = nullptr;
 
 		RV(WeaponCustomTypes, "WeaponCustomTypes");
 		RV(Enable, "Enable");
@@ -457,7 +456,6 @@ public:
 	CBaseEntity *pOldBestTarget;
 	CBaseEntity *pLocalPlayer;
 	CBaseWeapon *pLocalWeapon;
-	CBaseEntity *pBestBacktrTarget;
 
 	bool ShowBacktrack = false;
 	int ShowBacktrackType = 0;
@@ -511,7 +509,6 @@ private:
 	int iLastBestHitBox = 0;
 	int iLastSilentBestHitBox = 0;
 	int iBackTrackBestSimTime = 0;
-	int iBackTrackbestTarget = -1;
 	int AimMethod = 0;
 	int SmoothMethod = 0;
 	int SmoothMF = 0;
