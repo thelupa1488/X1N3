@@ -145,10 +145,6 @@ protected:
 
 class CLegitAim : public ILegitAim
 {
-private:
-	float correct_time = 0.0f;
-	float latency = 0.0f;
-	float lerp_time = 0.0f;
 public:
 
 	CConfig Config = CConfig(XorStr("LegitAim"));
@@ -227,9 +223,9 @@ public:
 	struct BacktrackData
 	{
 		Vector hitboxPos;
-		Vector Origin;
+		Vector origin;
 		float simtime;
-		matrix3x4_t matrix[128];
+		matrix3x4_t matrix[256];
 	};
 	std::map<int, std::deque<BacktrackData>> records;
 
@@ -315,7 +311,7 @@ public:
 		float TriggerDelay = 0;
 
 		bool Backtrack = false;
-		int BacktrackTicks = 0;
+		int BacktrackTimeLimit = 0;
 
 		int SmoothMoveFactor = 0;
 
@@ -371,7 +367,7 @@ public:
 			CHECK_VAR(TriggerRcsX);
 			CHECK_VAR(TriggerDelay);
 			CHECK_VAR(Backtrack);
-			CHECK_VAR(BacktrackTicks);
+			CHECK_VAR(BacktrackTimeLimit);
 			CHECK_VAR(SmoothMoveFactor);
 
 			return true;

@@ -3,6 +3,7 @@
 using namespace HookTables;
 
 #define GetWeap(a) ((a < 0) ? 0 : (a >= (int)GP_LegitAim->Weapons.size() ? (int)GP_LegitAim->Weapons.size()-1 : a))
+#define MAXBACKTRACKTICKS static_cast<size_t>(TIME_TO_TICKS(static_cast<float>(Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit) / 1000.f))
 
 int SelectedWeapon = 0;
 
@@ -298,7 +299,7 @@ void CLegitAim::Draw()
 
 void CLegitAim::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld)
 {
-	if (ShowBacktrack && Weapons[GetWeap(SelectedWeapon)].Backtrack && Weapons[GetWeap(SelectedWeapon)].BacktrackTicks)
+	if (ShowBacktrack && Weapons[GetWeap(SelectedWeapon)].Backtrack && Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit)
 	{
 		static auto fnDME = HookTables::pDrawModelExecute->GetTrampoline();
 		const char* ModelName = I::ModelInfo()->GetModelName((model_t*)pInfo.pModel);
@@ -333,7 +334,7 @@ void CLegitAim::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const Dr
 				{
 					for (auto& record : data)
 					{
-						if (record.matrix && Entity->Origin.DistTo(record.Origin) > 1.f)
+						if (record.matrix && Entity->Origin.DistTo(record.origin) > 1.f)
 						{
 							GP_Esp->OverrideMaterial(false, 0/*Texture*/, ShowBacktrackColor);
 					        fnDME(thisptr, ctx, state, pInfo, record.matrix);
@@ -343,11 +344,10 @@ void CLegitAim::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const Dr
 				}
 				if (ShowBacktrackType == 1)
 				{
-					auto& back = data.back();
-					if (back.matrix && Entity->Origin.DistTo(back.Origin) > 1.f)
+					if (data.back().matrix && Entity->Origin.DistTo(data.back().origin) > 1.f)
 					{
 						GP_Esp->OverrideMaterial(false, 0/*Texture*/, ShowBacktrackColor);
-						fnDME(thisptr, ctx, state, pInfo, back.matrix);
+						fnDME(thisptr, ctx, state, pInfo, data.back().matrix);
 						I::ModelRender()->ForcedMaterialOverride(nullptr);
 					}
 				}
@@ -1821,16 +1821,21 @@ float GetFovToPlayer(QAngle viewAngle, QAngle aimAngle)
 	return sqrtf(powf(delta.x, 2.0f) + powf(delta.y, 2.0f));
 }
 
+float correct_time = 0.0f;
+float latency = 0.0f;
+float lerp_time = 0.0f;
+
 void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 {
-	if (!CGlobal::IsGameReady || !CGlobal::LocalPlayer || CGlobal::LocalPlayer->IsDead())
-	{
+	if (!CGlobal::IsGameReady || !CGlobal::LocalPlayer || CGlobal::LocalPlayer->IsDead()) {
 		records.clear();
 		return;
 	}
 
-	if (SelectedWeapon < 0)
+	if (SelectedWeapon < 0) {
+		records.clear();
 		return;
+	}
 
 	static ConVar* sv_maxunlag = I::GetConVar()->FindVar(XorStr("sv_maxunlag"));
 	static ConVar* sv_minupdaterate = I::GetConVar()->FindVar(XorStr("sv_minupdaterate"));
@@ -1854,6 +1859,7 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 	float flLerpAmount = cl_interp->GetFloat();
 	float flLerpRatio = cl_interp_ratio->GetFloat();
 	flLerpRatio = clamp(flLerpRatio, min_interp, max_interp);
+
 	if (flLerpRatio == 0.0f)
 		flLerpRatio = 1.0f;
 
@@ -1862,7 +1868,7 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 	latency = I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING) + I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_INCOMING);
 	correct_time = latency + lerp_time;
 
-	if (Weapons[GetWeap(SelectedWeapon)].Backtrack && !FaceIt && Weapons[GetWeap(SelectedWeapon)].BacktrackTicks)
+	if (Weapons[GetWeap(SelectedWeapon)].Backtrack && !FaceIt && Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit)
 	{
 		float bestFov = FLT_MAX;
 		for (int i = 0; i < I::Engine()->GetMaxClients(); i++)
@@ -1919,34 +1925,40 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 			if (!hdr)
 				continue;
 
-			auto hitbox_set = hdr->GetHitboxSet(entity->HitboxSet());
-			auto hitbox_head = hitbox_set->GetHitbox(HITBOX_HEAD);
-			auto hitbox_center = (hitbox_head->bbmin + hitbox_head->bbmax) * 0.5f;
+			if (!entity->IsDead())
+			{
+				auto hitbox_set = hdr->GetHitboxSet(entity->HitboxSet());
+				auto hitbox_head = hitbox_set->GetHitbox(HITBOX_HEAD);
+				auto hitbox_center = (hitbox_head->bbmin + hitbox_head->bbmax) * 0.5f;
 
-			BacktrackData bd;
-			bd.simtime = entity->GetSimTime();
-			bd.Origin = entity->GetOrigin();
-			entity->InvalidateBoneCache();
-			entity->SetupBones(bd.matrix, 128, 256, I::GlobalVars()->curtime);
+				BacktrackData bd;
+				bd.simtime = entity->GetSimTime();
+				bd.origin = entity->GetOrigin();
+				entity->InvalidateBoneCache();
+				entity->SetupBones(bd.matrix, 256, 0x7FF00, I::GlobalVars()->curtime);
 
-			VectorTransform(hitbox_center, bd.matrix[hitbox_head->bone], bd.hitboxPos);
+				VectorTransform(hitbox_center, bd.matrix[hitbox_head->bone], bd.hitboxPos);
 
-			records[i].push_front(bd);
+				records[i].push_front(bd);
+
+				while (records[i].size() > 3 && records[i].size() > MAXBACKTRACKTICKS)
+					records[i].pop_back();
+			}
 		}
 
 		Vector localEyePos = CGlobal::LocalPlayer->GetEyePosition();
 		QAngle angles;
 		int tick_count = -1;
-		for (auto& node : records) 
+		for (auto& node : records)
 		{
 			auto& cur_data = node.second;
 			if (cur_data.empty())
 				continue;
 
-			for (auto& bd : cur_data) 
+			for (auto& bd : cur_data)
 			{
 				float deltaTime = correct_time - (I::GlobalVars()->curtime - bd.simtime);
-				if (std::fabsf(deltaTime) > TICKS_TO_TIME(Weapons[GetWeap(SelectedWeapon)].BacktrackTicks))
+				if (std::fabsf(deltaTime) > MAXBACKTRACKTICKS)
 					continue;
 
 				VectorAngles(bd.hitboxPos - localEyePos, angles);
@@ -1957,6 +1969,7 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 					bestFov = fov;
 					tick_count = TIME_TO_TICKS(bd.simtime + lerp_time);
 				}
+
 			}
 		}
 
@@ -1965,6 +1978,7 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 			pCmd->tick_count = tick_count;
 		}
 	}
+
 }
 
 void CLegitAim::SaveWeapons(nlohmann::json &j)
@@ -2035,7 +2049,7 @@ void CLegitAim::SaveWeapons(nlohmann::json &j)
 		SV("TriggerRcsY", v.TriggerRcsY);
 		SV("TriggerDelay", v.TriggerDelay);
 		SV("Backtrack", v.Backtrack);
-		SV("BacktrackTicks", v.BacktrackTicks);
+		SV("BacktrackTimeLimit", v.BacktrackTimeLimit);
 		SV("SmoothMoveFactor", v.SmoothMoveFactor);
 	}
 }
@@ -2163,7 +2177,7 @@ void CLegitAim::LoadWeapons(nlohmann::json &j)
 				LV("TriggerRcsY", v.TriggerRcsY);
 				LV("TriggerDelay", v.TriggerDelay);
 				LV("Backtrack", v.Backtrack);
-				LV("BacktrackTicks", v.BacktrackTicks);
+				LV("BacktrackTimeLimit", v.BacktrackTimeLimit);
 				LV("SmoothMoveFactor", v.SmoothMoveFactor);
 			}
 		}
