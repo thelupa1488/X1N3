@@ -146,7 +146,7 @@ void CEsp::SoundFrameStage()
 	}
 }
 
-IMaterial* CEsp::InitializeMaterials()
+void CEsp::InitializeMaterials()
 {
 	if (!Texture)
 		Texture = I::MaterialSystem()->CreateMaterial("Texture", KeyValues::FromString("VertexLitGeneric", "$basetexture white"));
@@ -191,8 +191,6 @@ IMaterial* CEsp::InitializeMaterials()
 		kv->SetString("$envmaptint", "[.7 .7 .7]");
 		Animated = I::MaterialSystem()->CreateMaterial("Animated", kv);
 	}
-
-	return nullptr;
 }
 
 void CEsp::OverrideMaterial(bool ignoreZ, int type, Color rgba)
