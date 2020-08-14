@@ -400,7 +400,7 @@ namespace Engine
 
 	Vector CBaseEntity::GetEyePosition()
 	{
-		return GetRenderOrigin() + GetViewOffset();
+		return GetOrigin() + GetViewOffset();
 	}
 
 	Vector CBaseEntity::GetPunchAngles()

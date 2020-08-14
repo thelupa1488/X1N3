@@ -611,6 +611,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				}
 			}
 			EnginePrediction::End();
+
 			if (BHop)
 			{
 				if (CGlobal::LocalPlayer->GetMoveType() & MOVETYPE_LADDER ||

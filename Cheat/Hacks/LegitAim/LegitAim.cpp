@@ -1932,11 +1932,6 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 	if (!CGlobal::IsGameReady || !CGlobal::LocalPlayer || CGlobal::LocalPlayer->IsDead())
 		return;
 
-	float updateRate = clamp(vars.updateRate->GetFloat(), vars.minUpdateRate->GetFloat(), vars.maxUpdateRate->GetFloat());
-	LerpTime = std::fmaxf(vars.interp->GetFloat(), vars.interpRatio->GetFloat() / updateRate);
-	Latency = I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING) + I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_INCOMING);
-	CorrectTime = Latency + LerpTime;
-
 	if (SelectedWeapon < 0)
 		return;
 
@@ -1944,6 +1939,11 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 	{
 		EnginePrediction::Run(pCmd);
 		{
+			float updateRate = clamp(vars.updateRate->GetFloat(), vars.minUpdateRate->GetFloat(), vars.maxUpdateRate->GetFloat());
+			LerpTime = std::fmaxf(vars.interp->GetFloat(), vars.interpRatio->GetFloat() / updateRate);
+			Latency = I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING) + I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_INCOMING);
+			CorrectTime = Latency + LerpTime;
+
 			if (pBestBacktrackTarget)
 			{
 				if (records[iBackTrackBestTargetIndex].size() <= 3 || (!IgnoreSmokeBacktrack && CGlobal::LineGoesThroughSmoke(CGlobal::LocalPlayer->GetEyePosition(), iBackTrackBestTargetOrigin)))
@@ -1968,10 +1968,7 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 				}
 			}
 
-			if (!(pCmd->buttons & IN_ATTACK))
-				return;
-
-			if (iBackTrackBestRecord)
+			if ((pCmd->buttons & IN_ATTACK) && iBackTrackBestRecord)
 			{
 				const auto& record = records[iBackTrackBestTargetIndex][iBackTrackBestRecord];
 				pBestBacktrackTarget->SetAbsOrigin(record.origin);
