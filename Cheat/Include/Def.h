@@ -3,7 +3,7 @@
 #include <VMProtectSDK.h>
 
 //#define DEBUG_DLL //for protobuf lib
-//#define ENABLE_XOR_STR
+#define ENABLE_XOR_STR
 //#define ENABLE_VMP
 #define YOUGAMEBIZ
 

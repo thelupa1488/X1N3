@@ -892,7 +892,7 @@ int CSkins::StickWeaponByDefIndex(int DefIdx)
 
 void CSkins::SaveSkins(nlohmann::json &j)
 {
-#define SV(o,a,b) j[XorStr("Skins")][o][v.Name][XorStr(a)] = b;
+#define SV(o,a,b) j[XorStr("Skins")][o][v.Name][/*XorStr*/(a)] = b;
 
 	StickerSettings emptyEntryStricker;
 	SkinSettings emptyEntry;
@@ -928,11 +928,11 @@ void CSkins::SaveSkins(nlohmann::json &j)
 						continue;
 					}
 
-					SV(sname, string("Stiker" + to_string(i) + "kit"), v.Skin.Stickers[i].kit);
-					SV(sname, string("Stiker" + to_string(i) + "kit_menu_index"), v.Skin.Stickers[i].kit_menu_index);
-					SV(sname, string("Stiker" + to_string(i) + "rotation"), v.Skin.Stickers[i].rotation);
-					SV(sname, string("Stiker" + to_string(i) + "scale"), v.Skin.Stickers[i].scale);
-					SV(sname, string("Stiker" + to_string(i) + "wear"), v.Skin.Stickers[i].wear);
+					SV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("kit")), v.Skin.Stickers[i].kit);
+					SV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("kit_menu_index")), v.Skin.Stickers[i].kit_menu_index);
+					SV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("rotation")), v.Skin.Stickers[i].rotation);
+					SV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("scale")), v.Skin.Stickers[i].scale);
+					SV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("wear")), v.Skin.Stickers[i].wear);
 				}
 			}
 		}
@@ -945,7 +945,7 @@ void CSkins::SaveSkins(nlohmann::json &j)
 
 void CSkins::LoadSkins(nlohmann::json &j)
 {
-#define LV(o,a,b) if(!j[XorStr("Skins")][o][v.Name][XorStr(a)].is_null()) {b = j[XorStr("Skins")][o][v.Name][XorStr(a)];}
+#define LV(o,a,b) if(!j[XorStr("Skins")][o][v.Name][/*XorStr*/(a)].is_null()) {b = j[XorStr("Skins")][o][v.Name][/*XorStr*/(a)];}
 
 	StickerSettings emptyEntryStricker;
 	SkinSettings emptyEntry;
@@ -959,7 +959,7 @@ void CSkins::LoadSkins(nlohmann::json &j)
 				if (!j[XorStr("Skins")][sname][v.Name].is_null())
 				{
 					bool IsEmpty = false;
-					LV(sname, XorStr("Emp"), IsEmpty);
+					LV(sname, ("Emp"), IsEmpty);
 					if (IsEmpty)
 					{
 						v.Skin = emptyEntry;
@@ -989,18 +989,18 @@ void CSkins::LoadSkins(nlohmann::json &j)
 						for (int i(0); i < 5; i++)
 						{
 							bool IsEmptyStick = false;
-							LV(sname, string("SRE" + to_string(i)), IsEmptyStick);
+							LV(sname, string(XorStr("SRE") + to_string(i)), IsEmptyStick);
 							if (IsEmptyStick)
 							{
 								v.Skin.Stickers[i] = emptyEntryStricker;
 								continue;
 							}
 
-							LV(sname, string("Stiker" + to_string(i) + "kit"), v.Skin.Stickers[i].kit);
-							LV(sname, string("Stiker" + to_string(i) + "kit_menu_index"), v.Skin.Stickers[i].kit_menu_index);
-							LV(sname, string("Stiker" + to_string(i) + "rotation"), v.Skin.Stickers[i].rotation);
-							LV(sname, string("Stiker" + to_string(i) + "scale"), v.Skin.Stickers[i].scale);
-							LV(sname, string("Stiker" + to_string(i) + "wear"), v.Skin.Stickers[i].wear);
+							LV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("kit")), v.Skin.Stickers[i].kit);
+							LV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("kit_menu_index")), v.Skin.Stickers[i].kit_menu_index);
+							LV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("rotation")), v.Skin.Stickers[i].rotation);
+							LV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("scale")), v.Skin.Stickers[i].scale);
+							LV(sname, string(XorStr("Stiker") + to_string(i) + XorStr("wear")), v.Skin.Stickers[i].wear);
 						}
 					}
 				}
