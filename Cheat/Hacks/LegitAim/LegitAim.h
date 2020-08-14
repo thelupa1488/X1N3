@@ -15,10 +15,11 @@
 
 namespace HookTables
 {
-	using DrawModelExecuteFn = void(__thiscall*)(void*, IMatRenderContext * ctx, const DrawModelState_t & state,
-		const ModelRenderInfo_t & pInfo, matrix3x4_t * pCustomBoneToWorld);
+	using DrawModelExecuteFn = void(__thiscall*)(void*, IMatRenderContext*, const DrawModelState_t&,
+		const ModelRenderInfo_t&, matrix3x4_t*);
 	extern cDetour<DrawModelExecuteFn>* pDrawModelExecute;
 }
+using namespace HookTables;
 
 namespace Engine
 {
@@ -26,9 +27,7 @@ namespace Engine
 	class CPlayer;
 	class CBaseWeapon;
 }
-
 using namespace Engine;
-
 
 extern int SelectedWeapon;
 
@@ -108,6 +107,8 @@ protected:
 
 	virtual void SaveWeapons(nlohmann::json &j) = 0;
 	virtual void LoadWeapons(nlohmann::json &j) = 0;
+	virtual void BacktrackFrameStageNotify() = 0;
+	virtual void InitializeBacktrack() = 0;
 	virtual void BacktrackCreateMove(CUserCmd* pCmd) = 0;
 	virtual void TriggerCreateMove(CUserCmd* pCmd) = 0;
 	virtual void TriggerGetBestTarget(Vector mAngle) = 0;
@@ -159,6 +160,8 @@ public:
 	virtual void SaveWeapons(nlohmann::json &j);
 	virtual void LoadWeapons(nlohmann::json &j);
 
+	virtual void BacktrackFrameStageNotify();
+	virtual void InitializeBacktrack();
 	virtual void BacktrackCreateMove(CUserCmd* pCmd);
 
 	virtual void TriggerCreateMove(CUserCmd* pCmd);
@@ -220,10 +223,23 @@ public:
 	bool TriggerJumpEnemyCheck = false;
 	bool TriggerOnlyZoom = false;
 
+	struct BacktrackVars
+	{
+		ConVar* updateRate;
+		ConVar* minUpdateRate;
+		ConVar* maxUpdateRate;
+		ConVar* interp;
+		ConVar* interpRatio;
+		ConVar* minInterpRatio;
+		ConVar* maxInterpRatio;
+		ConVar* maxUnlag;
+	};
+	BacktrackVars vars;
+
 	struct BacktrackData
 	{
-		Vector hitboxPos;
 		Vector origin;
+		Vector hitboxPos;
 		float simtime;
 		matrix3x4_t matrix[256];
 	};
@@ -413,6 +429,7 @@ public:
 		pOldBestTarget = nullptr;
 		pLocalPlayer = nullptr;
 		pLocalWeapon = nullptr;
+		pBestBacktrackTarget = nullptr;
 
 		RV(WeaponCustomTypes, "WeaponCustomTypes");
 		RV(Enable, "Enable");
@@ -427,6 +444,7 @@ public:
 		RV(DrawSilentFov, "DrawSilentFov");
 		RV(FovColor, "FovColor");
 		RV(SilentFovColor, "SilentFovColor");
+		RV(IgnoreSmokeBacktrack, "IgnoreSmokeBacktrack");
 		RV(ShowBacktrack, "ShowBacktrack");
 		RV(ShowBacktrackType, "ShowBacktrackType");
 		RV(ShowBacktrackColor, "ShowBacktrackColor");
@@ -456,7 +474,9 @@ public:
 	CBaseEntity *pOldBestTarget;
 	CBaseEntity *pLocalPlayer;
 	CBaseWeapon *pLocalWeapon;
+	CBaseEntity* pBestBacktrackTarget;
 
+	bool IgnoreSmokeBacktrack = false;
 	bool ShowBacktrack = false;
 	int ShowBacktrackType = 0;
 	Color ShowBacktrackColor = Color(255, 255, 255, 255);
@@ -465,8 +485,7 @@ public:
 
 private:
 
-	CUserCmd * LpCmd;
-
+	CUserCmd* LpCmd;
 	CCustomSmooth *CCSmooth = nullptr;
 
 	Vector MyEyeAng = Vector(0, 0, 0);
@@ -508,7 +527,9 @@ private:
 	int RCS_Y = 0;
 	int iLastBestHitBox = 0;
 	int iLastSilentBestHitBox = 0;
-	int iBackTrackBestSimTime = 0;
+	int iBackTrackBestTargetIndex = -1;
+	int iBackTrackBestRecord = -1;
+	Vector iBackTrackBestTargetOrigin = Vector(0, 0, 0);
 	int AimMethod = 0;
 	int SmoothMethod = 0;
 	int SmoothMF = 0;

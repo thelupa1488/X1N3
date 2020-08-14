@@ -205,7 +205,7 @@ void CEsp::OverrideMaterial(bool ignoreZ, int type, Color rgba)
 	case 3: Material = Metallic; break;
 	case 4: Material = Pearlescent; break;
 	case 5: Material = Animated; break;
-	default: Material = nullptr;
+	default: Material = nullptr; break;
 	}
 
 	if (!Material || Material->IsErrorMaterial()) 

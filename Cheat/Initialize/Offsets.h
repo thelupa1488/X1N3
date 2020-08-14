@@ -111,6 +111,8 @@ namespace Offsets
 
 	extern DWORD m_Item;
 
+	extern DWORD PredictionSeed;
+	extern DWORD PredictionPlayer;
 //	extern DWORD FindW2Matrix;
 }
 

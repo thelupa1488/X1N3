@@ -211,14 +211,14 @@ void CLegitAim::Menu()
 					X1Gui().Spacing();
 
 					DCheckBox("Backtrack", Weapons[GetWeap(SelectedWeapon)].Backtrack);
+					X1Gui().SameLine(158.f);
+					DCheckBox("Ignore smoke Backtrack", IgnoreSmokeBacktrack)
 					if (Weapons[GetWeap(SelectedWeapon)].Backtrack)
 					{
-						X1Gui().SameLine(128.f);
-						DCheckBox("Show backtrack", ShowBacktrack);
+						DCheckBox("Show Backtrack", ShowBacktrack);
 						if (ShowBacktrack)
 						{
-							X1Gui().Spacing();
-							X1Gui().SameLine(128.f);
+							X1Gui().SameLine(158.f);
 							X1Gui().PushItemWidth(175.f);
 							VectorEx<const char*> itemsSBT = { lolc("All Ticks"), lolc("Last Tick") };
 							DComboBox("Show Type##ShowBacktrack", ShowBacktrackType, itemsSBT);

@@ -515,7 +515,7 @@ void CEsp::PlayerEsp(CEntityPlayer* Local)
 			Name || Health || Armor || Ammo || Distance ||
 			Weapon || Money || Scope || Flashing || Line) && BindEnable.Check())
 		{
-			for (int EntIndex = 0; EntIndex < MAX_ENTITY_PLAYERS; EntIndex++)
+			for (int EntIndex = 0; EntIndex < I::Engine()->GetMaxClients(); EntIndex++)
 			{
 				CEntityPlayer* Entity = &GP_EntPlayers->EntityPlayer[EntIndex];
 

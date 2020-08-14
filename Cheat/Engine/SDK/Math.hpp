@@ -15,6 +15,7 @@
 #define TICKS_TO_TIME( t )		( I::GlobalVars()->interval_per_tick *( t ) )
 #define MAXBACKTRACKTICKS( tl )  ( static_cast<size_t> ( TIME_TO_TICKS ( static_cast<float> ( tl ) / 1000.f ) ) )
 
+
 namespace SDK
 {
 	static float FASTSQRT(float x)

@@ -1,7 +1,6 @@
 #include "LegitAim.h"
 #include "../Setup.h"
-using namespace HookTables;
-
+#include "../../Engine/EnginePrediction.h"
 #define GetWeap(a) ((a < 0) ? 0 : (a >= (int)GP_LegitAim->Weapons.size() ? (int)GP_LegitAim->Weapons.size()-1 : a))
 
 int SelectedWeapon = 0;
@@ -360,7 +359,7 @@ Vector OldStandRCS = Vector(0, 0, 0);
 bool NextSimpleDisable = false;
 bool DisableNewWeapn = false;
 bool NextAutoShot = false;
-float start = 0;
+float Start = 0;
 
 void CLegitAim::CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd)
 {
@@ -442,13 +441,13 @@ void CLegitAim::CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd*
 	if (OldWeapon != CGlobal::GWeaponID)
 	{
 		DisableNewWeapn = true;
-		start = I::GlobalVars()->curtime;
+		Start = I::GlobalVars()->curtime;
 	}
 
 	if (DisableNewWeapn)
 	{
 		float end = I::GlobalVars()->curtime;
-		float diff = end - start;
+		float diff = end - Start;
 		if (diff > 0.05f)
 			DisableNewWeapn = false;
 	}
@@ -715,7 +714,7 @@ bool CLegitAim::CheckOpportWork(CUserCmd* pCmd)
 		if ((pCmd->buttons & IN_ATTACK))
 			DisableIfPK = true;
 
-		start = I::GlobalVars()->curtime;
+		Start = I::GlobalVars()->curtime;
 		DisableNewWeapn = true;
 		return false;
 	}
@@ -1838,66 +1837,35 @@ float DistancePointToLine(Vector Point, Vector LineOrigin, Vector Dir)
 	return (Point - PerpendicularPoint).Length();
 }
 
+void CLegitAim::InitializeBacktrack()
+{
+	records.clear();
+	vars.updateRate = I::GetConVar()->FindVar("cl_updaterate");
+	vars.minUpdateRate = I::GetConVar()->FindVar("sv_minupdaterate");
+	vars.maxUpdateRate = I::GetConVar()->FindVar("sv_maxupdaterate");
+	vars.interp = I::GetConVar()->FindVar("cl_interp");
+	vars.interpRatio = I::GetConVar()->FindVar("cl_interp_ratio");
+	vars.minInterpRatio = I::GetConVar()->FindVar("sv_client_min_interp_ratio");
+	vars.maxInterpRatio = I::GetConVar()->FindVar("sv_client_max_interp_ratio");
+	vars.maxUnlag = I::GetConVar()->FindVar("sv_maxunlag");
+}
+
 float CorrectTime = 0;
 float Latency = 0;
 float LerpTime = 0;
 
-void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
+void CLegitAim::BacktrackFrameStageNotify()
 {
-	if (!CGlobal::IsGameReady || !CGlobal::LocalPlayer || CGlobal::LocalPlayer->IsDead()) 
-	{ records.clear(); return; }
-
-	static ConVar* sv_maxunlag = I::GetConVar()->FindVar(XorStr("sv_maxunlag"));
-	static ConVar* sv_minupdaterate = I::GetConVar()->FindVar(XorStr("sv_minupdaterate"));
-	static ConVar* sv_maxupdaterate = I::GetConVar()->FindVar(XorStr("sv_maxupdaterate"));
-
-	static ConVar* sv_client_min_interp_ratio = I::GetConVar()->FindVar(XorStr("sv_client_min_interp_ratio"));
-	static ConVar* sv_client_max_interp_ratio = I::GetConVar()->FindVar(XorStr("sv_client_max_interp_ratio"));
-
-	static ConVar* cl_interp_ratio = I::GetConVar()->FindVar(XorStr("cl_interp_ratio"));
-	static ConVar* cl_interp = I::GetConVar()->FindVar(XorStr("cl_interp"));
-	static ConVar* cl_updaterate = I::GetConVar()->FindVar(XorStr("cl_updaterate"));
-
-	float minupdaterate = sv_minupdaterate->GetFloat();
-	float maxupdaterate = sv_maxupdaterate->GetFloat();
-
-	float min_interp = sv_client_min_interp_ratio->GetFloat();
-	float max_interp = sv_client_max_interp_ratio->GetFloat();
-
-	float flLerpRatio = cl_interp_ratio->GetFloat();
-	float flLerpAmount = cl_interp->GetFloat();
-	float updaterate = cl_updaterate->GetFloat();
-
-	flLerpRatio = clamp(flLerpRatio, min_interp, max_interp);
-
-	if (flLerpRatio == 0.0f)
-		flLerpRatio = 1.0f;
-
-	float updateRate = clamp(updaterate, minupdaterate, maxupdaterate);
-	LerpTime = std::fmaxf(flLerpAmount, flLerpRatio / updateRate);
-	Latency = I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING) + I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_INCOMING);
-	CorrectTime = Latency + LerpTime;
-
-	if (SelectedWeapon < 0) 
+	if (!CGlobal::LocalPlayer || CGlobal::LocalPlayer->IsDead()) 
 	{ records.clear(); return; }
 
 	if (Weapons[GetWeap(SelectedWeapon)].Backtrack && !FaceIt && Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit)
 	{
-		for (int i = 0; i < I::Engine()->GetMaxClients(); i++)
+		for (int i = 0; i <= I::Engine()->GetMaxClients(); i++)
 		{
 			auto entity = (CBaseEntity*)I::EntityList()->GetClientEntity(i);
-
-			if (!entity || !CGlobal::LocalPlayer) 
-			{ if (records.count(i) > 0) records.erase(i); continue; }
-
-			if (entity == CGlobal::LocalPlayer) 
-			{ if (records.count(i) > 0) records.erase(i); continue; }
-
-			if (entity->IsDormant()) 
-			{ if (records.count(i) > 0) records.erase(i); continue; }
-
-			if (CGlobal::LocalPlayer->GetTeam() == entity->GetTeam())
-			{ if (records.count(i) > 0) records.erase(i); continue; }
+			if (!entity || entity == CGlobal::LocalPlayer || entity->IsDormant() || entity->IsDead() || CGlobal::LocalPlayer->GetTeam() == entity->GetTeam())
+			{ records[i].clear(); continue; }
 
 			auto& cur_records = records[i];
 			if (!cur_records.empty())
@@ -1925,57 +1893,92 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 			if (!hdr)
 				continue;
 
-			if (!entity->IsDead())
+			mstudiohitboxset_t* hitbox_set = hdr->GetHitboxSet(entity->HitboxSet());
+			mstudiobbox_t* hitbox_head = hitbox_set->GetHitbox(HITBOX_HEAD);
+			Vector hitbox_center = (hitbox_head->bbmin + hitbox_head->bbmax) * 0.5f;
+
+			BacktrackData bd;
+			bd.simtime = entity->GetSimTime();
+			bd.origin = entity->GetAbsOrigin();
+
+			entity->InvalidateBoneCache();
+			entity->SetupBones(bd.matrix, 256, 0x7FF00, I::GlobalVars()->curtime);
+
+			VectorTransform(hitbox_center, bd.matrix[hitbox_head->bone], bd.hitboxPos);
+
+			float bestFov = FLT_MAX;
+			Vector ViewDir = AngleVector(CGlobal::UserCmd->viewangles + (CGlobal::LocalPlayer->GetAimPunchAngle() * 2.f));
+			float FOVDistance = DistancePointToLine(bd.hitboxPos, CGlobal::LocalPlayer->GetEyePosition(), ViewDir);
+			auto origin = entity->GetAbsOrigin();
+
+			if (bestFov > FOVDistance)
 			{
-				mstudiohitboxset_t* hitbox_set = hdr->GetHitboxSet(entity->HitboxSet());
-				mstudiobbox_t* hitbox_head = hitbox_set->GetHitbox(HITBOX_HEAD);
-				Vector hitbox_center = (hitbox_head->bbmin + hitbox_head->bbmax) * 0.5f;
-
-				BacktrackData bd;
-				bd.simtime = entity->GetSimTime();
-				bd.origin = entity->GetOrigin();
-
-				entity->InvalidateBoneCache();
-				entity->SetupBones(bd.matrix, 256, 0x7FF00, I::GlobalVars()->curtime);
-
-				VectorTransform(hitbox_center, bd.matrix[hitbox_head->bone], bd.hitboxPos);
-
-				records[i].push_front(bd);
-
-				while (records[i].size() > 3 && records[i].size() > MAXBACKTRACKTICKS(Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit))
-					records[i].pop_back();
+				bestFov = FOVDistance;
+				pBestBacktrackTarget = entity;
+				iBackTrackBestTargetIndex = i;   
+				iBackTrackBestTargetOrigin = origin;
 			}
+
+			records[i].push_front(bd);
+
+			while (records[i].size() > 3 && records[i].size() > MAXBACKTRACKTICKS(Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit))
+				records[i].pop_back();
 		}
+	}
+}
 
-		for (auto& node : records)
+void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
+{
+	if (!CGlobal::IsGameReady || !CGlobal::LocalPlayer || CGlobal::LocalPlayer->IsDead())
+		return;
+
+	float updateRate = clamp(vars.updateRate->GetFloat(), vars.minUpdateRate->GetFloat(), vars.maxUpdateRate->GetFloat());
+	LerpTime = std::fmaxf(vars.interp->GetFloat(), vars.interpRatio->GetFloat() / updateRate);
+	Latency = I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING) + I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_INCOMING);
+	CorrectTime = Latency + LerpTime;
+
+	if (SelectedWeapon < 0)
+		return;
+
+	if (Weapons[GetWeap(SelectedWeapon)].Backtrack && !FaceIt && Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit)
+	{
+		EnginePrediction::Run(pCmd);
 		{
-			auto& cur_data = node.second;
-			if (cur_data.empty())
-				continue;
-
-			for (auto& bd : cur_data)
+			if (pBestBacktrackTarget)
 			{
-				float deltaTime = CorrectTime - (I::GlobalVars()->curtime - bd.simtime);
-				if (std::fabsf(deltaTime) > MAXBACKTRACKTICKS(Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit))
-					continue;
+				if (records[iBackTrackBestTargetIndex].size() <= 3 || (!IgnoreSmokeBacktrack && CGlobal::LineGoesThroughSmoke(CGlobal::LocalPlayer->GetEyePosition(), iBackTrackBestTargetOrigin)))
+					return;
 
-				float tempFloat = FLT_MAX;
-				Vector ViewDir = AngleVector(pCmd->viewangles + (CGlobal::LocalPlayer->GetAimPunchAngle() * 2.f));
-				float FOVDistance = DistancePointToLine(bd.hitboxPos, CGlobal::LocalPlayer->GetEyePosition(), ViewDir);
-
-				if (tempFloat > FOVDistance && bd.simtime > I::GlobalVars()->curtime - 1)
+				for (size_t i = 0; i < records[iBackTrackBestTargetIndex].size(); i++)
 				{
-					tempFloat = FOVDistance;
-					iBackTrackBestSimTime = TIME_TO_TICKS(bd.simtime + LerpTime);
-				}
+					const auto& record = records[iBackTrackBestTargetIndex][i];
+					float deltaTime = CorrectTime - (I::GlobalVars()->curtime - record.simtime);
+					if (std::fabsf(deltaTime) > MAXBACKTRACKTICKS(Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit))
+						continue;
 
+					float tempFloat = FLT_MAX;
+					Vector ViewDir = AngleVector(pCmd->viewangles + (CGlobal::LocalPlayer->GetAimPunchAngle() * 2.f));
+					float FOVDistance = DistancePointToLine(record.hitboxPos, CGlobal::LocalPlayer->GetEyePosition(), ViewDir);
+
+					if (tempFloat > FOVDistance)
+					{
+						tempFloat = FOVDistance;
+						iBackTrackBestRecord = i;
+					}
+				}
+			}
+
+			if (!(pCmd->buttons & IN_ATTACK))
+				return;
+
+			if (iBackTrackBestRecord)
+			{
+				const auto& record = records[iBackTrackBestTargetIndex][iBackTrackBestRecord];
+				pBestBacktrackTarget->SetAbsOrigin(record.origin);
+				pCmd->tick_count = TIME_TO_TICKS(record.simtime + LerpTime);
 			}
 		}
-
-		if (pCmd->buttons & IN_ATTACK)
-		{
-			pCmd->tick_count = iBackTrackBestSimTime;
-		}
+		EnginePrediction::End();
 	}
 }
 

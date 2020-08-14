@@ -109,5 +109,8 @@ namespace Offsets
 	DWORD m_vecMins = 0;
 	DWORD m_vecMaxs = 0;
 	DWORD m_Item = 0;
+
+	DWORD PredictionSeed = 0;
+	DWORD PredictionPlayer = 0;
 //	DWORD FindW2Matrix = 0;
 }

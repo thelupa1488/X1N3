@@ -11,6 +11,7 @@
 #include "../Engine/GrenadePrediction.h"
 #include "../Engine/SDK/SDK.h"
 #include "../Main.h"
+#include "../Include/Def.h"
 
 #define DELETE_PTR(name) delete name; name = nullptr
 
@@ -33,7 +34,10 @@ extern CMisc*				GP_Misc;
 extern CLegitAim*			GP_LegitAim;
 extern CRadar*				GP_Radar;
 extern CSkins*				GP_Skins;
-extern CInventory*          GP_Inventory;
+#ifdef YOUGAMEBIZ
+#else
+extern CInventory* GP_Inventory;
+#endif
 extern CGHelper*			GP_GHelper;
 
 
@@ -54,7 +58,10 @@ public:
 			GP_LegitAim =	new CLegitAim();
 			GP_Radar =		new CRadar();
 			GP_Skins =		new CSkins();
+#ifdef YOUGAMEBIZ
+#else
 			GP_Inventory =  new CInventory();
+#endif
 			GP_GHelper =	new CGHelper();
 			ADD_LOG("2-1-11-7-1\n");
 			CGSettings::G().UpdateList();
@@ -62,6 +69,7 @@ public:
 			ADD_LOG("2-1-11-7-2\n");
 			GP_Esp->InitVisuals();
 			GP_Esp->InitializeMaterials();
+			GP_LegitAim->InitializeBacktrack();
 			GP_Render->Initialize();
 			GP_GHelper->Initialize();
 			ADD_LOG("2-1-11-7-3\n");
@@ -71,7 +79,10 @@ public:
 			GP_Skins->initialize_kits();
 			GP_Skins->ParseSortedKits();
 			GP_Skins->PrepareSortedSkins();
+#ifdef YOUGAMEBIZ
+#else
 			GP_Inventory->InitalizeMedals();
+#endif
 #endif
 			ADD_LOG("2-1-11-7-4\n");
 			GP_Skins->AllSkinsLoaded = true;
@@ -89,7 +100,10 @@ public:
 			DELETE_PTR(GP_Misc);
 			DELETE_PTR(GP_LegitAim);
 			DELETE_PTR(GP_Radar);
+#ifdef YOUGAMEBIZ
+#else
 			DELETE_PTR(GP_Inventory);
+#endif
 			DELETE_PTR(GP_GHelper);
 		}
 	};

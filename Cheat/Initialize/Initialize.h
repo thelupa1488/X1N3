@@ -145,6 +145,8 @@ public:
 						&pDrawModelExecute);
 					ADD_LOG("Hook: DME\n");
 				}
+#ifdef YOUGAMEBIZ
+#else
 				if (SteamTable)
 				{
 					pContext.ApplyDetour<RetrieveMessageFn>(static_cast<RetrieveMessageFn>(SteamTable[RetrieveMessageIdx]),
@@ -159,6 +161,7 @@ public:
 						&pSendMessage);
 					ADD_LOG("Hook: SendMessage\n");
 				}
+#endif
 #endif
 				ADD_LOG("2-1-11-9\n");
 				GP_Setup = new CSetup::ISetup();
@@ -255,6 +258,8 @@ public:
 				offsets["m_hWeaponWorldModel"] = mGetOffset("DT_BaseCombatWeapon", "m_hWeaponWorldModel");
 				offsets["m_iWorldModelIndex"] = mGetOffset("DT_BaseCombatWeapon", "m_iWorldModelIndex");
 				offsets["m_nHitboxSet"] = mGetOffset("DT_BaseAnimating", "m_nHitboxSet");
+				offsets["PredictionSeed"] = (Utils::PatternScan(clientFactory, "8B 0D ? ? ? ? BA ? ? ? ? E8 ? ? ? ? 83 C4 04") + 2);
+				offsets["PredictionPlayer"] = (Utils::PatternScan(clientFactory, "89 35 ? ? ? ? F3 0F 10 48 20") + 2);
 				//offsets["FindW2Matrix"] = (reinterpret_cast<DWORD>(&I::Engine()->WorldToScreenMatrix()) + 0x40);
 				ADD_LOG("All Offsets sucessful\n");
 				ADD_LOG("2-1-9-1\n");

@@ -96,7 +96,7 @@ void CRadar::RenderPlayer(CBaseEntity* plocal)
 	Vec2 TextOffset = Vec2(X1Gui().GetCursorPos().x - X1Gui().GetCursorPosEx().x, X1Gui().GetCursorPos().y - X1Gui().GetCursorPosEx().y);
 
 	CEntityPlayer* pLocal = GP_EntPlayers->EntityLocal;
-	for (int EntIndex = 0; EntIndex < MAX_ENTITY_PLAYERS; EntIndex++)
+	for (int EntIndex = 0; EntIndex < I::Engine()->GetMaxClients(); EntIndex++)
 	{
 		CEntityPlayer* Entity = &GP_EntPlayers->EntityPlayer[EntIndex];
 

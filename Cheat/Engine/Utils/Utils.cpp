@@ -2,6 +2,9 @@
 #include "../../X1API/X1FastCall.h"
 #include <vector>
 #include <Psapi.h>
+#include <cmath>
+#include <cstdint>
+#include <tuple>
 #pragma comment(lib,"psapi")
 
 static const DWORD dwModuleDelay = 100;

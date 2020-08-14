@@ -550,6 +550,20 @@ namespace Engine
 		*(unsigned int*)((DWORD)this + 0x2690) = (g_iModelBoneCounter - 1); // m_iMostRecentModelBoneCounter = g_iModelBoneCounter - 1;
 	}
 
+	void CBaseEntity::SetAbsOrigin(const Vector& origin)
+	{
+		using SetAbsOriginFn = void(__thiscall*)(void*, const Vector& origin);
+		static SetAbsOriginFn SetAbsOrigin = (SetAbsOriginFn)Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8 ? ? ? ? 8B 7D"));
+		SetAbsOrigin(this, origin);
+	}
+
+	void CBaseEntity::SetAbsAngles(const QAngle& angles)
+	{
+		using SetAbsAnglesFn = void(__thiscall*)(void*, const QAngle & angles);
+		static SetAbsAnglesFn SetAbsAngles = (SetAbsAnglesFn)Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 83 EC 64 53 56 57 8B F1"));
+		SetAbsAngles(this, angles);
+	}
+
 	bool CBaseEntity::IsNotTarget()
 	{
 		if (this->GetHealth() <= 0)

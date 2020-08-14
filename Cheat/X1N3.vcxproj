@@ -11,6 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\EnginePrediction.cpp" />
+    <ClCompile Include="Engine\SDK\CGlobalVarsBase.cpp" />
     <ClCompile Include="Engine\SDK\Vector.cpp" />
     <ClCompile Include="Engine\Utils\Utils.cpp" />
     <ClCompile Include="Engine\Engine.cpp" />
@@ -36,8 +38,6 @@
     <ClCompile Include="Hacks\Esp\WorldEsp.cpp" />
     <ClCompile Include="Hacks\GrenadeHelper\GreandeHelper.cpp" />
     <ClCompile Include="Hacks\GrenadeHelper\GreandeHelperMenu.cpp" />
-    <ClCompile Include="Hacks\Inventory\Inventory.cpp" />
-    <ClCompile Include="Hacks\Inventory\MenuInventory.cpp" />
     <ClCompile Include="Hacks\LegitAim\LegitAim.cpp" />
     <ClCompile Include="Hacks\LegitAim\MenuLegitAim.cpp" />
     <ClCompile Include="Hacks\Misc\MenuMisc.cpp" />
@@ -53,72 +53,6 @@
     <ClCompile Include="Include\Headers.h" />
     <ClCompile Include="Initialize\Offsets.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="protobuf\base_gcmessages.pb.cc">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </ClCompile>
-    <ClCompile Include="protobuf\cstrike15_gcmessages.pb.cc">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </ClCompile>
-    <ClCompile Include="protobuf\econ_gcmessages.pb.cc">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </ClCompile>
-    <ClCompile Include="protobuf\engine_gcmessages.pb.cc">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </ClCompile>
-    <ClCompile Include="protobuf\fatdemo.pb.cc">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </ClCompile>
-    <ClCompile Include="protobuf\gcsdk_gcmessages.pb.cc">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </ClCompile>
-    <ClCompile Include="protobuf\gcsystemmsgs.pb.cc">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </ClCompile>
-    <ClCompile Include="protobuf\netmessages.pb.cc">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </ClCompile>
-    <ClCompile Include="protobuf\network_connection.pb.cc">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </ClCompile>
-    <ClCompile Include="protobuf\steamdatagram_messages.pb.cc">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </ClCompile>
-    <ClCompile Include="protobuf\steammessages.pb.cc">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </ClCompile>
     <ClCompile Include="Render\DXFont.cpp" />
     <ClCompile Include="Render\DXOverlayManager.cpp" />
     <ClCompile Include="Render\DXRender.cpp" />
@@ -132,11 +66,11 @@
     <ClCompile Include="X1API\MinHook\src\trampoline.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\EnginePrediction.h" />
     <ClInclude Include="Engine\SDK\CItemSystem.hpp" />
     <ClInclude Include="Engine\SDK\IBaseFileSystem.h" />
     <ClInclude Include="Engine\Utils\Utils.h" />
     <ClInclude Include="Engine\Engine.h" />
-    <ClInclude Include="Engine\EnginePrediction.h" />
     <ClInclude Include="Engine\Entity.h" />
     <ClInclude Include="Engine\EntityMem.h" />
     <ClInclude Include="Engine\GrenadePrediction.h" />
@@ -204,7 +138,6 @@
     <ClInclude Include="GUI\Gui.h" />
     <ClInclude Include="Hacks\Esp\Esp.h" />
     <ClInclude Include="Hacks\GrenadeHelper\GreandeHelper.h" />
-    <ClInclude Include="Hacks\Inventory\Inventory.h" />
     <ClInclude Include="Hacks\LegitAim\LegitAim.h" />
     <ClInclude Include="Hacks\Misc\Misc.h" />
     <ClInclude Include="Hacks\Radar\Radar.h" />
@@ -225,72 +158,6 @@
     <ClInclude Include="Initialize\Offsets.h" />
     <ClInclude Include="Json\Json.hpp" />
     <ClInclude Include="Main.h" />
-    <ClInclude Include="protobuf\base_gcmessages.pb.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </ClInclude>
-    <ClInclude Include="protobuf\cstrike15_gcmessages.pb.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </ClInclude>
-    <ClInclude Include="protobuf\econ_gcmessages.pb.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </ClInclude>
-    <ClInclude Include="protobuf\engine_gcmessages.pb.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </ClInclude>
-    <ClInclude Include="protobuf\fatdemo.pb.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </ClInclude>
-    <ClInclude Include="protobuf\gcsdk_gcmessages.pb.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </ClInclude>
-    <ClInclude Include="protobuf\gcsystemmsgs.pb.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </ClInclude>
-    <ClInclude Include="protobuf\netmessages.pb.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </ClInclude>
-    <ClInclude Include="protobuf\network_connection.pb.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </ClInclude>
-    <ClInclude Include="protobuf\steamdatagram_messages.pb.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </ClInclude>
-    <ClInclude Include="protobuf\steammessages.pb.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </ClInclude>
     <ClInclude Include="Render\color.h" />
     <ClInclude Include="Render\DirectData\EndScene.h" />
     <ClInclude Include="Render\DirectData\Present.h" />
@@ -358,7 +225,6 @@
     <ClInclude Include="X1API\X1Vector.h" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="protobuf\libprotoc.lib" />
     <Library Include="VMP\VMProtectSDK32.lib" />
     <Library Include="X1API\detours.lib" />
   </ItemGroup>

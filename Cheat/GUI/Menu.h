@@ -84,13 +84,15 @@ public:
 
 	void Changers()
 	{
+#ifdef YOUGAMEBIZ
+#else
 		vector<string> ItemsCSS = { lolc("Skins"), lolc("Inventory") };
 		VectorEx<const char*> ChaArr = { ItemsCSS[0].c_str(), ItemsCSS[1].c_str() };
-
+#endif
+#ifdef YOUGAMEBIZ
+#else
 		TabsLabels(ChangerMode, ChaArr, Vec2(328, 20), false);
-
 		X1Gui().SameLine(331);
-
 		if (ChangerMode == 0)
 		{
 			if (X1Gui().Button(GP_Skins->ShowSkinPreview ? XorStr("Preview <<<") : XorStr("Preview >>>"), Vec2(129, 20)))
@@ -104,12 +106,15 @@ public:
 		X1Gui().Spacing();
 		X1Gui().Separator();
 		X1Gui().Spacing();
+#endif
 
 		if (ChangerMode == 0)
 			DCheckBox("Enable Skins", GP_Skins->SkinsEnable);
-
+#ifdef YOUGAMEBIZ
+#else
 		if (ChangerMode == 1)
 			DCheckBox("Synchronization Inventory", GP_Inventory->SkinsSyncEnable);
+#endif
 
 		X1Gui().Spacing();
 		X1Gui().Separator();
@@ -117,9 +122,11 @@ public:
 
 		if (ChangerMode == 0)
 			GP_Skins->Menu();
-
+#ifdef YOUGAMEBIZ
+#else
 		if (ChangerMode == 1)
 			GP_Inventory->Menu();
+#endif
 	}
 
 	void SelectWindow()
@@ -143,7 +150,6 @@ public:
 		case 0: if (GP_LegitAim) GP_LegitAim->Menu(); break;
 		case 1: if (GP_Esp) GP_Esp->Menu(); break;
 		case 2: if (GP_Radar) GP_Radar->Menu(); break;
-		//case 3: if (GP_Skins) GP_Skins->Menu(); break;
 		case 3: if (GP_Skins) Changers(); break;
 		case 4: if (GP_Misc) GP_Misc->Menu(); break;
 		case 5: if (GP_GHelper) { GP_GHelper->Menu(); } break;
@@ -252,18 +258,25 @@ public:
 
 						bool IsVisualsTab = SelectedTab == 1 && GP_Esp->ShowPreview;
 						bool IsLegitAimTab = SelectedTab == 0 && GP_LegitAim->ShowWeaponList;
+#ifdef YOUGAMEBIZ
+#else
 						bool IsSkinsTab = SelectedTab == 3 && ChangerMode == 0 && GP_Skins->ShowSkinPreview;
 						bool IsInventTab = SelectedTab == 3 && ChangerMode == 1 && GP_Inventory->ShowInventoryList;
+#endif
 
 						static Vec2 TargetSize = Vec2(100, 100);
 						static Vec2 CurSize = Vec2(100, 100);
 
 						if (IsVisualsTab)
 							TargetSize = Vec2(350 + (X1Gui().GetStyle().wndPadding.x * 2) + 1, WINDOW2_SIZE_Y);
+#ifdef YOUGAMEBIZ
+#else
 						else if (IsSkinsTab)
 							TargetSize = Vec2(320, 248);
+
 						else if (IsInventTab)
 							TargetSize = Vec2(365, WINDOW2_SIZE_Y);
+#endif
 						else if (IsLegitAimTab)
 						{
 							if (GP_LegitAim->WeaponCustomTypes == 0)
@@ -275,7 +288,11 @@ public:
 						}
 
 						static bool ShowPrewWin = false;
+#ifdef YOUGAMEBIZ
+						bool EnablePrewWin = IsVisualsTab || IsLegitAimTab;
+#else
 						bool EnablePrewWin = IsVisualsTab || IsLegitAimTab || IsSkinsTab || IsInventTab;
+#endif
 
 						if (AnimEnable)
 						{
@@ -306,7 +323,8 @@ public:
 								if (SelectedTab == 1)
 									if (GP_Esp)
 										GP_Esp->VisualPreview();
-
+#ifdef YOUGAMEBIZ
+#else
 								if (SelectedTab == 3)	
 								{
 									if (ChangerMode == 0)
@@ -315,6 +333,7 @@ public:
 									if (ChangerMode == 1)
 										GP_Inventory->InvListMenu();
 								}
+#endif
 							}
 							X1Gui().End();
 						}

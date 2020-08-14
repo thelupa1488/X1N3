@@ -26,12 +26,14 @@ void CGSettings::SaveEx(nlohmann::json &j)
 		GP_Esp->Config.Save(j);
 		GP_Esp->SaveVisuals(j);
 	}
-
+#ifdef YOUGAMEBIZ
+#else
 	if (GP_Inventory)
 	{
 		GP_Inventory->Config.Save(j);
 		GP_Inventory->SaveInventory(j);
 	}
+#endif
 
 	if (GP_LegitAim)
 	{
@@ -78,12 +80,14 @@ void CGSettings::LoadEx(nlohmann::json &j)
 		GP_Esp->Config.Load(j);
 		GP_Esp->LoadVisuals(j);
 	}
-
+#ifdef YOUGAMEBIZ
+#else
 	if (GP_Inventory)
 	{
 		GP_Inventory->Config.Load(j);
 		GP_Inventory->LoadInventory(j);
 	}
+#endif
 
 	if (GP_LegitAim)
 	{
@@ -147,8 +151,10 @@ bool CGSettings::Load()
 	LoadEx(JFile);
 
 	JFile.clear();
-
+#ifdef YOUGAMEBIZ
+#else
 	GP_Inventory->SendClientHello();
+#endif
 	GP_Skins->UpdateSkins();
 
 	return true;

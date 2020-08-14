@@ -501,7 +501,8 @@ void CSkins::ApplyCustomSkin(CBaseAttributableItem* pWeapon, int nWeaponIndex, b
 
 	if (!Item)
 		return;
-
+#ifdef YOUGAMEBIZ
+#else
 	if (Item->IsInventory && !GP_Inventory->SkinsSyncEnable)
 		return;
 
@@ -514,6 +515,7 @@ void CSkins::ApplyCustomSkin(CBaseAttributableItem* pWeapon, int nWeaponIndex, b
 			SetSkin(pWeapon, &Item->SkinTT, Item->ID, false, bIsKnife);
 	}
 	else
+#endif
 		SetSkin(pWeapon, &Item->Skin, Item->ID, false, bIsKnife);
 }
 

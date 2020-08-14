@@ -178,6 +178,8 @@ namespace Engine
 
 		mstudiohitboxset_t* GetHitBoxSet();
 		void InvalidateBoneCache();
+		void SetAbsOrigin(const Vector& origin);
+		void SetAbsAngles(const QAngle& angles);
 		bool IsNotTarget();
 	};
 

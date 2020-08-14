@@ -6,7 +6,7 @@ void CEntityPlayers::Update()
 {
 	if (CGlobal::LocalPlayer)
 	{
-		for (int EntIndex = 0; EntIndex < MAX_ENTITY_PLAYERS; EntIndex++)
+		for (int EntIndex = 0; EntIndex < I::Engine()->GetMaxClients(); EntIndex++)
 		{
 			CBaseEntity* pEntity = (CBaseEntity*)I::EntityList()->GetClientEntity(EntIndex);
 
@@ -95,7 +95,7 @@ void CEntityPlayers::Update()
 
 CEntityPlayer* CEntityPlayers::FindByIdx(int Idx)
 {
-	for (int i(0); i < MAX_ENTITY_PLAYERS; i++)
+	for (int i(0); i < I::Engine()->GetMaxClients(); i++)
 		if (Idx == EntityPlayer[i].Idx)
 			return &EntityPlayer[i];
 	return nullptr;
@@ -103,7 +103,7 @@ CEntityPlayer* CEntityPlayers::FindByIdx(int Idx)
 
 CEntityPlayer* CEntityPlayers::GetByIdx(int Idx)
 {
-	if (Idx >= 0 && Idx < MAX_ENTITY_PLAYERS)
+	if (Idx >= 0 && Idx < I::Engine()->GetMaxClients())
 	{
 		return &EntityPlayer[Idx];
 	}
@@ -114,5 +114,5 @@ CEntityPlayer* CEntityPlayers::GetByIdx(int Idx)
 void CEntityPlayers::Clear()
 {
 	memset(EntityLocal, 0, sizeof(CEntityPlayer));
-	memset(EntityPlayer, 0, sizeof(CEntityPlayer) * MAX_ENTITY_PLAYERS);
+	memset(EntityPlayer, 0, sizeof(CEntityPlayer) * I::Engine()->GetMaxClients());
 }

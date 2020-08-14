@@ -966,7 +966,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					CBaseWeapon* pLocalWeapon = CGlobal::LocalPlayer->GetBaseWeapon();
 					if (pLocalWeapon)
 					{
-						for (int EntIndex = 0; EntIndex < MAX_ENTITY_PLAYERS; EntIndex++)
+						for (int EntIndex = 0; EntIndex < I::Engine()->GetMaxClients(); EntIndex++)
 						{
 							CEntityPlayer* Entity = &GP_EntPlayers->EntityPlayer[EntIndex];
 
@@ -1080,8 +1080,7 @@ void CMisc::EnginePrediction(bool& bSendPacket, CUserCmd* pCmd)
 	{
 		if (CGlobal::LocalPlayer)
 		{
-			static int unpred_flags = CGlobal::LocalPlayer->GetFlags();
-			EnginePrediction::Begin(pCmd);
+			EnginePrediction::Run(pCmd);
 			{
 				if (EdgeJump && EdgeJumpBind.Check())
 				{
@@ -1089,8 +1088,9 @@ void CMisc::EnginePrediction(bool& bSendPacket, CUserCmd* pCmd)
 						CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP)
 						return;
 
-					if ((unpred_flags & FL_ONGROUND) && !(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
+					if ((EnginePrediction::GetFlags() & FL_ONGROUND) && !(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
 						pCmd->buttons |= IN_JUMP;
+
 				}
 
 				//if (Desync)

@@ -9,7 +9,8 @@ int __fastcall hkDoPostScreenEffects(void* ecx, int edx, int a1)
 
 	return oDoPostScreenEffects(ecx, a1);
 }
-
+#ifdef YOUGAMEBIZ
+#else
 EGCResults __fastcall hkRetrieveMessage(void* ecx, void* edx, uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize)
 {
 	EGCResults status = HookTables::pRetrieveMessage->GetTrampoline()(ecx, punMsgType, pubDest, cubDest, pcubMsgSize);
@@ -23,7 +24,6 @@ EGCResults __fastcall hkRetrieveMessage(void* ecx, void* edx, uint32_t* punMsgTy
 
 	return status;
 }
-
 EGCResults __fastcall hkSendMessage(void* ecx, void* edx, uint32_t unMsgType, const void* pubData, uint32_t cubData)
 {
 	uint32_t messageType = unMsgType & 0x7FFFFFFF;
@@ -38,3 +38,4 @@ EGCResults __fastcall hkSendMessage(void* ecx, void* edx, uint32_t unMsgType, co
 
 	return status;
 }
+#endif
