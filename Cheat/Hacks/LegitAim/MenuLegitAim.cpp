@@ -211,10 +211,10 @@ void CLegitAim::Menu()
 					X1Gui().Spacing();
 
 					DCheckBox("Backtrack", Weapons[GetWeap(SelectedWeapon)].Backtrack);
-					X1Gui().SameLine(158.f);
-					DCheckBox("Ignore smoke Backtrack", IgnoreSmokeBacktrack)
 					if (Weapons[GetWeap(SelectedWeapon)].Backtrack)
 					{
+						X1Gui().SameLine(158.f);
+						DCheckBox("Ignore smoke Backtrack", IgnoreSmokeBacktrack)
 						DCheckBox("Show Backtrack", ShowBacktrack);
 						if (ShowBacktrack)
 						{

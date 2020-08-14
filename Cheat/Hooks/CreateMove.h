@@ -44,10 +44,7 @@ bool __stdcall hkCreateMove(float flInputSampleTime, CUserCmd* pCmd)
 				GP_LegitAim->TriggerCreateMove(pCmd);
 		}
 		if (GP_Misc)
-		{
 			GP_Misc->CreateMove(bSendPacket, flInputSampleTime, pCmd);
-			GP_Misc->EnginePrediction(bSendPacket, pCmd);
-		}
 
 		CGlobal::ClampAngles(pCmd->viewangles);
 		CGlobal::AngleNormalize(pCmd->viewangles);

@@ -4,7 +4,7 @@
 
 //#define DEBUG_DLL //for protobuf lib
 #define ENABLE_XOR_STR
-//#define ENABLE_VMP
+#define ENABLE_VMP
 #define YOUGAMEBIZ
 
 #define PRESENT_ENABLE

@@ -64,7 +64,6 @@ protected:
 	virtual void UpdateLBY(CCSGOPlayerAnimState* animstate) = 0;
 	virtual int  MaxChokeTicks() = 0;
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd) = 0;
-	virtual void EnginePrediction(bool& bSendPacket, CUserCmd* pCmd) = 0;
 	virtual void OverrideView(CViewSetup* pSetup) = 0;
 };
 
@@ -91,7 +90,6 @@ public:
 	virtual void UpdateLBY(CCSGOPlayerAnimState* animstate);
 	virtual int  MaxChokeTicks();
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd);
-	virtual void EnginePrediction(bool& bSendPacket, CUserCmd* pCmd);
 	virtual void OverrideView(CViewSetup* pSetup);
 	virtual void GetViewModelFOV(float &Fov);
 //	virtual void PlaySound(const char* pszSoundName);

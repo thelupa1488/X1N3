@@ -467,6 +467,150 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 	{
 		if (CGlobal::LocalPlayer)
 		{
+			EnginePrediction::Run(pCmd);
+			{
+				if (EdgeJump && EdgeJumpBind.Check())
+				{
+					if (CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER ||
+						CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP)
+						return;
+
+					if ((EnginePrediction::GetFlags() & FL_ONGROUND) && !(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
+						pCmd->buttons |= IN_JUMP;
+
+				}
+
+				//if (Desync)
+				//{
+				//	if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
+				//		CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER || CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP
+				//		|| CGlobal::LocalPlayer->IsDead())
+				//		return;
+
+				//	//if (I::GameRules() && I::GameRules()->IsFreezePeriod())
+				//	//	return;
+
+				//	auto weapon = CGlobal::LocalPlayer->GetBaseWeapon();
+
+				//	if (!weapon)
+				//		return;
+
+				//	if ((CGlobal::GWeaponID == WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_FAMAS) && weapon->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
+				//		return;
+
+				//	if (CGlobal::GWeaponType == WEAPON_TYPE_GRENADE) 
+				//	{
+				//		if (!weapon->GetPinPulled()) 
+				//		{
+				//			float throwTime = weapon->GetThrowTime();
+				//			if (throwTime > 0.f)
+				//				return;
+				//		}
+				//		if ((pCmd->buttons & IN_ATTACK) || (pCmd->buttons & IN_ATTACK2)) 
+				//		{
+				//			if (weapon->GetThrowTime() > 0.f)
+				//				return;
+				//		}
+				//	}
+
+				//	static bool broke_lby = false;
+				//	auto sideauto = GetBestHeadAngle(vangle.y);
+
+				//	if (!DesyncAd) 
+				//	{
+				//		if (DesyncBind.Check())
+				//			side = 1.0f;
+				//		else
+				//			side = -1.0f;
+				//	}
+				//	else
+				//		side = sideauto;
+
+				//	if (DesyncType == 1) 
+				//	{
+				//		float minimal_move = CGlobal::LocalPlayer->GetFlags() & IN_DUCK ? 3.0f : 1.0f;
+
+				//		if (!bSendPacket)
+				//			pCmd->viewangles.y += 120.f * side;
+
+				//		static bool flip = 1;
+				//		flip = !flip;
+
+				//		pCmd->sidemove += flip ? minimal_move : -minimal_move;
+				//	}
+				//	else if (DesyncType == 2) 
+				//	{
+				//		if (next_lby >= I::GlobalVars()->curtime) 
+				//		{
+				//			if (!broke_lby && bSendPacket)
+				//				return;
+
+				//			broke_lby = false;
+				//			bSendPacket = false;
+				//			pCmd->viewangles.y += 120.0f * side;
+				//		}
+				//		else 
+				//		{
+				//			broke_lby = true;
+				//			bSendPacket = false;
+				//			pCmd->viewangles.y += 120.0f * side;
+				//		}
+				//	}
+				//	else if (DesyncType == 3)
+				//	{
+				//		static bool switchaa = false;
+				//		switchaa = !switchaa;
+
+				//		if (!bSendPacket)
+				//			pCmd->viewangles.y += switchaa ? 180.f : 0.f;
+				//	}
+				//	FixAngles(pCmd->viewangles);
+				//}
+
+				if (AutoBlock && AutoBlockBind.Check())
+				{
+					float bestdist = 250.f;
+					int index = -1;
+
+					for (int i = 1; i < I::Engine()->GetMaxClients(); i++)
+					{
+						CBaseEntity* entity = (CBaseEntity*)I::EntityList()->GetClientEntity(i);
+
+						if (!entity)
+							continue;
+
+						if (entity->IsDead() || entity->IsDormant() || entity == CGlobal::LocalPlayer)
+							continue;
+
+						float dist = CGlobal::LocalPlayer->GetOrigin().DistTo(entity->GetOrigin());
+
+						if (dist < bestdist)
+						{
+							bestdist = dist;
+							index = i;
+						}
+					}
+
+					if (index == -1)
+						return;
+
+					CBaseEntity* target = (CBaseEntity*)I::EntityList()->GetClientEntity(index);
+
+					if (!target)
+						return;
+
+					QAngle angles = CalcAngle(CGlobal::LocalPlayer->GetOrigin(), target->GetOrigin());
+
+					angles.y -= CGlobal::LocalPlayer->GetEyeAngles().y;
+					NormalizeAngles(angles);
+
+					if (angles.y < 0.0f)
+						pCmd->sidemove = 250.f;
+					else if (angles.y > 0.0f)
+						pCmd->sidemove = -250.f;
+				}
+			}
+			EnginePrediction::End();
 			if (BHop)
 			{
 				if (CGlobal::LocalPlayer->GetMoveType() & MOVETYPE_LADDER ||
@@ -1071,159 +1215,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					}
 				}
 			}
-		}
-	}
-}
-void CMisc::EnginePrediction(bool& bSendPacket, CUserCmd* pCmd)
-{
-	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
-	{
-		if (CGlobal::LocalPlayer)
-		{
-			EnginePrediction::Run(pCmd);
-			{
-				if (EdgeJump && EdgeJumpBind.Check())
-				{
-					if (CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER ||
-						CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP)
-						return;
-
-					if ((EnginePrediction::GetFlags() & FL_ONGROUND) && !(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
-						pCmd->buttons |= IN_JUMP;
-
-				}
-
-				//if (Desync)
-				//{
-				//	if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
-				//		CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER || CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP
-				//		|| CGlobal::LocalPlayer->IsDead())
-				//		return;
-
-				//	//if (I::GameRules() && I::GameRules()->IsFreezePeriod())
-				//	//	return;
-
-				//	auto weapon = CGlobal::LocalPlayer->GetBaseWeapon();
-
-				//	if (!weapon)
-				//		return;
-
-				//	if ((CGlobal::GWeaponID == WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_FAMAS) && weapon->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
-				//		return;
-
-				//	if (CGlobal::GWeaponType == WEAPON_TYPE_GRENADE) 
-				//	{
-				//		if (!weapon->GetPinPulled()) 
-				//		{
-				//			float throwTime = weapon->GetThrowTime();
-				//			if (throwTime > 0.f)
-				//				return;
-				//		}
-				//		if ((pCmd->buttons & IN_ATTACK) || (pCmd->buttons & IN_ATTACK2)) 
-				//		{
-				//			if (weapon->GetThrowTime() > 0.f)
-				//				return;
-				//		}
-				//	}
-
-				//	static bool broke_lby = false;
-				//	auto sideauto = GetBestHeadAngle(vangle.y);
-
-				//	if (!DesyncAd) 
-				//	{
-				//		if (DesyncBind.Check())
-				//			side = 1.0f;
-				//		else
-				//			side = -1.0f;
-				//	}
-				//	else
-				//		side = sideauto;
-
-				//	if (DesyncType == 1) 
-				//	{
-				//		float minimal_move = CGlobal::LocalPlayer->GetFlags() & IN_DUCK ? 3.0f : 1.0f;
-
-				//		if (!bSendPacket)
-				//			pCmd->viewangles.y += 120.f * side;
-
-				//		static bool flip = 1;
-				//		flip = !flip;
-
-				//		pCmd->sidemove += flip ? minimal_move : -minimal_move;
-				//	}
-				//	else if (DesyncType == 2) 
-				//	{
-				//		if (next_lby >= I::GlobalVars()->curtime) 
-				//		{
-				//			if (!broke_lby && bSendPacket)
-				//				return;
-
-				//			broke_lby = false;
-				//			bSendPacket = false;
-				//			pCmd->viewangles.y += 120.0f * side;
-				//		}
-				//		else 
-				//		{
-				//			broke_lby = true;
-				//			bSendPacket = false;
-				//			pCmd->viewangles.y += 120.0f * side;
-				//		}
-				//	}
-				//	else if (DesyncType == 3)
-				//	{
-				//		static bool switchaa = false;
-				//		switchaa = !switchaa;
-
-				//		if (!bSendPacket)
-				//			pCmd->viewangles.y += switchaa ? 180.f : 0.f;
-				//	}
-				//	FixAngles(pCmd->viewangles);
-				//}
-
-				if (AutoBlock && AutoBlockBind.Check())
-				{
-					float bestdist = 250.f;
-					int index = -1;
-
-					for (int i = 1; i < I::Engine()->GetMaxClients(); i++)
-					{
-						CBaseEntity* entity = (CBaseEntity*)I::EntityList()->GetClientEntity(i);
-
-						if (!entity)
-							continue;
-
-						if (entity->IsDead() || entity->IsDormant() || entity == CGlobal::LocalPlayer)
-							continue;
-
-						float dist = CGlobal::LocalPlayer->GetOrigin().DistTo(entity->GetOrigin());
-
-						if (dist < bestdist)
-						{
-							bestdist = dist;
-							index = i;
-						}
-					}
-
-					if (index == -1)
-						return;
-
-					CBaseEntity* target = (CBaseEntity*)I::EntityList()->GetClientEntity(index);
-
-					if (!target)
-						return;
-
-					QAngle angles = CalcAngle(CGlobal::LocalPlayer->GetOrigin(), target->GetOrigin());
-
-					angles.y -= CGlobal::LocalPlayer->GetEyeAngles().y;
-					NormalizeAngles(angles);
-
-					if (angles.y < 0.0f)
-						pCmd->sidemove = 250.f;
-					else if (angles.y > 0.0f)
-						pCmd->sidemove = -250.f;
-				}
-			}
-			EnginePrediction::End();
 		}
 	}
 }
