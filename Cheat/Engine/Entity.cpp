@@ -540,7 +540,7 @@ namespace Engine
 
 	void CBaseEntity::InvalidateBoneCache()
 	{
-		static DWORD addr = (DWORD)Utils::PatternScan(XorStr("client.dll"), XorStr("80 3D ? ? ? ? ? 74 16 A1 ? ? ? ? 48 C7 81"));
+		static auto addr = (Utils::PatternScan(clientFactory, XorStr("80 3D ? ? ? ? ? 74 16 A1 ? ? ? ? 48 C7 81")));
 
 		*(int*)((uintptr_t)this + 0xA30) = I::GlobalVars()->framecount; //we'll skip occlusion checks now
 		*(int*)((uintptr_t)this + 0xA28) = 0;//clear occlusion flags
@@ -550,18 +550,18 @@ namespace Engine
 		*(unsigned int*)((DWORD)this + 0x2690) = (g_iModelBoneCounter - 1); // m_iMostRecentModelBoneCounter = g_iModelBoneCounter - 1;
 	}
 
-	void CBaseEntity::SetAbsOrigin(const Vector& origin)
-	{
-		using SetAbsOriginFn = void(__thiscall*)(void*, const Vector& origin);
-		static SetAbsOriginFn SetAbsOrigin = (SetAbsOriginFn)Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8 ? ? ? ? 8B 7D"));
-		SetAbsOrigin(this, origin);
-	}
-
 	void CBaseEntity::SetAbsAngles(const QAngle& angles)
 	{
-		using SetAbsAnglesFn = void(__thiscall*)(void*, const QAngle & angles);
+		using SetAbsAnglesFn = void(__thiscall*)(void*, const QAngle& angles);
 		static SetAbsAnglesFn SetAbsAngles = (SetAbsAnglesFn)Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 83 EC 64 53 56 57 8B F1"));
 		SetAbsAngles(this, angles);
+	}
+
+	void CBaseEntity::SetAbsOrigin(const Vector& origin)
+	{
+		using SetAbsOriginFn = void(__thiscall*)(void*, const Vector & origin);
+		static SetAbsOriginFn SetAbsOrigin = (SetAbsOriginFn)Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8 ?? ??"));
+		SetAbsOrigin(this, origin);
 	}
 
 	bool CBaseEntity::IsNotTarget()
