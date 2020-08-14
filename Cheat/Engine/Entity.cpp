@@ -560,7 +560,7 @@ namespace Engine
 	void CBaseEntity::SetAbsOrigin(const Vector& origin)
 	{
 		using SetAbsOriginFn = void(__thiscall*)(void*, const Vector & origin);
-		static SetAbsOriginFn SetAbsOrigin = (SetAbsOriginFn)Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8 ?? ??"));
+		static SetAbsOriginFn SetAbsOrigin = (SetAbsOriginFn)Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 51 53 56 57 8B F1"));
 		SetAbsOrigin(this, origin);
 	}
 
