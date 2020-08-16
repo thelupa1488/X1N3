@@ -25,8 +25,7 @@ namespace Engine
 		if (!hdr)
 			return -1;
 
-		static auto GetSequenceActivity = reinterpret_cast<int(__fastcall*)(void*, studiohdr_t*, int)>(
-			Utils::PatternScan(clientFactory, XorStr("55 8B EC 53 8B 5D 08 56 8B F1 83")));
+		static auto GetSequenceActivity = reinterpret_cast<int(__fastcall*)(void*, studiohdr_t*, int)>(offsets["SequenceActivity"]);
 
 		return GetSequenceActivity(this, hdr, sequence);
 	}
@@ -215,7 +214,7 @@ namespace Engine
 
 	CUserCmd*& CBaseEntity::GetCurrentCommand() 
 	{
-		static auto currentCommand = *(uint32_t*)(Utils::PatternScan(clientFactory, XorStr("89 BE ? ? ? ? E8 ? ? ? ? 85 FF")) + 2);
+		static auto currentCommand = *(uint32_t*)(offsets["CurrentCommand"]);
 		return *(CUserCmd**)((DWORD)this + currentCommand);
 	}
 
@@ -540,7 +539,7 @@ namespace Engine
 
 	void CBaseEntity::InvalidateBoneCache()
 	{
-		static auto addr = (Utils::PatternScan(clientFactory, XorStr("80 3D ? ? ? ? ? 74 16 A1 ? ? ? ? 48 C7 81")));
+		static auto addr = offsets["InvalidateBoneCache"];
 
 		*(int*)((uintptr_t)this + 0xA30) = I::GlobalVars()->framecount; //we'll skip occlusion checks now
 		*(int*)((uintptr_t)this + 0xA28) = 0;//clear occlusion flags
@@ -553,14 +552,14 @@ namespace Engine
 	void CBaseEntity::SetAbsAngles(const QAngle& angles)
 	{
 		using SetAbsAnglesFn = void(__thiscall*)(void*, const QAngle& angles);
-		static SetAbsAnglesFn SetAbsAngles = (SetAbsAnglesFn)Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 83 EC 64 53 56 57 8B F1"));
+		static SetAbsAnglesFn SetAbsAngles = (SetAbsAnglesFn)offsets["SetAbsAngles"];
 		SetAbsAngles(this, angles);
 	}
 
 	void CBaseEntity::SetAbsOrigin(const Vector& origin)
 	{
 		using SetAbsOriginFn = void(__thiscall*)(void*, const Vector & origin);
-		static SetAbsOriginFn SetAbsOrigin = (SetAbsOriginFn)Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 51 53 56 57 8B F1"));
+		static SetAbsOriginFn SetAbsOrigin = (SetAbsOriginFn)offsets["SetAbsOrigin"];
 		SetAbsOrigin(this, origin);
 	}
 

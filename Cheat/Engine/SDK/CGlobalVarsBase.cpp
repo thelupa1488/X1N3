@@ -3,7 +3,7 @@
 
 namespace SDK
 {
-	float CGlobalVarsBase::serverTime(CUserCmd* pCmd)
+	float CGlobalVarsBase::ServerTime(CUserCmd* pCmd)
 	{
         static int tick;
         static CUserCmd* lastCmd;

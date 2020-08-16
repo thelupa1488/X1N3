@@ -87,7 +87,7 @@ void CRender::IRender::Initialize()
 
 	auto& pContext = cContext::GetInstance();
 
-	DWORD d3d9TablePtrPtr = Utils::PatternScan(shaderapidx9Factory, XorStr("A1 ? ? ? ? 50 8B 08 FF 51 0C")) + 1;
+	DWORD d3d9TablePtrPtr = offsets["d3d9TablePtrPtr"];
 	if (d3d9TablePtrPtr)
 	{
 		g_pDevice = (IDirect3DDevice9*)(**(PDWORD*)d3d9TablePtrPtr);

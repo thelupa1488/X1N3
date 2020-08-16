@@ -33,15 +33,7 @@ string pszKnifeModels[19] =
 	pszKnifeNavaja,pszKnifeOutdoor,pszKnifeStiletto,pszKnifeTalon,pszKnifeSkeleton
 };
 
-template <typename T>
-T* get_entity_from_handle(UINT h)
-{
-	if (h == INVALID_EHANDLE_INDEX)
-		return nullptr;
-
-	return static_cast<T*>(I::EntityList()->GetClientEntityFromHandle((PVOID)h));
-}
-static auto get_wearable_create_fn() -> CreateClientClassFn
+static auto GetWearableCreateFn() -> CreateClientClassFn
 {
 	ClientClass* pClass = I::Client()->GetAllClasses();
 	for (pClass = I::Client()->GetAllClasses(); pClass; pClass = pClass->m_pNext)
@@ -54,16 +46,16 @@ static auto get_wearable_create_fn() -> CreateClientClassFn
 	return pClass->m_pCreateFn;
 }
 
-static auto make_glove(int entry, int serial) -> CBaseAttributableItem*
+static auto MakeGlove(int entry, int serial) -> CBaseAttributableItem*
 {
-	static auto create_wearable_fn = get_wearable_create_fn();
+	static auto create_wearable_fn = GetWearableCreateFn();
 
 	create_wearable_fn(entry, serial);
 
 	const auto glove = (CBaseAttributableItem*)I::EntityList()->GetClientEntity(entry);
 	assert(glove);
 	{
-		static auto set_abs_origin_addr = Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8"));
+		static auto set_abs_origin_addr = offsets["MakeGlove"];
 		const auto set_abs_origin_fn = reinterpret_cast<void(__thiscall*)(void*, const std::array<float, 3>&)>(set_abs_origin_addr);
 
 		static constexpr std::array<float, 3> new_pos = { 10000.f, 10000.f, 10000.f };
@@ -373,7 +365,7 @@ void CSkins::PostDataUpdate()
 		{
 			const auto entry = I::EntityList()->GetHighestEntityIndex() + 1;
 			const auto serial = rand() % 0x1000;
-			glove = make_glove(entry, serial);
+			glove = MakeGlove(entry, serial);
 			wearables[0] = entry | serial << 16;
 			glove_handle = wearables[0];
 			UpdateGlove = true;
@@ -594,8 +586,8 @@ struct hud_weapons_t {
 template<class T>
 static T* FindHudElement(const char* name)
 {
-	static auto pThis = *reinterpret_cast<DWORD**>(Utils::PatternScan(clientFactory, XorStr("B9 ? ? ? ? E8 ? ? ? ? 8B 5D 08")) + 1);
-	static auto find_hud_element = reinterpret_cast<DWORD(__thiscall*)(void*, const char*)>(Utils::PatternScan(clientFactory, XorStr("55 8B EC 53 8B 5D 08 56 57 8B F9 33 F6 39 77 28")));
+	static auto pThis = *reinterpret_cast<DWORD**>(offsets["FindHudElementThis"]);
+	static auto find_hud_element = reinterpret_cast<DWORD(__thiscall*)(void*, const char*)>(offsets["FindHudElement"]);
 	return (T*)find_hud_element(pThis, name);
 }
 
@@ -606,7 +598,7 @@ void CSkins::UpdateSkins(bool reset)
 	SetKillIconCfg();
 
 	typedef void(*ForceUpdate) (void);
-	ForceUpdate FullUpdate = (ForceUpdate)Utils::PatternScan(engineFactory, XorStr("A1 ? ? ? ? B9 ? ? ? ? 56 FF 50 14 8B 34 85"));
+	ForceUpdate FullUpdate = (ForceUpdate)offsets["FullUpdate"];
 	FullUpdate();
 
 	ForceUpdated = reset;

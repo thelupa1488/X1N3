@@ -110,7 +110,37 @@ namespace Offsets
 	DWORD m_vecMaxs = 0;
 	DWORD m_Item = 0;
 
+	DWORD Input = 0;
+	DWORD MoveHelper = 0;
+	DWORD GlowObjManager = 0;
+	DWORD MatchFramework = 0;
+	DWORD ClientState = 0;
+	DWORD GameRules = 0;
+
+	DWORD d3d9TablePtrPtr = 0;
+
 	DWORD PredictionSeed = 0;
 	DWORD PredictionPlayer = 0;
-//	DWORD FindW2Matrix = 0;
+	DWORD SetLocalPlayerReady = 0;
+	DWORD SmokeCount = 0;
+	DWORD SetClanTag = 0;
+	DWORD ItemDefinitionByName = 0;
+	DWORD ItemDefinitionMap = 0;
+	DWORD LineGoesThroughSmoke = 0;
+	DWORD ViewMatrix = 0;
+	DWORD SequenceActivity = 0;
+	DWORD CurrentCommand = 0;
+	DWORD InvalidateBoneCache = 0;
+	DWORD SetAbsAngles = 0;
+	DWORD SetAbsOrigin = 0;
+	DWORD FromString = 0;
+	DWORD FindKey = 0;
+	DWORD SetString = 0;
+	DWORD IsReloading = 0;
+	DWORD InitializeKits = 0;
+	DWORD InitializeStickers = 0;
+	DWORD MakeGlove = 0;
+	DWORD FindHudElementThis = 0;
+	DWORD FindHudElement = 0;
+	DWORD FullUpdate = 0;
 }

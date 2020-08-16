@@ -241,7 +241,7 @@ void CMisc::Draw()
 
 void CMisc::LegitPeek(CUserCmd* pCmd, bool& bSendPacket)
 {
-	int choke_factor = Desync ? min(MaxChokeTicks(), FakeLagFactor) : FakeLagFactor;
+	int choke_factor = /*Desync ? min(MaxChokeTicks(), FakeLagFactor) :*/ FakeLagFactor;
 
 	static bool m_bIsPeeking = false;
 	if (m_bIsPeeking)
@@ -320,7 +320,7 @@ void CMisc::LegitPeek(CUserCmd* pCmd, bool& bSendPacket)
 
 void CMisc::SetNewClan(string New, string Name)
 {
-	static auto pSetClanTag = reinterpret_cast<void(__fastcall*)(const char*, const char*)>(((DWORD)Utils::PatternScan(engineFactory, XorStr("53 56 57 8B DA 8B F9 FF 15"))));
+	static auto pSetClanTag = reinterpret_cast<void(__fastcall*)(const char*, const char*)>(offsets["SetClanTag"]);
 
 	if (pSetClanTag)
 		pSetClanTag(New.c_str(), Name.c_str());
@@ -467,151 +467,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 	{
 		if (CGlobal::LocalPlayer)
 		{
-			EnginePrediction::Run(pCmd);
-			{
-				if (EdgeJump && EdgeJumpBind.Check())
-				{
-					if (CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER ||
-						CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP)
-						return;
-
-					if ((EnginePrediction::GetFlags() & FL_ONGROUND) && !(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
-						pCmd->buttons |= IN_JUMP;
-
-				}
-
-				//if (Desync)
-				//{
-				//	if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
-				//		CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER || CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP
-				//		|| CGlobal::LocalPlayer->IsDead())
-				//		return;
-
-				//	//if (I::GameRules() && I::GameRules()->IsFreezePeriod())
-				//	//	return;
-
-				//	auto weapon = CGlobal::LocalPlayer->GetBaseWeapon();
-
-				//	if (!weapon)
-				//		return;
-
-				//	if ((CGlobal::GWeaponID == WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_FAMAS) && weapon->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
-				//		return;
-
-				//	if (CGlobal::GWeaponType == WEAPON_TYPE_GRENADE) 
-				//	{
-				//		if (!weapon->GetPinPulled()) 
-				//		{
-				//			float throwTime = weapon->GetThrowTime();
-				//			if (throwTime > 0.f)
-				//				return;
-				//		}
-				//		if ((pCmd->buttons & IN_ATTACK) || (pCmd->buttons & IN_ATTACK2)) 
-				//		{
-				//			if (weapon->GetThrowTime() > 0.f)
-				//				return;
-				//		}
-				//	}
-
-				//	static bool broke_lby = false;
-				//	auto sideauto = GetBestHeadAngle(vangle.y);
-
-				//	if (!DesyncAd) 
-				//	{
-				//		if (DesyncBind.Check())
-				//			side = 1.0f;
-				//		else
-				//			side = -1.0f;
-				//	}
-				//	else
-				//		side = sideauto;
-
-				//	if (DesyncType == 1) 
-				//	{
-				//		float minimal_move = CGlobal::LocalPlayer->GetFlags() & IN_DUCK ? 3.0f : 1.0f;
-
-				//		if (!bSendPacket)
-				//			pCmd->viewangles.y += 120.f * side;
-
-				//		static bool flip = 1;
-				//		flip = !flip;
-
-				//		pCmd->sidemove += flip ? minimal_move : -minimal_move;
-				//	}
-				//	else if (DesyncType == 2) 
-				//	{
-				//		if (next_lby >= I::GlobalVars()->curtime) 
-				//		{
-				//			if (!broke_lby && bSendPacket)
-				//				return;
-
-				//			broke_lby = false;
-				//			bSendPacket = false;
-				//			pCmd->viewangles.y += 120.0f * side;
-				//		}
-				//		else 
-				//		{
-				//			broke_lby = true;
-				//			bSendPacket = false;
-				//			pCmd->viewangles.y += 120.0f * side;
-				//		}
-				//	}
-				//	else if (DesyncType == 3)
-				//	{
-				//		static bool switchaa = false;
-				//		switchaa = !switchaa;
-
-				//		if (!bSendPacket)
-				//			pCmd->viewangles.y += switchaa ? 180.f : 0.f;
-				//	}
-				//	FixAngles(pCmd->viewangles);
-				//}
-
-				if (AutoBlock && AutoBlockBind.Check())
-				{
-					float bestdist = 250.f;
-					int index = -1;
-
-					for (int i = 1; i < I::Engine()->GetMaxClients(); i++)
-					{
-						CBaseEntity* entity = (CBaseEntity*)I::EntityList()->GetClientEntity(i);
-
-						if (!entity)
-							continue;
-
-						if (entity->IsDead() || entity->IsDormant() || entity == CGlobal::LocalPlayer)
-							continue;
-
-						float dist = CGlobal::LocalPlayer->GetOrigin().DistTo(entity->GetOrigin());
-
-						if (dist < bestdist)
-						{
-							bestdist = dist;
-							index = i;
-						}
-					}
-
-					if (index == -1)
-						return;
-
-					CBaseEntity* target = (CBaseEntity*)I::EntityList()->GetClientEntity(index);
-
-					if (!target)
-						return;
-
-					QAngle angles = CalcAngle(CGlobal::LocalPlayer->GetOrigin(), target->GetOrigin());
-
-					angles.y -= CGlobal::LocalPlayer->GetEyeAngles().y;
-					NormalizeAngles(angles);
-
-					if (angles.y < 0.0f)
-						pCmd->sidemove = 250.f;
-					else if (angles.y > 0.0f)
-						pCmd->sidemove = -250.f;
-				}
-			}
-			EnginePrediction::End();
-
 			if (BHop)
 			{
 				if (CGlobal::LocalPlayer->GetMoveType() & MOVETYPE_LADDER ||
@@ -637,7 +492,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 								bLastJumped = true;
 								bShouldFake = true;
 							}
-							else if (rand() % 100 < BHopChance)
+							else if (rand() % 101 < BHopChance)
 							{
 								pCmd->buttons &= ~IN_JUMP;
 								bLastJumped = false;
@@ -659,9 +514,8 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 							return;
 
 						bool on_ground = (CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND) && !(pCmd->buttons & IN_JUMP);
-						if (on_ground) {
+						if (on_ground)
 							return;
-						}
 
 						static auto side = 1.0f;
 						side = -side;
@@ -684,34 +538,37 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 						auto abs_angle_delta = abs(yaw_delta);
 						old_yaw = wish_angle.y;
 
-						if (abs_angle_delta <= ideal_strafe || abs_angle_delta >= 30.0f) {
+						if (abs_angle_delta <= ideal_strafe || abs_angle_delta >= 30.0f) 
+						{
 							QAngle velocity_direction;
 							VectorAngles(velocity, velocity_direction);
 							auto velocity_delta = remainderf(wish_angle.y - velocity_direction.y, 360.0f);
 							auto retrack = clamp(RAD2DEG(atan(30.0f / speed)), 0.0f, 90.0f) * AutoStrafeSpeed;
-							if (velocity_delta <= retrack || speed <= 15.0f) {
-								if (-(retrack) <= velocity_delta || speed <= 15.0f) {
+							if (velocity_delta <= retrack || speed <= 15.0f) 
+							{
+								if (-(retrack) <= velocity_delta || speed <= 15.0f) 
+								{
 									wish_angle.y += side * ideal_strafe;
 									pCmd->sidemove = cl_sidespeed->GetFloat() * side;
 								}
-								else {
+								else 
+								{
 									wish_angle.y = velocity_direction.y - retrack;
 									pCmd->sidemove = cl_sidespeed->GetFloat();
 								}
 							}
-							else {
+							else 
+							{
 								wish_angle.y = velocity_direction.y + retrack;
 								pCmd->sidemove = -cl_sidespeed->GetFloat();
 							}
 
 							MovementFix(pCmd, wish_angle, pCmd->viewangles);
 						}
-						else if (yaw_delta > 0.0f) {
+						else if (yaw_delta > 0.0f)
 							pCmd->sidemove = -cl_sidespeed->GetFloat();
-						}
-						else if (yaw_delta < 0.0f) {
+						else if (yaw_delta < 0.0f)
 							pCmd->sidemove = cl_sidespeed->GetFloat();
-						}
 					}
 				}
 			}
@@ -758,7 +615,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				lolc("particle/vistasmokev1/vistasmokev1_emods_impactdust"),
 				lolc("particle/vistasmokev1/vistasmokev1_fire"),
 			};
-			static auto smoke_count = *reinterpret_cast<uint32_t**>(Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 EC 08 8B 15 ? ? ? ? 0F 57 C0")) + 8);
+			static auto smoke_count = *reinterpret_cast<uint32_t**>(offsets["SmokeCount"]);
 			static bool NoSmokeReset = false;
 			if (NoSmoke)
 			{
@@ -848,7 +705,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 							old_tag = tag;
 							SetNewClan("", " ");
 						}
-
 						break;
 					}
 					case 1:
@@ -858,13 +714,11 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 							old_tag = tag;
 							SetNewClan(tag.c_str(), " ");
 						}
-
 						break;
 					}
 					case 2:
 					{
 						int value = (ServerTime % (str_size * 2)) + 1;
-
 						if (oldvalue != value)
 						{
 							if (value > str_size)
@@ -879,7 +733,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					case 3:
 					{
 						int value = ServerTime % str_size + 1;
-
 						if (oldvalue != value)
 						{
 							std::string tag_now = "";
@@ -892,13 +745,11 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 							SetNewClan(tag_now.c_str(), " ");
 							oldvalue = value;
 						}
-
 						break;
 					}
 					case 4:
 					{
 						int value = str_size - (ServerTime % str_size + 1);
-
 						if (oldvalue != value)
 						{
 							std::string tag_now = "";
@@ -911,13 +762,11 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 							SetNewClan(tag_now.c_str(), " ");
 							oldvalue = value;
 						}
-
 						break;
 					}
 					case 5:
 					{
 						int value = (ServerTime % (str_size * 2)) + 1;
-
 						if (oldvalue != value)
 						{
 							if (value > str_size)
@@ -931,7 +780,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 							SetNewClan(tag.c_str(), " ");
 							oldvalue = value;
 						}
-
 						break;
 					}
 					default:
@@ -1020,7 +868,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				if (FakeLagFactor <= 0)
 					return;
 
-				int choke_factor = Desync ? min(MaxChokeTicks(), FakeLagFactor) : FakeLagFactor;
+				int choke_factor = /*Desync ? min(MaxChokeTicks(), FakeLagFactor) :*/ FakeLagFactor;
 
 				auto speed = CGlobal::LocalPlayer->GetVelocity().Length();
 				bool standing = speed <= 1.0f;
@@ -1057,26 +905,31 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					bSendPacket = !(I::ClientState()->chokedcommands < choke_factor);
 					break;
 				case FakelagAdaptive:
-					if (standing) {
+					if (standing) 
+					{
 						bSendPacket = !(I::ClientState()->chokedcommands < choke_factor);
 						break;
 					}
 
 					UnitsPerTick = CGlobal::LocalPlayer->GetVelocity().Length() * I::GlobalVars()->interval_per_tick;
 					while ((WishTicks * UnitsPerTick) <= 68.0f) {
-						if (((AdaptiveTicks - 1) * UnitsPerTick) > 68.0f) {
+						if (((AdaptiveTicks - 1) * UnitsPerTick) > 68.0f) 
+						{
 							++WishTicks;
 							break;
 						}
-						if ((AdaptiveTicks * UnitsPerTick) > 68.0f) {
+						if ((AdaptiveTicks * UnitsPerTick) > 68.0f) 
+						{
 							WishTicks += 2;
 							break;
 						}
-						if (((AdaptiveTicks + 1) * UnitsPerTick) > 68.0f) {
+						if (((AdaptiveTicks + 1) * UnitsPerTick) > 68.0f) 
+						{
 							WishTicks += 3;
 							break;
 						}
-						if (((AdaptiveTicks + 2) * UnitsPerTick) > 68.0f) {
+						if (((AdaptiveTicks + 2) * UnitsPerTick) > 68.0f)
+						{
 							WishTicks += 4;
 							break;
 						}
@@ -1089,10 +942,12 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					bSendPacket = !(I::ClientState()->chokedcommands < WishTicks);
 					break;
 				case FakelagRandom:
-					if (I::ClientState()->chokedcommands < LastRandomNumber) {
+					if (I::ClientState()->chokedcommands < LastRandomNumber) 
+					{
 						bSendPacket = false;
 					}
-					else {
+					else 
+					{
 						randomSeed = 0x41C64E6D * randomSeed + 12345;
 						LastRandomNumber = (randomSeed / 0x10000 & 0x7FFFu) % choke_factor;
 						bSendPacket = true;
@@ -1216,6 +1071,63 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					}
 				}
 			}
+
+			EnginePrediction::Run(pCmd);
+			{
+				if (EdgeJump && EdgeJumpBind.Check())
+				{
+					if (CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER ||
+						CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP)
+						return;
+
+					if ((EnginePrediction::GetFlags() & FL_ONGROUND) && !(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
+						pCmd->buttons |= IN_JUMP;
+				}
+
+				if (AutoBlock && AutoBlockBind.Check())
+				{
+					float bestdist = 250.f;
+					int index = -1;
+
+					for (int i = 1; i < I::Engine()->GetMaxClients(); i++)
+					{
+						CBaseEntity* entity = (CBaseEntity*)I::EntityList()->GetClientEntity(i);
+
+						if (!entity)
+							continue;
+
+						if (entity->IsDead() || entity->IsDormant() || entity == CGlobal::LocalPlayer)
+							continue;
+
+						float dist = CGlobal::LocalPlayer->GetOrigin().DistTo(entity->GetOrigin());
+
+						if (dist < bestdist)
+						{
+							bestdist = dist;
+							index = i;
+						}
+					}
+
+					if (index == -1)
+						return;
+
+					CBaseEntity* target = (CBaseEntity*)I::EntityList()->GetClientEntity(index);
+
+					if (!target)
+						return;
+
+					QAngle angles = CalcAngle(CGlobal::LocalPlayer->GetOrigin(), target->GetOrigin());
+
+					angles.y -= CGlobal::LocalPlayer->GetEyeAngles().y;
+					NormalizeAngles(angles);
+
+					if (angles.y < 0.0f)
+						pCmd->sidemove = 250.f;
+					else if (angles.y > 0.0f)
+						pCmd->sidemove = -250.f;
+				}
+			}
+			EnginePrediction::End();
 		}
 	}
 }
@@ -1424,34 +1336,12 @@ void CMisc::GetViewModelFOV(float &Fov)
 	}
 }
 
-//void SetLocalPlayerReady()
-//{
-//	static auto SetLocalPlayerReadyFn = reinterpret_cast<bool(__stdcall*)(const char*)>
-//		(Utils::PatternScan(clientFactory,
-//			XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12")));
-//
-//	if (SetLocalPlayerReadyFn)
-//		SetLocalPlayerReadyFn("");
-//}
-
-//void accept()
-//{
-//	typedef void(__cdecl* accept_t)(void);
-//	static accept_t accept = (accept_t)Utils::PatternScan(clientFactory,
-//		XorStr("55 8B EC 51 56 8B 35 ? ? ? ? 57 83 BE"));
-//
-//	if (accept && **(unsigned long**)((unsigned long)accept + 0x7))
-//	{
-//		SetLocalPlayerReady();
-//	}
-//}
-
 void CMisc::AutoAcceptEmit()
 {
 	if (AutoAccept && !CGlobal::FullUpdateCheck)
 	{
 		static auto SetLocalPlayerReadyFn 
-			= reinterpret_cast<bool(__stdcall*)(const char*)>(Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12")));
+			= reinterpret_cast<bool(__stdcall*)(const char*)>(offsets["SetLocalPlayerReady"]);
 
 		if (SetLocalPlayerReadyFn)
 		{
@@ -1463,16 +1353,11 @@ void CMisc::AutoAcceptEmit()
 	}
 }
 
-//void CMisc::PlaySound(const char* pszSoundName)
-//{
-//}
-
 void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld)
 {
 	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
 	{
 		static auto fnDME = HookTables::pDrawModelExecute->GetTrampoline();
-
 		const char* ModelName = I::ModelInfo()->GetModelName((model_t*)pInfo.pModel);
 
 		if (!ModelName)

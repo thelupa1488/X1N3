@@ -2,8 +2,6 @@
 #include "SDK.h"
 #include <string>
 
-//std::uint8_t* Utils::PatternScan(void* module, const char* signature);
-
 class match_title;
 class match_extensions;
 class match_events_subscription;

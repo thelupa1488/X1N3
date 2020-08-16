@@ -108,11 +108,40 @@ namespace Offsets
 
 	extern DWORD m_vecMins;
 	extern DWORD m_vecMaxs;
-
 	extern DWORD m_Item;
+
+	extern DWORD Input;
+	extern DWORD MoveHelper;
+	extern DWORD GlowObjManager;
+	extern DWORD MatchFramework;
+	extern DWORD ClientState;
+	extern DWORD GameRules;
+
+	extern DWORD d3d9TablePtrPtr;
 
 	extern DWORD PredictionSeed;
 	extern DWORD PredictionPlayer;
-//	extern DWORD FindW2Matrix;
+	extern DWORD SetLocalPlayerReady;
+	extern DWORD SmokeCount;
+	extern DWORD SetClanTag;
+	extern DWORD ItemDefinitionByName;
+	extern DWORD ItemDefinitionMap;
+	extern DWORD LineGoesThroughSmoke;
+	extern DWORD ViewMatrix;
+	extern DWORD SequenceActivity;
+	extern DWORD CurrentCommand;
+	extern DWORD InvalidateBoneCache;
+	extern DWORD SetAbsAngles;
+	extern DWORD SetAbsOrigin;
+	extern DWORD FromString;
+	extern DWORD FindKey;
+	extern DWORD SetString;
+	extern DWORD IsReloading;
+	extern DWORD InitializeKits;
+	extern DWORD InitializeStickers;
+	extern DWORD MakeGlove;
+	extern DWORD FindHudElementThis;
+	extern DWORD FindHudElement;
+	extern DWORD FullUpdate;
 }
 

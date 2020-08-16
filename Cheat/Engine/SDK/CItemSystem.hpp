@@ -34,16 +34,15 @@ namespace SDK
 
 		CEconItemDefinition* GetItemDefinitionByName(const char* name)
 		{
-			static auto GetItemDefinitionByName = reinterpret_cast<CEconItemDefinition*(__fastcall*)(void*, const char*)>(
-				Utils::PatternScan(clientFactory, XorStr("55 8B EC 57 8B F9 80 BF ? ? ? ? ? 74 07")));
+			static auto GetItemDefinitionByName = reinterpret_cast<CEconItemDefinition*(__fastcall*)(void*, const char*)>(offsets["ItemDefinitionByName"]);
 
 			return GetItemDefinitionByName(this, name);
 		}
 
 		uintptr_t GetItemDefinitionMap()
 		{
-			static auto m_Map = *(uint32_t*)(Utils::PatternScan(clientFactory, XorStr("8B 87 ? ? ? ? 83 7C 88 ? ? 7C 0A 8B 44 88 04 5F 5E 5D C2 04 00 8B 87 ? ? ? ?")) + 2);
-			return *(uintptr_t*)((uintptr_t)this + m_Map);
+			static auto GetItemDefinitionMap = *(uint32_t*)(offsets["ItemDefinitionMap"]);
+			return *(uintptr_t*)((uintptr_t)this + GetItemDefinitionMap);
 		}
 
 		/// This is inlined on Windows so it needs to be rebuilt

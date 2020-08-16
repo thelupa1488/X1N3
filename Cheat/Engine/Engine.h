@@ -224,7 +224,7 @@ public:
 
 	static bool LineGoesThroughSmoke(Vector vStartPos, Vector vEndPos)
 	{
-		static auto LineGoesThroughSmokeFn = (bool(*)(Vector vStartPos, Vector vEndPos))Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 EC 08 8B 15 ? ? ? ? 0F 57 C0"));
+		static auto LineGoesThroughSmokeFn = (bool(*)(Vector vStartPos, Vector vEndPos))offsets["LineGoesThroughSmoke"];
 		return LineGoesThroughSmokeFn(vStartPos, vEndPos);
 	}
 
@@ -369,7 +369,7 @@ public:
 				static std::uintptr_t pViewMatrix;
 				if (!pViewMatrix)
 				{
-					pViewMatrix = static_cast<std::uintptr_t>(Utils::PatternScan(clientFactory, XorStr("0F 10 05 ? ? ? ? 8D 85 ? ? ? ? B9")));
+					pViewMatrix = static_cast<std::uintptr_t>(offsets["ViewMatrix"]);
 					pViewMatrix = *(std::uintptr_t*)(pViewMatrix + 0x3) + 0xB0;
 					return true;
 				}

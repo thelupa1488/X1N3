@@ -35,7 +35,6 @@ public:
 	vector<DamgeInfo_t> DamageVector;
 
 	bool DrawHit = false;
-//	bool PlaySound = false;
 	float HitMarkerEndTime = 0;
 
 	void RegListener();
@@ -49,7 +48,6 @@ class IMisc
 {
 protected:
 	virtual void GetViewModelFOV(float &Fov) = 0;
-//	virtual void PlaySound(const char* pszSoundName) = 0;
 	virtual void AutoAcceptEmit() = 0;
 	virtual void DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t &state, const ModelRenderInfo_t &pInfo, matrix3x4_t *pCustomBoneToWorld) = 0;
 	virtual void ShowSpectatorList() = 0;
@@ -92,7 +90,6 @@ public:
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd);
 	virtual void OverrideView(CViewSetup* pSetup);
 	virtual void GetViewModelFOV(float &Fov);
-//	virtual void PlaySound(const char* pszSoundName);
 	virtual void AutoAcceptEmit();
 	virtual void DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t &state, const ModelRenderInfo_t &pInfo, matrix3x4_t *pCustomBoneToWorld);
 	virtual void ShowSpectatorList();
@@ -124,14 +121,6 @@ public:
 	bool ThirdPerson = false;
 	int ThirdPersonDistance = 150;
 	CBind ThirdPersonBind = CBind(0, true);
-
-	bool Desync = false;
-	//int  DesyncType = 0;
-	//bool DesyncAd = false;
-	//CBind DesyncBind = CBind(0, true);
-
-	//bool DesyncArrows = false;
-	//bool AngleLines = false;
 
 	bool FovChanger = false;
 	int FovView = 100;
@@ -272,11 +261,6 @@ public:
 		RV(ThirdPerson, "ThirdPerson");
 		RV(ThirdPersonDistance, "ThirdPersonDistance");
 		RV(ThirdPersonBind, "ThirdPersonBind");
-		//RV(Desync, "Desync");
-		//RV(DesyncType, "DesyncType");
-		//RV(DesyncBind, "DesyncBind");
-		//RV(DesyncArrows, "DesyncArrows");
-		//RV(AngleLines, "AngleLines");
 		RV(FovChanger, "FovChanger");
 		RV(FovView, "FovView");
 		RV(FovModelChanger, "FovModelChanger");

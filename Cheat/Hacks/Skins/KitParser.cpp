@@ -336,7 +336,7 @@ auto CSkins::initialize_kits() -> void
 	// lea     ecx, [eax+4]
 	// call    CEconItemSchema::GetPaintKitDefinition
 
-	const auto sig_address = Utils::PatternScan(clientFactory, XorStr("E8 ? ? ? ? FF 76 0C 8D 48 04 E8"));
+	const auto sig_address = offsets["InitializeKits"];
 
 
 	// Skip the opcode, read rel32 address
@@ -397,7 +397,7 @@ auto CSkins::initialize_kits() -> void
 
 	// Dump sticker kits
 	{
-		const auto sticker_sig = Utils::PatternScan(clientFactory, XorStr("53 8D 48 04 E8 ? ? ? ? 8B 4D 10")) + 4;
+		const auto sticker_sig = offsets["InitializeStickers"];
 
 		// Skip the opcode, read rel32 address
 		const auto get_sticker_kit_definition_offset = *reinterpret_cast<std::intptr_t*>(sticker_sig + 1);

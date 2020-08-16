@@ -60,8 +60,7 @@ namespace Engine
 
 	bool CBaseWeapon::IsReloading()
 	{
-		static auto inReload = *reinterpret_cast<uint32_t*>(
-			Utils::PatternScan(clientFactory, XorStr("C6 87 ? ? ? ? ? 8B 06 8B CE FF 90")));
+		static auto inReload = *reinterpret_cast<uint32_t*>(offsets["IsReloading"]);
 		return *reinterpret_cast<bool*>(DWORD(this) + inReload);
 	}
 

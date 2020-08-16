@@ -65,8 +65,7 @@ string GlovesModels[49] =
 
 int Page = 0;
 
-
-inline bool FindLower(string data, string find)
+static bool FindLower(string data, string find)
 {
 	if (find.empty())
 		return true;
@@ -92,6 +91,7 @@ void CSkins::ItemsList(const vector<ItemSettings> &Items, int &var, const Vec2 S
 	}
 	X1Gui().ListBoxFooter();
 }
+
 void CSkins::SkinsList(const vector<paint_kit> &Skins, int &var, const Vec2 Size, const string Name, const string Find)
 {
 	if (X1Gui().ListBoxHeader(Name.c_str(), Size))
@@ -113,6 +113,7 @@ void CSkins::SkinsList(const vector<paint_kit> &Skins, int &var, const Vec2 Size
 	}
 	X1Gui().ListBoxFooter();
 }
+
 void CSkins::SortSkinsList(const vector<SortedKits_s> &Skins, int &var, const Vec2 Size, const string Name, const string Find)
 {
 	if (X1Gui().ListBoxHeader(Name.c_str(), Size))

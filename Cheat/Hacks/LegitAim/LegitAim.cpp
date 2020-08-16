@@ -349,6 +349,8 @@ void CLegitAim::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const Dr
 						I::ModelRender()->ForcedMaterialOverride(nullptr);
 					}
 					break;
+				default:
+					break;
 				}
 			}
 		}
@@ -378,9 +380,7 @@ void CLegitAim::CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd*
 	}
 
 	if (SelectedWeapon < 0)
-	{
 		return;
-	}
 
 	CurTime = I::GlobalVars()->curtime;
 
@@ -388,9 +388,7 @@ void CLegitAim::CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd*
 	TSDelay.Update(CurTime);
 
 	if (!pLocalPlayer)
-	{
-		return;
-	}	
+		return;	
 
 	bool IsRevolver = CGlobal::GWeaponID == WEAPON_REVOLVER && (pCmd->buttons & IN_ATTACK2);
 
@@ -879,7 +877,8 @@ void CLegitAim::CalcAutoPistol(CUserCmd* cmd, CBaseEntity * pLocal)
 		cmd->buttons &= ~IN_ATTACK;
 }
 
-static void Normalize(Vector& angle) {
+static void Normalize(Vector& angle) 
+{
 	while (angle.x > 89.0f) {
 		angle.x -= 180.f;
 	}
@@ -1863,8 +1862,15 @@ void CLegitAim::BacktrackFrameStageNotify()
 	{
 		for (int i = 0; i <= I::Engine()->GetMaxClients(); i++)
 		{
-			auto entity = (CBaseEntity*)I::EntityList()->GetClientEntity(i);
+			CBaseEntity* entity = (CBaseEntity*)I::EntityList()->GetClientEntity(i);
+
 			if (!entity || entity == CGlobal::LocalPlayer || entity->IsDormant() || entity->IsDead() || CGlobal::LocalPlayer->GetTeam() == entity->GetTeam())
+			{ records[i].clear(); continue; }
+
+			const model_t* model = entity->GetModel();
+			studiohdr_t* hdr = I::ModelInfo()->GetStudioModel(model);
+
+			if (!model || !hdr)
 			{ records[i].clear(); continue; }
 
 			auto& cur_records = records[i];
@@ -1884,14 +1890,6 @@ void CLegitAim::BacktrackFrameStageNotify()
 					cur_records.pop_back();
 				}
 			}
-
-			const model_t* model = entity->GetModel();
-			if (!model)
-				continue;
-
-			studiohdr_t* hdr = I::ModelInfo()->GetStudioModel(model);
-			if (!hdr)
-				continue;
 
 			mstudiohitboxset_t* hitbox_set = hdr->GetHitboxSet(entity->HitboxSet());
 			mstudiobbox_t* hitbox_head = hitbox_set->GetHitbox(HITBOX_HEAD);
@@ -1937,13 +1935,13 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 
 	if (Weapons[GetWeap(SelectedWeapon)].Backtrack && !FaceIt && Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit)
 	{
+		float updateRate = clamp(vars.updateRate->GetFloat(), vars.minUpdateRate->GetFloat(), vars.maxUpdateRate->GetFloat());
+		LerpTime = std::fmaxf(vars.interp->GetFloat(), vars.interpRatio->GetFloat() / updateRate);
+		Latency = I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING) + I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_INCOMING);
+		CorrectTime = Latency + LerpTime;
+
 		EnginePrediction::Run(pCmd);
 		{
-			float updateRate = clamp(vars.updateRate->GetFloat(), vars.minUpdateRate->GetFloat(), vars.maxUpdateRate->GetFloat());
-			LerpTime = std::fmaxf(vars.interp->GetFloat(), vars.interpRatio->GetFloat() / updateRate);
-			Latency = I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING) + I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_INCOMING);
-			CorrectTime = Latency + LerpTime;
-
 			if (pBestBacktrackTarget)
 			{
 				if (records[iBackTrackBestTargetIndex].size() <= 3 || (!IgnoreSmokeBacktrack && CGlobal::LineGoesThroughSmoke(CGlobal::LocalPlayer->GetEyePosition(), iBackTrackBestTargetOrigin)))
@@ -1959,7 +1957,6 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 					float tempFloat = FLT_MAX;
 					Vector ViewDir = AngleVector(pCmd->viewangles + (CGlobal::LocalPlayer->GetAimPunchAngle() * 2.f));
 					float FOVDistance = DistancePointToLine(record.hitboxPos, CGlobal::LocalPlayer->GetEyePosition(), ViewDir);
-
 					if (tempFloat > FOVDistance)
 					{
 						tempFloat = FOVDistance;
