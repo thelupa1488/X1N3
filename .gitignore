@@ -170,3 +170,4 @@ build/release/Protect.bat
 build/release/release.vmp.dll
 .vs/ProjectSettings.json
 .vs/slnx.sqlite
+.vs/VSWorkspaceState.json
