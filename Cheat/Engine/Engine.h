@@ -49,7 +49,6 @@ namespace SDK
 {
 	class IClientEntity;
 }
-
 using namespace SDK;
 
 class CBind

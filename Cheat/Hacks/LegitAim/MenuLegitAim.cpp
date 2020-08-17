@@ -220,10 +220,15 @@ void CLegitAim::Menu()
 						{
 							X1Gui().SameLine(158.f);
 							X1Gui().PushItemWidth(175.f);
-							VectorEx<const char*> itemsSBT = { lolc("All Ticks"), lolc("Last Tick") };
-							DComboBox("Show Type##ShowBacktrack", ShowBacktrackType, itemsSBT);
+							VectorEx<const char*>itemsSBS = { lolc("Textured"), lolc("Flat"), lolc("Wireframe"), lolc("Metallic"), lolc("Pearlescent"), lolc("Animated") };
+							DComboBox("Show Style##ShowBacktrack", ShowBacktrackStyle, itemsSBS);
 							X1Gui().SameLine();
 							DColorEdit("Color##ShowBacktrack", ShowBacktrackColor);
+							X1Gui().Spacing();
+							X1Gui().SameLine(158.f);
+							X1Gui().PushItemWidth(175.f);
+							VectorEx<const char*> itemsSBT = { lolc("All Ticks"), lolc("Last Tick") };
+							DComboBox("Show Type##ShowBacktrack", ShowBacktrackType, itemsSBT);
 						}
 						X1Gui().PushItemWidth(333.f);
 						SliderInts("Time (Ms)", Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit, 0, 200);

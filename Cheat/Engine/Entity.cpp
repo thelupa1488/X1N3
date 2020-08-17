@@ -551,14 +551,14 @@ namespace Engine
 
 	void CBaseEntity::SetAbsAngles(const QAngle& angles)
 	{
-		using SetAbsAnglesFn = void(__thiscall*)(void*, const QAngle& angles);
+		using SetAbsAnglesFn = void(__thiscall*)(void*, const QAngle&);
 		static SetAbsAnglesFn SetAbsAngles = (SetAbsAnglesFn)offsets["SetAbsAngles"];
 		SetAbsAngles(this, angles);
 	}
 
 	void CBaseEntity::SetAbsOrigin(const Vector& origin)
 	{
-		using SetAbsOriginFn = void(__thiscall*)(void*, const Vector & origin);
+		using SetAbsOriginFn = void(__thiscall*)(void*, const Vector&);
 		static SetAbsOriginFn SetAbsOrigin = (SetAbsOriginFn)offsets["SetAbsOrigin"];
 		SetAbsOrigin(this, origin);
 	}

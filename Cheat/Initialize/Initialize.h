@@ -180,7 +180,7 @@ public:
 			auto LInitOffsets = [&]() -> void
 			{
 				ADD_LOG("2-1-9-0\n");
-				ADD_LOG("======================Init Offsets:\n");
+				ADD_LOG("======================Init Offsets/Patterns:\n");
 
 				offsets["m_hMyWeapons"] = mGetOffset("DT_BaseCombatCharacter", "m_hMyWeapons") / 2;
 				offsets["m_hMyWearables"] = mGetOffset("DT_BaseCombatCharacter", "m_hMyWearables");
@@ -277,8 +277,8 @@ public:
 				offsets["SequenceActivity"] = (Utils::PatternScan(clientFactory, XorStr("55 8B EC 53 8B 5D 08 56 8B F1 83")));
 				offsets["CurrentCommand"] = (Utils::PatternScan(clientFactory, XorStr("89 BE ? ? ? ? E8 ? ? ? ? 85 FF")) + 2);
 				offsets["InvalidateBoneCache"] = (Utils::PatternScan(clientFactory, XorStr("80 3D ? ? ? ? ? 74 16 A1 ? ? ? ? 48 C7 81")));
-				offsets["SetAbsAngles"] = (Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 83 EC 64 53 56 57 8B F1")));
-				offsets["SetAbsOrigin"] = (Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 51 53 56 57 8B F1")));
+				offsets["SetAbsAngles"] = (Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 83 EC 64 53 56 57 8B F1 E8")));
+				offsets["SetAbsOrigin"] = (Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8")));
 				offsets["FromString"] = (Utils::PatternScan(clientFactory, XorStr("E8 ? ? ? ? 83 C4 04 89 45 D8")) + 1);
 				offsets["FindKey"] = (Utils::PatternScan(clientFactory, XorStr("E8 ? ? ? ? F7 45")) + 1);
 				offsets["SetString"] = (Utils::PatternScan(clientFactory, XorStr("E8 ? ? ? ? 89 77 38")) + 1);

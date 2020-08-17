@@ -561,7 +561,7 @@ namespace SDK
 	//--------------------------------------------------------------------------------
 	void VectorAngles(const Vector& forward, QAngle& angles)
 	{
-		float	tmp, yaw, pitch;
+		float tmp, yaw, pitch;
 
 		if (forward[1] == 0 && forward[0] == 0)
 		{

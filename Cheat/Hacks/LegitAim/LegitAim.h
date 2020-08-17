@@ -107,8 +107,8 @@ protected:
 
 	virtual void SaveWeapons(nlohmann::json &j) = 0;
 	virtual void LoadWeapons(nlohmann::json &j) = 0;
-	virtual void BacktrackFrameStageNotify() = 0;
 	virtual void InitializeBacktrack() = 0;
+	virtual void BacktrackFrameStageNotify() = 0;
 	virtual void BacktrackCreateMove(CUserCmd* pCmd) = 0;
 	virtual void TriggerCreateMove(CUserCmd* pCmd) = 0;
 	virtual void TriggerGetBestTarget(Vector mAngle) = 0;
@@ -160,8 +160,8 @@ public:
 	virtual void SaveWeapons(nlohmann::json &j);
 	virtual void LoadWeapons(nlohmann::json &j);
 
-	virtual void BacktrackFrameStageNotify();
 	virtual void InitializeBacktrack();
+	virtual void BacktrackFrameStageNotify();
 	virtual void BacktrackCreateMove(CUserCmd* pCmd);
 
 	virtual void TriggerCreateMove(CUserCmd* pCmd);
@@ -239,8 +239,8 @@ public:
 	struct BacktrackData
 	{
 		Vector origin;
-		Vector hitboxPos;
 		float simtime;
+		Vector hitboxPos;
 		matrix3x4_t matrix[256];
 	};
 	std::map<int, std::deque<BacktrackData>> records;
@@ -429,7 +429,7 @@ public:
 		pOldBestTarget = nullptr;
 		pLocalPlayer = nullptr;
 		pLocalWeapon = nullptr;
-		pBestBacktrackTarget = nullptr;
+		pBacktrackTarget = nullptr;
 
 		RV(WeaponCustomTypes, "WeaponCustomTypes");
 		RV(Enable, "Enable");
@@ -446,6 +446,7 @@ public:
 		RV(SilentFovColor, "SilentFovColor");
 		RV(IgnoreSmokeBacktrack, "IgnoreSmokeBacktrack");
 		RV(ShowBacktrack, "ShowBacktrack");
+		RV(ShowBacktrackStyle, "ShowBacktrackStyle");
 		RV(ShowBacktrackType, "ShowBacktrackType");
 		RV(ShowBacktrackColor, "ShowBacktrackColor");
 		RV(ShowSpot, "ShowSpot");
@@ -474,11 +475,12 @@ public:
 	CBaseEntity *pOldBestTarget;
 	CBaseEntity *pLocalPlayer;
 	CBaseWeapon *pLocalWeapon;
-	CBaseEntity* pBestBacktrackTarget;
+	CBaseEntity* pBacktrackTarget;
 
 	bool IgnoreSmokeBacktrack = false;
 	bool ShowBacktrack = false;
 	int ShowBacktrackType = 0;
+	int ShowBacktrackStyle = 0;
 	Color ShowBacktrackColor = Color(255, 255, 255, 255);
 
 	virtual float CalcFOV(Vector& viewangles, const Vector& vSrc, const Vector& vEnd);
@@ -527,9 +529,7 @@ private:
 	int RCS_Y = 0;
 	int iLastBestHitBox = 0;
 	int iLastSilentBestHitBox = 0;
-	int iBackTrackBestTargetIndex = -1;
-	int iBackTrackBestRecord = -1;
-	Vector iBackTrackBestTargetOrigin = Vector(0, 0, 0);
+	int iBacktrackTickCount = -1;
 	int AimMethod = 0;
 	int SmoothMethod = 0;
 	int SmoothMF = 0;
