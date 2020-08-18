@@ -470,106 +470,139 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 		{
 			if (BHop)
 			{
-				if (CGlobal::LocalPlayer->GetMoveType() & MOVETYPE_LADDER ||
-					CGlobal::LocalPlayer->GetMoveType() & MOVETYPE_NOCLIP)
-					return;
-
 				if (!CGlobal::LocalPlayer->IsDead())
 				{
-					if (pCmd->buttons & IN_JUMP && !(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
-					{
-						static bool bLastJumped = false;
-						static bool bShouldFake = false;
+					if (!(pCmd->buttons & IN_JUMP) || (CGlobal::LocalPlayer->GetMoveType() & MOVETYPE_LADDER))
+						return;
 
-						if (!bLastJumped && bShouldFake)
+					switch (BHopType)
+					{
+					case 0:
+					{
+						if (!(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
 						{
-							bShouldFake = false;
-							pCmd->buttons |= IN_JUMP;
-						}
-						else if (pCmd->buttons & IN_JUMP)
-						{
-							if (CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND)
+							static bool bLastJumped = false;
+							static bool bShouldFake = false;
+
+							if (!bLastJumped && bShouldFake)
 							{
-								bLastJumped = true;
-								bShouldFake = true;
+								bShouldFake = false;
+								pCmd->buttons |= IN_JUMP;
 							}
-							else if (rand() % 100 < BHopChance)
+							else if (pCmd->buttons & IN_JUMP)
 							{
-								pCmd->buttons &= ~IN_JUMP;
+								if (CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND)
+								{
+									bLastJumped = true;
+									bShouldFake = true;
+								}
+								else
+								{
+									pCmd->buttons &= ~IN_JUMP;
+									bLastJumped = false;
+								}
+							}
+							else
+							{
 								bLastJumped = false;
+								bShouldFake = false;
 							}
+						}
+						break;
+					}
+					case 1:
+					{
+						static int HopsRestricted = 0;
+						static int HopsHit = 0;
+
+						if (!(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
+						{
+							pCmd->buttons &= ~IN_JUMP;
+							HopsRestricted = 0;
+						}
+						else if ((rand() % 100 > BHopChance && HopsRestricted < BHopLimit) || (BHopMaxHit > 0 && HopsHit > BHopMaxHit))
+						{
+							pCmd->buttons &= ~IN_JUMP;
+							HopsRestricted++;
+							HopsHit = 0;
 						}
 						else
-						{
-							bLastJumped = false;
-							bShouldFake = false;
-						}
+							HopsHit++;
+
+						break;
 					}
-					if (AutoStrafe && !(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
+					default:
+						break;
+					}
+
+					if (AutoStrafe && BHopType != 1)
 					{
-						if (!KEY_DOWN(ButtonCode_t::KEY_SPACE) ||
-							KEY_DOWN(ButtonCode_t::KEY_A) ||
-							KEY_DOWN(ButtonCode_t::KEY_D) ||
-							KEY_DOWN(ButtonCode_t::KEY_S) ||
-							KEY_DOWN(ButtonCode_t::KEY_W))
-							return;
-
-						bool on_ground = (CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND) && !(pCmd->buttons & IN_JUMP);
-						if (on_ground)
-							return;
-
-						static auto side = 1.0f;
-						side = -side;
-
-						auto velocity = CGlobal::LocalPlayer->GetVelocity();
-						velocity.z = 0.0f;
-
-						QAngle wish_angle = pCmd->viewangles;
-
-						auto speed = velocity.Length2D();
-						auto ideal_strafe = clamp(RAD2DEG(atan(15.f / speed)), 0.0f, 90.0f);
-
-						if (pCmd->forwardmove > 0.0f)
-							pCmd->forwardmove = 0.0f;
-
-						static auto cl_sidespeed = I::GetConVar()->FindVar(XorStr("cl_sidespeed"));
-
-						static float old_yaw = 0.f;
-						auto yaw_delta = remainderf(wish_angle.y - old_yaw, 360.0f);
-						auto abs_angle_delta = abs(yaw_delta);
-						old_yaw = wish_angle.y;
-
-						if (abs_angle_delta <= ideal_strafe || abs_angle_delta >= 30.0f) 
+						if (!(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
 						{
-							QAngle velocity_direction;
-							VectorAngles(velocity, velocity_direction);
-							auto velocity_delta = remainderf(wish_angle.y - velocity_direction.y, 360.0f);
-							auto retrack = clamp(RAD2DEG(atan(30.0f / speed)), 0.0f, 90.0f) * AutoStrafeSpeed;
-							if (velocity_delta <= retrack || speed <= 15.0f) 
-							{
-								if (-(retrack) <= velocity_delta || speed <= 15.0f) 
-								{
-									wish_angle.y += side * ideal_strafe;
-									pCmd->sidemove = cl_sidespeed->GetFloat() * side;
-								}
-								else 
-								{
-									wish_angle.y = velocity_direction.y - retrack;
-									pCmd->sidemove = cl_sidespeed->GetFloat();
-								}
-							}
-							else 
-							{
-								wish_angle.y = velocity_direction.y + retrack;
-								pCmd->sidemove = -cl_sidespeed->GetFloat();
-							}
+							if (!KEY_DOWN(ButtonCode_t::KEY_SPACE) ||
+								KEY_DOWN(ButtonCode_t::KEY_A) ||
+								KEY_DOWN(ButtonCode_t::KEY_D) ||
+								KEY_DOWN(ButtonCode_t::KEY_S) ||
+								KEY_DOWN(ButtonCode_t::KEY_W))
+								return;
 
-							MovementFix(pCmd, wish_angle, pCmd->viewangles);
+							bool on_ground = (CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND) && !(pCmd->buttons & IN_JUMP);
+							if (on_ground)
+								return;
+
+							static auto side = 1.0f;
+							side = -side;
+
+							auto velocity = CGlobal::LocalPlayer->GetVelocity();
+							velocity.z = 0.0f;
+
+							QAngle wish_angle = pCmd->viewangles;
+
+							auto speed = velocity.Length2D();
+							auto ideal_strafe = clamp(RAD2DEG(atan(15.f / speed)), 0.0f, 90.0f);
+
+							if (pCmd->forwardmove > 0.0f)
+								pCmd->forwardmove = 0.0f;
+
+							static auto cl_sidespeed = I::GetConVar()->FindVar(XorStr("cl_sidespeed"));
+
+							static float old_yaw = 0.f;
+							auto yaw_delta = remainderf(wish_angle.y - old_yaw, 360.0f);
+							auto abs_angle_delta = abs(yaw_delta);
+							old_yaw = wish_angle.y;
+
+							if (abs_angle_delta <= ideal_strafe || abs_angle_delta >= 30.0f)
+							{
+								QAngle velocity_direction;
+								VectorAngles(velocity, velocity_direction);
+								auto velocity_delta = remainderf(wish_angle.y - velocity_direction.y, 360.0f);
+								auto retrack = clamp(RAD2DEG(atan(30.0f / speed)), 0.0f, 90.0f) * AutoStrafeSpeed;
+								if (velocity_delta <= retrack || speed <= 15.0f)
+								{
+									if (-(retrack) <= velocity_delta || speed <= 15.0f)
+									{
+										wish_angle.y += side * ideal_strafe;
+										pCmd->sidemove = cl_sidespeed->GetFloat() * side;
+									}
+									else
+									{
+										wish_angle.y = velocity_direction.y - retrack;
+										pCmd->sidemove = cl_sidespeed->GetFloat();
+									}
+								}
+								else
+								{
+									wish_angle.y = velocity_direction.y + retrack;
+									pCmd->sidemove = -cl_sidespeed->GetFloat();
+								}
+
+								MovementFix(pCmd, wish_angle, pCmd->viewangles);
+							}
+							else if (yaw_delta > 0.0f)
+								pCmd->sidemove = -cl_sidespeed->GetFloat();
+							else if (yaw_delta < 0.0f)
+								pCmd->sidemove = cl_sidespeed->GetFloat();
 						}
-						else if (yaw_delta > 0.0f)
-							pCmd->sidemove = -cl_sidespeed->GetFloat();
-						else if (yaw_delta < 0.0f)
-							pCmd->sidemove = cl_sidespeed->GetFloat();
 					}
 				}
 			}

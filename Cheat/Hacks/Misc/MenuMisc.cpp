@@ -14,12 +14,24 @@ void CMisc::Menu()
 	{
 		X1Gui().SameLine(SAME_LINE_1);
 		X1Gui().PushItemWidth(PUSH_1);
-		SliderInts("Chance##BHop", BHopChance, 0, 100);
-		DCheckBox("Auto strafe", AutoStrafe);
-		if (AutoStrafe)
+		VectorEx<const char* >itemsCSS = {lolc("Default"), lolc("Legit") };
+		DComboBox("Type##BHop", BHopType, itemsCSS)
+		if (BHopType == 1)
 		{
-			X1Gui().SameLine(SAME_LINE_1);
-			SliderInts("Speed##AutoStrafe", AutoStrafeSpeed, 0, 15);
+			X1Gui().PushItemWidth(PUSH_2);
+			SliderInts("Chance##LegitBHop", BHopChance, 0, 100);
+			SliderInts("Hops limit##LegitBHop", BHopLimit, 0, 15);
+			SliderInts("Max hops limit##LegitBHop", BHopMaxHit, 0, 15);
+		}
+		else
+		{
+			DCheckBox("Auto strafe", AutoStrafe);
+			if (AutoStrafe)
+			{
+				X1Gui().SameLine(SAME_LINE_1);
+				X1Gui().PushItemWidth(PUSH_1);
+				SliderInts("Speed##AutoStrafe", AutoStrafeSpeed, 0, 15);
+			}
 		}
 	}
 	X1Gui().Spacing();

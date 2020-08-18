@@ -109,11 +109,14 @@ public:
 
 	bool Enable = true;
 	bool BHop = false;
-	int  BHopChance = 0;
-	bool EdgeJump = false;
-	CBind EdgeJumpBind = CBind(0, true);
+	int BHopType = 0;
+	int BHopChance = 0;
+	int BHopLimit = 0;
+	int BHopMaxHit = 0;
 	bool AutoStrafe = false;
 	int  AutoStrafeSpeed = 0;
+	bool EdgeJump = false;
+	CBind EdgeJumpBind = CBind(0, true);
 
 	bool LeftHandKnife = false;
 	bool SwapHand = false;
@@ -253,7 +256,10 @@ public:
 		RV(ArrowsColor, "ArrowsColor");
 
 		RV(BHop, "BHop");
-		RV(BHopChance, "BHopChance");
+		RV(BHopType, "BHopType");
+		RV(BHopChance, "BHopHitChance");
+		RV(BHopLimit, "BHopLimit");
+		RV(BHopMaxHit, "BHopMaxHit")
 		RV(AutoStrafe, "AutoStrafe");
 		RV(AutoStrafeSpeed, "AutoStrafeSpeed");
 		RV(EdgeJump, "EdgeJump");

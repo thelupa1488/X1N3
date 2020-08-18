@@ -163,11 +163,11 @@ void CInventory::SetGlove(Inventory* Inv, bool IsCT)
 		{
 			if (GP_Skins->GlovesSkin_Array[i].ItemIndex == (WEAPON_ID)Inv->Weapon && GP_Skins->GlovesSkin_Array[i].PaintKit == Inv->WeaponSkinId)
 			{
-				GP_Skins->GlovesSkin_Array[i].IsInventory = true;
+				//GP_Skins->GlovesSkin_Array[i].IsInventory = true;
 				GP_Skins->SelectedGloveCT = i + 1;
 				GP_Skins->GloveCTWear = Inv->Wear;
-				GP_Skins->GlovesSkin_Array[i].Rarity = 6/*Covert*/;
-				GP_Skins->GlovesSkin_Array[i].Quality = 3/*Knife star*/;
+				//GP_Skins->GlovesSkin_Array[i].Rarity = 6/*Covert*/;
+				//GP_Skins->GlovesSkin_Array[i].Quality = 3/*Knife star*/;
 
 				if (Inv->Name)
 					snprintf(GP_Skins->GloveCTName, 32, "%s", Inv->Name);
@@ -179,11 +179,11 @@ void CInventory::SetGlove(Inventory* Inv, bool IsCT)
 		{
 			if (GP_Skins->GlovesSkin_Array[i].ItemIndex == (WEAPON_ID)Inv->Weapon && GP_Skins->GlovesSkin_Array[i].PaintKit == Inv->WeaponSkinId)
 			{
-				GP_Skins->GlovesSkin_Array[i].IsInventory = true;
+				//GP_Skins->GlovesSkin_Array[i].IsInventory = true;
 				GP_Skins->SelectedGloveTT = i + 1;
 				GP_Skins->GloveTTWear = Inv->Wear;
-				GP_Skins->GlovesSkin_Array[i].Rarity = 6/*Covert*/;
-				GP_Skins->GlovesSkin_Array[i].Quality = 3/*Knife star*/;
+				//GP_Skins->GlovesSkin_Array[i].Rarity = 6/*Covert*/;
+				//GP_Skins->GlovesSkin_Array[i].Quality = 3/*Knife star*/;
 
 				if (Inv->Name)
 					snprintf(GP_Skins->GloveTTName, 32, "%s", Inv->Name);

@@ -868,7 +868,6 @@
     <Library Include="VMP\VMProtectSDK32.lib">
       <Filter>VMP</Filter>
     </Library>
-    <Library Include="protobuf\libprotoc.lib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="steam_sdk\steam_api.json" />

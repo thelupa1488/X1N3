@@ -224,7 +224,6 @@
     <ClInclude Include="X1API\X1Vector.h" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="protobuf\libprotoc.lib" />
     <Library Include="VMP\VMProtectSDK32.lib" />
     <Library Include="X1API\detours.lib" />
   </ItemGroup>
@@ -284,7 +283,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(DXSDK_DIR)Include;$(ProjectDir)VMP;$(ProjectDir)Json;$(ProjectDir)protobuf\src;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(ProjectDir)X1API;$(ProjectDir)VMP;$(LibraryPath);</LibraryPath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(ProjectDir)protobuf;$(ProjectDir)VMP;$(ProjectDir)X1API;$(LibraryPath)</LibraryPath>
     <TargetName>release</TargetName>
     <OutDir>$(SolutionDir)build\release</OutDir>
     <IntDir>$(SolutionDir)Cheat\output\release</IntDir>
@@ -330,6 +329,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalOptions>/ignore:4307 %(AdditionalOptions)</AdditionalOptions>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>protobuf-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -365,7 +365,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <FullProgramDatabaseFile>false</FullProgramDatabaseFile>
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;protobuf.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/SAFESEH:NO %(AdditionalOptions)</AdditionalOptions>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>

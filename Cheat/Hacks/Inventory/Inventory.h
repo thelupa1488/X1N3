@@ -9,16 +9,7 @@
 #include "../../protobuf/netmessages.pb.h"
 #include "../../protobuf/steammessages.pb.h"
 
-#ifdef YOUGAMEBIZ
-#else
-#ifdef DEBUG_DLL
-#pragma comment(lib, "../protobuf/protobuf_debug.lib")
-#else
-#pragma comment(lib, "../protobuf/protobuf_release.lib")
-#endif
-
 #pragma comment(lib, "libprotoc.lib")
-#endif
 
 #include "../../Main.h"
 #include"../Skins/Skins.h"
