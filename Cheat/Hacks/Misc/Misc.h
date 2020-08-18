@@ -59,7 +59,6 @@ protected:
 	virtual void FrameStageNotify() = 0;
 	virtual void Menu() = 0;
 	virtual void Draw() = 0;
-	virtual void UpdateLBY(CCSGOPlayerAnimState* animstate) = 0;
 	virtual int  MaxChokeTicks() = 0;
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd) = 0;
 	virtual void OverrideView(CViewSetup* pSetup) = 0;
@@ -82,10 +81,7 @@ public:
 	virtual void Draw();
 	virtual void LegitPeek(CUserCmd* pCmd, bool& bSendPacket);
 	virtual void SetNewClan(string New, string Name);
-	virtual float GetFullLatency();
 	virtual bool ChangeName(bool reconnect, const char* newName, float delay);
-	virtual int  GetBestHeadAngle(float yaw);
-	virtual void UpdateLBY(CCSGOPlayerAnimState* animstate);
 	virtual int  MaxChokeTicks();
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd);
 	virtual void OverrideView(CViewSetup* pSetup);
@@ -100,13 +96,6 @@ public:
 	virtual void CustomWalls();
 	virtual void FrameStageNotify();
 
-	QAngle vangle = QAngle();
-	float anglefake = 0.f;
-	float anglereal = 0.f;
-	float view = 0.f;
-	float side = 1.0f;
-	float next_lby = 0.0f;
-
 	bool Enable = true;
 	bool BHop = false;
 	int BHopType = 0;
@@ -114,7 +103,7 @@ public:
 	int BHopLimit = 0;
 	int BHopMaxHit = 0;
 	bool AutoStrafe = false;
-	int  AutoStrafeSpeed = 0;
+	int AutoStrafeSpeed = 0;
 	bool EdgeJump = false;
 	CBind EdgeJumpBind = CBind(0, true);
 
