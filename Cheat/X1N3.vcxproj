@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\EnginePrediction.cpp" />
-    <ClCompile Include="Engine\SDK\CGlobalVarsBase.cpp" />
     <ClCompile Include="Engine\SDK\Vector.cpp" />
     <ClCompile Include="Engine\Utils\Utils.cpp" />
     <ClCompile Include="Engine\Engine.cpp" />
@@ -225,6 +224,7 @@
     <ClInclude Include="X1API\X1Vector.h" />
   </ItemGroup>
   <ItemGroup>
+    <Library Include="protobuf\libprotoc.lib" />
     <Library Include="VMP\VMProtectSDK32.lib" />
     <Library Include="X1API\detours.lib" />
   </ItemGroup>
@@ -275,16 +275,16 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)Include;$(SolutionDir)Cheat\VMP;$(SolutionDir)Cheat\Json;$(SolutionDir)Cheat\protobuf\src;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(SolutionDir)Cheat\protobuf;$(SolutionDir)Cheat\VMP;$(SolutionDir)Cheat\X1API;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(DXSDK_DIR)Include;$(ProjectDir)VMP;$(ProjectDir)Json;$(ProjectDir)protobuf\src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(ProjectDir)protobuf;$(ProjectDir)VMP;$(ProjectDir)X1API;$(LibraryPath)</LibraryPath>
     <TargetName>debug</TargetName>
     <OutDir>$(SolutionDir)build\debug</OutDir>
     <IntDir>$(SolutionDir)Cheat\output\debug</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)Include;$(SolutionDir)Cheat\VMP;$(SolutionDir)Cheat\Json;$(SolutionDir)Cheat\protobuf\src;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(SolutionDir)Cheat\X1API;$(SolutionDir)CheatVMP;$(LibraryPath);</LibraryPath>
+    <IncludePath>$(DXSDK_DIR)Include;$(ProjectDir)VMP;$(ProjectDir)Json;$(ProjectDir)protobuf\src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(ProjectDir)X1API;$(ProjectDir)VMP;$(LibraryPath);</LibraryPath>
     <TargetName>release</TargetName>
     <OutDir>$(SolutionDir)build\release</OutDir>
     <IntDir>$(SolutionDir)Cheat\output\release</IntDir>

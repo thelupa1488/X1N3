@@ -119,7 +119,7 @@ public:
 
 	static WEAPON_TYPE GWeaponType;
 	static WEAPON_ID GWeaponID;
-	static bool IsGuiVisble;
+	static bool IsGuiVisible;
 	static bool IsGameReady;
 	static int iScreenWidth;
 	static int iScreenHeight;
@@ -132,6 +132,7 @@ public:
 	static CBaseEntity* LocalPlayer;
 	static CUserCmd* UserCmd;
 
+	static int OrigRightHand;
 	static int OrigViewModelX;
 	static int OrigViewModelY;
 	static int OrigViewModelZ;
@@ -143,6 +144,16 @@ public:
 	static int WeaponItemIndex[34];
 
 	typedef void(*LPSEARCHFUNC)(LPCTSTR lpszFileName);
+
+	static void CreateFolderCFG()
+	{
+		FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3"), NULL);
+		FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Configurations"), NULL);
+		FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources"), NULL);
+		FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Images"), NULL);
+		FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Sounds"), NULL);
+		std::ofstream(XorStr("C:\\X1N3\\GrenadeHelper"));
+	}
 
 	static BOOL SearchFiles(LPCTSTR lpszFileName, LPSEARCHFUNC lpSearchFunc, BOOL bInnerFolders)
 	{

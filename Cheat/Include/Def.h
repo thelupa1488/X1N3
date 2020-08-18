@@ -2,10 +2,12 @@
 #include "../Engine/XorStr.h"
 #include <VMProtectSDK.h>
 
+//#define YOUGAMEBIZ
+#define ENABLE_XOR_STR
+#define ENABLE_VMP
+
+//#define ENABLE_INVENTORY
 //#define DEBUG_DLL //for protobuf lib
-//#define ENABLE_XOR_STR
-//#define ENABLE_VMP
-#define YOUGAMEBIZ
 
 #define PRESENT_ENABLE
 

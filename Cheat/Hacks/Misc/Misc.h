@@ -116,6 +116,8 @@ public:
 	int  AutoStrafeSpeed = 0;
 
 	bool LeftHandKnife = false;
+	bool SwapHand = false;
+	CBind SwapHandBind = CBind(0, true);
 	bool InfiniteCrouch = false;
 
 	bool ThirdPerson = false;
@@ -257,6 +259,8 @@ public:
 		RV(EdgeJump, "EdgeJump");
 		RV(EdgeJumpBind, "EdgeJumpBind");
 		RV(LeftHandKnife, "LeftHandKnife");
+		RV(SwapHand, "SwapHand");
+		RV(SwapHandBind, "SwapHandBind")
 		RV(InfiniteCrouch, "InfiniteCrouch");
 		RV(ThirdPerson, "ThirdPerson");
 		RV(ThirdPersonDistance, "ThirdPersonDistance");

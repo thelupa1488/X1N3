@@ -8,8 +8,7 @@ CMisc*				GP_Misc = nullptr;
 CLegitAim*			GP_LegitAim = nullptr;
 CRadar*				GP_Radar = nullptr;
 CSkins*				GP_Skins = nullptr;
-#ifdef YOUGAMEBIZ
-#else
+#ifdef ENABLE_INVENTORY
 CInventory*         GP_Inventory = nullptr;
 #endif
 CGHelper*			GP_GHelper = nullptr;

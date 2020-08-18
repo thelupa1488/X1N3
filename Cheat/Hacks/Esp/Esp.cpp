@@ -130,12 +130,17 @@ void CSoundEsp::Draw(CEntityPlayer* Local)
 void CEsp::SoundFrameStage()
 {
 	CUtlVector<SndInfo_t> sndList;
-	sndList.RemoveAll();
-
 	I::Sound()->GetActiveSounds(sndList);
+	if (sndList.Count() < 1)
+		return;
 
 	for (int i = 0; i < sndList.Count(); i++)
 	{
+		SndInfo_t& sound = sndList.Element(i);
+
+		if (sound.m_nSoundSource < 1)
+			continue;
+
 		if (!sndList[i].m_pOrigin || !sndList[i].m_nSoundSource || !sndList[i].m_bUpdatePositions || sndList[i].m_nChannel != 4)
 			continue;
 

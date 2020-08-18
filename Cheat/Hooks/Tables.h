@@ -14,14 +14,15 @@ namespace HookTables
 	using FireEventClientSideThinkFn = bool(__thiscall*)(void*, IGameEvent*);
 	using DrawModelExecuteFn = void(__thiscall*)(void*, IMatRenderContext*, const DrawModelState_t&,
 		const ModelRenderInfo_t&, matrix3x4_t*);
-	using PlaySoundFn = bool(__thiscall*)(void*, const char*);
 	using LockCursorFn = bool(__thiscall*)(void*);
-	using RetrieveMessageFn = EGCResults(__thiscall*)(void*, uint32_t*, void*, uint32_t, uint32_t*);
-	using SendMessageFn = EGCResults(__thiscall*)(void*, uint32_t, const void*, uint32_t);
 	using PostDataUpdateFn = void(__stdcall*)(void*, int);
 	using EmitSoundFn = void(__fastcall*)(IEngineSound*, int, IRecipientFilter&, int, int, const char*, 
 		unsigned int, const char*, float, float, int, int, int, const Vector*, 
 		const Vector*, CUtlVector<Vector>*, bool, int, int, SndInfo_t&);
+#ifdef ENABLE_INVENTORY
+	using RetrieveMessageFn = EGCResults(__thiscall*)(void*, uint32_t*, void*, uint32_t, uint32_t*);
+	using SendMessageFn = EGCResults(__thiscall*)(void*, uint32_t, const void*, uint32_t);
+#endif
 
 	cDetour<CreateMoveFn>* pCreateMove;
 	cDetour<OverrideViewFn>* pOverrideView;
@@ -30,10 +31,11 @@ namespace HookTables
 	cDetour<FrameStageNotifyFn>* pFrameStageNotify;
 	cDetour<FireEventClientSideThinkFn>* pFireEventClientSideThink;
 	cDetour<DrawModelExecuteFn>* pDrawModelExecute;
-	cDetour<PlaySoundFn>* pPlaySound;
 	cDetour<LockCursorFn>* pLockCursor;
-	cDetour<RetrieveMessageFn>* pRetrieveMessage;
-	cDetour<SendMessageFn>* pSendMessage;
 	cDetour<PostDataUpdateFn>* pPostDataUpdate;
 	cDetour<EmitSoundFn>* pEmitSound;
+#ifdef ENABLE_INVENTORY
+	cDetour<RetrieveMessageFn>* pRetrieveMessage;
+	cDetour<SendMessageFn>* pSendMessage;
+#endif
 }

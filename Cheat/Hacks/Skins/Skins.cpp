@@ -212,7 +212,7 @@ void CSkins::PostDataUpdate()
 						* pWeapon->ModelIndex() = mdl_idx + 1;
 
 					*pWeapon->fixskins() = Item->ID;
-
+#ifdef ENABLE_INVENTORY
 					if (Item->IsInventory)
 					{
 						if (IsTT)
@@ -222,6 +222,8 @@ void CSkins::PostDataUpdate()
 					}
 					else
 						*pAttrib->GetEntityQuality() = Item->Skin.quality;
+#endif
+					*pAttrib->GetEntityQuality() = Item->Skin.quality;
 				}
 			}
 
@@ -378,7 +380,7 @@ void CSkins::PostDataUpdate()
 			*glove->GetItemIDHigh() = -1;
 			*glove->GetAccountID() = LocalPlayerInfo.xuid_low;
 
-			*glove->GetEntityQuality() = GlovesSkin_Array[CurGlove - 1].IsInventory ? GlovesSkin_Array[CurGlove - 1].Quality : 4;
+			*glove->GetEntityQuality() = 4;
 			*glove->GetFallbackWear() = IsTT ? GloveTTWear : GloveCTWear;
 			*glove->GetFallbackSeed() = 0;
 
@@ -493,8 +495,7 @@ void CSkins::ApplyCustomSkin(CBaseAttributableItem* pWeapon, int nWeaponIndex, b
 
 	if (!Item)
 		return;
-#ifdef YOUGAMEBIZ
-#else
+#ifdef ENABLE_INVENTORY
 	if (Item->IsInventory && !GP_Inventory->SkinsSyncEnable)
 		return;
 
@@ -507,8 +508,10 @@ void CSkins::ApplyCustomSkin(CBaseAttributableItem* pWeapon, int nWeaponIndex, b
 			SetSkin(pWeapon, &Item->SkinTT, Item->ID, false, bIsKnife);
 	}
 	else
-#endif
 		SetSkin(pWeapon, &Item->Skin, Item->ID, false, bIsKnife);
+#else
+	SetSkin(pWeapon, &Item->Skin, Item->ID, false, bIsKnife);
+#endif
 }
 
 void CSkins::SetSkin(CBaseAttributableItem* pWeapon, SkinSettings *SkinParam, int id, bool IsCT, bool IsKnife)
@@ -657,6 +660,7 @@ void CSkinListener::FireGameEvent(IGameEvent *event)
 						if (GP_Skins->GetWeaponByDefIdx((int)CGlobal::GWeaponID, ListIdx, true, IsTT))
 						{
 							CSkins::ItemSettings* KItem = (IsTT ? &GP_Skins->KnifeNamesTT[ListIdx] : &GP_Skins->KnifeNames[ListIdx]);
+#ifdef ENABLE_INVENTORY
 							if (KItem->IsInventory)
 							{
 								if (IsTT)
@@ -684,11 +688,18 @@ void CSkinListener::FireGameEvent(IGameEvent *event)
 									ForceItemUpdate(CGlobal::LocalPlayer->GetBaseWeapon());
 								}
 							}
+#endif
+							if (KItem->Skin.auto_stat_track)
+							{
+								KItem->Skin.stat_track++;
+								ForceItemUpdate(CGlobal::LocalPlayer->GetBaseWeapon());
+							}
 						}
 					}
 					else
 					{
 						CSkins::ItemSettings* WItem = &GP_Skins->WeaponNames[GP_Skins->SelectedWeapon];
+#ifdef ENABLE_INVENTORY
 						if (WItem->IsInventory)
 						{
 							if (IsTT)
@@ -715,6 +726,12 @@ void CSkinListener::FireGameEvent(IGameEvent *event)
 								WItem->Skin.stat_track++;
 								ForceItemUpdate(CGlobal::LocalPlayer->GetBaseWeapon());
 							}
+						}
+#endif
+						if (WItem->Skin.auto_stat_track)
+						{
+							WItem->Skin.stat_track++;
+							ForceItemUpdate(CGlobal::LocalPlayer->GetBaseWeapon());
 						}
 					}
 				}
@@ -761,6 +778,7 @@ float __fastcall Hooked_GetStickerAttributeBySlotIndexFloat(void* thisptr, void*
 	bool IsTT = CGlobal::LocalPlayer->GetTeam() == 2;
 	CSkins::ItemSettings* SItem = &GP_Skins->WeaponNames[GP_Skins->StickWeaponByDefIndex(iID)];
 
+#ifdef ENABLE_INVENTORY
 	if (SItem->IsInventory)
 	{
 		if (IsTT)
@@ -803,6 +821,17 @@ float __fastcall Hooked_GetStickerAttributeBySlotIndexFloat(void* thisptr, void*
 		default: break;
 		}
 	}
+#endif
+	switch (iAttribute)
+	{
+	case EStickerAttributeType::Wear:
+		return min(1.f, SItem->Skin.Stickers[iSlot].wear + 0.0000000001f);
+	case EStickerAttributeType::Scale:
+		return  SItem->Skin.Stickers[iSlot].scale;
+	case EStickerAttributeType::Rotation:
+		return  SItem->Skin.Stickers[iSlot].rotation;
+	default: break;
+	}
 
 	return oGetStickerAttributeBySlotIndexFloat(thisptr, iSlot, iAttribute, flUnknown);
 }
@@ -823,6 +852,7 @@ UINT __fastcall Hooked_GetStickerAttributeBySlotIndexInt(void* thisptr, void* ed
 	bool IsTT = CGlobal::LocalPlayer->GetTeam() == 2;
 	CSkins::ItemSettings* SItem = &GP_Skins->WeaponNames[GP_Skins->StickWeaponByDefIndex(iID)];
 
+#ifdef ENABLE_INVENTORY
 	if (SItem->IsInventory)
 	{
 		if (IsTT)
@@ -832,6 +862,8 @@ UINT __fastcall Hooked_GetStickerAttributeBySlotIndexInt(void* thisptr, void* ed
 	}
 	else
 		return SItem->Skin.Stickers[iSlot].kit;
+#endif
+	return SItem->Skin.Stickers[iSlot].kit;
 }
 bool IsCodePtr(void* ptr)
 {

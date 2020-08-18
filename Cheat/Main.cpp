@@ -38,11 +38,6 @@ BOOL WINAPI DllMain(_In_ HINSTANCE hinstDll, _In_ DWORD fdwReason, _In_opt_ LPVO
 #endif
 		ADD_LOG("1\n");
 		make_unique<CreateThread_>(&SetupThread, hinstDll);
-		FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3"), NULL);
-		FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Configurations"), NULL);
-		FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources"), NULL);
-		FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Images"), NULL);
-		FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Sounds"), NULL);
 		ADD_LOG("2\n");
 		return TRUE;
 	case DLL_PROCESS_DETACH:

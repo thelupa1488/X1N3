@@ -27,6 +27,6 @@ void __fastcall hkLockCursor(void* thisptr, int edx)
 {
 	HookTables::pLockCursor->GetTrampoline()(thisptr);
 
-	if (CGlobal::IsGuiVisble)
+	if (CGlobal::IsGuiVisible)
 		I::Surface()->UnlockCursor();
 }

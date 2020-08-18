@@ -449,11 +449,6 @@ int CMisc::MaxChokeTicks()
 
 void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCmd)
 {
-	ConVar* cl_righthand = I::GetConVar()->FindVar(XorStr("cl_righthand"));
-	ConVar* viewmodel_offset_x = I::GetConVar()->FindVar(XorStr("viewmodel_offset_x"));
-	ConVar* viewmodel_offset_y = I::GetConVar()->FindVar(XorStr("viewmodel_offset_y"));
-	ConVar* viewmodel_offset_z = I::GetConVar()->FindVar(XorStr("viewmodel_offset_z"));
-
 	if (CGlobal::LocalPlayer && CGlobal::IsGameReady)
 	{
 		if (CGlobal::LocalPlayer->GetBaseWeapon())
@@ -463,6 +458,12 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				CGlobal::GWeaponID = (WEAPON_ID)*CGlobal::LocalPlayer->GetBaseWeapon()->GeteAttributableItem()->GetItemDefinitionIndex();
 		}
 	}
+
+	ConVar* cl_righthand = I::GetConVar()->FindVar(XorStr("cl_righthand"));
+	ConVar* viewmodel_offset_x = I::GetConVar()->FindVar(XorStr("viewmodel_offset_x"));
+	ConVar* viewmodel_offset_y = I::GetConVar()->FindVar(XorStr("viewmodel_offset_y"));
+	ConVar* viewmodel_offset_z = I::GetConVar()->FindVar(XorStr("viewmodel_offset_z"));
+
 	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
 	{
 		if (CGlobal::LocalPlayer)
@@ -492,7 +493,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 								bLastJumped = true;
 								bShouldFake = true;
 							}
-							else if (rand() % 101 < BHopChance)
+							else if (rand() % 100 < BHopChance)
 							{
 								pCmd->buttons &= ~IN_JUMP;
 								bLastJumped = false;
@@ -572,16 +573,33 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					}
 				}
 			}
+			static bool LeftHandKnifeReset = false;
 			if (LeftHandKnife)
 			{
+				int hand = CGlobal::OrigRightHand;
+
 				if (CGlobal::GWeaponType == WEAPON_TYPE_KNIFE)
-					cl_righthand->SetValue(0);
+					cl_righthand->SetValue(!hand);
 				else
-					cl_righthand->SetValue(1);
+					cl_righthand->SetValue(hand);
+
+				LeftHandKnifeReset = true;
 			}
-			if (!LeftHandKnife)
+			if (!LeftHandKnife && LeftHandKnifeReset)
 			{
-				cl_righthand->SetValue(1);
+				cl_righthand->SetValue(CGlobal::OrigRightHand);
+				LeftHandKnifeReset = false;
+			}
+			static bool SwapHandReset = false;
+			if (SwapHand)
+			{
+				cl_righthand->SetValue(!SwapHandBind.Check());
+				SwapHandReset = true;
+			}
+			if (!SwapHand && SwapHandReset)
+			{
+				cl_righthand->SetValue(CGlobal::OrigRightHand);
+				SwapHandReset = false;
 			}
 
 			if (InfiniteCrouch)
@@ -831,7 +849,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					I::Engine()->ExecuteClientCmd(msg.c_str());
 				}
 			}
-
+			static bool ViewModelXYZReset = false;
 			if (ViewModelXYZ)
 			{
 				if (ViewModelX > 0 || ViewModelX < 0) 
@@ -849,12 +867,15 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					*(float*)((DWORD)&viewmodel_offset_z->fnChangeCallback + 0xC) = NULL;
 					viewmodel_offset_z->SetValue(ViewModelZ);
 				}
+
+				ViewModelXYZReset = true;
 			}
-			else
+			if (!ViewModelXYZ && ViewModelXYZReset)
 			{
 				viewmodel_offset_x->SetValue(CGlobal::OrigViewModelX);
 				viewmodel_offset_y->SetValue(CGlobal::OrigViewModelY);
 				viewmodel_offset_z->SetValue(CGlobal::OrigViewModelZ);
+				ViewModelXYZReset = false;
 			}
 
 			if (FakeLag && FakeLagBind.Check())
@@ -1215,61 +1236,57 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 					pSetup->origin = newOrigin;
 				}
 			}
-
+			static bool ThirdPersonReset = false;
 			if (ThirdPerson)
 			{
-				static bool enable;
-
-				if (ThirdPersonBind.Check())
-					enable = true;
+				if (!CGlobal::LocalPlayer->IsDead())
+					I::Input()->m_fCameraInThirdPerson = ThirdPersonBind.Check();
 				else
-					enable = false;
-
-				if (enable && !CGlobal::LocalPlayer->IsDead())
-				{
-					I::Input()->m_fCameraInThirdPerson = enable;
-					auto GetCorrectDistance = [](float ideal_distance) -> float
-					{
-						/* vector for the inverse angles */
-						QAngle inverseAngles;
-						I::Engine()->GetViewAngles(inverseAngles);
-
-						/* inverse angles by 180 */
-						inverseAngles.x *= -1.f, inverseAngles.y += 180.f;
-
-						/* vector for direction */
-						Vector direction;
-						AngleVectors(inverseAngles, direction);
-
-						/* ray, trace & filters */
-						Ray_t ray;
-						trace_t trace;
-						CTraceFilter filter;
-
-						/* dont trace local player */
-						filter.pSkip = CGlobal::LocalPlayer;
-
-						/* create ray */
-						ray.Init(CGlobal::LocalPlayer->GetEyePosition(), CGlobal::LocalPlayer->GetEyePosition() + (direction * ideal_distance));
-
-						/* trace ray */
-						I::EngineTrace()->TraceRay(ray, MASK_SHOT, &filter, &trace);
-
-						/* return the ideal distance */
-						return (ideal_distance * trace.fraction) - 10.f;
-					};
-
-					QAngle angles;
-					I::Engine()->GetViewAngles(angles);
-					angles.z = GetCorrectDistance(ThirdPersonDistance); // 150 is better distance
-					I::Input()->m_vecCameraOffset = Vector(angles.x, angles.y, angles.z);
-				}
-				else 
 					I::Input()->m_fCameraInThirdPerson = false;
-			}
-			else
-				I::Input()->m_fCameraInThirdPerson = false;
 
+				auto GetCorrectDistance = [](float ideal_distance) -> float
+				{
+					/* vector for the inverse angles */
+					QAngle inverseAngles;
+					I::Engine()->GetViewAngles(inverseAngles);
+
+					/* inverse angles by 180 */
+					inverseAngles.x *= -1.f, inverseAngles.y += 180.f;
+
+					/* vector for direction */
+					Vector direction;
+					AngleVectors(inverseAngles, direction);
+
+					/* ray, trace & filters */
+					Ray_t ray;
+					trace_t trace;
+					CTraceFilter filter;
+
+					/* dont trace local player */
+					filter.pSkip = CGlobal::LocalPlayer;
+
+					/* create ray */
+					ray.Init(CGlobal::LocalPlayer->GetEyePosition(), CGlobal::LocalPlayer->GetEyePosition() + (direction * ideal_distance));
+
+					/* trace ray */
+					I::EngineTrace()->TraceRay(ray, MASK_SHOT, &filter, &trace);
+
+					/* return the ideal distance */
+					return (ideal_distance * trace.fraction) - 10.f;
+				};
+
+				QAngle angles;
+				I::Engine()->GetViewAngles(angles);
+				angles.z = GetCorrectDistance(ThirdPersonDistance); // 150 is better distance
+				I::Input()->m_vecCameraOffset = Vector(angles.x, angles.y, angles.z);
+
+				ThirdPersonReset = true;
+			}
+			if (!ThirdPerson && ThirdPersonReset)
+			{
+				I::Input()->m_fCameraInThirdPerson = false;
+				ThirdPersonReset = false;
+			}
 		}
 	}
 
@@ -1409,7 +1426,7 @@ void CMisc::ShowSpectatorList()
 	int LocalPlayerIdx = I::Engine()->GetLocalPlayer();
 	vector<int> observs = GetObservervators(LocalPlayerIdx);
 
-	if (observs.empty() && SpectatorListAutoHide && !CGlobal::IsGuiVisble)
+	if (observs.empty() && SpectatorListAutoHide && !CGlobal::IsGuiVisible)
 		return;
 
 	static bool Hovered = false;

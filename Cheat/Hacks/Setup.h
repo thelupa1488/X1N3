@@ -12,9 +12,45 @@
 #include "../Engine/SDK/SDK.h"
 #include "../Main.h"
 #include "../Include/Def.h"
+#include "../X1API/MinHook/hook.h"
 
 #define DELETE_PTR(name) delete name; name = nullptr
+namespace HookTables
+{
+	using CreateMoveFn = bool(__stdcall*)(float, CUserCmd*);
+	using OverrideViewFn = bool(__stdcall*)(CViewSetup*);
+	using GetViewModelFOVFn = float(__stdcall*)();
+	using DoPostScreenEffectsFn = int(__thiscall*)(void*, int);
+	using FrameStageNotifyFn = void(__thiscall*)(void*, int);
+	using FireEventClientSideThinkFn = bool(__thiscall*)(void*, IGameEvent*);
+	using DrawModelExecuteFn = void(__thiscall*)(void*, IMatRenderContext*, const DrawModelState_t&,
+		const ModelRenderInfo_t&, matrix3x4_t*);
+	using LockCursorFn = bool(__thiscall*)(void*);
+	using PostDataUpdateFn = void(__stdcall*)(void*, int);
+	using EmitSoundFn = void(__fastcall*)(IEngineSound*, int, IRecipientFilter&, int, int, const char*,
+		unsigned int, const char*, float, float, int, int, int, const Vector*,
+		const Vector*, CUtlVector<Vector>*, bool, int, int, SndInfo_t&);
+#ifdef ENABLE_INVENTORY
+	using RetrieveMessageFn = EGCResults(__thiscall*)(void*, uint32_t*, void*, uint32_t, uint32_t*);
+	using SendMessageFn = EGCResults(__thiscall*)(void*, uint32_t, const void*, uint32_t);
+#endif
 
+	extern cDetour<CreateMoveFn>* pCreateMove;
+	extern cDetour<OverrideViewFn>* pOverrideView;
+	extern cDetour<GetViewModelFOVFn>* pGetViewModelFOV;
+	extern cDetour<DoPostScreenEffectsFn>* pDoPostScreenEffects;
+	extern cDetour<FrameStageNotifyFn>* pFrameStageNotify;
+	extern cDetour<FireEventClientSideThinkFn>* pFireEventClientSideThink;
+	extern cDetour<DrawModelExecuteFn>* pDrawModelExecute;
+	extern cDetour<LockCursorFn>* pLockCursor;
+	extern cDetour<PostDataUpdateFn>* pPostDataUpdate;
+	extern cDetour<EmitSoundFn>* pEmitSound;
+#ifdef ENABLE_INVENTORY
+	extern cDetour<RetrieveMessageFn>* pRetrieveMessage;
+	extern cDetour<SendMessageFn>* pSendMessage;
+#endif
+}
+using namespace HookTables;
 
 class IISetup
 {
@@ -34,9 +70,8 @@ extern CMisc*				GP_Misc;
 extern CLegitAim*			GP_LegitAim;
 extern CRadar*				GP_Radar;
 extern CSkins*				GP_Skins;
-#ifdef YOUGAMEBIZ
-#else
-extern CInventory* GP_Inventory;
+#ifdef ENABLE_INVENTORY
+extern CInventory*          GP_Inventory;
 #endif
 extern CGHelper*			GP_GHelper;
 
@@ -58,8 +93,7 @@ public:
 			GP_LegitAim =	new CLegitAim();
 			GP_Radar =		new CRadar();
 			GP_Skins =		new CSkins();
-#ifdef YOUGAMEBIZ
-#else
+#ifdef ENABLE_INVENTORY
 			GP_Inventory =  new CInventory();
 #endif
 			GP_GHelper =	new CGHelper();
@@ -79,8 +113,7 @@ public:
 			GP_Skins->initialize_kits();
 			GP_Skins->ParseSortedKits();
 			GP_Skins->PrepareSortedSkins();
-#ifdef YOUGAMEBIZ
-#else
+#ifdef ENABLE_INVENTORY
 			GP_Inventory->InitalizeMedals();
 #endif
 #endif
@@ -94,14 +127,29 @@ public:
 			GP_Misc->HitWorker.UnRegListener();
 			GP_Skins->FireEvent.UnRegListener();
 
+			pCreateMove->Remove();
+			pOverrideView->Remove();
+			pGetViewModelFOV->Remove();
+			pDoPostScreenEffects->Remove();
+			pFrameStageNotify->Remove();
+			pFireEventClientSideThink->Remove();
+			pDrawModelExecute->Remove();
+			pLockCursor->Remove();
+			pPostDataUpdate->Remove();
+			pEmitSound->Remove();
+#ifdef ENABLE_INVENTORY
+			pRetrieveMessage->Remove();
+			pSendMessage->Remove();
+#endif
+
 			DELETE_PTR(GP_Render);
 			DELETE_PTR(GP_EntPlayers);
 			DELETE_PTR(GP_Esp);
 			DELETE_PTR(GP_Misc);
 			DELETE_PTR(GP_LegitAim);
 			DELETE_PTR(GP_Radar);
-#ifdef YOUGAMEBIZ
-#else
+			DELETE_PTR(GP_Skins);
+#ifdef ENABLE_INVENTORY
 			DELETE_PTR(GP_Inventory);
 #endif
 			DELETE_PTR(GP_GHelper);

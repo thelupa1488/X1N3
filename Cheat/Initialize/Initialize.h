@@ -38,7 +38,6 @@ public:
 #define FrameStageNotifyIdx 37
 #define DoPostScreenEffectsIdx 44
 #define LockCursorIdx 67
-//#define PlaySoundIdx 82
 
 using namespace HookTables;
 
@@ -53,7 +52,7 @@ public:
 			VMP_ULTRA("InitHooks")
 			auto LInitHooks = [&]() -> void
 			{
-				ADD_LOG("======================Init hooks:\n");
+				ADD_LOG("======================Init hooks/variables:\n");
 				ADD_LOG("2-1-11-0\n");
 				auto& pContext = cContext::GetInstance();
 				ADD_LOG("2-1-11-1\n");
@@ -65,6 +64,7 @@ public:
 				PVOID* ModelRenderTable = *reinterpret_cast<PVOID**>(I::ModelRender());
 				PVOID* SteamTable = *reinterpret_cast<PVOID**>(I::SteamGameCoordinator());
 
+				CGlobal::OrigRightHand = I::GetConVar()->FindVar(XorStr("cl_righthand"))->GetFloat();
 				CGlobal::OrigViewModelX = I::GetConVar()->FindVar(XorStr("viewmodel_offset_x"))->GetFloat();
 				CGlobal::OrigViewModelY = I::GetConVar()->FindVar(XorStr("viewmodel_offset_y"))->GetFloat();
 				CGlobal::OrigViewModelZ = I::GetConVar()->FindVar(XorStr("viewmodel_offset_z"))->GetFloat();
@@ -83,12 +83,6 @@ public:
 				ADD_LOG("2-1-11-4\n");
 				if (SurfaceTable)
 				{
-					//pContext.ApplyDetour<PlaySoundFn>(static_cast<PlaySoundFn>(SurfaceTable[decod(PlaySoundIdx)]),
-					//	reinterpret_cast<PlaySoundFn>
-					//	(hkPlaySound),
-					//	&pPlaySound);
-					//ADD_LOG("Hook: Sound\n");
-
 					pContext.ApplyDetour<LockCursorFn>(static_cast<LockCursorFn>(SurfaceTable[LockCursorIdx]),
 						reinterpret_cast<LockCursorFn>
 						(hkLockCursor),
@@ -145,8 +139,7 @@ public:
 						&pDrawModelExecute);
 					ADD_LOG("Hook: DME\n");
 				}
-#ifdef YOUGAMEBIZ
-#else
+#ifdef ENABLE_INVENTORY
 				if (SteamTable)
 				{
 					pContext.ApplyDetour<RetrieveMessageFn>(static_cast<RetrieveMessageFn>(SteamTable[RetrieveMessageIdx]),

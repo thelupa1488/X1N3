@@ -258,23 +258,23 @@ LRESULT WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		is_down = false;
 	}
 
-	if (!CGlobal::IsGuiVisble && !is_clicked && check_closed)
+	if (!CGlobal::IsGuiVisible && !is_clicked && check_closed)
 	{
 		check_closed = false;
 	}
 
 	if (is_clicked)
 	{
-		CGlobal::IsGuiVisble = !CGlobal::IsGuiVisble;
+		CGlobal::IsGuiVisible = !CGlobal::IsGuiVisible;
 	
-		ADD_LOG("Menu: Open: %i\n", CGlobal::IsGuiVisble);
+		ADD_LOG("Menu Open: %i\n", CGlobal::IsGuiVisble);
 
 		if (!check_closed)
 			check_closed = true;
 	}
 
-	if ((CGlobal::IsGuiVisble) && X1Gui().WndProcHandler(hWnd, msg, wParam, lParam))
-		return (CGlobal::IsGuiVisble) ? true : FastCall::G().t_CallWindowProcA(WndProc_o, hWnd, msg, wParam, lParam);
+	if ((CGlobal::IsGuiVisible) && X1Gui().WndProcHandler(hWnd, msg, wParam, lParam))
+		return (CGlobal::IsGuiVisible) ? true : FastCall::G().t_CallWindowProcA(WndProc_o, hWnd, msg, wParam, lParam);
 
 	return FastCall::G().t_CallWindowProcA(WndProc_o, hWnd, msg, wParam, lParam);
 }

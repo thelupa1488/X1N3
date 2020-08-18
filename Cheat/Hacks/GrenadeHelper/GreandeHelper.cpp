@@ -211,7 +211,7 @@ void CGHelper::Draw()
 			if (!cur_map->helpers[i].enable)
 				continue;
 
-			bool selected = CGlobal::IsGuiVisble && SelectedGHInf && SelectedGHInf == &cur_map->helpers[i];
+			bool selected = CGlobal::IsGuiVisible && SelectedGHInf && SelectedGHInf == &cur_map->helpers[i];
 
 
 			if (EnableFor1Grenade && !selected)

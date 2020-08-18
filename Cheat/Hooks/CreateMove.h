@@ -26,9 +26,9 @@ bool __stdcall hkCreateMove(float flInputSampleTime, CUserCmd* pCmd)
 
 		bool bSendPacket = true;
 
-		if (CGlobal::IsGuiVisble)
+		if (CGlobal::IsGuiVisible)
 			pCmd->buttons &= ~IN_ATTACK;
-		else if (GP_Skins && !CGlobal::IsGuiVisble)
+		else if (GP_Skins && !CGlobal::IsGuiVisible)
 			GP_Skins->SelectedWeapon = CGlobal::GetWeaponId();
 
 		if (GP_LegitAim)

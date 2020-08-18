@@ -1,7 +1,7 @@
 #include "Engine.h"
 #include "../Hacks/Setup.h"
 
-bool CGlobal::IsGuiVisble = false;
+bool CGlobal::IsGuiVisible = false;
 bool CGlobal::IsGameReady = false;
 int CGlobal::iScreenWidth;
 int CGlobal::iScreenHeight;
@@ -16,6 +16,7 @@ vector<string> CGlobal::ConfigList;
 CBaseEntity* CGlobal::LocalPlayer;
 CUserCmd* CGlobal::UserCmd;
 
+int CGlobal::OrigRightHand;
 int CGlobal::OrigViewModelX;
 int CGlobal::OrigViewModelY;
 int CGlobal::OrigViewModelZ;

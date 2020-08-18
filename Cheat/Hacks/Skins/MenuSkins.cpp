@@ -197,7 +197,7 @@ void CSkins::Menu()
 
 			ItemSettings* WItem = &WeaponNames[SelectedWeapon];
 
-			WeaponPreview = WItem->CdnName;
+			//WeaponPreview = WItem->CdnName;
 
 			X1Gui().BeginGroup();
 			{
@@ -212,7 +212,7 @@ void CSkins::Menu()
 				{
 					SkinsList(skin_kits, WItem->Skin.paint_kit_menu, Vec2(KITS_LIST_X, KITS_LIST_Y), XorStr("##AllSkins"), FindSkin);
 					WItem->Skin.paint_kit_id = skin_kits[WItem->Skin.paint_kit_menu].id;
-					SkinPreview = skin_kits[WItem->Skin.paint_kit_menu].cdn_name;
+					//SkinPreview = skin_kits[WItem->Skin.paint_kit_menu].cdn_name;
 				}
 				else if (WItem->Skin.skins_mode == 1)
 				{
@@ -222,7 +222,7 @@ void CSkins::Menu()
 						if (WItem->Skin.paint_kit_menu < (int)SortedWeapons[SelectedWeapon].kits.size())
 						{
 							WItem->Skin.paint_kit_id = SortedWeapons[SelectedWeapon].kits[WItem->Skin.paint_kit_menu].kit;
-							SkinPreview = SortedWeapons[SelectedWeapon].kits[WItem->Skin.paint_kit_menu].cdn_name;
+							//SkinPreview = SortedWeapons[SelectedWeapon].kits[WItem->Skin.paint_kit_menu].cdn_name;
 						}
 					}
 					else
@@ -352,7 +352,7 @@ void CSkins::Menu()
 			X1Gui().SameLine();
 			ItemSettings* WItem = &KnifeNames[SelectedKnifeModelCT];
 
-			WeaponPreview = WItem->CdnName;
+			//WeaponPreview = WItem->CdnName;
 
 			X1Gui().BeginGroup();
 			{
@@ -367,7 +367,7 @@ void CSkins::Menu()
 				{
 					SkinsList(skin_kits, WItem->Skin.paint_kit_menu, Vec2(KITS_LIST_X, KITS_LIST_Y), XorStr("##AllKnifSkins"), FindSkin);
 					WItem->Skin.paint_kit_id = skin_kits[WItem->Skin.paint_kit_menu].id;
-					SkinPreview = skin_kits[WItem->Skin.paint_kit_menu].cdn_name;
+					//SkinPreview = skin_kits[WItem->Skin.paint_kit_menu].cdn_name;
 				}
 				else if (WItem->Skin.skins_mode == 1)
 				{
@@ -377,7 +377,7 @@ void CSkins::Menu()
 						if (WItem->Skin.paint_kit_menu < (int)SortedKnives[SelectedKnifeModelCT].kits.size())
 						{
 							WItem->Skin.paint_kit_id = SortedKnives[SelectedKnifeModelCT].kits[WItem->Skin.paint_kit_menu].kit;
-							SkinPreview = SortedKnives[SelectedKnifeModelCT].kits[WItem->Skin.paint_kit_menu].cdn_name;
+							//SkinPreview = SortedKnives[SelectedKnifeModelCT].kits[WItem->Skin.paint_kit_menu].cdn_name;
 						}
 					}
 					else
@@ -393,8 +393,8 @@ void CSkins::Menu()
 
 			SkinParams(WItem->Skin);
 
-			WeaponPreview = KnifeNames[SelectedKnifeModelCT].CdnName;
-			SkinPreview = skin_kits[KnifeNames[SelectedKnifeModelCT].Skin.paint_kit_menu].cdn_name;
+			//WeaponPreview = KnifeNames[SelectedKnifeModelCT].CdnName;
+			//SkinPreview = skin_kits[KnifeNames[SelectedKnifeModelCT].Skin.paint_kit_menu].cdn_name;
 		}
 		else if (KnfTeamSettingsMode == 1)
 		{
@@ -402,7 +402,7 @@ void CSkins::Menu()
 			X1Gui().SameLine();
 			ItemSettings* WItem = &KnifeNamesTT[SelectedKnifeModelTT];
 
-			WeaponPreview = WItem->CdnName;
+			//WeaponPreview = WItem->CdnName;
 
 			X1Gui().BeginGroup();
 			{
@@ -417,7 +417,7 @@ void CSkins::Menu()
 				{
 					SkinsList(skin_kits, WItem->Skin.paint_kit_menu, Vec2(KITS_LIST_X, KITS_LIST_Y), XorStr("##AllKnifSkins"), FindSkin);
 					WItem->Skin.paint_kit_id = skin_kits[WItem->Skin.paint_kit_menu].id;
-					SkinPreview = skin_kits[WItem->Skin.paint_kit_menu].cdn_name;
+					//SkinPreview = skin_kits[WItem->Skin.paint_kit_menu].cdn_name;
 				}
 				else if (WItem->Skin.skins_mode == 1)
 				{
@@ -427,7 +427,7 @@ void CSkins::Menu()
 						if (WItem->Skin.paint_kit_menu < (int)SortedKnives[SelectedKnifeModelTT].kits.size())
 						{
 							WItem->Skin.paint_kit_id = SortedKnives[SelectedKnifeModelTT].kits[WItem->Skin.paint_kit_menu].kit;
-							SkinPreview = SortedKnives[SelectedKnifeModelTT].kits[WItem->Skin.paint_kit_menu].cdn_name;
+							//SkinPreview = SortedKnives[SelectedKnifeModelTT].kits[WItem->Skin.paint_kit_menu].cdn_name;
 						}
 					}
 					else
@@ -443,8 +443,8 @@ void CSkins::Menu()
 
 			SkinParams(WItem->Skin);
 
-			WeaponPreview = KnifeNamesTT[SelectedKnifeModelTT].CdnName;
-			SkinPreview = skin_kits[KnifeNamesTT[SelectedKnifeModelTT].Skin.paint_kit_menu].cdn_name;
+			//WeaponPreview = KnifeNamesTT[SelectedKnifeModelTT].CdnName;
+			//SkinPreview = skin_kits[KnifeNamesTT[SelectedKnifeModelTT].Skin.paint_kit_menu].cdn_name;
 		}
 	}
 	else if (SkinSettingsMode == 2)
@@ -466,10 +466,9 @@ void CSkins::Menu()
 
 		X1Gui().Spacing();
 
-		StickerSettings* GloveParam;
 		if (glvTeamSettingsMode == 0)
 		{
-			X1Gui().ListBoxHeader(XorStr("##Gloves"), Vec2(long_item_w, 500));
+			X1Gui().ListBoxHeader(XorStr("##Gloves"), Vec2(long_item_w, 527));
 			for (int i = 0; i < sizeof(GlovesModels) / sizeof(GlovesModels[0]); i++)
 			{
 				bool selected = i == SelectedGloveCT;
@@ -478,11 +477,11 @@ void CSkins::Menu()
 			}
 			X1Gui().ListBoxFooter();
 
-			if (SelectedGloveCT > 0)
-			{
-				SkinPreview = GlovesSkin_Array[SelectedGloveCT - 1].Url;
-				WeaponPreview = GlovesSkin_Array[SelectedGloveCT - 1].Url;
-			}
+			//if (SelectedGloveCT > 0)
+			//{
+			//	SkinPreview = GlovesSkin_Array[SelectedGloveCT - 1].Url;
+			//	WeaponPreview = GlovesSkin_Array[SelectedGloveCT - 1].Url;
+			//}
 
 			X1Gui().PushItemWidth(400);
 
@@ -495,7 +494,7 @@ void CSkins::Menu()
 		
 		else if (glvTeamSettingsMode == 1)
 		{
-			X1Gui().ListBoxHeader(XorStr("##Gloves"), Vec2(long_item_w, 500));
+			X1Gui().ListBoxHeader(XorStr("##Gloves"), Vec2(long_item_w, 527));
 			for (int i = 0; i < sizeof(GlovesModels) / sizeof(GlovesModels[0]); i++)
 			{
 				bool selected = i == SelectedGloveTT;
@@ -504,11 +503,11 @@ void CSkins::Menu()
 			}
 			X1Gui().ListBoxFooter();
 
-			if (SelectedGloveTT > 0)
-			{
-				SkinPreview = GlovesSkin_Array[SelectedGloveTT - 1].Url;
-				WeaponPreview = GlovesSkin_Array[SelectedGloveTT - 1].Url;
-			}
+			//if (SelectedGloveTT > 0)
+			//{
+			//	SkinPreview = GlovesSkin_Array[SelectedGloveTT - 1].Url;
+			//	WeaponPreview = GlovesSkin_Array[SelectedGloveTT - 1].Url;
+			//}
 
 			X1Gui().PushItemWidth(400);
 

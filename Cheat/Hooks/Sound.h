@@ -15,10 +15,3 @@ void __fastcall hkEmitSound(IEngineSound* thisptr, int edx, IRecipientFilter& fi
 	oEmitSound(thisptr, edx, filter, nEntityIndex, iChannel, szSoundEntry, uSoundEntryHash, szSample, flVolume, flAttenuation, nSeed, iFlags, iPitch, 
 		vecOrigin, vecDirection, pUtlVecOrigins, bUpdatePositions, flSoundTime, nSpeakerEntity, parameters);
 }
-
-void __fastcall hkPlaySound(void* thisptr, int edx, const char* pszSoundName)
-{
-	static auto oPlaySound = HookTables::pPlaySound->GetTrampoline();
-
-	oPlaySound(thisptr, pszSoundName);
-}

@@ -9,8 +9,8 @@ int __fastcall hkDoPostScreenEffects(void* ecx, int edx, int a1)
 
 	return oDoPostScreenEffects(ecx, a1);
 }
-#ifdef YOUGAMEBIZ
-#else
+
+#ifdef ENABLE_INVENTORY
 EGCResults __fastcall hkRetrieveMessage(void* ecx, void* edx, uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize)
 {
 	EGCResults status = HookTables::pRetrieveMessage->GetTrampoline()(ecx, punMsgType, pubDest, cubDest, pcubMsgSize);

@@ -23,7 +23,6 @@ void CEntityPlayers::Update()
 			}
 
 			EntityPlayer[EntIndex].RenderOrigin = pEntity->GetRenderOrigin();
-
 			if (EntityPlayer[EntIndex].RenderOrigin.IsZero())
 			{
 				EntityPlayer[EntIndex].IsUpdated = false;
@@ -38,7 +37,6 @@ void CEntityPlayers::Update()
 			else
 				EntityPlayer[EntIndex].HitBoxes[HITBOX_HEAD] = pEntity->GetHitboxPosition(HITBOX_HEAD);
 
-			EntityPlayer[EntIndex].Origin = pEntity->GetOrigin();
 			EntityPlayer[EntIndex].EyeAngle = pEntity->GetEyeAngles();
 			EntityPlayer[EntIndex].EyePosition = pEntity->GetEyePosition();
 			EntityPlayer[EntIndex].BaseEntity = pEntity;

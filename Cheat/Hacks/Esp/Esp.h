@@ -31,7 +31,6 @@ public:
 		int EntIdx;
 		PLAYER_TEAM Team;
 	};
-
 	vector<SoundInfo> Sounds;
 
 	virtual void Draw(CEntityPlayer* Local);

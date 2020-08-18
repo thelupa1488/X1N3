@@ -201,7 +201,6 @@
       <Filter>Engine\SDK</Filter>
     </ClCompile>
     <ClCompile Include="Engine\SDK\Vector.cpp" />
-    <ClCompile Include="Engine\SDK\CGlobalVarsBase.cpp" />
     <ClCompile Include="Engine\EnginePrediction.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -869,6 +868,7 @@
     <Library Include="VMP\VMProtectSDK32.lib">
       <Filter>VMP</Filter>
     </Library>
+    <Library Include="protobuf\libprotoc.lib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="steam_sdk\steam_api.json" />

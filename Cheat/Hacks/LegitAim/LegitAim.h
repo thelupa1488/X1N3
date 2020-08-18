@@ -429,7 +429,6 @@ public:
 		pOldBestTarget = nullptr;
 		pLocalPlayer = nullptr;
 		pLocalWeapon = nullptr;
-		pBacktrackTarget = nullptr;
 
 		RV(WeaponCustomTypes, "WeaponCustomTypes");
 		RV(Enable, "Enable");
@@ -475,7 +474,6 @@ public:
 	CBaseEntity *pOldBestTarget;
 	CBaseEntity *pLocalPlayer;
 	CBaseWeapon *pLocalWeapon;
-	CBaseEntity* pBacktrackTarget;
 
 	bool IgnoreSmokeBacktrack = false;
 	bool ShowBacktrack = false;

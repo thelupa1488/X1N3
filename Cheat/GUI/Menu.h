@@ -84,13 +84,9 @@ public:
 
 	void Changers()
 	{
-#ifdef YOUGAMEBIZ
-#else
+#ifdef ENABLE_INVENTORY
 		vector<string> ItemsCSS = { lolc("Skins"), lolc("Inventory") };
 		VectorEx<const char*> ChaArr = { ItemsCSS[0].c_str(), ItemsCSS[1].c_str() };
-#endif
-#ifdef YOUGAMEBIZ
-#else
 		TabsLabels(ChangerMode, ChaArr, Vec2(328, 20), false);
 		X1Gui().SameLine(331);
 		if (ChangerMode == 0)
@@ -110,8 +106,7 @@ public:
 
 		if (ChangerMode == 0)
 			DCheckBox("Enable Skins", GP_Skins->SkinsEnable);
-#ifdef YOUGAMEBIZ
-#else
+#ifdef ENABLE_INVENTORY
 		if (ChangerMode == 1)
 			DCheckBox("Synchronization Inventory", GP_Inventory->SkinsSyncEnable);
 #endif
@@ -122,8 +117,7 @@ public:
 
 		if (ChangerMode == 0)
 			GP_Skins->Menu();
-#ifdef YOUGAMEBIZ
-#else
+#ifdef ENABLE_INVENTORY
 		if (ChangerMode == 1)
 			GP_Inventory->Menu();
 #endif
@@ -189,7 +183,7 @@ public:
 			X1Gui().SetFont(MenuFont);
 
 			bool AnimEnable = X1Gui().GetStyle().AnimationEnable;
-			bool GuiEnable = CGlobal::IsGuiVisble;
+			bool GuiEnable = CGlobal::IsGuiVisible;
 
 			if (AnimEnable)
 			{
@@ -258,9 +252,8 @@ public:
 
 						bool IsVisualsTab = SelectedTab == 1 && GP_Esp->ShowPreview;
 						bool IsLegitAimTab = SelectedTab == 0 && GP_LegitAim->ShowWeaponList;
-#ifdef YOUGAMEBIZ
-#else
-						bool IsSkinsTab = SelectedTab == 3 && ChangerMode == 0 && GP_Skins->ShowSkinPreview;
+						//bool IsSkinsTab = SelectedTab == 3 && ChangerMode == 0 && GP_Skins->ShowSkinPreview;
+#ifdef ENABLE_INVENTORY
 						bool IsInventTab = SelectedTab == 3 && ChangerMode == 1 && GP_Inventory->ShowInventoryList;
 #endif
 
@@ -269,11 +262,10 @@ public:
 
 						if (IsVisualsTab)
 							TargetSize = Vec2(350 + (X1Gui().GetStyle().wndPadding.x * 2) + 1, WINDOW2_SIZE_Y);
-#ifdef YOUGAMEBIZ
-#else
-						else if (IsSkinsTab)
-							TargetSize = Vec2(320, 248);
 
+						//else if (IsSkinsTab)
+						//	TargetSize = Vec2(320, 248);
+#ifdef ENABLE_INVENTORY
 						else if (IsInventTab)
 							TargetSize = Vec2(365, WINDOW2_SIZE_Y);
 #endif
@@ -288,10 +280,10 @@ public:
 						}
 
 						static bool ShowPrewWin = false;
-#ifdef YOUGAMEBIZ
-						bool EnablePrewWin = IsVisualsTab || IsLegitAimTab;
+#ifdef ENABLE_INVENTORY
+						bool EnablePrewWin = IsVisualsTab || IsLegitAimTab /*|| IsSkinsTab*/ || IsInventTab;
 #else
-						bool EnablePrewWin = IsVisualsTab || IsLegitAimTab || IsSkinsTab || IsInventTab;
+						bool EnablePrewWin = IsVisualsTab || IsLegitAimTab;
 #endif
 
 						if (AnimEnable)
@@ -323,17 +315,16 @@ public:
 								if (SelectedTab == 1)
 									if (GP_Esp)
 										GP_Esp->VisualPreview();
-#ifdef YOUGAMEBIZ
-#else
+
 								if (SelectedTab == 3)	
 								{
-									if (ChangerMode == 0)
-										GP_Skins->Preview();
-
+									//if (ChangerMode == 0)
+									//	GP_Skins->Preview();
+#ifdef ENABLE_INVENTORY
 									if (ChangerMode == 1)
 										GP_Inventory->InvListMenu();
-								}
 #endif
+								}
 							}
 							X1Gui().End();
 						}

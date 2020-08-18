@@ -7,7 +7,7 @@ int SelectedWeapon = 0;
 
 void CLegitAim::SetSelectedWeapon(bool MenuCheck)
 {
-	if (MenuCheck ? !CGlobal::IsGuiVisble : true)
+	if (MenuCheck ? !CGlobal::IsGuiVisible : true)
 	{
 		SelectedWeapon = CGlobal::GetWeaponId();
 
@@ -363,7 +363,7 @@ void CLegitAim::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const Dr
 				case 0:
 					for (auto& data : record)
 					{
-						if (Entity->Origin.DistTo(data.origin) > 1.f)
+						if (Entity->RenderOrigin.DistTo(data.origin) > 1.f)
 						{
 							GP_Esp->OverrideMaterial(false, ShowBacktrackStyle, ShowBacktrackColor);
 							fnDME(thisptr, ctx, state, pInfo, data.matrix);
@@ -372,7 +372,7 @@ void CLegitAim::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const Dr
 					}
 					break;
 				case 1:
-					if (Entity->Origin.DistTo(record.back().origin) > 1.f)
+					if (Entity->RenderOrigin.DistTo(record.back().origin) > 1.f)
 					{
 						GP_Esp->OverrideMaterial(false, ShowBacktrackStyle, ShowBacktrackColor);
 						fnDME(thisptr, ctx, state, pInfo, record.back().matrix);
@@ -841,7 +841,7 @@ void CLegitAim::CreateAssistMove(Vector TargetAng, bool IsSilent)
 			I::Engine()->SetViewAngles(TargetAng);
 		}
 	}
-	else if (FaceItMode && !CGlobal::IsGuiVisble)
+	else if (FaceItMode && !CGlobal::IsGuiVisible)
 	{
 		if (IsSilent)
 			I::Engine()->SetViewAngles(TargetAng);
@@ -1576,17 +1576,12 @@ void CLegitAim::LegitResolver()
 {
 	if (Resolver)
 	{
-		for (int i = 1; i < I::Engine()->GetMaxClients(); i++)
+		for (int EntIndex = 0; EntIndex < I::Engine()->GetMaxClients(); EntIndex++)
 		{
-			CBaseEntity* pEntity = (CBaseEntity*)I::EntityList()->GetClientEntity(i);
+			CEntityPlayer* Entity = &GP_EntPlayers->EntityPlayer[EntIndex];
+			CEntityPlayer* Local = GP_EntPlayers->EntityLocal;
 
-			if (!pEntity)
-				continue;
-
-			if (pEntity->IsDead())
-				continue;
-
-			if (pEntity == pLocalPlayer)
+			if (!Entity || Entity == Local || Entity->IsDormant || Entity->IsDead || Local->Team == Entity->Team)
 				continue;
 
 			if (pLocalPlayer->GetBasePlayerAnimState())
@@ -1908,8 +1903,8 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 
 	if (Weapons[GetWeap(SelectedWeapon)].Backtrack && !FaceIt && Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit)
 	{
-//		EnginePrediction::Run(pCmd);
-//		{
+		EnginePrediction::Run(pCmd);
+		{
 			float bestFov = FLT_MAX;
 			Vector aimPunch = (pLocalPlayer->GetAimPunchAngle() * 2.f);
 			Vector eyePosition = pLocalPlayer->GetEyePosition();
@@ -1942,8 +1937,8 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 			{
 				pCmd->tick_count = iBacktrackTickCount;
 			}
-//		}
-//		EnginePrediction::End();
+		}
+		EnginePrediction::End();
 	}
 }
 
