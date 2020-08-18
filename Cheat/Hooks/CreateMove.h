@@ -31,6 +31,9 @@ bool __stdcall hkCreateMove(float flInputSampleTime, CUserCmd* pCmd)
 		else if (GP_Skins && !CGlobal::IsGuiVisible)
 			GP_Skins->SelectedWeapon = CGlobal::GetWeaponId();
 
+		if (GP_Misc)
+			GP_Misc->CreateMove(bSendPacket, flInputSampleTime, pCmd);
+
 		if (GP_LegitAim)
 		{
 			GP_LegitAim->SetSelectedWeapon();
@@ -43,8 +46,6 @@ bool __stdcall hkCreateMove(float flInputSampleTime, CUserCmd* pCmd)
 			if (GP_LegitAim->TriggerEnable)
 				GP_LegitAim->TriggerCreateMove(pCmd);
 		}
-		if (GP_Misc)
-			GP_Misc->CreateMove(bSendPacket, flInputSampleTime, pCmd);
 
 		CGlobal::ClampAngles(pCmd->viewangles);
 		CGlobal::AngleNormalize(pCmd->viewangles);

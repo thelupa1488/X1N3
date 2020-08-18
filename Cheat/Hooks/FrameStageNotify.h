@@ -13,10 +13,6 @@ void __fastcall hkFrameStageNotify(void* ecx, void* edx, int Stage)
 		if (GP_Esp->SoundEspEnable)
 			GP_Esp->SoundFrameStage();
 
-	if (GP_LegitAim && CGlobal::IsGameReady && (ClientFrameStage_t)Stage == ClientFrameStage_t::FRAME_RENDER_START)
-		if (GP_LegitAim->Enable)
-			GP_LegitAim->BacktrackFrameStageNotify();
-
 	if (GP_Misc && CGlobal::IsGameReady && (ClientFrameStage_t)Stage == ClientFrameStage_t::FRAME_RENDER_START)
 		if (GP_Misc->Enable)
 			GP_Misc->FrameStageNotify();

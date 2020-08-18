@@ -66,36 +66,6 @@ void CLegitAim::SetSelectedWeapon(bool MenuCheck)
 	}
 }
 
-void CLegitAim::InitializeBacktrack()
-{
-	records.clear();
-	vars.updateRate = I::GetConVar()->FindVar("cl_updaterate");
-	vars.minUpdateRate = I::GetConVar()->FindVar("sv_minupdaterate");
-	vars.maxUpdateRate = I::GetConVar()->FindVar("sv_maxupdaterate");
-	vars.interp = I::GetConVar()->FindVar("cl_interp");
-	vars.interpRatio = I::GetConVar()->FindVar("cl_interp_ratio");
-	vars.minInterpRatio = I::GetConVar()->FindVar("sv_client_min_interp_ratio");
-	vars.maxInterpRatio = I::GetConVar()->FindVar("sv_client_max_interp_ratio");
-	vars.maxUnlag = I::GetConVar()->FindVar("sv_maxunlag");
-}
-
-float getLerp()
-{
-	auto ratio = clamp(GP_LegitAim->vars.interpRatio->GetFloat(), GP_LegitAim->vars.minInterpRatio->GetFloat(), GP_LegitAim->vars.maxInterpRatio->GetFloat());
-
-	return max(GP_LegitAim->vars.interp->GetFloat(), (ratio / ((GP_LegitAim->vars.maxUpdateRate) ? GP_LegitAim->vars.maxUpdateRate->GetFloat() : GP_LegitAim->vars.updateRate->GetFloat())));
-}
-
-bool valid(float simtime)
-{
-	auto network = I::Engine()->GetNetChannelInfo();
-	if (!network)
-		return false;
-
-	auto delta = clamp(network->GetLatency(0) + network->GetLatency(1) + getLerp(), 0.f, GP_LegitAim->vars.maxUnlag->GetFloat()) - (I::GlobalVars()->curtime - simtime);
-	return std::fabsf(delta) <= 0.2f;
-}
-
 float TestSF = 10;
 float TestMouse = 0;
 
@@ -356,7 +326,7 @@ void CLegitAim::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const Dr
 		if (!Local->IsDead)
 		{
 			auto& record = records.at(Entity->Idx);
-			if (record.size() > 0 && valid(record.front().simtime))
+			if (record.size() > 0)
 			{
 				switch (ShowBacktrackType)
 				{
@@ -1844,67 +1814,106 @@ float FovToPlayer(QAngle viewAngle, QAngle aimAngle)
 	return sqrtf(powf(delta.x, 2.0f) + powf(delta.y, 2.0f));
 }
 
-void CLegitAim::BacktrackFrameStageNotify()
+void CLegitAim::InitializeBacktrack()
 {
-	if (!pLocalPlayer || pLocalPlayer->IsDead())
-	{ records.clear(); return; }
-
-	if (Weapons[GetWeap(SelectedWeapon)].Backtrack && !FaceIt && Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit)
-	{
-		for (int i = 0; i <= I::Engine()->GetMaxClients(); i++)
-		{
-			CBaseEntity* entity = (CBaseEntity*)I::EntityList()->GetClientEntity(i);
-			if (!entity || entity == pLocalPlayer || entity->IsDormant() || entity->IsDead() || pLocalPlayer->GetTeam() == entity->GetTeam())
-			{ records[i].clear(); continue; }
-
-			if (!records[i].empty() && (records[i].front().simtime == entity->GetSimTime()))
-				continue;
-
-			const model_t* model = entity->GetModel();
-			if (!model)
-				continue;
-
-			studiohdr_t* hdr = I::ModelInfo()->GetStudioModel(model);
-			if (!hdr)
-				continue;
-
-			mstudiohitboxset_t* hitbox_set = hdr->GetHitboxSet(entity->HitboxSet());
-			mstudiobbox_t* hitbox_head = hitbox_set->GetHitbox(HITBOX_HEAD);
-			Vector hitbox_center = (hitbox_head->bbmin + hitbox_head->bbmax) * 0.5f;
-
-			BacktrackData bd;
-			bd.origin = entity->GetAbsOrigin();
-			bd.simtime = entity->GetSimTime();
-
-			entity->InvalidateBoneCache();
-			entity->SetupBones(bd.matrix, 256, 0x7FF00, I::GlobalVars()->curtime);
-
-			VectorTransform(hitbox_center, bd.matrix[hitbox_head->bone], bd.hitboxPos);
-
-			records[i].push_front(bd);
-
-			while (records[i].size() > 3 && records[i].size() > MAXBACKTRACKTICKS(Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit))
-				records[i].pop_back();
-
-			auto invalid = std::find_if(std::cbegin(records[i]), std::cend(records[i]), [](const BacktrackData& rec) { return !valid(rec.simtime); });
-			if (invalid != std::cend(records[i]))
-				records[i].erase(invalid, std::cend(records[i]));
-		}
-	}
+	records.clear();
+	vars.UpdateRate = I::GetConVar()->FindVar("cl_updaterate");
+	vars.minUpdateRate = I::GetConVar()->FindVar("sv_minupdaterate");
+	vars.maxUpdateRate = I::GetConVar()->FindVar("sv_maxupdaterate");
+	vars.interp = I::GetConVar()->FindVar("cl_interp");
+	vars.interpRatio = I::GetConVar()->FindVar("cl_interp_ratio");
+	vars.minInterpRatio = I::GetConVar()->FindVar("sv_client_min_interp_ratio");
+	vars.maxInterpRatio = I::GetConVar()->FindVar("sv_client_max_interp_ratio");
+	vars.maxUnlag = I::GetConVar()->FindVar("sv_maxunlag");
 }
 
+float CorrectTime = 0;
+float Latency = 0;
+float LerpTime = 0;
+
 void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
-{
+{ 
 	if (!CGlobal::IsGameReady || !pLocalPlayer || pLocalPlayer->IsDead())
-		return;
+	{ records.clear(); return; }
+
+	float minInterpRatio = vars.minInterpRatio->GetFloat();
+	float maxInterpRatio = vars.maxInterpRatio->GetFloat();
+
+	float UpdateRate = vars.UpdateRate->GetFloat();
+	float minUpdateRate = vars.minUpdateRate->GetFloat();
+	float maxUpdateRate = vars.maxUpdateRate->GetFloat();
+
+	float interp = vars.interp->GetFloat();
+	float maxUnlag = vars.maxUnlag->GetFloat();
+
+	float flLerpRatio = vars.interpRatio->GetFloat();
+	flLerpRatio = clamp(flLerpRatio, minInterpRatio, maxInterpRatio);
+	if (flLerpRatio == 0.0f)
+		flLerpRatio = 1.0f;
+
+	float updateRate = clamp(UpdateRate, minUpdateRate, maxUpdateRate);
+	LerpTime = std::fmaxf(interp, flLerpRatio / updateRate);
+	Latency = I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING) + I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_INCOMING);
+	CorrectTime = clamp(Latency + LerpTime, 0.f, maxUnlag);
 
 	if (SelectedWeapon < 0)
-		return;
+	{ records.clear(); return; }
 
 	if (Weapons[GetWeap(SelectedWeapon)].Backtrack && !FaceIt && Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit)
 	{
 		EnginePrediction::Run(pCmd);
 		{
+			for (int i = 0; i <= I::Engine()->GetMaxClients(); i++)
+			{
+				CBaseEntity* entity = (CBaseEntity*)I::EntityList()->GetClientEntity(i);
+				if (!entity || entity == pLocalPlayer || entity->IsDormant() || entity->IsDead() || pLocalPlayer->GetTeam() == entity->GetTeam())
+				{ records[i].clear(); continue; }
+
+				auto& cur_data = records[i];
+				if (!cur_data.empty()) 
+				{
+					auto& front = cur_data.front();
+					if (front.simtime == entity->GetSimTime())
+						continue;
+
+					while (!cur_data.empty()) 
+					{
+						auto& back = cur_data.back();
+						float deltaTime = CorrectTime - (I::GlobalVars()->curtime - back.simtime);
+						if (std::fabsf(deltaTime) <= 0.2f)
+							break;
+
+						cur_data.pop_back();
+					}
+				}
+
+				const model_t* model = entity->GetModel();
+				if (!model)
+					continue;
+
+				studiohdr_t* hdr = I::ModelInfo()->GetStudioModel(model);
+				if (!hdr)
+					continue;
+
+				mstudiohitboxset_t* hitbox_set = hdr->GetHitboxSet(entity->HitboxSet());
+				mstudiobbox_t* hitbox_head = hitbox_set->GetHitbox(HITBOX_HEAD);
+				Vector hitbox_center = (hitbox_head->bbmin + hitbox_head->bbmax) * 0.5f;
+
+				BacktrackData bd;
+				bd.origin = entity->GetAbsOrigin();
+				bd.simtime = entity->GetSimTime();
+
+				entity->InvalidateBoneCache();
+				entity->SetupBones(bd.matrix, 256, 0x7FF00, I::GlobalVars()->curtime);
+
+				VectorTransform(hitbox_center, bd.matrix[hitbox_head->bone], bd.hitboxPos);
+
+				records[i].push_front(bd);
+
+				while (records[i].size() > 3 && records[i].size() > MAXBACKTRACKTICKS(Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit))
+					records[i].pop_back();
+			}
+
 			float bestFov = FLT_MAX;
 			Vector aimPunch = (pLocalPlayer->GetAimPunchAngle() * 2.f);
 			Vector eyePosition = pLocalPlayer->GetEyePosition();
@@ -1919,7 +1928,8 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 					if (cur_data.size() <= 3 || (!IgnoreSmokeBacktrack && CGlobal::LineGoesThroughSmoke(eyePosition, bd.origin)))
 						return;
 
-					if (!valid(bd.simtime))
+					float deltaTime = CorrectTime - (I::GlobalVars()->curtime - bd.simtime);
+					if (std::fabsf(deltaTime) > TICKS_TO_TIME(MAXBACKTRACKTICKS(Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit)))
 						continue;
 
 					VectorAngles(bd.hitboxPos - eyePosition, aimPunch);
@@ -1928,7 +1938,7 @@ void CLegitAim::BacktrackCreateMove(CUserCmd* pCmd)
 					if (bestFov > FOVDistance) 
 					{
 						bestFov = FOVDistance;
-						iBacktrackTickCount = TIME_TO_TICKS(bd.simtime + getLerp());
+						iBacktrackTickCount = TIME_TO_TICKS(bd.simtime + LerpTime);
 					}
 				}
 			}

@@ -108,7 +108,6 @@ protected:
 	virtual void SaveWeapons(nlohmann::json &j) = 0;
 	virtual void LoadWeapons(nlohmann::json &j) = 0;
 	virtual void InitializeBacktrack() = 0;
-	virtual void BacktrackFrameStageNotify() = 0;
 	virtual void BacktrackCreateMove(CUserCmd* pCmd) = 0;
 	virtual void TriggerCreateMove(CUserCmd* pCmd) = 0;
 	virtual void TriggerGetBestTarget(Vector mAngle) = 0;
@@ -161,7 +160,6 @@ public:
 	virtual void LoadWeapons(nlohmann::json &j);
 
 	virtual void InitializeBacktrack();
-	virtual void BacktrackFrameStageNotify();
 	virtual void BacktrackCreateMove(CUserCmd* pCmd);
 
 	virtual void TriggerCreateMove(CUserCmd* pCmd);
@@ -225,7 +223,7 @@ public:
 
 	struct BacktrackVars
 	{
-		ConVar* updateRate;
+		ConVar* UpdateRate;
 		ConVar* minUpdateRate;
 		ConVar* maxUpdateRate;
 		ConVar* interp;

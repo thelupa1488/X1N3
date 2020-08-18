@@ -563,7 +563,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				cl_righthand->SetValue(CGlobal::OrigRightHand);
 				SwapHandReset = false;
 			}
-
 			if (InfiniteCrouch)
 			{
 				if (!CGlobal::LocalPlayer->IsDead())
