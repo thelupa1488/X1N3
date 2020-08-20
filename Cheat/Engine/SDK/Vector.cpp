@@ -63,7 +63,8 @@ namespace SDK
 		x = ix; y = iy; z = iz;
 	}
 
-	Vector Vector::Normalized() const {
+	Vector Vector::Normalized() const 
+	{
 		Vector res = *this;
 		vec_t l = res.Length();
 		if( l != 0.0f ) {

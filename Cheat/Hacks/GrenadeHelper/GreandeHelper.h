@@ -39,10 +39,6 @@ protected:
 	virtual Map* GetMapByGName(string _game_name) = 0;
 
 	virtual Vector CalcHelpPos(Vector target) = 0;
-//	virtual Map* GetMapByHelp(GHInfo* help) = 0;
-
-	//virtual void DeleteMap(string _game_name) = 0;
-	//virtual void DeleteHelp(GHInfo* help) = 0;
 };
 
 class CGHelper : public IGHelper
@@ -98,10 +94,10 @@ public:
 	virtual void Menu();
 
 	virtual Map* GetMapByGName(string _game_name);
-	/*virtual*/ Map* GetMapByHelp(GHInfo* help);
+	virtual Map* GetMapByHelp(GHInfo* help);
 
-	/*virtual*/ void DeleteMap(string _game_name);
-	/*virtual*/ void DeleteHelp(GHInfo* help);
+	virtual void DeleteMap(string _game_name);
+	virtual void DeleteHelp(GHInfo* help);
 
 	virtual Vector CalcHelpPos(Vector target);
 

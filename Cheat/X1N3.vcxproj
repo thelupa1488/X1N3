@@ -57,6 +57,8 @@
     <ClCompile Include="Render\DXRender.cpp" />
     <ClCompile Include="Render\DXRenderDraw.cpp" />
     <ClCompile Include="Render\DXRenderInit.cpp" />
+    <ClCompile Include="X1API\Cryptor\base64.cpp" />
+    <ClCompile Include="X1API\Cryptor\Cryptor.cpp" />
     <ClCompile Include="X1API\Hide\cHide.cpp" />
     <ClCompile Include="X1API\MinHook\src\buffer.c" />
     <ClCompile Include="X1API\MinHook\src\HDE\hde32.c" />
@@ -208,6 +210,8 @@
     <ClInclude Include="steam_sdk\steam_api_internal.h" />
     <ClInclude Include="steam_sdk\steam_gameserver.h" />
     <ClInclude Include="VMP\VMProtectSDK.h" />
+    <ClInclude Include="X1API\Cryptor\base64.h" />
+    <ClInclude Include="X1API\Cryptor\Cryptor.h" />
     <ClInclude Include="X1API\detours.h" />
     <ClInclude Include="X1API\Hide\cHide.h" />
     <ClInclude Include="X1API\MinHook\hook.h" />

@@ -1837,14 +1837,13 @@ void CLegitAim::InitializeBacktrack()
 
 void CLegitAim::BacktrackCreateMoveEP(CUserCmd* pCmd)
 {
-	if (!CGlobal::IsGameReady)
-		return;
+	pLocalPlayer = CGlobal::LocalPlayer;
 
 	if (!pLocalPlayer || pLocalPlayer->IsDead())
-		return;
+	{ records.clear(); return; }
 
 	if (SelectedWeapon < 0)
-		return;
+	{ records.clear(); return; }
 
 	if (Weapons[GetWeap(SelectedWeapon)].Backtrack && !FaceIt && Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit)
 	{
@@ -1893,23 +1892,23 @@ void CLegitAim::BacktrackCreateMoveEP(CUserCmd* pCmd)
 			mstudiobbox_t* hitbox_head = hitbox_set->GetHitbox(HITBOX_HEAD);
 			Vector hitbox_center = (hitbox_head->bbmin + hitbox_head->bbmax) * 0.5f;
 
-			BacktrackData bd;
-			bd.origin = entity->GetAbsOrigin();
-			bd.simtime = entity->GetSimTime();
+			BacktrackData record;
+			record.origin = entity->GetAbsOrigin();
+			record.simtime = entity->GetSimTime();
 
 			entity->InvalidateBoneCache();
-			entity->SetupBones(bd.matrix, 256, 0x7FF00, I::GlobalVars()->curtime);
+			entity->SetupBones(record.matrix, 256, 0x7FF00, I::GlobalVars()->curtime);
 
-			VectorTransform(hitbox_center, bd.matrix[hitbox_head->bone], bd.hitboxPos);
+			VectorTransform(hitbox_center, record.matrix[hitbox_head->bone], record.hitboxPos);
 
-			records[i].push_front(bd);
+			records[i].push_front(record);
 
 			while (records[i].size() > 3 && records[i].size() > MAXBACKTRACKTICKS(Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit))
 				records[i].pop_back();
 		}
 
 		float bestFov = FLT_MAX;
-		Vector aimPunch = (pLocalPlayer->GetAimPunchAngle() * 2.f);
+		Vector aimPunch = pLocalPlayer->GetAimPunchAngle();
 		Vector eyePosition = pLocalPlayer->GetEyePosition();
 		for (auto& node : records)
 		{

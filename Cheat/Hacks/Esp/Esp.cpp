@@ -258,7 +258,6 @@ void CEsp::OverrideMaterial(bool IgnoreZ, int Type, Color RGBA, bool Glow, const
 			if (bFoundPulse)
 				pMatPulse->SetVecComponentValue(0.5f * (1.2f - Pulse), 2);
 		}
-
 		GlowMaterial->AlphaModulate(RGBA.G1A());
 
 		GlowMaterial->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, IgnoreZ);

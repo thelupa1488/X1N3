@@ -152,7 +152,6 @@ public:
 		FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources"), NULL);
 		FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Images"), NULL);
 		FastCall::G().t_CreateDirectoryA(XorStr("C:\\X1N3\\Resources\\Sounds"), NULL);
-		std::ofstream(XorStr("C:\\X1N3\\GrenadeHelper"));
 	}
 
 	static BOOL SearchFiles(LPCTSTR lpszFileName, LPSEARCHFUNC lpSearchFunc, BOOL bInnerFolders)
