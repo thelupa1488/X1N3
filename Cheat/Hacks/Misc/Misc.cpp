@@ -1362,6 +1362,18 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 				fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 			}
 		}
+
+		if (HandGlow)
+		{
+			if (strstr(ModelName, XorStr("arms")))
+			{
+				HandGlowColor[4];
+				const float Pulse = HandGlowColor[3] * (std::sin(I::GlobalVars()->curtime * HandGlowPulseSpeed) * HandGlowPulseRange + 0.5f + 0.5f);
+				GP_Esp->OverrideMaterial(false, HandGlowStyle, HandGlowColor, true, Pulse);
+				fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
+			}
+		}
+
 		if (WeaponChams)
 		{
 			if (strstr(ModelName, XorStr("models/weapons/v_")) && !strstr(ModelName, XorStr("arms")))
@@ -1373,6 +1385,17 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 					Material->SetMaterialVarFlag(MATERIAL_VAR_NO_DRAW, true);
 					I::ModelRender()->ForcedMaterialOverride(Material);
 				}
+				fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
+			}
+		}
+
+		if (WeaponGlow)
+		{
+			if (strstr(ModelName, XorStr("models/weapons/v_")) && !strstr(ModelName, XorStr("arms")))
+			{
+				WeaponGlowColor[4];
+				const float Pulse = WeaponGlowColor[3] * (std::sin(I::GlobalVars()->curtime * WeaponGlowPulseSpeed) * WeaponGlowPulseRange + 0.5f + 0.5f);
+				GP_Esp->OverrideMaterial(false, WeaponGlowStyle, WeaponGlowColor, true, Pulse);
 				fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 			}
 		}

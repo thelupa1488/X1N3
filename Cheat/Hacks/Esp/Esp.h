@@ -60,6 +60,9 @@ private:
 	IMaterial* Metallic = nullptr;
 	IMaterial* Pearlescent = nullptr;
 	IMaterial* Animated = nullptr;
+	IMaterial* GlowDef = nullptr;
+	IMaterial* GlowSPulse = nullptr;
+	IMaterial* GlowDPulse = nullptr;
 public:
 	enum Sides
 	{
@@ -160,9 +163,8 @@ public:
 	virtual void DrawSkeletonLine(int point1, int point2, CEntityPlayer* Entity);
 	virtual void Draw3DBox(CEntityPlayer* Entity, Color color);
 	virtual void InitializeMaterials();
-	virtual void OverrideMaterial(bool ignoreZ, int type, Color rgba);
+	virtual void OverrideMaterial(bool IgnoreZ, int Type, Color RGBA, bool Glow = false, const float Pulse = 0);
 	virtual void DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld);
-	virtual void DrawGlow();
 
 	void PlaySounds(Vector _Pos, int EntityIdx);
 	void Reset();
@@ -196,10 +198,11 @@ public:
 	bool Glow = false;
     bool GlowVisibleOnly = false;
 	int GlowStyle = 0;
+	int GlowPulseSpeed = 0;
+	float GlowPulseRange = 0;
 	bool Chams = false;
 	bool ChamsVisibleOnly = false;
 	int  ChamsStyle = 0;
-	//float MaterialFixColorChams = 10.0f;
 	bool FillBox = false;
 	bool HeadEsp = false;
 	bool Line = false;
@@ -353,10 +356,11 @@ public:
 		RV(Glow, "Glow");
 		RV(GlowVisibleOnly, "GlowVisibleOnly");
 		RV(GlowStyle, "GlowStyle");
+		RV(GlowPulseSpeed, "GlowPulseSpeed");
+		RV(GlowPulseRange, "GlowPulseRange");
 		RV(Chams, "Chams");
 		RV(ChamsVisibleOnly, "ChamsVisbleOnly");
 		RV(ChamsStyle, "ChamsStyle");
-		//RV(MaterialFixColorChams, "MaterialFixColorChams");
 		RV(FillBox, "FillBox");
 		RV(HeadEsp, "HeadEsp");
 		RV(Line, "Line");

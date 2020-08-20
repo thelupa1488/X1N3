@@ -18,7 +18,6 @@ namespace SDK
 	IVModelInfo*	    I::g_pModelInfo = nullptr;
 	IEngineSound*		I::g_pSound = nullptr;
 	IVModelRender*		I::g_pModelRender = nullptr;
-	CGlowObjectManager* I::g_pGlowObjManager = nullptr;
 	IViewRender*		I::g_pRenderView = nullptr;
 	IMaterialSystem*	I::g_pMaterialSystem = nullptr;
 	ISurface*			I::g_pSurface = nullptr;
@@ -320,16 +319,6 @@ namespace SDK
 		}
 
 		return g_pMoveHelper;
-	}
-
-	CGlowObjectManager* I::GlowObjManager()
-	{
-		if (!g_pGlowObjManager)
-		{
-			g_pGlowObjManager = *(CGlowObjectManager**)(offsets["GlowObjManager"]);
-			ADD_LOG("->GlowObjectManager -> %X\n", (DWORD)g_pGlowObjManager);
-		}
-		return g_pGlowObjManager;
 	}
 
 	IMatchFramework* I::MatchFramework()

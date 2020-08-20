@@ -182,8 +182,18 @@ public:
 	bool HandChams = false;
 	int HandChamsStyle = 0;
 
+	bool HandGlow = false;
+	int HandGlowStyle = 0;
+	int HandGlowPulseSpeed = 0;
+	float HandGlowPulseRange = 0;
+
 	bool WeaponChams = false;
 	int WeaponChamsStyle = 0;
+
+	bool WeaponGlow = false;
+	int WeaponGlowStyle = 0;
+	int WeaponGlowPulseSpeed = 0;
+	float WeaponGlowPulseRange = 0;
 
 	bool DamageInfo = false;
 	int DamageInfoPosition = 1;
@@ -227,7 +237,9 @@ public:
 	Color SpreadColor = Color(255, 255, 50, 255);
 	Color HitMarkerColor = Color(255, 0, 0, 255);
 	Color HandChamsColor = Color(255, 198, 0, 255);
+	Color HandGlowColor = Color(255, 198, 0, 255);
 	Color WeaponChamsColor = Color(255, 198, 0, 255);
+	Color WeaponGlowColor = Color(255, 198, 0, 255);
 	Color DamageInfoColor = Color(255, 100, 100, 255);
 	Color ColoredWallsColor = Color(255, 100, 100, 255);
 	Color ArrowsColor = Color(255, 0, 0, 255);
@@ -241,7 +253,9 @@ public:
 		RV(SpreadColor, "SpreadColor");
 		RV(HitMarkerColor, "HitMarkerColor");
 		RV(HandChamsColor, "HandChamsColor");
+		RV(HandGlowColor, "HandGlowColor");
 		RV(WeaponChamsColor, "WeaponChamsColor");
+		RV(WeaponGlowColor, "WeaponGlowColor");
 		RV(DamageInfoColor, "DamageInfoColor");
 		RV(ColoredWallsColor, "ColoredWallsColor");
 		RV(ArrowsColor, "ArrowsColor");
@@ -309,8 +323,16 @@ public:
 		RV(NightMode, "NightMode");
 		RV(HandChams, "HandChams");
 		RV(HandChamsStyle, "HandChamsStyle");
+		RV(HandGlow, "HandGlow");
+		RV(HandGlowStyle, "HandGlowStyle");
+		RV(HandGlowPulseSpeed, "HandGlowPulseSpeed");
+		RV(HandGlowPulseRange, "HandGlowPulseRange");
 		RV(WeaponChams, "WeaponChams");
 		RV(WeaponChamsStyle, "WeaponChamsStyle");
+		RV(WeaponGlow, "WeaponGlow");
+		RV(WeaponGlowStyle, "WeaponGlowStyle");
+		RV(WeaponGlowPulseSpeed, "WeaponGlowPulseSpeed");
+		RV(WeaponGlowPulseSpeed, "WeaponGlowPulseRange");
 		RV(DamageInfo, "DamageInfo");
 		RV(DamageInfoPosition, "DamageInfoPosition");
 		RV(DamageInfoStyle, "DamageInfoStyle");

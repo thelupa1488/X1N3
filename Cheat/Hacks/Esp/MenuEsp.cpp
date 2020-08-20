@@ -170,29 +170,6 @@ void CEsp::Menu()
 			X1Gui().Separator();
 			X1Gui().Spacing();
 
-			DCheckBox("Glow", Glow)
-			if (Glow)
-			{
-				X1Gui().SameLine(SAME_LINE_1);
-				X1Gui().PushItemWidth(PUSH_1);
-				VectorEx<const char*>itemsCS = { lolc("Default"), lolc("Pulsing"), lolc("Outline"), lolc("Outline Pulsing") };
-				DComboBox("Style##Glow", GlowStyle, itemsCS);
-				X1Gui().SameLine(SAME_LINE_1 + PUSH_1 + 40);
-				DCheckBox("Visible only##Glow", GlowVisibleOnly);
-
-				DColorEdit("CT color##Glow", GlowCT);
-				X1Gui().SameLine(100);
-				DColorEdit("T color##Glow", GlowTT);
-				X1Gui().SameLine(200);
-				DColorEdit("Visible CT color##Glow", GlowVisibleCT);
-				X1Gui().SameLine(340);
-				DColorEdit("Visible T color##Glow", GlowVisibleTT);
-			}
-
-			X1Gui().Spacing();
-			X1Gui().Separator();
-			X1Gui().Spacing();
-
 			DCheckBox("Chams", Chams);
 			if (Chams)
 			{
@@ -211,6 +188,35 @@ void CEsp::Menu()
 				X1Gui().SameLine(340);
 				DColorEdit("Visible T color##Chams", ChamsVisibleTT);
 			}
+
+			X1Gui().Spacing();
+			X1Gui().Separator();
+			X1Gui().Spacing();
+
+			DCheckBox("Glow", Glow)
+				if (Glow)
+				{
+					X1Gui().SameLine(SAME_LINE_1);
+					X1Gui().PushItemWidth(PUSH_1);
+					VectorEx<const char*>itemsCS = { lolc("Default"), lolc("Static pulse"), lolc("Dynamic pulse") };
+					DComboBox("Style##Glow", GlowStyle, itemsCS);
+					X1Gui().SameLine(SAME_LINE_1 + PUSH_1 + 40);
+					DCheckBox("Visible only##Glow", GlowVisibleOnly);
+
+					DColorEdit("CT color##Glow", GlowCT);
+					X1Gui().SameLine(100);
+					DColorEdit("T color##Glow", GlowTT);
+					X1Gui().SameLine(200);
+					DColorEdit("Visible CT color##Glow", GlowVisibleCT);
+					X1Gui().SameLine(340);
+					DColorEdit("Visible T color##Glow", GlowVisibleTT);
+					if (GlowStyle == 2)
+					{
+						X1Gui().PushItemWidth(PUSH_2);
+						SliderInts("Speed", GlowPulseSpeed, 1, 15);
+						SliderFloats("Range", GlowPulseRange, 0, 1, "%.2f");
+					}
+				}
 
 			X1Gui().Spacing();
 			X1Gui().Separator();

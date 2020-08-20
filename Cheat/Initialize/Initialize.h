@@ -36,7 +36,6 @@ public:
 #define CreateMoveIdx 24
 #define GetViewModelFOVIdx 35
 #define FrameStageNotifyIdx 37
-#define DoPostScreenEffectsIdx 44
 #define LockCursorIdx 67
 
 using namespace HookTables;
@@ -97,12 +96,6 @@ public:
 						(hkCreateMove),
 						&pCreateMove);
 					ADD_LOG("Hook: CreateMove\n");
-
-					pContext.ApplyDetour<DoPostScreenEffectsFn>(static_cast<DoPostScreenEffectsFn>(ClientModeTable[DoPostScreenEffectsIdx]),
-						reinterpret_cast<DoPostScreenEffectsFn>
-						(hkDoPostScreenEffects),
-						&pDoPostScreenEffects);
-					ADD_LOG("Hook: DoPostScreenEffects\n");
 
 					pContext.ApplyDetour<OverrideViewFn>(static_cast<OverrideViewFn>(ClientModeTable[OverrideViewIdx]),
 						reinterpret_cast<OverrideViewFn>

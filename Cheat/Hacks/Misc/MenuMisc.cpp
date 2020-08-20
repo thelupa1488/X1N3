@@ -73,33 +73,11 @@ void CMisc::Menu()
 		X1Gui().SameLine(SAME_LINE_1);
 		X1Gui().PushItemWidth(PUSH_1);
 		SliderInts("Distance##ThirdPerson", ThirdPersonDistance, 50, 300);
-		//DCheckBox("Angle Lines", AngleLines);
-		//X1Gui().SameLine(SAME_LINE_1);
 		X1Gui().PushItemWidth(PUSH_1);
 		HotsKey("Button##ThirdPerson", ThirdPersonBind.Button);
 		X1Gui().SameLine();
 		DCheckBox("Hold##ThirdPerson", ThirdPersonBind.Hold);
 	}
-	//X1Gui().Spacing();
-	//X1Gui().Separator();
-	//X1Gui().Spacing();
-	//DCheckBox("Desync [Beta]", Desync);
-	//if (Desync)
-	//{
-	//	X1Gui().SameLine(SAME_LINE_1);
-	//	X1Gui().PushItemWidth(PUSH_1);
-	//	VectorEx<const char* >itemsCSS = {lolc("Off"), lolc("Static"), lolc("Balance") };
-	//	DComboBox("Type##Desync", DesyncType, itemsCSS);
-	//	DCheckBox("Auto direction", DesyncAd);
-	//	X1Gui().SameLine();
-	//	HotsKey("Button##Desync", DesyncBind.Button);
-	//	DCheckBox("Desync arrows", DesyncArrows);
-	//	if (DesyncArrows)
-	//	{
-	//		X1Gui().SameLine();
-	//		DColorEdit("Color##Arrows", ArrowsColor);
-	//	}
-	//}
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
@@ -334,8 +312,26 @@ void CMisc::Menu()
 		X1Gui().SameLine();
 		X1Gui().PushItemWidth(PUSH_1);
 		VectorEx<const char* >itemsCS = { lolc("Textured"),lolc("Flat"), lolc("Wireframe"), lolc("Metallic"), lolc("Pearlescent"), lolc("Animated"), lolc("Disable") };
-		DComboBox("Style##Hand", HandChamsStyle, itemsCS);
-		DColorEdit("Color##Hand", HandChamsColor);
+		DComboBox("Style##HandChams", HandChamsStyle, itemsCS);
+		DColorEdit("Color##HandChams", HandChamsColor);
+	}
+	X1Gui().Spacing();
+	X1Gui().Separator();
+	X1Gui().Spacing();
+	DCheckBox("Hand glow", HandGlow);
+	if (HandGlow)
+	{
+		X1Gui().SameLine();
+		X1Gui().PushItemWidth(PUSH_1);
+		VectorEx<const char*>itemsCS = { lolc("Default"), lolc("Static pulse"), lolc("Dynamic pulse") };
+		DComboBox("Style##HandGlow", HandGlowStyle, itemsCS);
+		DColorEdit("Color##HandGlow", HandGlowColor);
+		if (HandGlowStyle == 2)
+		{
+			X1Gui().PushItemWidth(PUSH_2);
+			SliderInts("Speed", HandGlowPulseSpeed, 1, 15);
+			SliderFloats("Range", HandGlowPulseRange, 0, 1, "%.2f")
+		}
 	}
 	X1Gui().Spacing();
 	X1Gui().Separator();
@@ -346,8 +342,26 @@ void CMisc::Menu()
 		X1Gui().SameLine();
 		X1Gui().PushItemWidth(PUSH_1);
 		VectorEx<const char* >itemsCS = { lolc("Textured"),lolc("Flat"), lolc("Wireframe"), lolc("Metallic"), lolc("Pearlescent"), lolc("Animated"), lolc("Disable") };
-		DComboBox("Style##Weapon", WeaponChamsStyle, itemsCS);
-		DColorEdit("Color##Weapon", WeaponChamsColor);
+		DComboBox("Style##WeaponChams", WeaponChamsStyle, itemsCS);
+		DColorEdit("Color##WeaponChams", WeaponChamsColor);
+	}
+	X1Gui().Spacing();
+	X1Gui().Separator();
+	X1Gui().Spacing();
+	DCheckBox("Weapon glow", WeaponGlow);
+	if (WeaponGlow)
+	{
+		X1Gui().SameLine();
+		X1Gui().PushItemWidth(PUSH_1);
+		VectorEx<const char*>itemsCS = { lolc("Default"), lolc("Static pulse"), lolc("Dynamic pulse") };
+		DComboBox("Style##WeaponGlow", WeaponGlowStyle, itemsCS);
+		DColorEdit("Color##WeaponGlow", WeaponGlowColor);
+		if (WeaponGlowStyle == 2)
+		{
+			X1Gui().PushItemWidth(PUSH_2);
+			SliderInts("Speed", WeaponGlowPulseSpeed, 1, 15);
+			SliderFloats("Range", WeaponGlowPulseRange, 0, 1, "%.2f")
+		}
 	}
 	X1Gui().Spacing();
 	X1Gui().Separator();

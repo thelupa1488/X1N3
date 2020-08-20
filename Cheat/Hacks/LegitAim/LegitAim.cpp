@@ -1816,52 +1816,46 @@ float FovToPlayer(QAngle viewAngle, QAngle aimAngle)
 void CLegitAim::InitializeBacktrack()
 {
 	records.clear();
-	vars.UpdateRate = I::GetConVar()->FindVar("cl_updaterate");
-	vars.minUpdateRate = I::GetConVar()->FindVar("sv_minupdaterate");
-	vars.maxUpdateRate = I::GetConVar()->FindVar("sv_maxupdaterate");
-	vars.interp = I::GetConVar()->FindVar("cl_interp");
-	vars.interpRatio = I::GetConVar()->FindVar("cl_interp_ratio");
-	vars.minInterpRatio = I::GetConVar()->FindVar("sv_client_min_interp_ratio");
-	vars.maxInterpRatio = I::GetConVar()->FindVar("sv_client_max_interp_ratio");
-	vars.maxUnlag = I::GetConVar()->FindVar("sv_maxunlag");
-}
+	vars.cl_UpdateRate = I::GetConVar()->FindVar("cl_updaterate");
+	vars.cl_minUpdateRate = I::GetConVar()->FindVar("sv_minupdaterate");
+	vars.cl_maxUpdateRate = I::GetConVar()->FindVar("sv_maxupdaterate");
+	vars.cl_interp = I::GetConVar()->FindVar("cl_interp");
+	vars.cl_interpRatio = I::GetConVar()->FindVar("cl_interp_ratio");
+	vars.cl_minInterpRatio = I::GetConVar()->FindVar("sv_client_min_interp_ratio");
+	vars.cl_maxInterpRatio = I::GetConVar()->FindVar("sv_client_max_interp_ratio");
+	vars.cl_maxUnlag = I::GetConVar()->FindVar("sv_maxunlag");
 
-float CorrectTime = 0;
-float Latency = 0;
-float LerpTime = 0;
+	vars.UpdateRate = vars.cl_UpdateRate->GetFloat();
+	vars.minUpdateRate = vars.cl_minUpdateRate->GetFloat();
+	vars.maxUpdateRate = vars.cl_maxUpdateRate->GetFloat();
+	vars.interp = vars.cl_interp->GetFloat();
+	vars.interpRatio = vars.cl_interpRatio->GetFloat();
+	vars.minInterpRatio = vars.cl_minInterpRatio->GetFloat();
+	vars.maxInterpRatio = vars.cl_maxInterpRatio->GetFloat();
+	vars.maxUnlag = vars.cl_maxUnlag->GetFloat();
+}
 
 void CLegitAim::BacktrackCreateMoveEP(CUserCmd* pCmd)
 {
 	if (!CGlobal::IsGameReady)
-	{ records.clear(); return; }
+		return;
 
 	if (!pLocalPlayer || pLocalPlayer->IsDead())
-	{ records.clear(); return; }
-
-	float minInterpRatio = vars.minInterpRatio->GetFloat();
-	float maxInterpRatio = vars.maxInterpRatio->GetFloat();
-
-	float UpdateRate = vars.UpdateRate->GetFloat();
-	float minUpdateRate = vars.minUpdateRate->GetFloat();
-	float maxUpdateRate = vars.maxUpdateRate->GetFloat();
-
-	float interp = vars.interp->GetFloat();
-	float maxUnlag = vars.maxUnlag->GetFloat();
+		return;
 
 	if (SelectedWeapon < 0)
-	{ records.clear(); return; }
+		return;
 
 	if (Weapons[GetWeap(SelectedWeapon)].Backtrack && !FaceIt && Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit)
 	{
-		float flLerpRatio = vars.interpRatio->GetFloat();
-		flLerpRatio = clamp(flLerpRatio, minInterpRatio, maxInterpRatio);
-		if (flLerpRatio == 0.0f)
-			flLerpRatio = 1.0f;
+		vars.flLerpRatio = clamp(vars.interpRatio, vars.minInterpRatio, vars.maxInterpRatio);
+		if (vars.flLerpRatio == 0.0f)
+			vars.flLerpRatio = 1.0f;
 
-		float updateRate = clamp(UpdateRate, minUpdateRate, maxUpdateRate);
-		LerpTime = std::fmaxf(interp, flLerpRatio / updateRate);
-		Latency = I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING) + I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_INCOMING);
-		CorrectTime = clamp(Latency + LerpTime, 0.f, maxUnlag);
+		float updateRate = clamp(vars.UpdateRate, vars.minUpdateRate, vars.maxUpdateRate);
+		vars.LerpTime = std::fmaxf(vars.interp, vars.flLerpRatio / updateRate);
+		vars.Latency = I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING) + I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_INCOMING);
+		vars.CorrectTime = clamp(vars.Latency + vars.LerpTime, 0.f, vars.maxUnlag);
 
 		for (int i = 0; i <= I::Engine()->GetMaxClients(); i++)
 		{
@@ -1879,7 +1873,7 @@ void CLegitAim::BacktrackCreateMoveEP(CUserCmd* pCmd)
 				while (!cur_data.empty())
 				{
 					auto& back = cur_data.back();
-					float deltaTime = CorrectTime - (I::GlobalVars()->curtime - back.simtime);
+					float deltaTime = vars.CorrectTime - (I::GlobalVars()->curtime - back.simtime);
 					if (std::fabsf(deltaTime) <= 0.2f)
 						break;
 
@@ -1928,7 +1922,7 @@ void CLegitAim::BacktrackCreateMoveEP(CUserCmd* pCmd)
 				if (cur_data.size() <= 3 || (!IgnoreSmokeBacktrack && CGlobal::LineGoesThroughSmoke(eyePosition, bd.origin)))
 					return;
 
-				float deltaTime = CorrectTime - (I::GlobalVars()->curtime - bd.simtime);
+				float deltaTime = vars.CorrectTime - (I::GlobalVars()->curtime - bd.simtime);
 				if (std::fabsf(deltaTime) > TICKS_TO_TIME(MAXBACKTRACKTICKS(Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit)))
 					continue;
 
@@ -1938,7 +1932,7 @@ void CLegitAim::BacktrackCreateMoveEP(CUserCmd* pCmd)
 				if (bestFov > FOVDistance)
 				{
 					bestFov = FOVDistance;
-					iBacktrackTickCount = TIME_TO_TICKS(bd.simtime + LerpTime);
+					iBacktrackTickCount = TIME_TO_TICKS(bd.simtime + vars.LerpTime);
 				}
 			}
 		}

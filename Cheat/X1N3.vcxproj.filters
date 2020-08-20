@@ -572,9 +572,6 @@
     <ClInclude Include="Engine\SDK\CGlowObjectManager.h">
       <Filter>Engine\SDK</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\SDK\CGlowObjManager.h">
-      <Filter>Engine\SDK</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\SDK\checksum_md5.hpp">
       <Filter>Engine\SDK</Filter>
     </ClInclude>
@@ -777,6 +774,7 @@
     <ClInclude Include="steam_sdk\steam_api.h" />
     <ClInclude Include="Engine\SDK\CItemSystem.hpp" />
     <ClInclude Include="Engine\EnginePrediction.h" />
+    <ClInclude Include="Engine\SDK\IMaterialVar.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">

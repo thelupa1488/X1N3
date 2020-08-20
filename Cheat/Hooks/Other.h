@@ -1,15 +1,5 @@
 #include "Tables.h"
 
-int __fastcall hkDoPostScreenEffects(void* ecx, int edx, int a1)
-{
-	static auto oDoPostScreenEffects = HookTables::pDoPostScreenEffects->GetTrampoline();
-
-	if (GP_Esp && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
-		GP_Esp->DrawGlow();
-
-	return oDoPostScreenEffects(ecx, a1);
-}
-
 #ifdef ENABLE_INVENTORY
 EGCResults __fastcall hkRetrieveMessage(void* ecx, void* edx, uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize)
 {

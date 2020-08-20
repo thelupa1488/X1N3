@@ -37,11 +37,11 @@
 #include "IVModelRender.h"
 #include "IVRenderView.h"
 #include "IMaterialSystem.h"
+#include "IMaterialVar.h"
 #include "ISurface.h"
 #include "IGameEvent.h"
 #include "TextureGroupNames.h"
 #include "ICVar.h"
-#include "CGlowObjManager.h"
 #include "IPhysics.hpp"
 #include "KeyValues.h"
 #include "Math.hpp"
@@ -95,7 +95,6 @@ namespace SDK
 		static IVModelInfo*	        ModelInfo();
 		static IEngineSound*		Sound();
 		static IVModelRender*		ModelRender();
-		static CGlowObjectManager*  GlowObjManager();
 		static IViewRender*		    RenderView();
 		static IMaterialSystem*		MaterialSystem();
 		static ISurface*			Surface();
@@ -124,7 +123,6 @@ namespace SDK
 		static IVModelInfo*	        g_pModelInfo;
 		static IEngineSound*		g_pSound;
 		static IVModelRender*		g_pModelRender;
-		static CGlowObjectManager*  g_pGlowObjManager;
 		static IViewRender*		    g_pRenderView;
 		static IMaterialSystem*		g_pMaterialSystem;
 		static ISurface*			g_pSurface;

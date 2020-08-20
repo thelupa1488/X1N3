@@ -68,6 +68,7 @@
     <ClInclude Include="Engine\EnginePrediction.h" />
     <ClInclude Include="Engine\SDK\CItemSystem.hpp" />
     <ClInclude Include="Engine\SDK\IBaseFileSystem.h" />
+    <ClInclude Include="Engine\SDK\IMaterialVar.h" />
     <ClInclude Include="Engine\Utils\Utils.h" />
     <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="Engine\Entity.h" />
@@ -78,7 +79,6 @@
     <ClInclude Include="Engine\SDK\ButtonCode.h" />
     <ClInclude Include="Engine\SDK\CGlobalVarsBase.hpp" />
     <ClInclude Include="Engine\SDK\CGlowObjectManager.h" />
-    <ClInclude Include="Engine\SDK\CGlowObjManager.h" />
     <ClInclude Include="Engine\SDK\CHandle.hpp" />
     <ClInclude Include="Engine\SDK\checksum_md5.hpp" />
     <ClInclude Include="Engine\SDK\CInput.hpp" />

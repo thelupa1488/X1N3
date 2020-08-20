@@ -165,63 +165,107 @@ void CEsp::InitializeMaterials()
 	if (!Metallic)
 		Metallic = I::MaterialSystem()->CreateMaterial("Metallic", KeyValues::FromString("VertexLitGeneric",
 			"$basetexture white\
-			\$ignorez 0\
-			\$envmap env_cubemap\
-			\$normalmapalphaenvmapmask 1\
-			\$envmapcontrast 1\
-			\$nofog 1\
-			\$model 1\
-			\$nocull 0\
-			\$selfillum 1\
-			\$halfambert 1\
-			\$znearer 0\
-			\$flat 1\
-			\$rimlight 1 $rimlightexponent 2 $rimlightboost 0.2 $rimlightboost [ 1 1 1 ]"));
+			 $ignorez 0\
+			 $envmap env_cubemap\
+			 $normalmapalphaenvmapmask 1\
+			 $envmapcontrast 1\
+			 $nofog 1\
+			 $model 1\
+			 $nocull 0\
+			 $selfillum 1\
+			 $halfambert 1\
+			 $znearer 0\
+			 $flat 1\
+			 $rimlight 1 $rimlightexponent 2 $rimlightboost 0.2 $rimlightboost [ 1 1 1 ]"));
 
 	if (!Pearlescent)
 		Pearlescent = I::MaterialSystem()->CreateMaterial("Pearlescent", KeyValues::FromString("VertexLitGeneric",
-			"$ambientonly 1\
-			\$phong 1\
-			\$pearlescent 3\
-			\$basemapalphaphongmask 1"));
+			"$ambientonly 1 $phong 1 $pearlescent 3 $basemapalphaphongmask 1"));
 
 	if (!Animated)
 	{
-		const auto kv = KeyValues::FromString("VertexLitGeneric",
-			"$basetexture white\
-			\$envmap editor/cube_vertigo\
-			\$envmapcontrast 1\
-			\$basetexture dev/zone_warning proxies\
-			\{ texturescroll { texturescrollvar $basetexturetransform texturescrollrate 0.6 texturescrollangle 90 } }");
+		const auto kv = KeyValues::FromString("VertexLitGeneric", 
+			"$basetexture white $envmap editor/cube_vertigo $envmapcontrast 1 $basetexture dev/zone_warning proxies\
+			 { texturescroll { texturescrollvar $basetexturetransform texturescrollrate 0.6 texturescrollangle 90 } }");
 		kv->SetString("$envmaptint", "[.7 .7 .7]");
 		Animated = I::MaterialSystem()->CreateMaterial("Animated", kv);
 	}
+
+	if (!GlowDef)
+		GlowDef = I::MaterialSystem()->CreateMaterial("GlowDefault", KeyValues::FromString("VertexLitGeneric",
+			"$additive 1 $envmap models/effects/cube_white $envmapfresnel 1 $alpha .8"));
+
+	if (!GlowSPulse)
+		GlowSPulse = I::MaterialSystem()->FindMaterial("dev/glow_armsrace.vmt");
+
+	if (!GlowDPulse)
+		GlowDPulse = I::MaterialSystem()->CreateMaterial("GlowDPulse", KeyValues::FromString("VertexLitGeneric",
+			"$additive 1 $envmap models/effects/cube_white $envmapfresnel 1 $alpha .8"));
 }
 
-void CEsp::OverrideMaterial(bool ignoreZ, int type, Color rgba)
+void CEsp::OverrideMaterial(bool IgnoreZ, int Type, Color RGBA, bool Glow, const float Pulse)
 {
-	IMaterial* Material = nullptr;
-
-	switch (type)
+	if (!Glow)
 	{
-	case 0: Material = Texture; break;
-	case 1: Material = Flat; break;
-	case 2: Material = Wireframe; break;
-	case 3: Material = Metallic; break;
-	case 4: Material = Pearlescent; break;
-	case 5: Material = Animated; break;
-	default: break;
+		IMaterial* ChamsMaterial = nullptr;
+		switch (Type)
+		{
+		case 0: ChamsMaterial = Texture; break;
+		case 1: ChamsMaterial = Flat; break;
+		case 2: ChamsMaterial = Wireframe; break;
+		case 3: ChamsMaterial = Metallic; break;
+		case 4: ChamsMaterial = Pearlescent; break;
+		case 5: ChamsMaterial = Animated; break;
+		default: 
+			break;
+		}
+
+		if (!ChamsMaterial || ChamsMaterial->IsErrorMaterial())
+			return;
+
+		ChamsMaterial->ColorModulate(RGBA.G1R(), RGBA.G1G(), RGBA.G1B());
+		ChamsMaterial->AlphaModulate(RGBA.G1A());
+
+		ChamsMaterial->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, IgnoreZ);
+		ChamsMaterial->IncrementReferenceCount();
+
+		I::ModelRender()->ForcedMaterialOverride(ChamsMaterial);
 	}
+	else
+	{
+		IMaterial* GlowMaterial = nullptr;
+		switch (Type)
+		{
+		case 0: GlowMaterial = GlowDef; break;
+		case 1: GlowMaterial = GlowSPulse; break;
+		case 2: GlowMaterial = GlowDPulse; break;
+		default: 
+			break;
+		}
 
-	if (!Material || Material->IsErrorMaterial()) 
-		return;
+		if (!GlowMaterial || GlowMaterial->IsErrorMaterial())
+			return;
 
-	Material->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, ignoreZ);
-	Material->ColorModulate(rgba.G1R(), rgba.G1G(), rgba.G1B());
-	Material->AlphaModulate(rgba.G1A());
-	Material->IncrementReferenceCount();
+		static bool bFoundColor = false;
+		IMaterialVar* pMatColor = GlowMaterial->FindVar("$envmaptint", &bFoundColor);
+		if (bFoundColor)
+			pMatColor->SetVecValue(RGBA.G1R(), RGBA.G1G(), RGBA.G1B());
 
-	I::ModelRender()->ForcedMaterialOverride(Material);
+		if (Type == 2)
+		{
+			static bool bFoundPulse = false;
+			IMaterialVar* pMatPulse = GlowMaterial->FindVar("$envmapfresnelminmaxexp", &bFoundPulse);
+			if (bFoundPulse)
+				pMatPulse->SetVecComponentValue(0.5f * (1.2f - Pulse), 2);
+		}
+
+		GlowMaterial->AlphaModulate(RGBA.G1A());
+
+		GlowMaterial->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, IgnoreZ);
+		GlowMaterial->IncrementReferenceCount();
+
+		I::ModelRender()->ForcedMaterialOverride(GlowMaterial);
+	}
 }
 
 void CEsp::LoadVisuals(nlohmann::json &j)
