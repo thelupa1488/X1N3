@@ -47,7 +47,7 @@ void CMisc::Menu()
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
-	DCheckBox("Left hand knife", LeftHandKnife);
+	DCheckBox("Left/Right hand knife", LRHandKnife);
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();

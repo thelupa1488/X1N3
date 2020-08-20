@@ -401,9 +401,9 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 	{
 		if (CGlobal::LocalPlayer)
 		{
-			if (!CGlobal::LocalPlayer->IsDead())
+			if (BHop)
 			{
-				if (BHop)
+				if (!CGlobal::LocalPlayer->IsDead())
 				{
 					if ((CGlobal::LocalPlayer->GetMoveType() & MOVETYPE_LADDER))
 						return;
@@ -536,7 +536,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				}
 			}
 			static bool LeftHandKnifeReset = false;
-			if (LeftHandKnife)
+			if (LRHandKnife)
 			{
 				static int hand = CGlobal::OrigRightHand;
 
@@ -547,7 +547,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 
 				LeftHandKnifeReset = true;
 			}
-			if (!LeftHandKnife && LeftHandKnifeReset)
+			if (!LRHandKnife && LeftHandKnifeReset)
 			{
 				cl_righthand->SetValue(CGlobal::OrigRightHand);
 				LeftHandKnifeReset = false;
@@ -1053,63 +1053,68 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					}
 				}
 			}
+		}
+	}
+}
 
-			EnginePrediction::Run(pCmd);
+void CMisc::CreateMoveEP(CUserCmd* pCmd)
+{
+	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
+	{
+		if (CGlobal::LocalPlayer)
+		{
+			if (EdgeJump && EdgeJumpBind.Check())
 			{
-				if (EdgeJump && EdgeJumpBind.Check())
-				{
-					if (CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER ||
-						CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP)
-						return;
+				if (CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER ||
+					CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP)
+					return;
 
-					if ((EnginePrediction::GetFlags() & FL_ONGROUND) && !(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
-						pCmd->buttons |= IN_JUMP;
-				}
-
-				if (AutoBlock && AutoBlockBind.Check())
-				{
-					float bestdist = 250.f;
-					int index = -1;
-
-					for (int i = 1; i < I::Engine()->GetMaxClients(); i++)
-					{
-						CBaseEntity* entity = (CBaseEntity*)I::EntityList()->GetClientEntity(i);
-
-						if (!entity)
-							continue;
-
-						if (entity->IsDead() || entity->IsDormant() || entity == CGlobal::LocalPlayer)
-							continue;
-
-						float dist = CGlobal::LocalPlayer->GetOrigin().DistTo(entity->GetOrigin());
-
-						if (dist < bestdist)
-						{
-							bestdist = dist;
-							index = i;
-						}
-					}
-
-					if (index == -1)
-						return;
-
-					CBaseEntity* target = (CBaseEntity*)I::EntityList()->GetClientEntity(index);
-
-					if (!target)
-						return;
-
-					QAngle angles = CalcAngle(CGlobal::LocalPlayer->GetOrigin(), target->GetOrigin());
-
-					angles.y -= CGlobal::LocalPlayer->GetEyeAngles().y;
-					NormalizeAngles(angles);
-
-					if (angles.y < 0.0f)
-						pCmd->sidemove = 250.f;
-					else if (angles.y > 0.0f)
-						pCmd->sidemove = -250.f;
-				}
+				if ((EnginePrediction::GetFlags() & FL_ONGROUND) && !(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
+					pCmd->buttons |= IN_JUMP;
 			}
-			EnginePrediction::End();
+
+			if (AutoBlock && AutoBlockBind.Check())
+			{
+				float bestdist = 250.f;
+				int index = -1;
+
+				for (int i = 1; i < I::Engine()->GetMaxClients(); i++)
+				{
+					CBaseEntity* entity = (CBaseEntity*)I::EntityList()->GetClientEntity(i);
+
+					if (!entity)
+						continue;
+
+					if (entity->IsDead() || entity->IsDormant() || entity == CGlobal::LocalPlayer)
+						continue;
+
+					float dist = CGlobal::LocalPlayer->GetOrigin().DistTo(entity->GetOrigin());
+
+					if (dist < bestdist)
+					{
+						bestdist = dist;
+						index = i;
+					}
+				}
+
+				if (index == -1)
+					return;
+
+				CBaseEntity* target = (CBaseEntity*)I::EntityList()->GetClientEntity(index);
+
+				if (!target)
+					return;
+
+				QAngle angles = CalcAngle(CGlobal::LocalPlayer->GetOrigin(), target->GetOrigin());
+
+				angles.y -= CGlobal::LocalPlayer->GetEyeAngles().y;
+				NormalizeAngles(angles);
+
+				if (angles.y < 0.0f)
+					pCmd->sidemove = 250.f;
+				else if (angles.y > 0.0f)
+					pCmd->sidemove = -250.f;
+			}
 		}
 	}
 }

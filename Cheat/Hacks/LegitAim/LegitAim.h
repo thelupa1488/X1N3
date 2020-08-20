@@ -108,7 +108,7 @@ protected:
 	virtual void SaveWeapons(nlohmann::json &j) = 0;
 	virtual void LoadWeapons(nlohmann::json &j) = 0;
 	virtual void InitializeBacktrack() = 0;
-	virtual void BacktrackCreateMove(CUserCmd* pCmd) = 0;
+	virtual void BacktrackCreateMoveEP(CUserCmd* pCmd) = 0;
 	virtual void TriggerCreateMove(CUserCmd* pCmd) = 0;
 	virtual void TriggerGetBestTarget(Vector mAngle) = 0;
 	virtual bool CheckOpportWork(CUserCmd* pCmd) = 0;
@@ -160,7 +160,7 @@ public:
 	virtual void LoadWeapons(nlohmann::json &j);
 
 	virtual void InitializeBacktrack();
-	virtual void BacktrackCreateMove(CUserCmd* pCmd);
+	virtual void BacktrackCreateMoveEP(CUserCmd* pCmd);
 
 	virtual void TriggerCreateMove(CUserCmd* pCmd);
 	virtual void TriggerGetBestTarget(Vector mAngle);

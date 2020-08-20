@@ -1,5 +1,6 @@
 #pragma once
 #include "Tables.h"
+#include "../Engine/EnginePrediction.h"
 
 bool __stdcall hkCreateMove(float flInputSampleTime, CUserCmd* pCmd)
 {
@@ -31,14 +32,9 @@ bool __stdcall hkCreateMove(float flInputSampleTime, CUserCmd* pCmd)
 		else if (GP_Skins && !CGlobal::IsGuiVisible)
 			GP_Skins->SelectedWeapon = CGlobal::GetWeaponId();
 
-		if (GP_Misc)
-			GP_Misc->CreateMove(bSendPacket, flInputSampleTime, pCmd);
-
 		if (GP_LegitAim)
 		{
 			GP_LegitAim->SetSelectedWeapon();
-
-			GP_LegitAim->BacktrackCreateMove(pCmd);
 
 			if (GP_LegitAim->Enable)
 				GP_LegitAim->CreateMove(bSendPacket, flInputSampleTime, pCmd);
@@ -46,6 +42,19 @@ bool __stdcall hkCreateMove(float flInputSampleTime, CUserCmd* pCmd)
 			if (GP_LegitAim->TriggerEnable)
 				GP_LegitAim->TriggerCreateMove(pCmd);
 		}
+
+		if (GP_Misc)
+			GP_Misc->CreateMove(bSendPacket, flInputSampleTime, pCmd);
+
+		EnginePrediction::Run(pCmd);
+		{
+			if (GP_LegitAim)
+				GP_LegitAim->BacktrackCreateMoveEP(pCmd);
+
+			if (GP_Misc)
+				GP_Misc->CreateMoveEP(pCmd);
+		}
+		EnginePrediction::End();
 
 		CGlobal::ClampAngles(pCmd->viewangles);
 		CGlobal::AngleNormalize(pCmd->viewangles);

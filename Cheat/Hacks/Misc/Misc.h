@@ -61,6 +61,7 @@ protected:
 	virtual void Draw() = 0;
 	virtual int  MaxChokeTicks() = 0;
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd) = 0;
+	virtual void CreateMoveEP(CUserCmd* pCmd) = 0;
 	virtual void OverrideView(CViewSetup* pSetup) = 0;
 };
 
@@ -84,6 +85,7 @@ public:
 	virtual bool ChangeName(bool reconnect, const char* newName, float delay);
 	virtual int  MaxChokeTicks();
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd);
+	virtual void CreateMoveEP(CUserCmd* pCmd);
 	virtual void OverrideView(CViewSetup* pSetup);
 	virtual void GetViewModelFOV(float &Fov);
 	virtual void AutoAcceptEmit();
@@ -107,7 +109,7 @@ public:
 	bool EdgeJump = false;
 	CBind EdgeJumpBind = CBind(0, true);
 
-	bool LeftHandKnife = false;
+	bool LRHandKnife = false;
 	bool SwapHand = false;
 	CBind SwapHandBind = CBind(0, true);
 	bool InfiniteCrouch = false;
@@ -253,7 +255,7 @@ public:
 		RV(AutoStrafeSpeed, "AutoStrafeSpeed");
 		RV(EdgeJump, "EdgeJump");
 		RV(EdgeJumpBind, "EdgeJumpBind");
-		RV(LeftHandKnife, "LeftHandKnife");
+		RV(LRHandKnife, "LRHandKnife");
 		RV(SwapHand, "SwapHand");
 		RV(SwapHandBind, "SwapHandBind")
 		RV(InfiniteCrouch, "InfiniteCrouch");
