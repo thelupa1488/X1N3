@@ -601,14 +601,8 @@
     <ClInclude Include="Engine\SDK\IGameRules.h">
       <Filter>Engine\SDK</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\SDK\IInputSystem.hpp">
-      <Filter>Engine\SDK</Filter>
-    </ClInclude>
     <ClInclude Include="Initialize\Initialize.h">
       <Filter>Initialize</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\SDK\Match.h">
-      <Filter>Engine\SDK</Filter>
     </ClInclude>
     <ClInclude Include="Engine\SDK\KeyValues.h">
       <Filter>Engine\SDK</Filter>
@@ -772,7 +766,6 @@
     <ClInclude Include="Render\TestTexture.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\SDK\IBaseFileSystem.h" />
     <ClInclude Include="steam_sdk\steam_api.h" />
     <ClInclude Include="Engine\SDK\CItemSystem.hpp" />
     <ClInclude Include="Engine\EnginePrediction.h" />

@@ -362,10 +362,7 @@ public:
 
 	virtual void SetKillIconCfg();
 
-	bool KnifeNextUpdate = false;
-
 	int SelectedWeapon = 0;
-	int WeaponSkinMode = 0;
 
 	int SelectedKnifeModelCT = 0;
 	int SelectedKnifeModelTT = 0;
@@ -406,7 +403,6 @@ public:
 	CSkins()
 	{
 		RV(SelectedWeapon, "SelectedWeapon");
-		RV(WeaponSkinMode, "WeaponSkinMode");
 		RV(SelectedKnifeModelCT, "SelectedKnifeModelCT");
 		RV(SelectedKnifeModelTT, "SelectedKnifeModelTT");
 		RV(SelectedGloveCT, "SelectedGloveCT");

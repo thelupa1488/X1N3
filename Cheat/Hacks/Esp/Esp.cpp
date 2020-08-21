@@ -129,38 +129,38 @@ void CSoundEsp::Draw(CEntityPlayer* Local)
 
 void CEsp::SoundFrameStage()
 {
-	CUtlVector<SndInfo_t> sndList;
-	I::Sound()->GetActiveSounds(sndList);
-	if (sndList.Count() < 1)
-		return;
-
-	for (int i = 0; i < sndList.Count(); i++)
+	if (Enable && SoundEspEnable)
 	{
-		SndInfo_t& sound = sndList.Element(i);
+		CUtlVector<SndInfo_t> sndList;
+		I::Sound()->GetActiveSounds(sndList);
+		if (sndList.Count() < 1)
+			return;
 
-		if (sound.m_nSoundSource < 1)
-			continue;
+		for (int i = 0; i < sndList.Count(); i++)
+		{
+			SndInfo_t& sound = sndList.Element(i);
 
-		if (!sndList[i].m_pOrigin || !sndList[i].m_nSoundSource || !sndList[i].m_bUpdatePositions || sndList[i].m_nChannel != 4)
-			continue;
+			if (sound.m_nSoundSource < 1)
+				continue;
 
-		if (CGlobal::LocalPlayer->GetOrigin().DistTo(*sndList[i].m_pOrigin) > 900)
-			continue;
+			if (!sndList[i].m_pOrigin || !sndList[i].m_nSoundSource || !sndList[i].m_bUpdatePositions || sndList[i].m_nChannel != 4)
+				continue;
 
-		GP_Esp->PlaySounds(*sndList[i].m_pOrigin, sndList[i].m_nSoundSource);
+			if (CGlobal::LocalPlayer->GetOrigin().DistTo(*sndList[i].m_pOrigin) > 900)
+				continue;
+
+			GP_Esp->PlaySounds(*sndList[i].m_pOrigin, sndList[i].m_nSoundSource);
+		}
 	}
 }
 
 void CEsp::InitializeMaterials()
 {
 	if (!Texture)
-		Texture = I::MaterialSystem()->CreateMaterial("Texture", KeyValues::FromString("VertexLitGeneric", "$basetexture white"));
+		Texture = I::MaterialSystem()->CreateMaterial("Texture", KeyValues::FromString("VertexLitGeneric", nullptr));
 
 	if (!Flat)
-		Flat = I::MaterialSystem()->CreateMaterial("Flat", KeyValues::FromString("UnlitGeneric", "$basetexture white"));
-
-	if (!Wireframe)
-		Wireframe = I::MaterialSystem()->CreateMaterial("Wireframe", KeyValues::FromString("VertexLitGeneric", "$basetexture white $wireframe 1"));
+		Flat = I::MaterialSystem()->CreateMaterial("Flat", KeyValues::FromString("UnlitGeneric", nullptr));
 
 	if (!Metallic)
 		Metallic = I::MaterialSystem()->CreateMaterial("Mettalic", KeyValues::FromString("VertexLitGeneric",
@@ -195,7 +195,7 @@ void CEsp::InitializeMaterials()
 			"$additive 1 $envmap models/effects/cube_white $envmapfresnel 1"));
 }
 
-void CEsp::OverrideMaterial(bool IgnoreZ, int Type, Color RGBA, bool Glow, const float Pulse)
+void CEsp::OverrideMaterial(bool IgnoreZ, int dMaterial, int Type, Color RGBA, bool Glow, const float Pulse)
 {
 	if (!Glow)
 	{
@@ -204,11 +204,10 @@ void CEsp::OverrideMaterial(bool IgnoreZ, int Type, Color RGBA, bool Glow, const
 		{
 		case 0: ChamsMaterial = Texture; break;
 		case 1: ChamsMaterial = Flat; break;
-		case 2: ChamsMaterial = Wireframe; break;
-		case 3: ChamsMaterial = Metallic; break;
-		case 4: ChamsMaterial = MetallicPlus; break;
-		case 5: ChamsMaterial = Pearlescent; break;
-		case 6: ChamsMaterial = Animated; break;
+		case 2: ChamsMaterial = Metallic; break;
+		case 3: ChamsMaterial = MetallicPlus; break;
+		case 4: ChamsMaterial = Pearlescent; break;
+		case 5: ChamsMaterial = Animated; break;
 		default: 
 			break;
 		}
@@ -216,7 +215,7 @@ void CEsp::OverrideMaterial(bool IgnoreZ, int Type, Color RGBA, bool Glow, const
 		if (!ChamsMaterial || ChamsMaterial->IsErrorMaterial())
 			return;
 
-		if (Type == 4)
+		if (ChamsMaterial == MetallicPlus)
 		{
 			static bool bFoundColor = false;
 			IMaterialVar* pMatColor = ChamsMaterial->FindVar("$envmaptint", &bFoundColor);
@@ -228,6 +227,7 @@ void CEsp::OverrideMaterial(bool IgnoreZ, int Type, Color RGBA, bool Glow, const
 
 		ChamsMaterial->AlphaModulate(RGBA.G1A());
 
+		ChamsMaterial->SetMaterialVarFlag(MATERIAL_VAR_WIREFRAME, (dMaterial == 1) ? true : false);
 		ChamsMaterial->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, IgnoreZ);
 		ChamsMaterial->IncrementReferenceCount();
 

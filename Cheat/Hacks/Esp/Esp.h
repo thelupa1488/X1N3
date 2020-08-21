@@ -56,7 +56,6 @@ class CEsp : public IEsp
 private:
 	IMaterial* Texture = nullptr;
 	IMaterial* Flat = nullptr;
-	IMaterial* Wireframe = nullptr;
 	IMaterial* Metallic = nullptr;
 	IMaterial* MetallicPlus = nullptr;
 	IMaterial* Pearlescent = nullptr;
@@ -164,7 +163,7 @@ public:
 	virtual void DrawSkeletonLine(int point1, int point2, CEntityPlayer* Entity);
 	virtual void Draw3DBox(CEntityPlayer* Entity, Color color);
 	virtual void InitializeMaterials();
-	virtual void OverrideMaterial(bool IgnoreZ, int Type, Color RGBA, bool Glow = false, const float Pulse = 0);
+	virtual void OverrideMaterial(bool IgnoreZ, int dMaterial, int Type, Color RGBA, bool Glow = false, const float Pulse = 0);
 	virtual void DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld);
 
 	void PlaySounds(Vector _Pos, int EntityIdx);
@@ -204,6 +203,7 @@ public:
 	bool Chams = false;
 	bool ChamsVisibleOnly = false;
 	int  ChamsStyle = 0;
+	int ChamsDouble = 0;
 	bool FillBox = false;
 	bool HeadEsp = false;
 	bool Line = false;
@@ -362,6 +362,7 @@ public:
 		RV(Chams, "Chams");
 		RV(ChamsVisibleOnly, "ChamsVisbleOnly");
 		RV(ChamsStyle, "ChamsStyle");
+		RV(ChamsDouble, "ChamsDouble");
 		RV(FillBox, "FillBox");
 		RV(HeadEsp, "HeadEsp");
 		RV(Line, "Line");

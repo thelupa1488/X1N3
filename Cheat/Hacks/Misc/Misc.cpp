@@ -3,8 +3,7 @@
 #include "../../GUI/Gui.h"
 #include "../../Engine/EnginePrediction.h"
 
-//#define KEY_DOWN(VK_NNM) ((FastCall::G().t_GetAsyncKeyState(VK_NNM) & 0x8000) ? 1:0)
-#define KEY_DOWN(VK_NNM) (I::InputSystem()->IsButtonDown(VK_NNM))
+#define KEY_DOWN(VK_NNM) ((FastCall::G().t_GetAsyncKeyState(VK_NNM) & 0x8000) ? 1:0)
 
 using namespace HookTables;
 
@@ -469,11 +468,11 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					}
 					if (AutoStrafe && !(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
 					{
-						if (!KEY_DOWN(ButtonCode_t::KEY_SPACE) ||
-							KEY_DOWN(ButtonCode_t::KEY_A) ||
-							KEY_DOWN(ButtonCode_t::KEY_D) ||
-							KEY_DOWN(ButtonCode_t::KEY_S) ||
-							KEY_DOWN(ButtonCode_t::KEY_W))
+						if (!KEY_DOWN(VK_SPACE) ||
+							KEY_DOWN(VK_KEY_A) ||
+							KEY_DOWN(VK_KEY_D) ||
+							KEY_DOWN(VK_KEY_S) ||
+							KEY_DOWN(VK_KEY_W))
 							return;
 
 						bool on_ground = (CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND) && !(pCmd->buttons & IN_JUMP);
@@ -586,7 +585,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					*maxAlpha = 255.f;
 				NoFlashReset = false;
 			}
-
 			vector<const char*> smoke_materials =
 			{
 				lolc("particle/vistasmokev1/vistasmokev1_smokegrenade"),
@@ -601,7 +599,8 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				for (auto mat : smoke_materials)
 				{
 					auto material = I::MaterialSystem()->FindMaterial(mat, TEXTURE_GROUP_CLIENT_EFFECTS);
-					material->SetMaterialVarFlag(MATERIAL_VAR_WIREFRAME, true);
+					material->SetMaterialVarFlag(NoSmokeStyle ? MATERIAL_VAR_WIREFRAME : MATERIAL_VAR_NO_DRAW, true);
+					material->SetMaterialVarFlag(!NoSmokeStyle ? MATERIAL_VAR_WIREFRAME : MATERIAL_VAR_NO_DRAW, false);
 					if (NoSmoke)
 						*(int*)smoke_count = 0;
 				}
@@ -612,7 +611,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				for (auto mat : smoke_materials)
 				{
 					auto material = I::MaterialSystem()->FindMaterial(mat, TEXTURE_GROUP_CLIENT_EFFECTS);
-					material->SetMaterialVarFlag(MATERIAL_VAR_WIREFRAME, false);
+					material->SetMaterialVarFlag(NoSmokeStyle ? MATERIAL_VAR_WIREFRAME : MATERIAL_VAR_NO_DRAW, false);
 					if (!NoSmoke && NoSmokeReset)
 						*(int*)smoke_count = 1;
 				}
@@ -1185,19 +1184,19 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 				else
 				{
 					float fSpeed = freecamspeed; //5.f;
-					if (KEY_DOWN(ButtonCode_t::KEY_LCONTROL))
+					if (KEY_DOWN(VK_CONTROL))
 						fSpeed = fSpeed * 0.45f;
-					if (KEY_DOWN(ButtonCode_t::KEY_LSHIFT))
+					if (KEY_DOWN(VK_SHIFT))
 						fSpeed = fSpeed * 1.65f;
-					if (KEY_DOWN(ButtonCode_t::KEY_W)) 		
+					if (KEY_DOWN(VK_KEY_W))
 						newOrigin += pSetup->angles.Forward() * fSpeed;
-					if (KEY_DOWN(ButtonCode_t::KEY_A))	
+					if (KEY_DOWN(VK_KEY_A))
 						newOrigin += pSetup->angles.Right() * fSpeed;
-					if (KEY_DOWN(ButtonCode_t::KEY_D)) 	
+					if (KEY_DOWN(VK_KEY_D))
 						newOrigin -= pSetup->angles.Right() * fSpeed;
-					if (KEY_DOWN(ButtonCode_t::KEY_S)) 
+					if (KEY_DOWN(VK_KEY_S))
 						newOrigin -= pSetup->angles.Forward() * fSpeed;
-					if (KEY_DOWN(ButtonCode_t::KEY_SPACE))
+					if (KEY_DOWN(VK_SPACE))
 						newOrigin += pSetup->angles.Up() * fSpeed;
 					pSetup->origin = newOrigin;
 				}
@@ -1338,7 +1337,7 @@ void CMisc::AutoAcceptEmit()
 
 void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld)
 {
-	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
+	if (Enable && HandChams || HandGlow)
 	{
 		static auto fnDME = HookTables::pDrawModelExecute->GetTrampoline();
 		const char* ModelName = I::ModelInfo()->GetModelName((model_t*)pInfo.pModel);
@@ -1346,56 +1345,61 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 		if (!ModelName)
 			return;
 
-		IMaterial* Material = I::MaterialSystem()->FindMaterial(ModelName, TEXTURE_GROUP_MODEL);
-
-		if (HandChams)
+		if (strstr(ModelName, XorStr("arms")))
 		{
-			if (strstr(ModelName, XorStr("arms")))
+			IMaterial* Material = I::MaterialSystem()->FindMaterial(ModelName, TEXTURE_GROUP_MODEL);
+
+			if (HCStyle)
 			{
 				HandChamsColor[4];
-				GP_Esp->OverrideMaterial(false, HandChamsStyle, HandChamsColor);
-				if (HandChamsStyle == 6) //disable hand
+				GP_Esp->OverrideMaterial(false, HCDouble, HCStyle, HandChamsColor);
+				if (HCStyle == 6) //disable hand
 				{
 					Material->SetMaterialVarFlag(MATERIAL_VAR_NO_DRAW, true);
 					I::ModelRender()->ForcedMaterialOverride(Material);
 				}
 				fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 			}
-		}
 
-		if (HandGlow)
-		{
-			if (strstr(ModelName, XorStr("arms")))
+			if (HGStyle)
 			{
 				HandGlowColor[4];
-				const float Pulse = HandGlowColor[3] * (std::sin(I::GlobalVars()->curtime * HandGlowPulseSpeed) * HandGlowPulseRange + 0.5f + 0.5f);
-				GP_Esp->OverrideMaterial(false, HandGlowStyle, HandGlowColor, true, Pulse);
+				const float Pulse = HandGlowColor[3] * (std::sin(I::GlobalVars()->curtime * HGPSpeed) * HGPRange + 0.5f + 0.5f);
+				GP_Esp->OverrideMaterial(false, 0, HGStyle, HandGlowColor, true, Pulse);
 				fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 			}
 		}
+	}
 
-		if (WeaponChams)
+	if (Enable && WeaponChams || WeaponGlow)
+	{
+		static auto fnDME = HookTables::pDrawModelExecute->GetTrampoline();
+		const char* ModelName = I::ModelInfo()->GetModelName((model_t*)pInfo.pModel);
+
+		if (!ModelName)
+			return;
+
+		if (strstr(ModelName, ("models/weapons/v_")) && !strstr(ModelName, XorStr("arms")))
 		{
-			if (strstr(ModelName, XorStr("models/weapons/v_")) && !strstr(ModelName, XorStr("arms")))
+			IMaterial* Material = I::MaterialSystem()->FindMaterial(ModelName, TEXTURE_GROUP_MODEL);
+
+			if (WCStyle)
 			{
 				WeaponChamsColor[4];
-				GP_Esp->OverrideMaterial(false, WeaponChamsStyle, WeaponChamsColor);
-				if (WeaponChamsStyle == 6) //disable weapon
+				GP_Esp->OverrideMaterial(false, WCDouble, WCStyle, WeaponChamsColor);
+				if (WCStyle == 6) //disable weapon
 				{
 					Material->SetMaterialVarFlag(MATERIAL_VAR_NO_DRAW, true);
 					I::ModelRender()->ForcedMaterialOverride(Material);
 				}
 				fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 			}
-		}
 
-		if (WeaponGlow)
-		{
-			if (strstr(ModelName, XorStr("models/weapons/v_")) && !strstr(ModelName, XorStr("arms")))
+			if (WGStyle)
 			{
 				WeaponGlowColor[4];
-				const float Pulse = WeaponGlowColor[3] * (std::sin(I::GlobalVars()->curtime * WeaponGlowPulseSpeed) * WeaponGlowPulseRange + 0.5f + 0.5f);
-				GP_Esp->OverrideMaterial(false, WeaponGlowStyle, WeaponGlowColor, true, Pulse);
+				const float Pulse = WeaponGlowColor[3] * (std::sin(I::GlobalVars()->curtime * WGPSpeed) * WGPRange + 0.5f + 0.5f);
+				GP_Esp->OverrideMaterial(false, 0, WGStyle, WeaponGlowColor, true, Pulse);
 				fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 			}
 		}
@@ -1653,17 +1657,6 @@ void CMisc::Night()
 			}
 
 			nightz = false;
-		}
-	}
-}
-
-void CMisc::FrameStageNotify()
-{
-	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
-	{
-		if (CGlobal::LocalPlayer)
-		{
-			//...
 		}
 	}
 }

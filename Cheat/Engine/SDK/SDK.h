@@ -45,14 +45,10 @@
 #include "IPhysics.hpp"
 #include "KeyValues.h"
 #include "Math.hpp"
-#include "Match.h"
 #include "IPredition.hpp"
 #include "checksum_md5.hpp"
 #include "IGameRules.h"
 #include "CUserCmd.hpp"
-#include "IInputSystem.hpp"
-#include "IBaseFileSystem.h"
-//#include "memalloc.h"
 
 #include <Windows.h>
 #include <WinInet.h>
@@ -82,63 +78,57 @@ namespace SDK
 	class I
 	{
 	public:
-		static IVEngineClient*		Engine();
-		static IBaseClientDLL*		Client();
-		static IClientEntityList*	EntityList();
-		static IGameEventManager2*  GameEvent();
-		static CGlobalVarsBase*		GlobalVars();
-		static CInput*				Input();
-		static CClientState*		ClientState();
-		static IEngineTrace*		EngineTrace();
-		static IPanel*              Panel();
-		static IClientMode*			ClientMode();
-		static IVModelInfo*	        ModelInfo();
-		static IEngineSound*		Sound();
-		static IVModelRender*		ModelRender();
-		static IViewRender*		    RenderView();
-		static IMaterialSystem*		MaterialSystem();
-		static ISurface*			Surface();
-		static IPhysicsSurfaceProps*PhysSurface();
-		static IInputSystem*		InputSystem();
-		static ConVar*               GetConVar();
-		static ILocalize*           Localize();
+		static IVEngineClient*		  Engine();
+		static IBaseClientDLL*		  Client();
+		static IClientEntityList*	  EntityList();
+		static IGameEventManager2*    GameEvent();
+		static CGlobalVarsBase*		  GlobalVars();
+		static CInput*				  Input();
+		static CClientState*		  ClientState();
+		static IEngineTrace*		  EngineTrace();
+		static IPanel*                Panel();
+		static IClientMode*			  ClientMode();
+		static IVModelInfo*	          ModelInfo();
+		static IEngineSound*		  Sound();
+		static IVModelRender*		  ModelRender();
+		static IViewRender*		      RenderView();
+		static IMaterialSystem*		  MaterialSystem();
+		static ISurface*			  Surface();
+		static IPhysicsSurfaceProps*  PhysSurface();
+		static ConVar*                GetConVar();
+		static ILocalize*             Localize();
 		static ISteamGameCoordinator* SteamGameCoordinator();
-		static ISteamUser*          SteamUser();
-		static IMatchFramework*     MatchFramework();
-		static IPrediction*         Prediction();
-		static IMoveHelper*         MoveHelper();
-		static IGameMovement*       GameMovement();
-		static IGameRules*          GameRules();
-		static IBaseFileSystem*     FileSystem();
+		static ISteamUser*            SteamUser();
+		static IPrediction*           Prediction();
+		static IMoveHelper*			  MoveHelper();
+		static IGameMovement*	      GameMovement();
+		static IGameRules*			  GameRules();
 	private:
-		static IVEngineClient*		g_pEngine;
-		static IBaseClientDLL*		g_pClient;
-		static IClientEntityList*   g_pEntityList;
-		static CGlobalVarsBase*		g_pGlobals;
-		static CInput*				g_pInput;
-		static CClientState*		g_pClientState;
-		static IEngineTrace*		g_pEngineTrace;
-		static IClientMode*			g_pClientMode;
-		static IPanel*              g_pPanel;
-		static IVModelInfo*	        g_pModelInfo;
-		static IEngineSound*		g_pSound;
-		static IVModelRender*		g_pModelRender;
-		static IViewRender*		    g_pRenderView;
-		static IMaterialSystem*		g_pMaterialSystem;
-		static ISurface*			g_pSurface;
-		static IPhysicsSurfaceProps* g_PhysSurface;
-		static IGameEventManager2*	g_pGameEvent;
-		static IInputSystem*		g_pInputSystem;
-		static ConVar*               g_pConVar;
-		static ILocalize*           g_pLocalize;
+		static IVEngineClient*		  g_pEngine;
+		static IBaseClientDLL*		  g_pClient;
+		static IClientEntityList*     g_pEntityList;
+		static CGlobalVarsBase*		  g_pGlobals;
+		static CInput*				  g_pInput;
+		static CClientState*		  g_pClientState;
+		static IEngineTrace*		  g_pEngineTrace;
+		static IClientMode*			  g_pClientMode;
+		static IPanel*                g_pPanel;
+		static IVModelInfo*	          g_pModelInfo;
+		static IEngineSound*		  g_pSound;
+		static IVModelRender*		  g_pModelRender;
+		static IViewRender*		      g_pRenderView;
+		static IMaterialSystem*		  g_pMaterialSystem;
+		static ISurface*			  g_pSurface;
+		static IPhysicsSurfaceProps*  g_PhysSurface;
+		static IGameEventManager2*	  g_pGameEvent;
+		static ConVar*                g_pConVar;
+		static ILocalize*             g_pLocalize;
 		static ISteamGameCoordinator* g_pSteamGameCoordinator;
-		static ISteamUser*          g_pSteamUser;
-		static IMatchFramework*     g_pMatchFramework;
-		static IPrediction*         g_pPrediction;
-		static IMoveHelper*         g_pMoveHelper;
-		static IGameMovement*       g_pGameMovement;
-		static IGameRules*          g_pGameRules;
-		static IBaseFileSystem*     g_pFileSystem;
+		static ISteamUser*            g_pSteamUser;
+		static IPrediction*			  g_pPrediction;
+		static IMoveHelper*           g_pMoveHelper;
+		static IGameMovement*         g_pGameMovement;
+		static IGameRules*            g_pGameRules;
 	};
 
 	template <typename T>

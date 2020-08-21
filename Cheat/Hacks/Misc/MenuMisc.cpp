@@ -128,9 +128,9 @@ void CMisc::Menu()
 	if (ViewModelXYZ)
 	{
 		X1Gui().PushItemWidth(PUSH_2);
-		SliderFloats("ViewModel X", ViewModelX, -30.f, 30.f, "%.2f");
-		SliderFloats("ViewModel Y", ViewModelY, -30.f, 30.f, "%.2f");
-		SliderFloats("ViewModel Z", ViewModelZ, -30.f, 30.f, "%.2f");
+		SliderFloats("ViewModel X", ViewModelX, -30, 30);
+		SliderFloats("ViewModel Y", ViewModelY, -30, 30);
+		SliderFloats("ViewModel Z", ViewModelZ, -30, 30);
 	}
 	X1Gui().Spacing();
 	X1Gui().Separator();
@@ -199,7 +199,6 @@ void CMisc::Menu()
 	DCheckBox("Spread circle", SpreadCircel);
 	if (SpreadCircel)
 	{
-		X1Gui().SameLine(SAME_LINE_1);
 		DColorEdit("Color##spread", SpreadColor);
 	}
 	X1Gui().Spacing();
@@ -248,13 +247,13 @@ void CMisc::Menu()
 	X1Gui().Separator();
 	X1Gui().Spacing();
 	DCheckBox("Remove smoke", NoSmoke);
-//	if (NoSmoke)
-//	{
-	//	X1Gui().SameLine(SAME_LINE_1);
-	//	X1Gui().PushItemWidth(PUSH_1);
-	//	VectorEx<const char* >itemsCSS = { lolc("No Draw Smoke") , lolc("Wireframe Smoke") };
-	//	DComboBox("Type##NoSmoke", TypeNoSmoke, itemsCSS);
-//	}
+	if (NoSmoke)
+	{
+		X1Gui().SameLine(SAME_LINE_1);
+		X1Gui().PushItemWidth(PUSH_1);
+		VectorEx<const char* >itemsCSS = { lolc("No draw"), lolc("Wireframe") };
+		DComboBox("Type##NoSmoke", NoSmokeStyle, itemsCSS);
+	}
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
@@ -309,10 +308,18 @@ void CMisc::Menu()
 	DCheckBox("Hand chams", HandChams);
 	if (HandChams)
 	{
-		X1Gui().SameLine();
+		X1Gui().SameLine(SAME_LINE_1);
 		X1Gui().PushItemWidth(PUSH_1);
-		VectorEx<const char* >itemsCS = { lolc("Textured"),lolc("Flat"), lolc("Wireframe"), lolc("Metallic"), lolc("Metallic Plus"), lolc("Pearlescent"), lolc("Animated"), lolc("Disable") };
-		DComboBox("Style##HandChams", HandChamsStyle, itemsCS);
+		VectorEx<const char* >itemsCS = { lolc("Textured"),lolc("Flat"), lolc("Metallic"), lolc("Metallic Plus"), lolc("Pearlescent"), lolc("Animated"), lolc("Disable") };
+		DComboBox("Style##HandChams", HCStyle, itemsCS);
+		if (HCStyle <= 5)
+		{
+			X1Gui().Spacing();
+			X1Gui().SameLine(SAME_LINE_1);
+			X1Gui().PushItemWidth(PUSH_1);
+			VectorEx<const char* >itemsCSd = { lolc("None"),lolc("Wireframe") };
+			DComboBox("Double##HandChams", HCDouble, itemsCSd);
+		}
 		DColorEdit("Color##HandChams", HandChamsColor);
 	}
 	X1Gui().Spacing();
@@ -321,16 +328,16 @@ void CMisc::Menu()
 	DCheckBox("Hand glow", HandGlow);
 	if (HandGlow)
 	{
-		X1Gui().SameLine();
+		X1Gui().SameLine(SAME_LINE_1);
 		X1Gui().PushItemWidth(PUSH_1);
 		VectorEx<const char*>itemsCS = { lolc("Default"), lolc("Static pulse"), lolc("Dynamic pulse") };
-		DComboBox("Style##HandGlow", HandGlowStyle, itemsCS);
+		DComboBox("Style##HandGlow", HGStyle, itemsCS);
 		DColorEdit("Color##HandGlow", HandGlowColor);
-		if (HandGlowStyle == 2)
+		if (HGStyle == 2)
 		{
 			X1Gui().PushItemWidth(PUSH_2);
-			SliderInts("Speed", HandGlowPulseSpeed, 1, 15);
-			SliderFloats("Range", HandGlowPulseRange, 0, 1, "%.2f")
+			SliderInts("Speed##HandGlow", HGPSpeed, 1, 15);
+			SliderFloats("Range##HandGlow", HGPRange, 0.1, 1)
 		}
 	}
 	X1Gui().Spacing();
@@ -339,10 +346,18 @@ void CMisc::Menu()
 	DCheckBox("Weapon chams", WeaponChams);
 	if (WeaponChams)
 	{
-		X1Gui().SameLine();
+		X1Gui().SameLine(SAME_LINE_1);
 		X1Gui().PushItemWidth(PUSH_1);
-		VectorEx<const char* >itemsCS = { lolc("Textured"),lolc("Flat"), lolc("Wireframe"), lolc("Metallic"), lolc("Metallic Plus"), lolc("Pearlescent"), lolc("Animated"), lolc("Disable") };
-		DComboBox("Style##WeaponChams", WeaponChamsStyle, itemsCS);
+		VectorEx<const char* >itemsCS = { lolc("Textured"),lolc("Flat"), lolc("Metallic"), lolc("Metallic Plus"), lolc("Pearlescent"), lolc("Animated"), lolc("Disable") };
+		DComboBox("Style##WeaponChams", WCStyle, itemsCS);
+		if (WCStyle <= 5)
+		{
+			X1Gui().Spacing();
+			X1Gui().SameLine(SAME_LINE_1);
+			X1Gui().PushItemWidth(PUSH_1);
+			VectorEx<const char* >itemsCSd = { lolc("None"),lolc("Wireframe") };
+			DComboBox("Double##WeaponChams", WCDouble, itemsCSd);
+		}
 		DColorEdit("Color##WeaponChams", WeaponChamsColor);
 	}
 	X1Gui().Spacing();
@@ -351,16 +366,16 @@ void CMisc::Menu()
 	DCheckBox("Weapon glow", WeaponGlow);
 	if (WeaponGlow)
 	{
-		X1Gui().SameLine();
+		X1Gui().SameLine(SAME_LINE_1);
 		X1Gui().PushItemWidth(PUSH_1);
 		VectorEx<const char*>itemsCS = { lolc("Default"), lolc("Static pulse"), lolc("Dynamic pulse") };
-		DComboBox("Style##WeaponGlow", WeaponGlowStyle, itemsCS);
+		DComboBox("Style##WeaponGlow", WGStyle, itemsCS);
 		DColorEdit("Color##WeaponGlow", WeaponGlowColor);
-		if (WeaponGlowStyle == 2)
+		if (WGStyle == 2)
 		{
 			X1Gui().PushItemWidth(PUSH_2);
-			SliderInts("Speed", WeaponGlowPulseSpeed, 1, 15);
-			SliderFloats("Range", WeaponGlowPulseRange, 0, 1, "%.2f")
+			SliderInts("Speed##WeaponGlow", WGPSpeed, 1, 15);
+			SliderFloats("Range##WeaponGlow", WGPRange, 0.1, 1)
 		}
 	}
 	X1Gui().Spacing();
@@ -385,14 +400,14 @@ void CMisc::Menu()
 		SliderInts("Text Size##damage", TextDamageInfo, 9, MAX_FONT_SIZE);
 		if (DamageInfoPosition == 0)
 		{
-			SliderFloats("Show Time", DamageInfoShowTime, 0.1, 10);
-			SliderInts("Position X", DamageInfoPosX, 1, CGlobal::iScreenWidth);
-			SliderInts("Position Y", DamageInfoPosY, 1, CGlobal::iScreenHeight);
+			SliderFloats("Show Time##damage", DamageInfoShowTime, 0.1, 10);
+			SliderInts("Position X##damage", DamageInfoPosX, 1, CGlobal::iScreenWidth);
+			SliderInts("Position Y##damage", DamageInfoPosY, 1, CGlobal::iScreenHeight);
 		}
 		else if (DamageInfoPosition == 1)
 		{
-			SliderInts("Height", DamageInfoHeight, 1, 100);
-			SliderInts("Speed", DamageInfoSpeed, 1, 100);
+			SliderInts("Height##damage", DamageInfoHeight, 1, 100);
+			SliderInts("Speed##damage", DamageInfoSpeed, 1, 100);
 		}
 		DColorEdit("Color##damage", DamageInfoColor);
 	}
@@ -433,8 +448,6 @@ void CMisc::Menu()
 	DCheckBox("Colored walls", ColoredWalls);
 	if (ColoredWalls)
 	{
-		X1Gui().SameLine(SAME_LINE_1);
-		X1Gui().PushItemWidth(PUSH_1);
 		DColorEdit("Color##clrwall", ColoredWallsColor);
 	}
 	X1Gui().Spacing();

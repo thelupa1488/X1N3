@@ -56,7 +56,6 @@ protected:
 	virtual void Reset() = 0;
 	virtual void UpdateSoundList() = 0;
 	virtual void CustomWalls() = 0;
-	virtual void FrameStageNotify() = 0;
 	virtual void Menu() = 0;
 	virtual void Draw() = 0;
 	virtual int  MaxChokeTicks() = 0;
@@ -96,7 +95,6 @@ public:
 	virtual void Reset();
 	virtual void UpdateSoundList();
 	virtual void CustomWalls();
-	virtual void FrameStageNotify();
 
 	bool Enable = true;
 	bool BHop = false;
@@ -153,6 +151,7 @@ public:
 	int AntiFlashAlpha = 255;
 
 	bool NoSmoke = false;
+	int NoSmokeStyle = 0;
 
 	CHitListener HitWorker;
 
@@ -180,20 +179,22 @@ public:
 	bool NightMode = false;
 
 	bool HandChams = false;
-	int HandChamsStyle = 0;
+	int HCStyle = 0;
+	int HCDouble = 0;
 
 	bool HandGlow = false;
-	int HandGlowStyle = 0;
-	int HandGlowPulseSpeed = 0;
-	float HandGlowPulseRange = 0;
+	int HGStyle = 0;
+	int HGPSpeed = 0;
+	float HGPRange = 0;
 
 	bool WeaponChams = false;
-	int WeaponChamsStyle = 0;
+	int WCStyle = 0;
+	int WCDouble = 0;
 
 	bool WeaponGlow = false;
-	int WeaponGlowStyle = 0;
-	int WeaponGlowPulseSpeed = 0;
-	float WeaponGlowPulseRange = 0;
+	int WGStyle = 0;
+	int WGPSpeed = 0;
+	float WGPRange = 0;
 
 	bool DamageInfo = false;
 	int DamageInfoPosition = 1;
@@ -303,6 +304,7 @@ public:
 		RV(AntiFlash, "AntiFlash");
 		RV(AntiFlashAlpha, "AntiFlashAlpha");
 		RV(NoSmoke, "NoSmoke");
+		RV(NoSmokeStyle, "NoSmokeStyle")
 		RV(NameStealer, "NameStealer")
 		RV(ClanTagChanger, "ClanTagChanger");
 		RV(ClanTagChangerStyle, "ClanTagChangerStyle");
@@ -322,17 +324,19 @@ public:
 		RV(SpectatorListAutoHide, "SpectatorListAutoHide");
 		RV(NightMode, "NightMode");
 		RV(HandChams, "HandChams");
-		RV(HandChamsStyle, "HandChamsStyle");
+		RV(HCStyle, "HCStyle");
+		RV(HCDouble, "HCDouble");
 		RV(HandGlow, "HandGlow");
-		RV(HandGlowStyle, "HandGlowStyle");
-		RV(HandGlowPulseSpeed, "HandGlowPulseSpeed");
-		RV(HandGlowPulseRange, "HandGlowPulseRange");
+		RV(HGStyle, "HGStyle");
+		RV(HGPSpeed, "HGPSpeed");
+		RV(HGPRange, "HGPRange");
 		RV(WeaponChams, "WeaponChams");
-		RV(WeaponChamsStyle, "WeaponChamsStyle");
+		RV(WCStyle, "WCStyle");
+		RV(WCDouble, "WCDouble");
 		RV(WeaponGlow, "WeaponGlow");
-		RV(WeaponGlowStyle, "WeaponGlowStyle");
-		RV(WeaponGlowPulseSpeed, "WeaponGlowPulseSpeed");
-		RV(WeaponGlowPulseSpeed, "WeaponGlowPulseRange");
+		RV(WGStyle, "WGStyle");
+		RV(WGPSpeed, "WGPSpeed");
+		RV(WGPRange, "WGPRange");
 		RV(DamageInfo, "DamageInfo");
 		RV(DamageInfoPosition, "DamageInfoPosition");
 		RV(DamageInfoStyle, "DamageInfoStyle");

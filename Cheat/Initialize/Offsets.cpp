@@ -112,10 +112,7 @@ namespace Offsets
 
 	DWORD Input = 0;
 	DWORD MoveHelper = 0;
-	DWORD GlowObjManager = 0;
-	DWORD MatchFramework = 0;
 	DWORD ClientState = 0;
-	DWORD GameRules = 0;
 
 	DWORD d3d9TablePtrPtr = 0;
 

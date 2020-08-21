@@ -112,10 +112,7 @@ namespace Offsets
 
 	extern DWORD Input;
 	extern DWORD MoveHelper;
-	extern DWORD GlowObjManager;
-	extern DWORD MatchFramework;
 	extern DWORD ClientState;
-	extern DWORD GameRules;
 
 	extern DWORD d3d9TablePtrPtr;
 

@@ -457,9 +457,11 @@ public:
 		RV(SilentFovColor, "SilentFovColor");
 		RV(IgnoreSmokeBacktrack, "IgnoreSmokeBacktrack");
 		RV(ShowBacktrack, "ShowBacktrack");
-		RV(ShowBacktrackStyle, "ShowBacktrackStyle");
-		RV(ShowBacktrackType, "ShowBacktrackType");
-		RV(ShowBacktrackColor, "ShowBacktrackColor");
+		RV(SBVisibleOnly, "SBVisibleOnly");
+		RV(SBTick, "SBTick");
+		RV(SBStyle, "SBStyle");
+		RV(SBDouble, "SBDouble");
+		RV(ShowBactrackColor, "ShowBactrackColor");
 		RV(ShowSpot, "ShowSpot");
 		RV(FaceIt, "FaceIt");
 		RV(EntityAim, "EntityAim");
@@ -489,9 +491,11 @@ public:
 
 	bool IgnoreSmokeBacktrack = false;
 	bool ShowBacktrack = false;
-	int ShowBacktrackType = 0;
-	int ShowBacktrackStyle = 0;
-	Color ShowBacktrackColor = Color(255, 255, 255, 255);
+	bool SBVisibleOnly = false;
+	int SBTick = 0;
+	int SBStyle = 0;
+	int SBDouble = 0;
+	Color ShowBactrackColor = Color(255, 255, 255, 255);
 
 	virtual float CalcFOV(Vector& viewangles, const Vector& vSrc, const Vector& vEnd);
 

@@ -175,10 +175,15 @@ void CEsp::Menu()
 			{
 				X1Gui().SameLine(SAME_LINE_1);
 				X1Gui().PushItemWidth(PUSH_1);
-				VectorEx<const char*>itemsCSVis = { lolc("Textured"), lolc("Flat"), lolc("Wireframe"), lolc("Metallic"), lolc("Metallic Plus"), lolc("Pearlescent"), lolc("Animated") };
+				VectorEx<const char*>itemsCSVis = { lolc("Textured"), lolc("Flat"), lolc("Metallic"), lolc("Metallic Plus"), lolc("Pearlescent"), lolc("Animated") };
 				DComboBox("Style##Chams", ChamsStyle, itemsCSVis);
 				X1Gui().SameLine(SAME_LINE_1 + PUSH_1 + 40);
 				DCheckBox("Visible only##Chams", ChamsVisibleOnly);
+				X1Gui().Spacing();
+				X1Gui().SameLine(SAME_LINE_1);
+				X1Gui().PushItemWidth(PUSH_1);
+				VectorEx<const char*>itemsCSd = { lolc("None"), lolc("Wireframe")};
+				DComboBox("Double##Chams", ChamsDouble, itemsCSd);
 
 				DColorEdit("CT color##Chams", ChamsCT);
 				X1Gui().SameLine(100);
@@ -214,7 +219,7 @@ void CEsp::Menu()
 					{
 						X1Gui().PushItemWidth(PUSH_2);
 						SliderInts("Speed", GlowPulseSpeed, 1, 15);
-						SliderFloats("Range", GlowPulseRange, 0, 1, "%.2f");
+						SliderFloats("Range", GlowPulseRange, 0.1, 1, "%.2f");
 					}
 				}
 

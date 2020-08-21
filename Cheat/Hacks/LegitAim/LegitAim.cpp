@@ -327,14 +327,14 @@ void CLegitAim::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const Dr
 			auto& record = records.at(Entity->Idx);
 			if (record.size() > 0)
 			{
-				switch (ShowBacktrackType)
+				switch (SBTick)
 				{
 				case 0:
 					for (auto& data : record)
 					{
 						if (Entity->RenderOrigin.DistTo(data.origin) > 1.f)
 						{
-							GP_Esp->OverrideMaterial(false, ShowBacktrackStyle, ShowBacktrackColor);
+							GP_Esp->OverrideMaterial(false, SBDouble, SBStyle, ShowBactrackColor);
 							fnDME(thisptr, ctx, state, pInfo, data.matrix);
 							I::ModelRender()->ForcedMaterialOverride(nullptr);
 						}
@@ -343,7 +343,7 @@ void CLegitAim::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const Dr
 				case 1:
 					if (Entity->RenderOrigin.DistTo(record.back().origin) > 1.f)
 					{
-						GP_Esp->OverrideMaterial(false, ShowBacktrackStyle, ShowBacktrackColor);
+						GP_Esp->OverrideMaterial(false, SBDouble, SBStyle, ShowBactrackColor);
 						fnDME(thisptr, ctx, state, pInfo, record.back().matrix);
 						I::ModelRender()->ForcedMaterialOverride(nullptr);
 					}

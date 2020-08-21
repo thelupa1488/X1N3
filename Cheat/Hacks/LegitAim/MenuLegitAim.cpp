@@ -159,16 +159,19 @@ void CLegitAim::Menu()
 	}
 	X1Gui().EndChild();
 
-	VectorEx<const char*> AimPSettings = { lolc("Basic"), lolc("RCS"), lolc("Silent"), lolc("Delays") };
+	VectorEx<const char*> AimPSettings = { lolc("Basic"), lolc("RCS"), lolc("Silent"), lolc("Backtrack"), lolc("Delays") };
 
-	TabsLabels(SubTabAimSelected, AimPSettings, Vec2(X1Gui().GetCurWindowSize().x - (X1Gui().GetStyle().wndPadding.x * 2), 0), false);
+	TabsLabels(SubTabAimSelected, AimPSettings, Vec2(453, 0), false);
 
-	if (X1Gui().BeginChild(XorStr("Main2Child4"), Vec2(0, 215), true))
+	if (X1Gui().BeginChild(XorStr("Main2Child4"), Vec2(0, 200), true))
 	{
-		X1Gui().PushItemWidth(379.f);
+		X1Gui().PushItemWidth(369.f);
 
 		if (SubTabAimSelected == 0)
 		{
+			VectorEx<const char*> itemsSM = { lolc("Constant smooth") , lolc("Variable smooth") };
+			DComboBox("Smooth method", Weapons[GetWeap(SelectedWeapon)].SmoothMethod, itemsSM);
+
 			VectorEx<const char*> itemsSMF = { lolc("Deceleration of speed") , lolc("Constant speed") };
 			DComboBox("Smooth factor", Weapons[GetWeap(SelectedWeapon)].SmoothMoveFactor, itemsSMF);
 
@@ -178,14 +181,15 @@ void CLegitAim::Menu()
 			}
 			else if (Weapons[GetWeap(SelectedWeapon)].SmoothMethod == 1)
 			{
-
+				SliderFloats("Start Smooth", Weapons[GetWeap(SelectedWeapon)].StartAcceleration, 1, 100);
+				SliderFloats("End Smooth", Weapons[GetWeap(SelectedWeapon)].EndAcceleration, 1, 100);
 			}
 
 			X1Gui().Spacing();
 			X1Gui().Separator();
 			X1Gui().Spacing();
 
-			SliderFloats("Fov", Weapons[GetWeap(SelectedWeapon)].Fov, 0, 300, "");
+			SliderFloats("Fov", Weapons[GetWeap(SelectedWeapon)].Fov, 0, 300);
 
 			VectorEx<const char*> itemsFP = { lolc("Screen center") , lolc("Recoil"), lolc("On player") };
 			DComboBox("FOV Pos", Weapons[GetWeap(SelectedWeapon)].FovPos, itemsFP);
@@ -202,37 +206,6 @@ void CLegitAim::Menu()
 				{
 					VectorEx<const char*> itemsHB = { lolc("Head"), lolc("Neck"), lolc("Low neck"), lolc("Body"), lolc("Thorax"), lolc("Chest"), lolc("Upper chest") };
 					DComboBox("Hitbox", Weapons[GetWeap(SelectedWeapon)].HitBox, itemsHB);
-				}
-
-				if (!FaceIt)
-				{
-					X1Gui().Spacing();
-					X1Gui().Separator();
-					X1Gui().Spacing();
-
-					DCheckBox("Backtrack", Weapons[GetWeap(SelectedWeapon)].Backtrack);
-					if (Weapons[GetWeap(SelectedWeapon)].Backtrack)
-					{
-						X1Gui().SameLine(158.f);
-						DCheckBox("Ignore smoke Backtrack", IgnoreSmokeBacktrack)
-						DCheckBox("Show Backtrack", ShowBacktrack);
-						if (ShowBacktrack)
-						{
-							X1Gui().SameLine(158.f);
-							X1Gui().PushItemWidth(175.f);
-							VectorEx<const char*>itemsSBS = { lolc("Textured"), lolc("Flat"), lolc("Wireframe"), lolc("Metallic"), lolc("Metallic Plus"), lolc("Pearlescent"), lolc("Animated") };
-							DComboBox("Show Style##ShowBacktrack", ShowBacktrackStyle, itemsSBS);
-							X1Gui().SameLine();
-							DColorEdit("Color##ShowBacktrack", ShowBacktrackColor);
-							X1Gui().Spacing();
-							X1Gui().SameLine(158.f);
-							X1Gui().PushItemWidth(175.f);
-							VectorEx<const char*> itemsSBT = { lolc("All Ticks"), lolc("Last Tick") };
-							DComboBox("Show Type##ShowBacktrack", ShowBacktrackType, itemsSBT);
-						}
-						X1Gui().PushItemWidth(333.f);
-						SliderInts("Time (Ms)", Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit, 0, 200);
-					}
 				}
 			}
 		}
@@ -312,6 +285,38 @@ void CLegitAim::Menu()
 		}
 		else if (SubTabAimSelected == 3)
 		{
+			if (!FaceIt)
+			{
+				DCheckBox("Backtrack", Weapons[GetWeap(SelectedWeapon)].Backtrack);
+
+				DCheckBox("Ignore smoke##Backtrack", IgnoreSmokeBacktrack);
+
+				SliderInts("Time (Ms)##Backtrack", Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit, 0, 200);
+
+				X1Gui().Spacing();
+				X1Gui().Separator();
+				X1Gui().Spacing();
+				DCheckBox("Show Backtrack", ShowBacktrack);
+				if (ShowBacktrack)
+				{
+					X1Gui().SameLine();
+					DCheckBox("Visible Only##ShowBacktrack", SBVisibleOnly);
+
+					VectorEx<const char*> itemsSBT = { lolc("All Ticks"), lolc("Last Tick") };
+					DComboBox("Tick##ShowBacktrack", SBTick, itemsSBT);
+
+					VectorEx<const char*>itemsSBS = { lolc("Textured"), lolc("Flat"), lolc("Metallic"), lolc("Metallic Plus"), lolc("Pearlescent"), lolc("Animated") };
+					DComboBox("Style##ShowBacktrack", SBStyle, itemsSBS);
+
+					VectorEx<const char*>itemsSBD = { lolc("None"), lolc("Wireframe") };
+					DComboBox("Double##ShowBacktrack", SBDouble, itemsSBD);
+
+					DColorEdit("Color##ShowBacktrack", ShowBactrackColor);
+				}
+			}
+		}
+		else if (SubTabAimSelected == 4)
+		{
 			DCheckBox("Target switch delay", Weapons[GetWeap(SelectedWeapon)].TargetSwitchDelayEnable);
 
 			if (Weapons[GetWeap(SelectedWeapon)].TargetSwitchDelayEnable)
@@ -350,9 +355,12 @@ void CLegitAim::Menu()
 		}
 	}
 	X1Gui().EndChild();
+
+	X1Gui().Spacing();
+	X1Gui().Spacing();
 	X1Gui().Spacing();
 	
-	if (X1Gui().BeginChild(XorStr("TriggerChild"), Vec2(0, 205), true))
+	if (X1Gui().BeginChild(XorStr("TriggerChild"), Vec2(0, 215), true))
 	{
 		static int SubtabTrigMiscSelected = 0;
 

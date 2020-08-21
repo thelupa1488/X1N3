@@ -59,7 +59,6 @@ public:
 				PVOID* SurfaceTable = *reinterpret_cast<PVOID**>(I::Surface());
 				PVOID* ClientModeTable = *reinterpret_cast<PVOID**>(I::ClientMode());
 				PVOID* ClientTable = *reinterpret_cast<PVOID**>(I::Client());
-				PVOID* ClientStateTable = *reinterpret_cast<PVOID**>(I::ClientState());
 				PVOID* ModelRenderTable = *reinterpret_cast<PVOID**>(I::ModelRender());
 				PVOID* SteamTable = *reinterpret_cast<PVOID**>(I::SteamGameCoordinator());
 
@@ -119,11 +118,6 @@ public:
 					ADD_LOG("Hook: StageNotify\n");
 				}
 				ADD_LOG("2-1-11-7\n");
-				if (ClientStateTable)
-				{
-					//...//
-				}
-				ADD_LOG("2-1-11-8\n");
 				if (ModelRenderTable)
 				{
 					pContext.ApplyDetour<DrawModelExecuteFn>(static_cast<DrawModelExecuteFn>(ModelRenderTable[DrawModelExecuteIdx]),
@@ -149,14 +143,14 @@ public:
 				}
 #endif
 #endif
-				ADD_LOG("2-1-11-9\n");
+				ADD_LOG("2-1-11-8\n");
 				GP_Setup = new CSetup::ISetup();
 				GP_Setup->Setup();
-				ADD_LOG("2-1-11-10\n");
+				ADD_LOG("2-1-11-9\n");
 				ADD_LOG("All Hooks sucessful\n");
 			};
 			LInitHooks();
-			ADD_LOG("2-1-11-11\n");
+			ADD_LOG("2-1-11-10\n");
 
 			VMP_END
 		}
@@ -247,10 +241,7 @@ public:
 				offsets["d3d9TablePtrPtr"] = (Utils::PatternScan(shaderapidx9Factory, XorStr("A1 ? ? ? ? 50 8B 08 FF 51 0C")) + 1);
 				offsets["Input"] = (Utils::PatternScan(clientFactory, XorStr("B9 ? ? ? ? F3 0F 11 04 24 FF 50 10")) + 1);
 				offsets["MoveHelper"] = (Utils::PatternScan(clientFactory, XorStr("8B 0D ? ? ? ? 8B 45 ? 51 8B D4 89 02 8B 01")) + 2);
-				offsets["GlowObjManager"] = (Utils::PatternScan(clientFactory, XorStr("0F 11 05 ? ? ? ? 83 C8 01")) + 3);
-				offsets["MatchFramework"] = (Utils::PatternScan(clientFactory, XorStr("8B 0D ? ? ? ? 8B 01 FF 50 2C 8D 4B 18")) + 2);
 				offsets["ClientState"] = (Utils::PatternScan(engineFactory, XorStr("A1 ? ? ? ? 8B 80 ? ? ? ? C3")) + 1);
-				offsets["GameRules"] = (Utils::PatternScan(clientFactory, XorStr("8B 0D ?? ?? ?? ?? 85 C0 74 0A 8B 01 FF 50 78 83 C0 54")) + 2);
 				offsets["PredictionSeed"] = (Utils::PatternScan(clientFactory, "8B 0D ? ? ? ? BA ? ? ? ? E8 ? ? ? ? 83 C4 04") + 2);
 				offsets["PredictionPlayer"] = (Utils::PatternScan(clientFactory, "89 35 ? ? ? ? F3 0F 10 48 20") + 2);
 				offsets["SetLocalPlayerReady"] = (Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12")));

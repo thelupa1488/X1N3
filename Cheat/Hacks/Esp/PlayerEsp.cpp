@@ -837,13 +837,13 @@ void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMod
 		if (!ChamsVisibleOnly)
 		{
 			ChamsInvisColor[4];
-			OverrideMaterial(true, ChamsStyle, ChamsInvisColor);
+			OverrideMaterial(true, ChamsDouble, ChamsStyle, ChamsInvisColor);
 			fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 		}
 		if (ChamsStyle >= 0)
 		{
 			ChamsVisbleColor[4];
-			OverrideMaterial(false, ChamsStyle, ChamsVisbleColor);
+			OverrideMaterial(false, ChamsDouble, ChamsStyle, ChamsVisbleColor);
 			fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 		}
 	}
@@ -885,14 +885,14 @@ void CEsp::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMod
 		{
 			GlowInvisColor[4];
 			const float Pulse = GlowInvisColor[3] * (std::sin(I::GlobalVars()->curtime * GlowPulseSpeed) * GlowPulseRange + 0.5f + 0.5f);
-			OverrideMaterial(true, GlowStyle, GlowInvisColor, true, Pulse);
+			OverrideMaterial(true, 0, GlowStyle, GlowInvisColor, true, Pulse);
 			fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 		}
 		if (GlowStyle >= 0)
 		{
 			GlowVisbleColor[4];
 			const float Pulse = GlowVisbleColor[3] * (std::sin(I::GlobalVars()->curtime * GlowPulseSpeed) * GlowPulseRange + 0.5f + 0.5f);
-			OverrideMaterial(false, GlowStyle, GlowVisbleColor, true, Pulse);
+			OverrideMaterial(false, 0, GlowStyle, GlowVisbleColor, true, Pulse);
 			fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 		}
 	}

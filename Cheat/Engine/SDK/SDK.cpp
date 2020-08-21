@@ -6,34 +6,31 @@
 
 namespace SDK
 {
-	IVEngineClient*     I::g_pEngine = nullptr;
-	IBaseClientDLL*     I::g_pClient = nullptr;
-	IClientEntityList*  I::g_pEntityList = nullptr;
-	CGlobalVarsBase*    I::g_pGlobals = nullptr;
-	CInput*             I::g_pInput = nullptr;
-	CClientState*       I::g_pClientState = nullptr;
-	IEngineTrace*       I::g_pEngineTrace = nullptr;
-	IClientMode*        I::g_pClientMode = nullptr;
-	IPanel*             I::g_pPanel = nullptr;
-	IVModelInfo*	    I::g_pModelInfo = nullptr;
-	IEngineSound*		I::g_pSound = nullptr;
-	IVModelRender*		I::g_pModelRender = nullptr;
-	IViewRender*		I::g_pRenderView = nullptr;
-	IMaterialSystem*	I::g_pMaterialSystem = nullptr;
-	ISurface*			I::g_pSurface = nullptr;
-	IPhysicsSurfaceProps*I::g_PhysSurface = nullptr;
-	IGameEventManager2*	I::g_pGameEvent = nullptr;
-	IInputSystem*		I::g_pInputSystem = nullptr;
-	ConVar*             I::g_pConVar = nullptr;
-	ILocalize*          I::g_pLocalize = nullptr;
+	IVEngineClient*        I::g_pEngine = nullptr;
+	IBaseClientDLL*        I::g_pClient = nullptr;
+	IClientEntityList*     I::g_pEntityList = nullptr;
+	CGlobalVarsBase*       I::g_pGlobals = nullptr;
+	CInput*                I::g_pInput = nullptr;
+	CClientState*          I::g_pClientState = nullptr;
+	IEngineTrace*          I::g_pEngineTrace = nullptr;
+	IClientMode*           I::g_pClientMode = nullptr;
+	IPanel*                I::g_pPanel = nullptr;
+	IVModelInfo*	       I::g_pModelInfo = nullptr;
+	IEngineSound*		   I::g_pSound = nullptr;
+	IVModelRender*		   I::g_pModelRender = nullptr;
+	IViewRender*		   I::g_pRenderView = nullptr;
+	IMaterialSystem*	   I::g_pMaterialSystem = nullptr;
+	ISurface*			   I::g_pSurface = nullptr;
+	IPhysicsSurfaceProps*  I::g_PhysSurface = nullptr;
+	IGameEventManager2*	   I::g_pGameEvent = nullptr;
+	ConVar*                I::g_pConVar = nullptr;
+	ILocalize*             I::g_pLocalize = nullptr;
 	ISteamGameCoordinator* I::g_pSteamGameCoordinator = nullptr;
-	ISteamUser*         I::g_pSteamUser = nullptr;
-	IMatchFramework*    I::g_pMatchFramework = nullptr;
-	IPrediction*        I::g_pPrediction = nullptr;
-	IMoveHelper*        I::g_pMoveHelper = nullptr;
-	IGameMovement*      I::g_pGameMovement = nullptr;
-	IGameRules*         I::g_pGameRules = nullptr;
-	IBaseFileSystem*    I::g_pFileSystem = nullptr;
+	ISteamUser*            I::g_pSteamUser = nullptr;
+	IPrediction*           I::g_pPrediction = nullptr;
+	IMoveHelper*           I::g_pMoveHelper = nullptr;
+	IGameMovement*         I::g_pGameMovement = nullptr;
+	IGameRules*            I::g_pGameRules = nullptr;
 
 	class InterfaceReg
 	{
@@ -245,16 +242,6 @@ namespace SDK
 		return g_PhysSurface;
 	}
 
-	IInputSystem* I::InputSystem()
-	{
-		if (!g_pInputSystem)
-		{
-			g_pInputSystem = GetInterface<IInputSystem>(inputSysFactory, XorStr("InputSystemVersion"));
-			ADD_LOG("->InputSystem -> %X\n", (DWORD)g_pInputSystem);
-		}
-		return g_pInputSystem;
-	}
-
 	ILocalize* I::Localize()
 	{
 		if (!g_pLocalize)
@@ -264,17 +251,6 @@ namespace SDK
 		}
 
 		return g_pLocalize;
-	}
-
-	IBaseFileSystem* I::FileSystem()
-	{
-		if (!g_pFileSystem)
-		{
-			g_pFileSystem = GetInterface<IBaseFileSystem>(filesysFactory, XorStr("VBaseFileSystem011"));
-			ADD_LOG("->FileSystem -> %X\n", (DWORD)g_pFileSystem);
-		}
-
-		return g_pFileSystem;
 	}
 
 	CGlobalVarsBase* I::GlobalVars()
@@ -321,17 +297,6 @@ namespace SDK
 		return g_pMoveHelper;
 	}
 
-	IMatchFramework* I::MatchFramework()
-	{
-		if (!g_pMatchFramework)
-		{
-			g_pMatchFramework = **(IMatchFramework***)(offsets["MatchFramework"]);
-			ADD_LOG("->MatchFramework -> %X\n", (DWORD)g_pMatchFramework);
-		}
-
-		return g_pMatchFramework;
-	}
-
 	CClientState* I::ClientState()
 	{
 		if (!g_pClientState)
@@ -355,9 +320,8 @@ namespace SDK
 
 	ISteamUser* I::SteamUser()
 	{
-		if (!g_pSteamUser) {
+		if (!g_pSteamUser)
 			SteamGameCoordinator();
-		}
 
 		return g_pSteamUser;
 	}

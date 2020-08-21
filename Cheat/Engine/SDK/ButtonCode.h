@@ -17,6 +17,11 @@ enum
 #define JOYSTICK_POV_BUTTON( _joystick, _button ) ( (ButtonCode_t)JOYSTICK_POV_BUTTON_INTERNAL( _joystick, _button ) )
 #define JOYSTICK_AXIS_BUTTON( _joystick, _button ) ( (ButtonCode_t)JOYSTICK_AXIS_BUTTON_INTERNAL( _joystick, _button ) )
 
+#define VK_KEY_W 0x57
+#define VK_KEY_A 0x41
+#define VK_KEY_D 0x44
+#define VK_KEY_S 0x53
+
 enum ButtonCode_t
 {
 	BUTTON_CODE_INVALID = -1 ,
