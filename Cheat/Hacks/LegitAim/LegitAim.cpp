@@ -334,7 +334,7 @@ void CLegitAim::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const Dr
 					{
 						if (Entity->RenderOrigin.DistTo(data.origin) > 1.f)
 						{
-							GP_Esp->OverrideMaterial(false, SBDouble, SBStyle, ShowBactrackColor);
+							GP_Esp->OverrideMaterial(!SBVisibleOnly, SBDouble, SBStyle, ShowBactrackColor);
 							fnDME(thisptr, ctx, state, pInfo, data.matrix);
 							I::ModelRender()->ForcedMaterialOverride(nullptr);
 						}
@@ -343,7 +343,7 @@ void CLegitAim::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const Dr
 				case 1:
 					if (Entity->RenderOrigin.DistTo(record.back().origin) > 1.f)
 					{
-						GP_Esp->OverrideMaterial(false, SBDouble, SBStyle, ShowBactrackColor);
+						GP_Esp->OverrideMaterial(!SBVisibleOnly, SBDouble, SBStyle, ShowBactrackColor);
 						fnDME(thisptr, ctx, state, pInfo, record.back().matrix);
 						I::ModelRender()->ForcedMaterialOverride(nullptr);
 					}
