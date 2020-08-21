@@ -6,17 +6,16 @@
 #include  "color.h"
 #include  "..//X1API/MinHook/hook.h"
 
-//using oEndScene = HRESULT(STDMETHODCALLTYPE*)(IDirect3DDevice9* pDevice);
-//extern cDetour<oEndScene>* pEndScene;
+namespace HookRender
+{
+	using oEndScene = HRESULT(STDMETHODCALLTYPE*)(IDirect3DDevice9*);
+	using oPresent = HRESULT(STDMETHODCALLTYPE*)(IDirect3DDevice9*, CONST RECT*, CONST RECT*, HWND, CONST RGNDATA*);
+	using oReset = HRESULT(STDMETHODCALLTYPE*)(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*);
 
-using oEndScene = HRESULT(STDMETHODCALLTYPE*)(IDirect3DDevice9 * pDevice);
-extern cDetour<oEndScene>* pEndScene;
-
-using oPresent = HRESULT(STDMETHODCALLTYPE*)(IDirect3DDevice9* pDevice, CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDestWindowOverride, CONST RGNDATA* pDirtyRegion);
-extern cDetour<oPresent>* pPresent;
-
-using oReset = HRESULT(STDMETHODCALLTYPE*)(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*);
-extern cDetour<oReset>* pReset;
+	extern cDetour<oPresent>* pPresent;
+	extern cDetour<oEndScene>* pEndScene;
+	extern cDetour<oReset>* pReset;
+}
 
 extern IDirect3DDevice9* g_pDevice;
 

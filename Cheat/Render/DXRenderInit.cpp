@@ -6,9 +6,24 @@
 #include "DirectData/Present.h"
 #include "DirectData/EndScene.h"
 
-cDetour<oEndScene>* pEndScene;
-cDetour<oPresent>* pPresent;
-cDetour<oReset>* pReset;
+namespace HookRender
+{
+	using oEndScene = HRESULT(STDMETHODCALLTYPE*)(IDirect3DDevice9*);
+	using oPresent = HRESULT(STDMETHODCALLTYPE*)(IDirect3DDevice9*, CONST RECT*, CONST RECT*, HWND, CONST RGNDATA*);
+	using oReset = HRESULT(STDMETHODCALLTYPE*)(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*);
+
+	cDetour<oPresent>* pPresent;
+	cDetour<oEndScene>* pEndScene;
+	cDetour<oReset>* pReset;
+
+	void Shutdown()
+	{
+		pEndScene->Remove();
+		pPresent->Remove();
+		pReset->Remove();
+	}
+}
+using namespace HookRender;
 
 #define ResetIndex 16
 #define PresentIndex 17

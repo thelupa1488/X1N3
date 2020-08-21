@@ -14,41 +14,16 @@
 #include "../Include/Def.h"
 #include "../X1API/MinHook/hook.h"
 
-#define DELETE_PTR(name) delete name; name = nullptr
+namespace HookRender
+{
+	extern void Shutdown();
+}
 namespace HookTables
 {
-	using CreateMoveFn = bool(__stdcall*)(float, CUserCmd*);
-	using OverrideViewFn = bool(__stdcall*)(CViewSetup*);
-	using GetViewModelFOVFn = float(__stdcall*)();
-	using FrameStageNotifyFn = void(__thiscall*)(void*, ClientFrameStage_t);
-	using FireEventClientSideThinkFn = bool(__thiscall*)(void*, IGameEvent*);
-	using DrawModelExecuteFn = void(__thiscall*)(void*, IMatRenderContext*, const DrawModelState_t&,
-		const ModelRenderInfo_t&, matrix3x4_t*);
-	using LockCursorFn = bool(__thiscall*)(void*);
-	using PostDataUpdateFn = void(__stdcall*)(void*, int);
-	using EmitSoundFn = void(__fastcall*)(IEngineSound*, int, IRecipientFilter&, int, int, const char*,
-		unsigned int, const char*, float, float, int, int, int, const Vector*,
-		const Vector*, CUtlVector<Vector>*, bool, int, int, SndInfo_t&);
-#ifdef ENABLE_INVENTORY
-	using RetrieveMessageFn = EGCResults(__thiscall*)(void*, uint32_t*, void*, uint32_t, uint32_t*);
-	using SendMessageFn = EGCResults(__thiscall*)(void*, uint32_t, const void*, uint32_t);
-#endif
-
-	extern cDetour<CreateMoveFn>* pCreateMove;
-	extern cDetour<OverrideViewFn>* pOverrideView;
-	extern cDetour<GetViewModelFOVFn>* pGetViewModelFOV;
-	extern cDetour<FrameStageNotifyFn>* pFrameStageNotify;
-	extern cDetour<FireEventClientSideThinkFn>* pFireEventClientSideThink;
-	extern cDetour<DrawModelExecuteFn>* pDrawModelExecute;
-	extern cDetour<LockCursorFn>* pLockCursor;
-	extern cDetour<PostDataUpdateFn>* pPostDataUpdate;
-	extern cDetour<EmitSoundFn>* pEmitSound;
-#ifdef ENABLE_INVENTORY
-	extern cDetour<RetrieveMessageFn>* pRetrieveMessage;
-	extern cDetour<SendMessageFn>* pSendMessage;
-#endif
+	extern void Shutdown();
 }
-using namespace HookTables;
+
+#define DELETE_PTR(name) delete name; name = nullptr
 
 class IISetup
 {
@@ -122,22 +97,11 @@ public:
 		}
 		virtual void Shutdown()
 		{
+			HookRender::Shutdown();
+			HookTables::Shutdown();
+
 			GP_Misc->HitWorker.UnRegListener();
 			GP_Skins->FireEvent.UnRegListener();
-
-			pCreateMove->Remove();
-			pOverrideView->Remove();
-			pGetViewModelFOV->Remove();
-			pFrameStageNotify->Remove();
-			pFireEventClientSideThink->Remove();
-			pDrawModelExecute->Remove();
-			pLockCursor->Remove();
-			pPostDataUpdate->Remove();
-			pEmitSound->Remove();
-#ifdef ENABLE_INVENTORY
-			pRetrieveMessage->Remove();
-			pSendMessage->Remove();
-#endif
 
 			DELETE_PTR(GP_Render);
 			DELETE_PTR(GP_EntPlayers);

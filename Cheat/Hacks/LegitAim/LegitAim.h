@@ -166,9 +166,9 @@ public:
 	virtual void TriggerGetBestTarget(Vector mAngle);
 	virtual void TriggerRCS(int X, int Y, CUserCmd* pCmd, bool Enable);
 	virtual bool __declspec(noinline) CanFire(Vector mAngle, CUserCmd* pCmd, CBaseEntity* BaseEnt, int BestInd, CBaseEntity* Local, bool AllHitGroup);
+
 	/*NO SAVE*/
 	int TriggerBestIdx = -1;
-
 	int WeaponCustomTypes = 0;
 	bool ShowWeaponList = false;
 	int SubTabAimSelected = 0;
@@ -202,13 +202,12 @@ public:
 	bool FaceIt = false;
 	bool EntityAim = false;
 	bool Resolver = false;
+	//bool Debug = false;
 	bool ShowEntitysName = false;
 	string EntityTargetName = XorStr("<default>");
 
 	CBind AimBind = CBind(0);
 	CBind TriggerBind = CBind(0);
-
-//	bool Debug = false;
 
 	float MouseSense = 1.9f;
 
@@ -271,7 +270,7 @@ public:
 		bool IsCustomSub = false;
 
 		int SmoothMethod = 0;
-
+		int SmoothMoveFactor = 0;
 		float StartAcceleration = 85;
 		float EndAcceleration = 65;
 
@@ -340,8 +339,6 @@ public:
 
 		bool Backtrack = false;
 		int BacktrackTimeLimit = 0;
-
-		int SmoothMoveFactor = 0;
 
 #define CHECK_VAR(l) if(l != src.##l) return false;
 		bool operator==(const WeaponSettings& src) const

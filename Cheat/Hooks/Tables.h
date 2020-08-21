@@ -36,4 +36,20 @@ namespace HookTables
 	cDetour<RetrieveMessageFn>* pRetrieveMessage;
 	cDetour<SendMessageFn>* pSendMessage;
 #endif
+	void Shutdown()
+	{
+		pCreateMove->Remove();
+		pOverrideView->Remove();
+		pGetViewModelFOV->Remove();
+		pFrameStageNotify->Remove();
+		pFireEventClientSideThink->Remove();
+		pDrawModelExecute->Remove();
+		pLockCursor->Remove();
+		pPostDataUpdate->Remove();
+		pEmitSound->Remove();
+#ifdef ENABLE_INVENTORY
+		pRetrieveMessage->Remove();
+		pSendMessage->Remove();
+#endif
+	}
 }

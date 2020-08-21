@@ -146,5 +146,5 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDirect3DDevice9* pDevice, CONST RECT* pSour
 	for (int i = 0; i < size; i++)
 		pDevice->SetRenderState(backupStates[i], oldStates[i]);
 
-	return pPresent->GetTrampoline()(pDevice, pSourceRect, pDestRect, hDestWindowOverride, pDirtyRegion);
+	return HookRender::pPresent->GetTrampoline()(pDevice, pSourceRect, pDestRect, hDestWindowOverride, pDirtyRegion);
 }
