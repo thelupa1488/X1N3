@@ -220,7 +220,7 @@ void CLegitAim::Menu()
 						{
 							X1Gui().SameLine(158.f);
 							X1Gui().PushItemWidth(175.f);
-							VectorEx<const char*>itemsSBS = { lolc("Textured"), lolc("Flat"), lolc("Wireframe"), lolc("Metallic"), lolc("Pearlescent"), lolc("Animated") };
+							VectorEx<const char*>itemsSBS = { lolc("Textured"), lolc("Flat"), lolc("Wireframe"), lolc("Metallic"), lolc("Metallic Plus"), lolc("Pearlescent"), lolc("Animated") };
 							DComboBox("Show Style##ShowBacktrack", ShowBacktrackStyle, itemsSBS);
 							X1Gui().SameLine();
 							DColorEdit("Color##ShowBacktrack", ShowBacktrackColor);

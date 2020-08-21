@@ -58,6 +58,7 @@ private:
 	IMaterial* Flat = nullptr;
 	IMaterial* Wireframe = nullptr;
 	IMaterial* Metallic = nullptr;
+	IMaterial* MetallicPlus = nullptr;
 	IMaterial* Pearlescent = nullptr;
 	IMaterial* Animated = nullptr;
 	IMaterial* GlowDef = nullptr;

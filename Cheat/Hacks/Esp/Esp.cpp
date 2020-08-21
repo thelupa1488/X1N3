@@ -163,20 +163,12 @@ void CEsp::InitializeMaterials()
 		Wireframe = I::MaterialSystem()->CreateMaterial("Wireframe", KeyValues::FromString("VertexLitGeneric", "$basetexture white $wireframe 1"));
 
 	if (!Metallic)
-		Metallic = I::MaterialSystem()->CreateMaterial("Metallic", KeyValues::FromString("VertexLitGeneric",
-			"$basetexture white\
-			 $ignorez 0\
-			 $envmap env_cubemap\
-			 $normalmapalphaenvmapmask 1\
-			 $envmapcontrast 1\
-			 $nofog 1\
-			 $model 1\
-			 $nocull 0\
-			 $selfillum 1\
-			 $halfambert 1\
-			 $znearer 0\
-			 $flat 1\
-			 $rimlight 1 $rimlightexponent 2 $rimlightboost 0.2 $rimlightboost [ 1 1 1 ]"));
+		Metallic = I::MaterialSystem()->CreateMaterial("Mettalic", KeyValues::FromString("VertexLitGeneric",
+			"$basetexture white $envmap env_cubemap $normalmapalphaenvmapmask 1 $envmapcontrast 1 $nofog 1 $model 1 $nocull 0 $selfillum 1 $halfambert 1 $znearer 0 $flat 1"));
+
+	if (!MetallicPlus)
+		MetallicPlus = I::MaterialSystem()->CreateMaterial("Mettalic", KeyValues::FromString("VertexLitGeneric",
+			"$envmap env_cubemap $envmapcontrast 1 $envmapsaturation 1.0 $phong 1 $phongexponent 15.0 $normalmapalphaenvmask 1 $phongboost 6.0"));
 
 	if (!Pearlescent)
 		Pearlescent = I::MaterialSystem()->CreateMaterial("Pearlescent", KeyValues::FromString("VertexLitGeneric",
@@ -193,14 +185,14 @@ void CEsp::InitializeMaterials()
 
 	if (!GlowDef)
 		GlowDef = I::MaterialSystem()->CreateMaterial("GlowDefault", KeyValues::FromString("VertexLitGeneric",
-			"$additive 1 $envmap models/effects/cube_white $envmapfresnel 1 $alpha .8"));
+			"$additive 1 $envmap models/effects/cube_white $envmapfresnel 1"));
 
 	if (!GlowSPulse)
 		GlowSPulse = I::MaterialSystem()->FindMaterial("dev/glow_armsrace.vmt");
 
 	if (!GlowDPulse)
 		GlowDPulse = I::MaterialSystem()->CreateMaterial("GlowDPulse", KeyValues::FromString("VertexLitGeneric",
-			"$additive 1 $envmap models/effects/cube_white $envmapfresnel 1 $alpha .8"));
+			"$additive 1 $envmap models/effects/cube_white $envmapfresnel 1"));
 }
 
 void CEsp::OverrideMaterial(bool IgnoreZ, int Type, Color RGBA, bool Glow, const float Pulse)
@@ -214,8 +206,9 @@ void CEsp::OverrideMaterial(bool IgnoreZ, int Type, Color RGBA, bool Glow, const
 		case 1: ChamsMaterial = Flat; break;
 		case 2: ChamsMaterial = Wireframe; break;
 		case 3: ChamsMaterial = Metallic; break;
-		case 4: ChamsMaterial = Pearlescent; break;
-		case 5: ChamsMaterial = Animated; break;
+		case 4: ChamsMaterial = MetallicPlus; break;
+		case 5: ChamsMaterial = Pearlescent; break;
+		case 6: ChamsMaterial = Animated; break;
 		default: 
 			break;
 		}
@@ -223,7 +216,16 @@ void CEsp::OverrideMaterial(bool IgnoreZ, int Type, Color RGBA, bool Glow, const
 		if (!ChamsMaterial || ChamsMaterial->IsErrorMaterial())
 			return;
 
-		ChamsMaterial->ColorModulate(RGBA.G1R(), RGBA.G1G(), RGBA.G1B());
+		if (Type == 4)
+		{
+			static bool bFoundColor = false;
+			IMaterialVar* pMatColor = ChamsMaterial->FindVar("$envmaptint", &bFoundColor);
+			if (bFoundColor)
+				pMatColor->SetVecValue(RGBA.G1R(), RGBA.G1G(), RGBA.G1B());
+		}
+		else
+			ChamsMaterial->ColorModulate(RGBA.G1R(), RGBA.G1G(), RGBA.G1B());
+
 		ChamsMaterial->AlphaModulate(RGBA.G1A());
 
 		ChamsMaterial->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, IgnoreZ);

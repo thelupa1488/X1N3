@@ -1816,14 +1816,15 @@ float FovToPlayer(QAngle viewAngle, QAngle aimAngle)
 void CLegitAim::InitializeBacktrack()
 {
 	records.clear();
-	vars.cl_UpdateRate = I::GetConVar()->FindVar("cl_updaterate");
-	vars.cl_minUpdateRate = I::GetConVar()->FindVar("sv_minupdaterate");
-	vars.cl_maxUpdateRate = I::GetConVar()->FindVar("sv_maxupdaterate");
-	vars.cl_interp = I::GetConVar()->FindVar("cl_interp");
-	vars.cl_interpRatio = I::GetConVar()->FindVar("cl_interp_ratio");
-	vars.cl_minInterpRatio = I::GetConVar()->FindVar("sv_client_min_interp_ratio");
-	vars.cl_maxInterpRatio = I::GetConVar()->FindVar("sv_client_max_interp_ratio");
-	vars.cl_maxUnlag = I::GetConVar()->FindVar("sv_maxunlag");
+
+	vars.cl_UpdateRate = I::GetConVar()->FindVar(XorStr("cl_updaterate"));
+	vars.cl_minUpdateRate = I::GetConVar()->FindVar(XorStr("sv_minupdaterate"));
+	vars.cl_maxUpdateRate = I::GetConVar()->FindVar(XorStr("sv_maxupdaterate"));
+	vars.cl_interp = I::GetConVar()->FindVar(XorStr("cl_interp"));
+	vars.cl_interpRatio = I::GetConVar()->FindVar(XorStr("cl_interp_ratio"));
+	vars.cl_minInterpRatio = I::GetConVar()->FindVar(XorStr("sv_client_min_interp_ratio"));
+	vars.cl_maxInterpRatio = I::GetConVar()->FindVar(XorStr("sv_client_max_interp_ratio"));
+	vars.cl_maxUnlag = I::GetConVar()->FindVar(XorStr("sv_maxunlag"));
 
 	vars.UpdateRate = vars.cl_UpdateRate->GetFloat();
 	vars.minUpdateRate = vars.cl_minUpdateRate->GetFloat();
