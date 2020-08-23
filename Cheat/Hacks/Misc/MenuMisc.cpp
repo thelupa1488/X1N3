@@ -135,6 +135,15 @@ void CMisc::Menu()
 	X1Gui().Spacing();
 	X1Gui().Separator();
 	X1Gui().Spacing();
+	DCheckBox("Aspect", Aspect);
+	if (Aspect)
+	{
+		X1Gui().PushItemWidth(PUSH_2);
+		SliderFloats("Aspect ratio", AspectRation, 0.1, 5);
+	}
+	X1Gui().Spacing();
+	X1Gui().Separator();
+	X1Gui().Spacing();
 	DCheckBox("No visual recoil", NoVisualRecoil);
 	X1Gui().Spacing();
 	X1Gui().Separator();
@@ -230,7 +239,7 @@ void CMisc::Menu()
 			{
 				itemsHSS.push_back(SoundList[i].c_str());
 			}
-			X1Gui().ComboBox(XorStr("Style##Hts"), &HitSoundStyle, itemsHSS);
+			DComboBox("Style##Hts", HitSoundStyle, itemsHSS);
 		}
 	}
 	X1Gui().Spacing();

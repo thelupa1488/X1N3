@@ -200,10 +200,10 @@
     <ClCompile Include="Engine\SDK\KeyValues.cpp">
       <Filter>Engine\SDK</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\SDK\Vector.cpp" />
     <ClCompile Include="Engine\EnginePrediction.cpp" />
     <ClCompile Include="X1API\Cryptor\base64.cpp" />
     <ClCompile Include="X1API\Cryptor\Cryptor.cpp" />
+    <ClCompile Include="Engine\SDK\Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />

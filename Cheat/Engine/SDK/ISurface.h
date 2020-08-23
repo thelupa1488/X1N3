@@ -95,7 +95,7 @@ namespace SDK
         virtual void          DrawPrintText(const wchar_t* text, int textLen, FontDrawType drawType = FontDrawType::FONT_DRAW_DEFAULT) = 0;
         virtual void          DrawUnicodeChar(wchar_t wch, FontDrawType drawType = FontDrawType::FONT_DRAW_DEFAULT) = 0;
         virtual void          DrawFlushText() = 0;
-        virtual void* CreateHTMLWindow(void* events, vgui::VPANEL context) = 0;
+        virtual void*         CreateHTMLWindow(void* events, vgui::VPANEL context) = 0;
         virtual void          PaintHTMLWindow(void* htmlwin) = 0;
         virtual void          DeleteHTMLWindow(void* htmlwin) = 0;
         virtual int           DrawGetTextureId(char const* filename) = 0;

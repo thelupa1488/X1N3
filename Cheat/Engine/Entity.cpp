@@ -523,7 +523,7 @@ namespace Engine
 		if (!pHitboxBox || !IsValid())
 			return vRet;
 
-		if (!SetupBones(MatrixArray, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, 0))
+		if (!SetupBones(MatrixArray, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, !GetSimTime()))
 			return vRet;
 
 		if (!pHitboxBox->bone || !pHitboxBox->bbmin.IsValid() || !pHitboxBox->bbmax.IsValid())

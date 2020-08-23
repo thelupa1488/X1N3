@@ -183,7 +183,10 @@ namespace SDK
 		void	MulAdd( const Vector& a , const Vector& b , float scalar );
 
 		// Dot product.
-		vec_t	Dot( const Vector& vOther ) const;
+		float Dot(const Vector& vOther) const
+		{
+			return (x * vOther.x + y * vOther.y + z * vOther.z);
+		}
 
 		// assignment
 		Vector& operator=( const Vector &vOther );

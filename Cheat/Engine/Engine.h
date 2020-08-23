@@ -133,9 +133,10 @@ public:
 	static CUserCmd* UserCmd;
 
 	static int OrigRightHand;
-	static int OrigViewModelX;
-	static int OrigViewModelY;
-	static int OrigViewModelZ;
+	static float OrigViewModelX;
+	static float OrigViewModelY;
+	static float OrigViewModelZ;
+	static float OrigAspectRatio;
 
 	static string WeaponNames[34];
 

@@ -3,7 +3,7 @@
 #include "../../GUI/Gui.h"
 #include "../../Engine/EnginePrediction.h"
 
-#define KEY_DOWN(VK_NNM) ((FastCall::G().t_GetAsyncKeyState(VK_NNM) & 0x8000) ? 1:0)
+#define KEY_DOWN(VK_NNM) ((FastCall::G().t_GetAsyncKeyState(VK_NNM) & 0x8000) ? 1 : 0)
 
 using namespace HookTables;
 
@@ -395,6 +395,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 	ConVar* viewmodel_offset_x = I::GetConVar()->FindVar(XorStr("viewmodel_offset_x"));
 	ConVar* viewmodel_offset_y = I::GetConVar()->FindVar(XorStr("viewmodel_offset_y"));
 	ConVar* viewmodel_offset_z = I::GetConVar()->FindVar(XorStr("viewmodel_offset_z"));
+	ConVar* r_aspectratio = I::GetConVar()->FindVar(XorStr("r_aspectratio"));
 
 	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
 	{
@@ -836,6 +837,18 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				viewmodel_offset_y->SetValue(CGlobal::OrigViewModelY);
 				viewmodel_offset_z->SetValue(CGlobal::OrigViewModelZ);
 				ViewModelXYZReset = false;
+			}
+
+			static bool AspectRatioReset = false;
+			if (Aspect)
+			{
+				r_aspectratio->SetValue(AspectRation);
+				AspectRatioReset = true;
+			}
+			if (!Aspect && AspectRatioReset)
+			{
+				r_aspectratio->SetValue(CGlobal::OrigAspectRatio);
+				AspectRatioReset = false;
 			}
 
 			if (FakeLag && FakeLagBind.Check())
@@ -1349,7 +1362,7 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 		{
 			IMaterial* Material = I::MaterialSystem()->FindMaterial(ModelName, TEXTURE_GROUP_MODEL);
 
-			if (HCStyle)
+			if (HandChams)
 			{
 				HandChamsColor[4];
 				GP_Esp->OverrideMaterial(false, HCDouble, HCStyle, HandChamsColor);
@@ -1361,7 +1374,7 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 				fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 			}
 
-			if (HGStyle)
+			if (HandGlow)
 			{
 				HandGlowColor[4];
 				const float Pulse = HandGlowColor[3] * (std::sin(I::GlobalVars()->curtime * HGPSpeed) * HGPRange + 0.5f + 0.5f);
@@ -1383,7 +1396,7 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 		{
 			IMaterial* Material = I::MaterialSystem()->FindMaterial(ModelName, TEXTURE_GROUP_MODEL);
 
-			if (WCStyle)
+			if (WeaponChams)
 			{
 				WeaponChamsColor[4];
 				GP_Esp->OverrideMaterial(false, WCDouble, WCStyle, WeaponChamsColor);
@@ -1395,7 +1408,7 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 				fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 			}
 
-			if (WGStyle)
+			if (WeaponGlow)
 			{
 				WeaponGlowColor[4];
 				const float Pulse = WeaponGlowColor[3] * (std::sin(I::GlobalVars()->curtime * WGPSpeed) * WGPRange + 0.5f + 0.5f);
@@ -1574,160 +1587,123 @@ vector<int> CMisc::GetObservervators(int playerId)
 
 void CMisc::Night()
 {
-	static bool nightz = false;
-
+	static bool NightModeReset = false;
 	if (NightMode && CGlobal::IsGameReady)
 	{
-		if (!nightz)
+		static auto sv_skyname = I::GetConVar()->FindVar(XorStr("sv_skyname"));
+		static auto r_DrawSpecificStaticProp = I::GetConVar()->FindVar(XorStr("r_DrawSpecificStaticProp"));
+		r_DrawSpecificStaticProp->SetValue(1);
+		sv_skyname->SetValue(XorStr("sky_csgo_night02"));
+
+		for (MaterialHandle_t i = I::MaterialSystem()->FirstMaterial(); i != I::MaterialSystem()->InvalidMaterial(); i = I::MaterialSystem()->NextMaterial(i))
 		{
-			static auto sv_skyname = I::GetConVar()->FindVar(XorStr("sv_skyname"));
-			static auto r_DrawSpecificStaticProp = I::GetConVar()->FindVar(XorStr("r_DrawSpecificStaticProp"));
+			IMaterial* pMaterial = I::MaterialSystem()->GetMaterial(i);
 
-			r_DrawSpecificStaticProp->SetValue(1);
-			sv_skyname->SetValue(XorStr("sky_csgo_night02"));
+			if (!pMaterial)
+				continue;
 
-			for (MaterialHandle_t i = I::MaterialSystem()->FirstMaterial(); i != I::MaterialSystem()->InvalidMaterial(); i = I::MaterialSystem()->NextMaterial(i))
+			const char* group = pMaterial->GetTextureGroupName();
+			const char* name = pMaterial->GetName();
+
+			if (strstr(group, XorStr("World textures")))
 			{
-				IMaterial *pMaterial = I::MaterialSystem()->GetMaterial(i);
-
-				if (!pMaterial)
-					continue;
-
-				const char* group = pMaterial->GetTextureGroupName();
-				const char* name = pMaterial->GetName();
-
-				if (strstr(group, XorStr("World textures")))
-				{
-					pMaterial->ColorModulate(0.10, 0.10, 0.10);
-				}
-				if (strstr(group, XorStr("StaticProp")))
-				{
-					pMaterial->ColorModulate(0.30, 0.30, 0.30);
-				}
-				if (strstr(name, XorStr("models/props/de_dust/palace_bigdome")))
-				{
-					pMaterial->SetMaterialVarFlag(MATERIAL_VAR_NO_DRAW, true);
-				}
-				if (strstr(name, XorStr("models/props/de_dust/palace_pillars")))
-				{
-					pMaterial->ColorModulate(0.30, 0.30, 0.30);
-				}
-				if (strstr(group, XorStr("Particle textures")))
-				{
-					pMaterial->SetMaterialVarFlag(MATERIAL_VAR_NO_DRAW, true);
-				}
-				nightz = true;
+				pMaterial->ColorModulate(0.10, 0.10, 0.10);
+			}
+			if (strstr(group, XorStr("StaticProp")))
+			{
+				pMaterial->ColorModulate(0.30, 0.30, 0.30);
+			}
+			if (strstr(name, XorStr("models/props/de_dust/palace_bigdome")))
+			{
+				pMaterial->SetMaterialVarFlag(MATERIAL_VAR_NO_DRAW, true);
+			}
+			if (strstr(name, XorStr("models/props/de_dust/palace_pillars")))
+			{
+				pMaterial->ColorModulate(0.30, 0.30, 0.30);
+			}
+			if (strstr(group, XorStr("Particle textures")))
+			{
+				pMaterial->SetMaterialVarFlag(MATERIAL_VAR_NO_DRAW, true);
 			}
 		}
+		NightModeReset = true;
 	}
-	else
+	if (!NightMode && NightModeReset)
 	{
-		if (nightz)
+		for (MaterialHandle_t i = I::MaterialSystem()->FirstMaterial(); i != I::MaterialSystem()->InvalidMaterial(); i = I::MaterialSystem()->NextMaterial(i))
 		{
-			for (MaterialHandle_t i = I::MaterialSystem()->FirstMaterial(); i != I::MaterialSystem()->InvalidMaterial(); i = I::MaterialSystem()->NextMaterial(i))
+			IMaterial* pMaterial = I::MaterialSystem()->GetMaterial(i);
+
+			if (!pMaterial)
+				continue;
+
+			const char* group = pMaterial->GetTextureGroupName();
+			const char* name = pMaterial->GetName();
+
+			if (strstr(group, XorStr("World textures")))
 			{
-				IMaterial *pMaterial = I::MaterialSystem()->GetMaterial(i);
-
-				if (!pMaterial)
-					continue;
-
-				const char* group = pMaterial->GetTextureGroupName();
-				const char* name = pMaterial->GetName();
-
-				if (strstr(group, XorStr("World textures")))
-				{
-					pMaterial->ColorModulate(1, 1, 1);
-				}
-				if (strstr(group, XorStr("StaticProp")))
-				{
-					pMaterial->ColorModulate(1, 1, 1);
-				}
-				if (strstr(name, XorStr("models/props/de_dust/palace_bigdome")))
-				{
-					pMaterial->SetMaterialVarFlag(MATERIAL_VAR_NO_DRAW, false);
-				}
-				if (strstr(name, XorStr("models/props/de_dust/palace_pillars")))
-				{
-					pMaterial->ColorModulate(1, 1, 1);
-				}
-				if (strstr(group, XorStr("Particle textures")))
-				{
-					pMaterial->SetMaterialVarFlag(MATERIAL_VAR_NO_DRAW, false);
-				}
+				pMaterial->ColorModulate(1, 1, 1);
 			}
-
-			nightz = false;
+			if (strstr(group, XorStr("StaticProp")))
+			{
+				pMaterial->ColorModulate(1, 1, 1);
+			}
+			if (strstr(name, XorStr("models/props/de_dust/palace_bigdome")))
+			{
+				pMaterial->SetMaterialVarFlag(MATERIAL_VAR_NO_DRAW, false);
+			}
+			if (strstr(name, XorStr("models/props/de_dust/palace_pillars")))
+			{
+				pMaterial->ColorModulate(1, 1, 1);
+			}
+			if (strstr(group, XorStr("Particle textures")))
+			{
+				pMaterial->SetMaterialVarFlag(MATERIAL_VAR_NO_DRAW, false);
+			}
 		}
+		NightModeReset = false;
 	}
 }
 
 void CMisc::CustomWalls()
 {
-	static bool reset = false;
-
+	static bool CustomWallsReset = false;
 	if (ColoredWalls && CGlobal::IsGameReady)
 	{
-		static float old_r = ColoredWallsColor.G1R();
-		static float old_g = ColoredWallsColor.G1G();
-		static float old_b = ColoredWallsColor.G1B();
-		static float old_a = ColoredWallsColor.G1A();
-
-		static int old_style = ColoredWallsStyle;
-
-		if (!reset || old_style != ColoredWallsStyle ||
-			(old_r != ColoredWallsColor.G1R() ||
-				old_g != ColoredWallsColor.G1G() ||
-				old_b != ColoredWallsColor.G1B() ||
-				old_a != ColoredWallsColor.G1A()))
+		for (MaterialHandle_t i = I::MaterialSystem()->FirstMaterial(); i != I::MaterialSystem()->InvalidMaterial(); i = I::MaterialSystem()->NextMaterial(i))
 		{
+			IMaterial* pMaterial = I::MaterialSystem()->GetMaterial(i);
 
-			for (MaterialHandle_t i = I::MaterialSystem()->FirstMaterial(); i != I::MaterialSystem()->InvalidMaterial(); i = I::MaterialSystem()->NextMaterial(i))
+			if (!pMaterial)
+				continue;
+
+			if (strstr(pMaterial->GetTextureGroupName(), XorStr("World")) ||
+				strstr(pMaterial->GetTextureGroupName(), XorStr("Particle textures")) ||
+				strstr(pMaterial->GetTextureGroupName(), XorStr("StaticProp")) ||
+				strstr(pMaterial->GetTextureGroupName(), XorStr("SkyBox")))
 			{
-				IMaterial *pMaterial = I::MaterialSystem()->GetMaterial(i);
-
-				if (!pMaterial)
-					continue;
-
-				if (strstr(pMaterial->GetTextureGroupName(), XorStr("World")) ||
-					strstr(pMaterial->GetTextureGroupName(), XorStr("Particle textures")) ||
-					strstr(pMaterial->GetTextureGroupName(), XorStr("StaticProp")) ||
-					strstr(pMaterial->GetTextureGroupName(), XorStr("SkyBox")))
-				{
-
-					pMaterial->AlphaModulate(ColoredWallsColor.G1A());
-					pMaterial->ColorModulate(ColoredWallsColor.G1R(), ColoredWallsColor.G1G(), ColoredWallsColor.G1B());
-				}
-
+				pMaterial->AlphaModulate(ColoredWallsColor.G1A());
+				pMaterial->ColorModulate(ColoredWallsColor.G1R(), ColoredWallsColor.G1G(), ColoredWallsColor.G1B());
 			}
-
-			reset = true;
+			CustomWallsReset = true;
 		}
-
-		old_r = ColoredWallsColor.G1R();
-		old_g = ColoredWallsColor.G1G();
-		old_b = ColoredWallsColor.G1B();
-		old_a = ColoredWallsColor.G1A();
-		old_style = ColoredWallsStyle;
 	}
-	else
+	if (!ColoredWalls && CustomWallsReset)
 	{
-		if (reset && CGlobal::IsGameReady)
+		for (MaterialHandle_t i = I::MaterialSystem()->FirstMaterial(); i != I::MaterialSystem()->InvalidMaterial(); i = I::MaterialSystem()->NextMaterial(i))
 		{
-			for (MaterialHandle_t i = I::MaterialSystem()->FirstMaterial(); i != I::MaterialSystem()->InvalidMaterial(); i = I::MaterialSystem()->NextMaterial(i))
+			IMaterial* pMaterial = I::MaterialSystem()->GetMaterial(i);
+
+			if (!pMaterial)
+				continue;
+
+			if (strstr(pMaterial->GetTextureGroupName(), XorStr("World")))
 			{
-				IMaterial *pMaterial = I::MaterialSystem()->GetMaterial(i);
-
-				if (!pMaterial)
-					continue;
-
-				if (strstr(pMaterial->GetTextureGroupName(), XorStr("World")))
-				{
-					pMaterial->AlphaModulate(1);
-					pMaterial->ColorModulate(1, 1, 1);
-				}
+				pMaterial->AlphaModulate(1);
+				pMaterial->ColorModulate(1, 1, 1);
 			}
-			reset = false;
 		}
+		CustomWallsReset = false;
 	}
 }
 
@@ -1753,6 +1729,38 @@ void CHitListener::RegListener()
 void CHitListener::UnRegListener()
 {
 	I::GameEvent()->RemoveListener(this);
+}
+
+void ReadWavFileIntoMemory(string fname, BYTE** pb, DWORD* fsize) 
+{
+	ifstream f(fname, ios::binary);
+
+	f.seekg(0, ios::end);
+	int lim = f.tellg();
+	*fsize = lim;
+
+	*pb = new BYTE[lim];
+	f.seekg(0, ios::beg);
+
+	f.read((char*)*pb, lim);
+
+	f.close();
+}
+
+void PlaySound_Volume(string szFilename, float fVolume)
+{
+	DWORD dwFileSize;
+	BYTE* pFileBytes;
+	ReadWavFileIntoMemory(szFilename, &pFileBytes, &dwFileSize);
+
+	BYTE* pDataOffset = (pFileBytes + 40);
+
+	__int16* p = (__int16*)(pDataOffset + 8);
+
+	for (int i = 80 / sizeof(*p); i < dwFileSize / sizeof(*pFileBytes); i++)
+		p[i] = (float)p[i] * fVolume;
+
+	PlaySound((LPCSTR)pFileBytes, NULL, SND_MEMORY);
 }
 
 #define HIT_TRACE_SHOW_TIME 2.f
@@ -1805,7 +1813,7 @@ void CHitListener::FireGameEvent(IGameEvent *event)
 						HitMarkerEndTime = I::GlobalVars()->curtime + 0.29f;
 
 						if (GP_Misc->HitSound)
-							if (!GP_Misc->SoundList.empty() && GP_Misc->HitSoundStyle >= 0 && GP_Misc->HitSoundStyle < (int)GP_Misc->SoundList.size())
+							if (!GP_Misc->SoundList.empty() && GP_Misc->HitSoundStyle >= 0 && GP_Misc->HitSoundStyle < (int)GP_Misc->SoundList.size())	
 								FastCall::G().t_PlaySoundA((CGlobal::SystemDisk + XorStr("X1N3\\Resources\\Sounds\\") + GP_Misc->SoundList[GP_Misc->HitSoundStyle]).c_str(),
 									NULL, SND_FILENAME | SND_ASYNC);
 

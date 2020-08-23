@@ -11,9 +11,9 @@
 #define Assert(_exp) ((void)0)
 
 #define TICK_INTERVAL			(I::GlobalVars()->interval_per_tick)
-#define TIME_TO_TICKS( dt )		( (int)( 0.5f + (float)(dt) / TICK_INTERVAL ) )
-#define TICKS_TO_TIME( t )		( I::GlobalVars()->interval_per_tick *( t ) )
-#define MAXBACKTRACKTICKS( tl )  ( static_cast<size_t> ( TIME_TO_TICKS ( static_cast<float> ( tl ) / 1000.f ) ) )
+#define TIME_TO_TICKS(dt)		((int)(0.5f + (float)(dt) / TICK_INTERVAL))
+#define TICKS_TO_TIME(t)		(I::GlobalVars()->interval_per_tick * (t))
+#define MAXBACKTRACKTICKS(tl)  (static_cast<size_t> (TIME_TO_TICKS (static_cast<float> (tl) / 1000.f)) - 1)
 
 
 namespace SDK
@@ -50,6 +50,7 @@ namespace SDK
 	Vector CrossProduct2(const Vector& a, const Vector& b);
 	Vector gCalcAngle(Vector src, Vector dst);
 	void AngleVectors(const Vector& angles, Vector* forward, Vector* right, Vector* up);
+//	void VectorTransform(const Vector& in1, const matrix3x4_t& in2, Vector& out);
 	void NormalizeAngles(QAngle& angles);
 	void NormalizePitch(float& pitch);
 	bool IntersectionBoundingBox(const Vector& start, const Vector& dir, const Vector& min, const Vector& max, Vector* hit_point = nullptr);

@@ -45,7 +45,7 @@ namespace SDK
 	struct mstudiobone_t
 	{
 		int                    sznameindex;
-		inline char* const    pszName(void) const { return ((char*)this) + sznameindex; }
+		inline char* const     pszName(void) const { return ((char*)this) + sznameindex; }
 		int                    parent;
 		int                    bonecontroller[6];    // bone controller index, -1 == none
 		Vector                 pos;
@@ -61,10 +61,22 @@ namespace SDK
 		int                    proctype;
 		int                    procindex;
 		mutable int            physicsbone;
-		inline void* pProcedure() const { if (procindex == 0) return NULL; else return  (void*)(((BYTE*)this) + procindex); };
+		inline void*           pProcedure() const 
+		{ 
+			if (procindex == 0) 
+				return NULL; 
+			else
+				return (void*)(((BYTE*)this) + procindex); 
+		};
 		int                    surfacepropidx;
-		inline char* const    pszSurfaceProp(void) const { return ((char*)this) + surfacepropidx; }
-		inline int             GetSurfaceProp(void) const { return surfacepropLookup; }
+		inline char* const     pszSurfaceProp(void) const 
+		{ 
+			return ((char*)this) + surfacepropidx; 
+		}
+		inline int             GetSurfaceProp(void) const 
+		{ 
+			return surfacepropLookup; 
+		}
 
 		int                    contents;
 		int                    surfacepropLookup;

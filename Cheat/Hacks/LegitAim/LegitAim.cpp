@@ -480,6 +480,14 @@ void CLegitAim::CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd*
 		if ((AutoPistol || AutoFire) && IsPistol)
 			CalcAutoPistol(pCmd, pLocalPlayer);
 
+	//bool EnableAimBacktrack = AimPlusBacktrack && Weapons[GetWeap(SelectedWeapon)].Backtrack && !FindedTarg && iBackTrackbestTarget != -1 && iBackTrackBestSimTime != -1;
+	//if (EnableAimBacktrack)
+	//{
+	//	GetBestHitBox(false, true);
+	//	iBestTarget = iBackTrackbestTarget;
+	//	FindedTarg = (iBestTarget != -1 && iBestHitBox != -1) || (iSilentBestTarget != -1 && iSilentBestHitBox != -1);
+	//}
+
 	bool AnyDelay = (FFDelay.STimer.Active || FFAutoDelay || pSilentAutoDelay);
 
 	static bool FixAttack = false;
@@ -1167,7 +1175,7 @@ bool CLegitAim::GetBestTarget(bool _CheckSilent)
 
 				if (_CheckSilent ? IsSilentNearest : IsNearest)
 				{
-					for (int j(0); j < 17; j++)
+					for (int j = 0; j < 19/*17*/; j++)
 					{
 						Vector vecHitBox = CheckEntity->GetHitboxPosition(j);
 
@@ -1179,7 +1187,7 @@ bool CLegitAim::GetBestTarget(bool _CheckSilent)
 						if (_Fov < BestFov)
 						{
 							BestFov = _Fov;
-							_iBestTarget = i;
+							_iBestTarget = i; 
 							pBestTarget = CheckEntity;
 							break;
 						}
@@ -1188,8 +1196,9 @@ bool CLegitAim::GetBestTarget(bool _CheckSilent)
 				else
 				{
 					int _HitBox = _CheckSilent ? SilentHitBox : HitBox;
-					if (_HitBox == 3)
-						_HitBox = 4;
+						
+					if (_HitBox == 2)
+						_HitBox = 6;
 
 					Vector vecHitBox = CheckEntity->GetHitboxPosition(_HitBox);
 
@@ -1197,7 +1206,6 @@ bool CLegitAim::GetBestTarget(bool _CheckSilent)
 						continue;
 
 					float _Fov = CalcFOV(FovStartAng, MyEyeAng, vecHitBox);
-
 					if (_Fov < BestFov)
 					{
 						BestFov = _Fov;
@@ -1289,7 +1297,7 @@ bool CLegitAim::GetBestHitBox(bool _CheckSilent, bool CheckBackTrack)
 		{
 			if (_CheckSilent ? IsSilentNearest : IsNearest)
 			{
-				for (int i(0); i < 7; i++)
+				for (int i = 0; i < 7; i++)
 				{
 					if (!CheckBackTrack)
 					{
@@ -1301,7 +1309,6 @@ bool CLegitAim::GetBestHitBox(bool _CheckSilent, bool CheckBackTrack)
 							continue;
 						}
 					}
-
 					float _Fov = CalcFOV(FovStartAng, MyEyeAng, vecHitBox);
 
 					if (_Fov < BestFov)
@@ -1313,7 +1320,7 @@ bool CLegitAim::GetBestHitBox(bool _CheckSilent, bool CheckBackTrack)
 				}
 				if (HiddenHitBoxs > 6)
 				{
-					for (int i(7); i < 17; i++)
+					for (int i = 7; i < 19/*17*/; i++)
 					{
 						if (!CheckBackTrack)
 						{
@@ -1336,17 +1343,16 @@ bool CLegitAim::GetBestHitBox(bool _CheckSilent, bool CheckBackTrack)
 			}
 			else
 			{
-				int _HitBox = _CheckSilent ? SilentHitBox : HitBox;
+				int _HitBox = _CheckSilent ? SilentHitBox : HitBox;;
 
-				if (_HitBox == 3)
-					_HitBox = 4;
+				if (_HitBox == 2)
+					_HitBox = 6;
 
 				_BestHitBox = _HitBox;
 
 				if (!CheckBackTrack)
 					_BestHitBoxPos = pBestTarget->GetHitboxPosition(_HitBox);
 			}
-
 		}
 		else
 		{
@@ -1365,7 +1371,6 @@ bool CLegitAim::GetBestHitBox(bool _CheckSilent, bool CheckBackTrack)
 
 					if (pModelName)
 					{
-
 						string md = pModelName;
 
 						if (md == EntityTargetName)
@@ -1806,45 +1811,54 @@ void CLegitAim::TriggerRCS(int X, int Y, CUserCmd* pCmd, bool Enable)
 	}
 }
 
-float FovToPlayer(QAngle viewAngle, QAngle aimAngle)
+Vector AngleVector(QAngle meme)
 {
-	QAngle delta = aimAngle - viewAngle;
-	FixAngles(delta);
-	return sqrtf(powf(delta.x, 2.0f) + powf(delta.y, 2.0f));
+	auto sy = sin(meme.y / 180.f * static_cast<float>(3.141592654f));
+	auto cy = cos(meme.y / 180.f * static_cast<float>(3.141592654f));
+
+	auto sp = sin(meme.x / 180.f * static_cast<float>(3.141592654f));
+	auto cp = cos(meme.x / 180.f * static_cast<float>(3.141592654f));
+
+	return Vector(cp * cy, cp * sy, -sp);
+}
+
+float DistancePointToLine(Vector Point, Vector LineOrigin, Vector Dir)
+{
+	auto PointDir = Point - LineOrigin;
+
+	auto TempOffset = PointDir.Dot(Dir) / (Dir.x * Dir.x + Dir.y * Dir.y + Dir.z * Dir.z);
+	if (TempOffset < 0.000001f)
+		return FLT_MAX;
+
+	auto PerpendicularPoint = LineOrigin + (Dir * TempOffset);
+
+	return (Point - PerpendicularPoint).Length();
 }
 
 void CLegitAim::InitializeBacktrack()
 {
 	records.clear();
-
-	vars.cl_UpdateRate = I::GetConVar()->FindVar(XorStr("cl_updaterate"));
-	vars.cl_minUpdateRate = I::GetConVar()->FindVar(XorStr("sv_minupdaterate"));
-	vars.cl_maxUpdateRate = I::GetConVar()->FindVar(XorStr("sv_maxupdaterate"));
-	vars.cl_interp = I::GetConVar()->FindVar(XorStr("cl_interp"));
-	vars.cl_interpRatio = I::GetConVar()->FindVar(XorStr("cl_interp_ratio"));
-	vars.cl_minInterpRatio = I::GetConVar()->FindVar(XorStr("sv_client_min_interp_ratio"));
-	vars.cl_maxInterpRatio = I::GetConVar()->FindVar(XorStr("sv_client_max_interp_ratio"));
-	vars.cl_maxUnlag = I::GetConVar()->FindVar(XorStr("sv_maxunlag"));
-
-	vars.UpdateRate = vars.cl_UpdateRate->GetFloat();
-	vars.minUpdateRate = vars.cl_minUpdateRate->GetFloat();
-	vars.maxUpdateRate = vars.cl_maxUpdateRate->GetFloat();
-	vars.interp = vars.cl_interp->GetFloat();
-	vars.interpRatio = vars.cl_interpRatio->GetFloat();
-	vars.minInterpRatio = vars.cl_minInterpRatio->GetFloat();
-	vars.maxInterpRatio = vars.cl_maxInterpRatio->GetFloat();
-	vars.maxUnlag = vars.cl_maxUnlag->GetFloat();
+	vars.UpdateRate = I::GetConVar()->FindVar(XorStr("cl_updaterate"))->GetFloat();
+	vars.minUpdateRate = I::GetConVar()->FindVar(XorStr("sv_minupdaterate"))->GetFloat();
+	vars.maxUpdateRate = I::GetConVar()->FindVar(XorStr("sv_maxupdaterate"))->GetFloat();
+	vars.interp = I::GetConVar()->FindVar(XorStr("cl_interp"))->GetFloat();
+	vars.interpRatio = I::GetConVar()->FindVar(XorStr("cl_interp_ratio"))->GetFloat();
+	vars.minInterpRatio = I::GetConVar()->FindVar(XorStr("sv_client_min_interp_ratio"))->GetFloat();
+	vars.maxInterpRatio = I::GetConVar()->FindVar(XorStr("sv_client_max_interp_ratio"))->GetFloat();
+	vars.maxUnlag = I::GetConVar()->FindVar(XorStr("sv_maxunlag"))->GetFloat();
 }
 
 void CLegitAim::BacktrackCreateMoveEP(CUserCmd* pCmd)
 {
+	iBackTrackbestTarget = -1;
+
 	pLocalPlayer = CGlobal::LocalPlayer;
 
 	if (!pLocalPlayer || pLocalPlayer->IsDead())
-	{ records.clear(); return; }
+	    return;
 
 	if (SelectedWeapon < 0)
-	{ records.clear(); return; }
+		return;
 
 	if (Weapons[GetWeap(SelectedWeapon)].Backtrack && !FaceIt && Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit)
 	{
@@ -1857,10 +1871,26 @@ void CLegitAim::BacktrackCreateMoveEP(CUserCmd* pCmd)
 		vars.Latency = I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING) + I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_INCOMING);
 		vars.CorrectTime = clamp(vars.Latency + vars.LerpTime, 0.f, vars.maxUnlag);
 
+		PlayerInfo info;
+		float bestFov = FLT_MAX;
+		int maxtick = MAXBACKTRACKTICKS(Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit);
 		for (int i = 0; i <= I::Engine()->GetMaxClients(); i++)
 		{
 			CBaseEntity* entity = (CBaseEntity*)I::EntityList()->GetClientEntity(i);
-			if (!entity || entity == pLocalPlayer || entity->IsDormant() || entity->IsDead() || pLocalPlayer->GetTeam() == entity->GetTeam())
+
+			if (!entity || !pLocalPlayer)
+			{ records[i].clear(); continue; }
+
+			if (entity == pLocalPlayer)
+			{ records[i].clear(); continue; }
+
+			if (!I::Engine()->GetPlayerInfo(i, &info))
+			{ records[i].clear(); continue; }
+
+			if (entity->IsDormant())
+			{ records[i].clear(); continue; }
+
+			if (pLocalPlayer->GetTeam() == entity->GetTeam())
 			{ records[i].clear(); continue; }
 
 			auto& cur_data = records[i];
@@ -1881,65 +1911,70 @@ void CLegitAim::BacktrackCreateMoveEP(CUserCmd* pCmd)
 				}
 			}
 
-			const model_t* model = entity->GetModel();
-			if (!model)
-				continue;
-
-			studiohdr_t* hdr = I::ModelInfo()->GetStudioModel(model);
-			if (!hdr)
-				continue;
-
-			mstudiohitboxset_t* hitbox_set = hdr->GetHitboxSet(entity->HitboxSet());
-			mstudiobbox_t* hitbox_head = hitbox_set->GetHitbox(HITBOX_HEAD);
-			Vector hitbox_center = (hitbox_head->bbmin + hitbox_head->bbmax) * 0.5f;
-
 			BacktrackData record;
 			record.origin = entity->GetAbsOrigin();
 			record.simtime = entity->GetSimTime();
+			record.hitboxPos = entity->GetHitboxPosition(0 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 16 & 17 & 18 & 19 & 10 & 11);
 
 			entity->InvalidateBoneCache();
 			entity->SetupBones(record.matrix, 256, 0x7FF00, I::GlobalVars()->curtime);
 
-			VectorTransform(hitbox_center, record.matrix[hitbox_head->bone], record.hitboxPos);
+			Vector ViewDir = AngleVector(pCmd->viewangles + (pLocalPlayer->GetAimPunchAngle() * 2.f));
+			float FOVDistance = DistancePointToLine(record.hitboxPos, pLocalPlayer->GetEyePosition(), ViewDir);
+
+			if (FOVDistance < bestFov)
+			{
+				bestFov = FOVDistance;
+				iBackTrackbestTarget = i;
+				pBestBacktrackTarget = entity;
+			}
 
 			records[i].push_front(record);
 
-			while (records[i].size() > 3 && records[i].size() > MAXBACKTRACKTICKS(Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit))
+			while (records[i].size() > 3 && records[i].size() > maxtick)
 				records[i].pop_back();
 		}
 
-		float bestFov = FLT_MAX;
-		Vector aimPunch = pLocalPlayer->GetAimPunchAngle();
-		Vector eyePosition = pLocalPlayer->GetEyePosition();
-		for (auto& node : records)
+		float bestTargetSimTime = 0;
+		if (iBackTrackbestTarget != -1)
 		{
-			auto& cur_data = node.second;
-			if (cur_data.empty())
-				continue;
-
-			for (auto& bd : cur_data)
+			float tempFloat = FLT_MAX;
+			for (auto& node : records)
 			{
-				if (cur_data.size() <= 3 || (!IgnoreSmokeBacktrack && CGlobal::LineGoesThroughSmoke(eyePosition, bd.origin)))
-					return;
-
-				float deltaTime = vars.CorrectTime - (I::GlobalVars()->curtime - bd.simtime);
-				if (std::fabsf(deltaTime) > TICKS_TO_TIME(MAXBACKTRACKTICKS(Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit)))
+				auto& cur_data = node.second;
+				if (cur_data.empty())
 					continue;
 
-				VectorAngles(bd.hitboxPos - eyePosition, aimPunch);
-				FixAngles(aimPunch);
-				float FOVDistance = FovToPlayer(pCmd->viewangles, aimPunch);
-				if (bestFov > FOVDistance)
+				for (auto& bd : cur_data)
 				{
-					bestFov = FOVDistance;
-					iBacktrackTickCount = TIME_TO_TICKS(bd.simtime + vars.LerpTime);
+					if (cur_data.size() <= 3 || (!IgnoreSmokeBacktrack && CGlobal::LineGoesThroughSmoke(pLocalPlayer->GetEyePosition(), bd.origin)))
+						return;
+
+					float deltaTime = vars.CorrectTime - (I::GlobalVars()->curtime - bd.simtime);
+					if (std::fabsf(deltaTime) > TICKS_TO_TIME(maxtick))
+						continue;
+
+					Vector ViewDir = AngleVector(pCmd->viewangles + (pLocalPlayer->GetAimPunchAngle() * 2.f));
+					float tempFOVDistance = DistancePointToLine(bd.hitboxPos, pLocalPlayer->GetEyePosition(), ViewDir);
+
+					if (tempFOVDistance < tempFloat)
+					{
+						tempFloat = tempFOVDistance;
+						bestTargetSimTime = TIME_TO_TICKS(bd.simtime + vars.LerpTime);
+						iBackTrackBestSimTime = bestTargetSimTime;
+					}
 				}
 			}
 		}
 
-		if ((pCmd->buttons & IN_ATTACK) && iBacktrackTickCount != -1)
+		if (pCmd->buttons & IN_ATTACK && iBackTrackbestTarget != -1)
 		{
-			pCmd->tick_count = iBacktrackTickCount;
+			auto& record = records.at(iBackTrackbestTarget);
+			if (record.size() > 0)
+				for (auto& data : record)
+					pBestBacktrackTarget->SetAbsOrigin(data.origin);
+
+			pCmd->tick_count = bestTargetSimTime;
 		}
 	}
 }

@@ -4,52 +4,53 @@
 #include <cmath>
 #include <limits>
 
-namespace SDK 
+namespace SDK
 {
-	void VectorTransform( const Vector& in1 , const matrix3x4_t& in2 , Vector& out ) 
+	void VectorTransform(const Vector& in1, const matrix3x4_t& in2, Vector& out)
 	{
 		out.x = in1.x * in2[0][0] + in1.y * in2[0][1] + in1.z * in2[0][2] + in2[0][3];
 		out.y = in1.x * in2[1][0] + in1.y * in2[1][1] + in1.z * in2[1][2] + in2[1][3];
 		out.z = in1.x * in2[2][0] + in1.y * in2[2][1] + in1.z * in2[2][2] + in2[2][3];
 	}
 
-	void VectorCopy( const Vector& src, Vector& dst ) {
+	void VectorCopy(const Vector& src, Vector& dst) {
 		dst.x = src.x;
 		dst.y = src.y;
 		dst.z = src.z;
 	}
-	void VectorLerp( const Vector& src1, const Vector& src2, vec_t t, Vector& dest ) {
+	void VectorLerp(const Vector& src1, const Vector& src2, vec_t t, Vector& dest) {
 		dest.x = src1.x + (src2.x - src1.x) * t;
 		dest.y = src1.y + (src2.y - src1.y) * t;
 		dest.z = src1.z + (src2.z - src1.z) * t;
 	}
-	float VectorLength( const Vector& v ) {
-		return sqrt( v.x*v.x + v.y*v.y + v.z*v.z );
+	float VectorLength(const Vector& v) {
+		return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 	}
-	void VectorCrossProduct( const Vector& a, const Vector& b, Vector& result ) {
-		result.x = a.y*b.z - a.z*b.y;
-		result.y = a.z*b.x - a.x*b.z;
-		result.z = a.x*b.y - a.y*b.x;
+	void VectorCrossProduct(const Vector& a, const Vector& b, Vector& result) {
+		result.x = a.y * b.z - a.z * b.y;
+		result.y = a.z * b.x - a.x * b.z;
+		result.z = a.x * b.y - a.y * b.x;
 	}
-	vec_t NormalizeVector( Vector& v ) {
+	vec_t NormalizeVector(Vector& v) {
 		vec_t l = v.Length();
-		if( l != 0.0f ) {
+		if (l != 0.0f) {
 			v /= l;
-		} else {
+		}
+		else {
 			v.x = v.y = v.z = 0.0f;
 		}
 		return l;
 	}
 
-	Vector::Vector( void ) {
+	Vector::Vector(void) {
 		Invalidate();
 	}
-	Vector::Vector( vec_t X, vec_t Y, vec_t Z ) {
+	Vector::Vector(vec_t X, vec_t Y, vec_t Z) {
 		x = X;
 		y = Y;
 		z = Z;
 	}
-	Vector::Vector( vec_t* clr ) {
+	Vector::Vector(vec_t* clr) {
 		x = clr[0];
 		y = clr[1];
 		z = clr[2];
@@ -59,17 +60,18 @@ namespace SDK
 	// initialization
 	//-----------------------------------------------------------------------------
 
-	void Vector::Init( vec_t ix, vec_t iy, vec_t iz ) {
+	void Vector::Init(vec_t ix, vec_t iy, vec_t iz) {
 		x = ix; y = iy; z = iz;
 	}
 
-	Vector Vector::Normalized() const 
+	Vector Vector::Normalized() const
 	{
 		Vector res = *this;
 		vec_t l = res.Length();
-		if( l != 0.0f ) {
+		if (l != 0.0f) {
 			res /= l;
-		} else {
+		}
+		else {
 			res.x = res.y = res.z = 0.0f;
 		}
 		return res;
@@ -78,7 +80,7 @@ namespace SDK
 		return NormalizeVector(*this);
 	}
 
-	void Vector::Random( vec_t minVal, vec_t maxVal ) {
+	void Vector::Random(vec_t minVal, vec_t maxVal) {
 		x = minVal + ((float)rand() / RAND_MAX) * (maxVal - minVal);
 		y = minVal + ((float)rand() / RAND_MAX) * (maxVal - minVal);
 		z = minVal + ((float)rand() / RAND_MAX) * (maxVal - minVal);
@@ -93,7 +95,7 @@ namespace SDK
 	// assignment
 	//-----------------------------------------------------------------------------
 
-	Vector& Vector::operator=(const Vector &vOther) {
+	Vector& Vector::operator=(const Vector& vOther) {
 		x = vOther.x; y = vOther.y; z = vOther.z;
 		return *this;
 	}
@@ -102,11 +104,11 @@ namespace SDK
 	//-----------------------------------------------------------------------------
 	// Array access
 	//-----------------------------------------------------------------------------
-	vec_t& Vector::operator[]( int i ) {
+	vec_t& Vector::operator[](int i) {
 		return ((vec_t*)this)[i];
 	}
 
-	vec_t Vector::operator[]( int i ) const {
+	vec_t Vector::operator[](int i) const {
 		return ((vec_t*)this)[i];
 	}
 
@@ -127,7 +129,7 @@ namespace SDK
 	//-----------------------------------------------------------------------------
 
 	bool Vector::IsValid() const {
-		return std::isfinite( x ) && std::isfinite( y ) && std::isfinite( z );
+		return std::isfinite(x) && std::isfinite(y) && std::isfinite(z);
 	}
 
 	//-----------------------------------------------------------------------------
@@ -158,7 +160,7 @@ namespace SDK
 	//-----------------------------------------------------------------------------
 	// Copy
 	//-----------------------------------------------------------------------------
-	void	Vector::CopyToArray( float* rgfl ) const {
+	void	Vector::CopyToArray(float* rgfl) const {
 		rgfl[0] = x, rgfl[1] = y, rgfl[2] = z;
 	}
 
@@ -172,37 +174,35 @@ namespace SDK
 	}
 
 	// get the component of this vector parallel to some other given vector
-	Vector Vector::ProjectOnto( const Vector& onto ) {
-		return onto * (this->Dot( onto ) / (onto.LengthSqr()));
+	Vector Vector::ProjectOnto(const Vector& onto) {
+		return onto * (this->Dot(onto) / (onto.LengthSqr()));
 	}
 
 	// FIXME: Remove
 	// For backwards compatability
-	void	Vector::MulAdd( const Vector& a, const Vector& b, float scalar ) {
+	void	Vector::MulAdd(const Vector& a, const Vector& b, float scalar) {
 		x = a.x + b.x * scalar;
 		y = a.y + b.y * scalar;
 		z = a.z + b.z * scalar;
 	}
 
-	Vector VectorLerp( const Vector& src1, const Vector& src2, vec_t t ) {
+	Vector VectorLerp(const Vector& src1, const Vector& src2, vec_t t) {
 		Vector result;
-		VectorLerp( src1, src2, t, result );
+		VectorLerp(src1, src2, t, result);
 		return result;
 	}
 
-	vec_t Vector::Dot( const Vector& b ) const {
-		return (x*b.x + y*b.y + z*b.z);
-	}
-	void VectorClear( Vector& a ) {
+
+	void VectorClear(Vector& a) {
 		a.x = a.y = a.z = 0.0f;
 	}
 
-	vec_t Vector::Length( void ) const {
-		return sqrt( x*x + y*y + z*z );
+	vec_t Vector::Length(void) const {
+		return sqrt(x * x + y * y + z * z);
 	}
 
 	// check a point against a box
-	bool Vector::WithinAABox( Vector const &boxmin, Vector const &boxmax ) {
+	bool Vector::WithinAABox(Vector const& boxmin, Vector const& boxmax) {
 		return (
 			(x >= boxmin.x) && (x <= boxmax.x) &&
 			(y >= boxmin.y) && (y <= boxmax.y) &&
@@ -213,7 +213,7 @@ namespace SDK
 	//-----------------------------------------------------------------------------
 	// Get the distance from this vector to the other one 
 	//-----------------------------------------------------------------------------
-	vec_t Vector::DistTo( const Vector &vOther ) const {
+	vec_t Vector::DistTo(const Vector& vOther) const {
 		Vector delta;
 		delta = *this - vOther;
 		return delta.Length();
@@ -222,16 +222,16 @@ namespace SDK
 	//-----------------------------------------------------------------------------
 	// Returns a vector with the min or max in X, Y, and Z.
 	//-----------------------------------------------------------------------------
-	Vector Vector::Min( const Vector &vOther ) const {
-		return Vector( x < vOther.x ? x : vOther.x,
+	Vector Vector::Min(const Vector& vOther) const {
+		return Vector(x < vOther.x ? x : vOther.x,
 			y < vOther.y ? y : vOther.y,
-			z < vOther.z ? z : vOther.z );
+			z < vOther.z ? z : vOther.z);
 	}
 
-	Vector Vector::Max( const Vector &vOther ) const {
-		return Vector( x > vOther.x ? x : vOther.x,
+	Vector Vector::Max(const Vector& vOther) const {
+		return Vector(x > vOther.x ? x : vOther.x,
 			y > vOther.y ? y : vOther.y,
-			z > vOther.z ? z : vOther.z );
+			z > vOther.z ? z : vOther.z);
 	}
 
 
@@ -240,31 +240,31 @@ namespace SDK
 	//-----------------------------------------------------------------------------
 
 	Vector Vector::operator-(void) const {
-		return Vector( -x, -y, -z );
+		return Vector(-x, -y, -z);
 	}
 
 	Vector Vector::operator+(const Vector& v) const {
-		return Vector( x + v.x, y + v.y, z + v.z );
+		return Vector(x + v.x, y + v.y, z + v.z);
 	}
 
 	Vector Vector::operator-(const Vector& v) const {
-		return Vector( x - v.x, y - v.y, z - v.z );
+		return Vector(x - v.x, y - v.y, z - v.z);
 	}
 
 	Vector Vector::operator*(float fl) const {
-		return Vector( x * fl, y * fl, z * fl );
+		return Vector(x * fl, y * fl, z * fl);
 	}
 
 	Vector Vector::operator*(const Vector& v) const {
-		return Vector( x * v.x, y * v.y, z * v.z );
+		return Vector(x * v.x, y * v.y, z * v.z);
 	}
 
 	Vector Vector::operator/(float fl) const {
-		return Vector( x / fl, y / fl, z / fl );
+		return Vector(x / fl, y / fl, z / fl);
 	}
 
 	Vector Vector::operator/(const Vector& v) const {
-		return Vector( x / v.x, y / v.y, z / v.z );
+		return Vector(x / v.x, y / v.y, z / v.z);
 	}
 
 	Vector operator*(float fl, const Vector& v) {
@@ -275,9 +275,9 @@ namespace SDK
 	// cross product
 	//-----------------------------------------------------------------------------
 
-	Vector Vector::Cross( const Vector& vOther ) const {
+	Vector Vector::Cross(const Vector& vOther) const {
 		Vector res;
-		VectorCrossProduct( *this, vOther, res );
+		VectorCrossProduct(*this, vOther, res);
 		return res;
 	}
-}                                                                                                                                                                                                                                                                                       
+}

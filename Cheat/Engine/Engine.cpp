@@ -17,9 +17,10 @@ CBaseEntity* CGlobal::LocalPlayer;
 CUserCmd* CGlobal::UserCmd;
 
 int CGlobal::OrigRightHand;
-int CGlobal::OrigViewModelX;
-int CGlobal::OrigViewModelY;
-int CGlobal::OrigViewModelZ;
+float CGlobal::OrigViewModelX;
+float CGlobal::OrigViewModelY;
+float CGlobal::OrigViewModelZ;
+float CGlobal::OrigAspectRatio;
 
 void ReadConfigs(LPCTSTR lpszFileName)
 {

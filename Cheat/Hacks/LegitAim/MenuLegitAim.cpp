@@ -204,7 +204,8 @@ void CLegitAim::Menu()
 
 				if (!Weapons[GetWeap(SelectedWeapon)].Nearest)
 				{
-					VectorEx<const char*> itemsHB = { lolc("Head"), lolc("Neck"), lolc("Low neck"), lolc("Body"), lolc("Thorax"), lolc("Chest"), lolc("Upper chest") };
+					VectorEx<const char*> itemsHB = { lolc("Head"), lolc("Neck"), lolc("Low neck"), 
+						lolc("Body"), lolc("Thorax"), lolc("Chest") };
 					DComboBox("Hitbox", Weapons[GetWeap(SelectedWeapon)].HitBox, itemsHB);
 				}
 			}
@@ -242,7 +243,8 @@ void CLegitAim::Menu()
 
 					if (!Weapons[GetWeap(SelectedWeapon)].NearestRcs)
 					{
-						VectorEx<const char*> itemsHB = { lolc("Head"), lolc("Neck"), lolc("Low neck"), lolc("Body"), lolc("Thorax"), lolc("Chest"), lolc("Upper chest") };
+						VectorEx<const char*> itemsHB = { lolc("Head"), lolc("Neck"), lolc("Low neck"),
+							lolc("Body"), lolc("Thorax"), lolc("Chest") };
 						DComboBox("Hitbox", Weapons[GetWeap(SelectedWeapon)].HitBoxRcs, itemsHB);
 					}
 				}
@@ -268,7 +270,8 @@ void CLegitAim::Menu()
 
 					if (!Weapons[GetWeap(SelectedWeapon)].SilentNearest)
 					{
-						VectorEx<const char*> itemsHB = { lolc("Head"), lolc("Neck"), lolc("Low neck"), lolc("Body"), lolc("Thorax"), lolc("Chest"), lolc("Upper chest") };
+						VectorEx<const char*> itemsHB = { lolc("Head"), lolc("Neck"), lolc("Low neck"),
+							lolc("Body"), lolc("Thorax"), lolc("Chest") };
 						DComboBox("Hitbox", Weapons[GetWeap(SelectedWeapon)].SilentHitBox, itemsHB);
 					}
 

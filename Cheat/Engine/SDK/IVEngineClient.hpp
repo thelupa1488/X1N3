@@ -39,7 +39,8 @@ namespace SDK
 	{
 	public:
 
-		enum {
+		enum 
+		{
 			GENERIC = 0,	// must be first and is default group
 			LOCALPLAYER,	// bytes for local player entity update
 			OTHERPLAYERS,	// bytes for other players update
@@ -251,13 +252,13 @@ namespace SDK
 		virtual void                  SetOcclusionParameters(const int /*OcclusionParams_t*/& params) = 0; // 96
 		virtual void                  GetUILanguage(char* dest, int destlen) = 0;
 		virtual int                   IsSkyboxVisibleFromPoint(const Vector& vecPoint) = 0;
-		virtual const char* GetMapEntitiesString() = 0;
+		virtual const char*           GetMapEntitiesString() = 0;
 		virtual bool                  IsInEditMode(void) = 0; // 100
 		virtual float                 GetScreenAspectRatio(int viewportWidth, int viewportHeight) = 0;
 		virtual bool                  REMOVED_SteamRefreshLogin(const char* password, bool isSecure) = 0;
 		virtual bool                  REMOVED_SteamProcessCall(bool& finished) = 0;
 		virtual unsigned int          GetEngineBuildNumber() = 0; // engines build
-		virtual const char* GetProductVersionString() = 0; // mods version number (steam.inf)
+		virtual const char*           GetProductVersionString() = 0; // mods version number (steam.inf)
 		virtual void                  GrabPreColorCorrectedFrame(int x, int y, int width, int height) = 0;
 		virtual bool                  IsHammerRunning() const = 0;
 		virtual void                  ExecuteClientCmd(const char* szCmdString) = 0; //108

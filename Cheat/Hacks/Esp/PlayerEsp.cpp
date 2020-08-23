@@ -54,9 +54,6 @@ void CEsp::DrawPlayerEx(CEntityPlayer* Entity, CEntityPlayer* Local, bool IsDorm
 			float Width = Height / 2.f;
 			Vector BoxScreen = Vector(HeadScreen.x - (Width / 2.f), HeadScreen.y, 0);
 
-			/*	if (BoxStyle == 2)
-					GetBox(Entity, BoxScreen.x, BoxScreen.y, Width, Height);
-	*/
 			if (Skeleton)
 			{
 				DrawSkeletonLine(0, 1, Entity);
@@ -78,7 +75,6 @@ void CEsp::DrawPlayerEx(CEntityPlayer* Entity, CEntityPlayer* Local, bool IsDorm
 				DrawSkeletonLine(3, 7, Entity);
 				DrawSkeletonLine(7, 9, Entity);
 				DrawSkeletonLine(9, 11, Entity);
-
 			}
 
 			if (Line)

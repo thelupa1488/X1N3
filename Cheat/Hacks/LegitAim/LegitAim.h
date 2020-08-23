@@ -21,7 +21,7 @@ namespace HookTables
 }
 using namespace HookTables;
 
-namespace Engine
+namespace Engin
 {
 	class CBaseEntity;
 	class CPlayer;
@@ -222,15 +222,6 @@ public:
 
 	struct BacktrackVars
 	{
-		ConVar* cl_UpdateRate;
-		ConVar* cl_minUpdateRate;
-		ConVar* cl_maxUpdateRate;
-		ConVar* cl_interp;
-		ConVar* cl_interpRatio;
-		ConVar* cl_minInterpRatio;
-		ConVar* cl_maxInterpRatio;
-		ConVar* cl_maxUnlag;
-
 		float UpdateRate;
 		float minUpdateRate;
 		float maxUpdateRate;
@@ -438,6 +429,8 @@ public:
 		pOldBestTarget = nullptr;
 		pLocalPlayer = nullptr;
 		pLocalWeapon = nullptr;
+		pBestBacktrackTarget = nullptr;
+
 
 		RV(WeaponCustomTypes, "WeaponCustomTypes");
 		RV(Enable, "Enable");
@@ -485,6 +478,7 @@ public:
 	CBaseEntity *pOldBestTarget;
 	CBaseEntity *pLocalPlayer;
 	CBaseWeapon *pLocalWeapon;
+	CBaseEntity *pBestBacktrackTarget;
 
 	bool IgnoreSmokeBacktrack = false;
 	bool ShowBacktrack = false;
@@ -540,7 +534,8 @@ private:
 	int RCS_Y = 0;
 	int iLastBestHitBox = 0;
 	int iLastSilentBestHitBox = 0;
-	int iBacktrackTickCount = -1;
+	int iBackTrackBestSimTime = 0;
+	int iBackTrackbestTarget = -1;
 	int AimMethod = 0;
 	int SmoothMethod = 0;
 	int SmoothMF = 0;

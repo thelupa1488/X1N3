@@ -212,6 +212,9 @@ public:
 	float ViewModelY = 0;
 	float ViewModelZ = 0;
 
+	bool Aspect = false;
+	float AspectRation = 0;
+
 	bool FakeLag = false;
 	int FakeLagFactor = 0;
 	int FakeLagType = 0;
@@ -223,7 +226,6 @@ public:
 	int TextDamageInfo = 38;
 
 	bool ColoredWalls = false;
-	int ColoredWallsStyle = 0;
 
 	bool KnifeBot = false;
 	int KnifeBotDistance = 81;
@@ -243,7 +245,7 @@ public:
 	Color WeaponGlowColor = Color(255, 198, 0, 255);
 	Color DamageInfoColor = Color(255, 100, 100, 255);
 	Color ColoredWallsColor = Color(255, 100, 100, 255);
-	Color ArrowsColor = Color(255, 0, 0, 255);
+//	Color ArrowsColor = Color(255, 0, 0, 255);
 
 	vector<string> SoundList;
 
@@ -259,7 +261,7 @@ public:
 		RV(WeaponGlowColor, "WeaponGlowColor");
 		RV(DamageInfoColor, "DamageInfoColor");
 		RV(ColoredWallsColor, "ColoredWallsColor");
-		RV(ArrowsColor, "ArrowsColor");
+//		RV(ArrowsColor, "ArrowsColor");
 
 		RV(BHop, "BHop");
 		RV(BHopType, "BHopType");
@@ -350,6 +352,8 @@ public:
 		RV(ViewModelX, "ViewModelX");
 		RV(ViewModelY, "ViewModelY");
 		RV(ViewModelZ, "ViewModelZ");
+		RV(Aspect, "Aspect");
+		RV(AspectRation, "Aspect Ration");
 		RV(FakeLag, "FakeLag");
 		RV(FakeLagType, "FakeLagType");
 		RV(FakeLagStanding, "FakeLagStanding");
@@ -359,7 +363,6 @@ public:
 
 		RV(TextDamageInfo, "TextDamageInfo");
 		RV(ColoredWalls, "ColoredWalls");
-		RV(ColoredWallsStyle, "ColoredWallsStyle");
 		RV(KnifeBot, "KnifeBot");
 		RV(KnifeBotDistance, "KnifeBotDistance");
 		RV(KnifeBotFilter, "KnifeBotFilter");
@@ -367,7 +370,7 @@ public:
 		RV(KnifeBotMode, "KnifeBotMode");
 		
 		RV(AutoBlock, "AutoBlock");
-		RV(AutoBlock, "AutoBlockBind");
+		RV(AutoBlockBind, "AutoBlockBind");
 
 		ADD_LOG("Setup: CMisc sucessful\n");
 	}
