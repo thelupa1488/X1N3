@@ -128,13 +128,16 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDirect3DDevice9* pDevice, CONST RECT* pSour
 			
 			X1Gui().Update();
 
-			if (GP_Radar)
-				GP_Radar->Draw();
+			if (CGlobal::IsGameReady)
+			{
+				if (GP_Radar)
+					GP_Radar->Draw();
 
-			if (GP_Misc->SpectatorList && !CGlobal::FullUpdateCheck)
-				GP_Misc->ShowSpectatorList();
+				if (GP_Misc->SpectatorList && !CGlobal::FullUpdateCheck)
+					GP_Misc->ShowSpectatorList();
+			}
 
-				Menu.Draw(MenuFont);
+			Menu.Draw(MenuFont);
 
 			X1Gui().Cleanup();
 

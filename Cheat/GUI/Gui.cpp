@@ -289,7 +289,7 @@ void CGui::Update()
 	else
 		IO.BCKBDur = 0;
 
-	if (/*FastCall::G().t_*/GetAsyncKeyState(VK_BACK))
+	if (FastCall::G().t_GetAsyncKeyState(VK_BACK))
 		IO.BCKBPress = true;
 	else
 		IO.BCKBPress = false;

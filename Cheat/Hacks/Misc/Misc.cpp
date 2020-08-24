@@ -167,10 +167,13 @@ void CMisc::Draw()
 							pWeapon->GetInaccuracy() * 550.f, 42, SpreadColor);
 					}
 				}
-
-				Night();
-				CustomWalls();
 			}
+		}
+
+		if (CGlobal::IsGameReady)
+		{
+			Night();
+			CustomWalls();
 		}
 
 		//if (Desync)
@@ -1588,7 +1591,7 @@ vector<int> CMisc::GetObservervators(int playerId)
 void CMisc::Night()
 {
 	static bool NightModeReset = false;
-	if (NightMode && CGlobal::IsGameReady)
+	if (NightMode)
 	{
 		static auto sv_skyname = I::GetConVar()->FindVar(XorStr("sv_skyname"));
 		static auto r_DrawSpecificStaticProp = I::GetConVar()->FindVar(XorStr("r_DrawSpecificStaticProp"));
@@ -1668,7 +1671,7 @@ void CMisc::Night()
 void CMisc::CustomWalls()
 {
 	static bool CustomWallsReset = false;
-	if (ColoredWalls && CGlobal::IsGameReady)
+	if (ColoredWalls)
 	{
 		for (MaterialHandle_t i = I::MaterialSystem()->FirstMaterial(); i != I::MaterialSystem()->InvalidMaterial(); i = I::MaterialSystem()->NextMaterial(i))
 		{

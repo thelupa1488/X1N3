@@ -92,7 +92,6 @@ void CRadar::CalcRadarPoint(Vector vOrigin, float& screenx, float& screeny, bool
 
 void CRadar::RenderPlayer(CBaseEntity* plocal)
 {
-
 	Vec2 TextOffset = Vec2(X1Gui().GetCursorPos().x - X1Gui().GetCursorPosEx().x, X1Gui().GetCursorPos().y - X1Gui().GetCursorPosEx().y);
 
 	CEntityPlayer* pLocal = GP_EntPlayers->EntityLocal;
