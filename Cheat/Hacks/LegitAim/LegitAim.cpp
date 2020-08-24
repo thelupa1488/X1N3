@@ -70,85 +70,85 @@ float TestMouse = 0;
 
 void CLegitAim::Draw()
 {
-	/*if (Debug)
-	{
-		int VTabSz = 15;
-		int VTab = 15;
+	//if (Debug)
+	//{
+	//	int VTabSz = 15;
+	//	int VTab = 15;
 
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("iBestTarget: ") + to_string(iBestTarget)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("iBestHitBox: ") + to_string(iBestHitBox)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("iSilentBestTarget: ") + to_string(iSilentBestTarget)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("iSilentBestHitBox: ") + to_string(iSilentBestHitBox)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("iShotsFired: ") + to_string(iShotsFired)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("iEndBullet: ") + to_string(AimEndBullet)).c_str()); VTab += VTabSz;
-		VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("iSilentHitBox: ") + to_string(SilentHitBox)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("iHitBox: ") + to_string(HitBox)).c_str()); VTab += VTabSz;
-		VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bNearest: ") + to_string(IsNearest)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bSilentNearest: ") + to_string(IsSilentNearest)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bSilentF: ") + to_string(CanSilent)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("iCurWeapon: ") + to_string(SelectedWeapon)).c_str()); VTab += VTabSz;
-		VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("fGFov: ") + to_string(GFov)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("fGSilentFov: ") + to_string(GSilentFov)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("fGSmooth: ") + to_string(GSmooth)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bRCSStandelone: ") + to_string(CanRCSStandelone)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bRCS: ") + to_string(CanRCS)).c_str()); VTab += VTabSz;
-		VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(), 
-			(XorStr("BestPos: X: ") + to_string((int)BestHitBoxPos.x) + XorStr(", Y: ") + to_string((int)BestHitBoxPos.y) + XorStr(", Z: ") + to_string((int)BestHitBoxPos.z)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(), 
-			(XorStr("BestSilentPos: X: ") + to_string((int)SilentBestHitBoxPos.x) + XorStr(", Y: ") + to_string((int)SilentBestHitBoxPos.y) + XorStr(", Z: ") + to_string((int)SilentBestHitBoxPos.z)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(), 
-			(XorStr("FSA: X: ") + to_string((int)FovStartAng.x) + XorStr(", Y: ") + to_string((int)FovStartAng.y) + XorStr(", Z: ") + to_string((int)FovStartAng.z)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(), 
-			(XorStr("PunchAng: X: ") + to_string((int)AimPunchAngle.x) + XorStr(", Y: ") + to_string((int)AimPunchAngle.y) + XorStr(", Z: ") + to_string((int)AimPunchAngle.z)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(), 
-			(XorStr("PreVec: X: ") + to_string((int)PreVec.x) + XorStr(", Y: ") + to_string((int)PreVec.y) + XorStr(", Z: ") + to_string((int)PreVec.z)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(), 
-			(XorStr("SilentPreVec: X: ") + to_string((int)SilentPreVec.x) + XorStr(", Y: ") + to_string((int)SilentPreVec.y) + XorStr(", Z: ") + to_string((int)SilentPreVec.z)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(), 
-			(XorStr("FinalVec: X: ") + to_string((int)FinalVec.x) + XorStr(", Y: ") + to_string((int)FinalVec.y) + XorStr(", Z: ") + to_string((int)FinalVec.z)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(), 
-			(XorStr("SilentFinalVec: X: ") + to_string((int)SilentFinalVec.x) + XorStr(", Y: ") + to_string((int)SilentFinalVec.y) + XorStr(", Z: ") + to_string((int)SilentFinalVec.z)).c_str()); VTab += VTabSz;
-		VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("fCurtime: ") + to_string(CurTime)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("fFFDelayEnd: ") + to_string(FFDelay.STimer.EndTime)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bFFDelayEnable: ") + to_string(FFDelay.STimer.Enable)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bFFDelayDisable: ") + to_string(FFDelayDisable)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("iBestTarget: ") + to_string(iBestTarget)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("iBestHitBox: ") + to_string(iBestHitBox)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("iSilentBestTarget: ") + to_string(iSilentBestTarget)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("iSilentBestHitBox: ") + to_string(iSilentBestHitBox)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("iShotsFired: ") + to_string(iShotsFired)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("iEndBullet: ") + to_string(AimEndBullet)).c_str()); VTab += VTabSz;
+	//	VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("iSilentHitBox: ") + to_string(SilentHitBox)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("iHitBox: ") + to_string(HitBox)).c_str()); VTab += VTabSz;
+	//	VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bNearest: ") + to_string(IsNearest)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bSilentNearest: ") + to_string(IsSilentNearest)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bSilentF: ") + to_string(CanSilent)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("iCurWeapon: ") + to_string(SelectedWeapon)).c_str()); VTab += VTabSz;
+	//	VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("fGFov: ") + to_string(GFov)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("fGSilentFov: ") + to_string(GSilentFov)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("fGSmooth: ") + to_string(GSmooth)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bRCSStandelone: ") + to_string(CanRCSStandelone)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bRCS: ") + to_string(CanRCS)).c_str()); VTab += VTabSz;
+	//	VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(), 
+	//		(XorStr("BestPos: X: ") + to_string((int)BestHitBoxPos.x) + XorStr(", Y: ") + to_string((int)BestHitBoxPos.y) + XorStr(", Z: ") + to_string((int)BestHitBoxPos.z)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(), 
+	//		(XorStr("BestSilentPos: X: ") + to_string((int)SilentBestHitBoxPos.x) + XorStr(", Y: ") + to_string((int)SilentBestHitBoxPos.y) + XorStr(", Z: ") + to_string((int)SilentBestHitBoxPos.z)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(), 
+	//		(XorStr("FSA: X: ") + to_string((int)FovStartAng.x) + XorStr(", Y: ") + to_string((int)FovStartAng.y) + XorStr(", Z: ") + to_string((int)FovStartAng.z)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(), 
+	//		(XorStr("PunchAng: X: ") + to_string((int)AimPunchAngle.x) + XorStr(", Y: ") + to_string((int)AimPunchAngle.y) + XorStr(", Z: ") + to_string((int)AimPunchAngle.z)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(), 
+	//		(XorStr("PreVec: X: ") + to_string((int)PreVec.x) + XorStr(", Y: ") + to_string((int)PreVec.y) + XorStr(", Z: ") + to_string((int)PreVec.z)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(), 
+	//		(XorStr("SilentPreVec: X: ") + to_string((int)SilentPreVec.x) + XorStr(", Y: ") + to_string((int)SilentPreVec.y) + XorStr(", Z: ") + to_string((int)SilentPreVec.z)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(), 
+	//		(XorStr("FinalVec: X: ") + to_string((int)FinalVec.x) + XorStr(", Y: ") + to_string((int)FinalVec.y) + XorStr(", Z: ") + to_string((int)FinalVec.z)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(), 
+	//		(XorStr("SilentFinalVec: X: ") + to_string((int)SilentFinalVec.x) + XorStr(", Y: ") + to_string((int)SilentFinalVec.y) + XorStr(", Z: ") + to_string((int)SilentFinalVec.z)).c_str()); VTab += VTabSz;
+	//	VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("fCurtime: ") + to_string(CurTime)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("fFFDelayEnd: ") + to_string(FFDelay.STimer.EndTime)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bFFDelayEnable: ") + to_string(FFDelay.STimer.Enable)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bFFDelayDisable: ") + to_string(FFDelayDisable)).c_str()); VTab += VTabSz;
 
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bFFDelayActive: ") + to_string(FFDelay.STimer.Active)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bFFOneClickDelay: ") + to_string(FFDelayOneClickEnable)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bFFOCDelayActive: ") + to_string(FFDelayOCActive)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bFFOCDelayDisable: ") + to_string(FFDelayOCDisable)).c_str()); VTab += VTabSz;
-		VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("fTSDelayEnd: ") + to_string(TSDelay.STimer.EndTime)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bTSDelayEnable: ") + to_string(TSDelay.STimer.Enable)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bTSDelayActive: ") + to_string(TSDelay.STimer.Active)).c_str()); VTab += VTabSz;
-		VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bKillStop: ") + to_string(KillStop)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bKillStopEnable: ") + to_string(KillStopEnable)).c_str()); VTab += VTabSz;
-		VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bpSilentAutoDelay: ") + to_string(pSilentAutoDelay)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bpSilentAutoDelayEnable: ") + to_string(pSilentAutoDelayEnable)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bpSilentAutoDelayDisable: ") + to_string(pSilentAutoDelayDisable)).c_str()); VTab += VTabSz;
-		VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bFFDelayActive: ") + to_string(FFDelay.STimer.Active)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bFFOneClickDelay: ") + to_string(FFDelayOneClickEnable)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bFFOCDelayActive: ") + to_string(FFDelayOCActive)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bFFOCDelayDisable: ") + to_string(FFDelayOCDisable)).c_str()); VTab += VTabSz;
+	//	VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("fTSDelayEnd: ") + to_string(TSDelay.STimer.EndTime)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bTSDelayEnable: ") + to_string(TSDelay.STimer.Enable)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bTSDelayActive: ") + to_string(TSDelay.STimer.Active)).c_str()); VTab += VTabSz;
+	//	VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bKillStop: ") + to_string(KillStop)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bKillStopEnable: ") + to_string(KillStopEnable)).c_str()); VTab += VTabSz;
+	//	VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bpSilentAutoDelay: ") + to_string(pSilentAutoDelay)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bpSilentAutoDelayEnable: ") + to_string(pSilentAutoDelayEnable)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bpSilentAutoDelayDisable: ") + to_string(pSilentAutoDelayDisable)).c_str()); VTab += VTabSz;
+	//	VTab += VTabSz;
 
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bFFAutoDelay: ") + to_string(FFAutoDelay)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bFFAutoDelayEnable: ") + to_string(FFAutoDelayEnable)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bFFAutoDelayDisable: ") + to_string(FFAutoDelayDisable)).c_str()); VTab += VTabSz;
-		VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bFFAutoDelay: ") + to_string(FFAutoDelay)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bFFAutoDelayEnable: ") + to_string(FFAutoDelayEnable)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bFFAutoDelayDisable: ") + to_string(FFAutoDelayDisable)).c_str()); VTab += VTabSz;
+	//	VTab += VTabSz;
 
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bAutoPistol: ") + to_string(AutoPistol)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bIsPistol: ") + to_string(IsPistol)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bIsSniper & Type: ") + to_string(IsSniper) + (" : ") + to_string(IsSniperClass)).c_str()); VTab += VTabSz;
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bIsShotgun: ") + to_string(IsShotgun)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bAutoPistol: ") + to_string(AutoPistol)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bIsPistol: ") + to_string(IsPistol)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bIsSniper & Type: ") + to_string(IsSniper) + (" : ") + to_string(IsSniperClass)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bIsShotgun: ") + to_string(IsShotgun)).c_str()); VTab += VTabSz;
 
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bFastZoom & bZoomed: ") + to_string(FastZoom) + (" : ") + to_string(IsZoomed)).c_str()); VTab += VTabSz;
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("bFastZoom & bZoomed: ") + to_string(FastZoom) + (" : ") + to_string(IsZoomed)).c_str()); VTab += VTabSz;
 
-		GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("fTest: ") + to_string(TestMouse)).c_str()); VTab += VTabSz;
-	}*/
+	//	GP_Render->DrawString(15, Vec2(500, VTab), Color::Yellow(),  (XorStr("fTest: ") + to_string(TestMouse)).c_str()); VTab += VTabSz;
+	//}
 
 	if (ShowEntitysName)
 	{
@@ -226,6 +226,7 @@ void CLegitAim::Draw()
 			float dx = CGlobal::iScreenWidth / CGlobal::GFovView;
 
 			bool _CanSilent = true;
+			bool _CanRCS = true;
 
 			if (Weapons[GetWeap(SelectedWeapon)].SilentEndBullet > 0)
 				if (iShotsFired >= Weapons[GetWeap(SelectedWeapon)].SilentEndBullet)
@@ -235,6 +236,15 @@ void CLegitAim::Draw()
 				if (Weapons[GetWeap(SelectedWeapon)].SilentStartBullet > 0)
 					if (Weapons[GetWeap(SelectedWeapon)].SilentStartBullet - 1 > iShotsFired)
 						_CanSilent = false;
+
+			if (Weapons[GetWeap(SelectedWeapon)].RcsEndBullet > 0)
+				if (iShotsFired >= Weapons[GetWeap(SelectedWeapon)].RcsEndBullet)
+					_CanRCS = false;
+
+			if (_CanRCS)
+				if (Weapons[GetWeap(SelectedWeapon)].RcsStartBullet > 0)
+					if (Weapons[GetWeap(SelectedWeapon)].RcsStartBullet - 1 > iShotsFired)
+						_CanRCS = false;
 
 			float x = CGlobal::iScreenWidth / 2.f;
 			float y = CGlobal::iScreenHeight / 2.f;
@@ -247,6 +257,11 @@ void CLegitAim::Draw()
 					{
 						if (DrawFov)
 							GP_Render->DrawRing(x, y, (dy * GFov / 3.f), 32, FovColor);
+
+						if (DrawFov && Weapons[GetWeap(SelectedWeapon)].FovRcs)
+							if (_CanRCS)
+								GP_Render->DrawRing(x, y, (dy * Weapons[GetWeap(SelectedWeapon)].FovRcs / 3.f), 32, FovColor);
+
 						if (DrawSilentFov && Weapons[GetWeap(SelectedWeapon)].Silent)
 							if (_CanSilent)
 								GP_Render->DrawRing(x, y, (dy * GSilentFov), 32, SilentFovColor);
@@ -261,6 +276,11 @@ void CLegitAim::Draw()
 
 						if (DrawFov)
 							GP_Render->DrawRing(pos.x, pos.y, (dy * GFov / 3.f), 32, FovColor);
+
+						if (DrawFov && Weapons[GetWeap(SelectedWeapon)].FovRcs)
+							if (_CanRCS)
+								GP_Render->DrawRing(pos.x, pos.y, (dy * Weapons[GetWeap(SelectedWeapon)].FovRcs / 3.f), 32, FovColor);
+
 						if (DrawSilentFov && Weapons[GetWeap(SelectedWeapon)].Silent)
 							if (_CanSilent)
 								GP_Render->DrawRing(pos.x, pos.y, (dy * GSilentFov), 32, SilentFovColor);
@@ -277,6 +297,16 @@ void CLegitAim::Draw()
 					Vector m_vAimBestHitboxScreen;
 
 					if (CGlobal::WorldToScreen(BestHitBoxPos, m_vAimBestHitboxScreen))
+						GP_Render->DrawRing(m_vAimBestHitboxScreen.x, m_vAimBestHitboxScreen.y, iFov / int(1920 / CGlobal::iScreenWidth), 32, FovColor);
+				}
+				if (DrawFov && iLastBestHitBox != -1 && pOldBestTarget->GetHealth() > 0 && Weapons[GetWeap(SelectedWeapon)].FovRcs)
+				{
+					float base_fov = pow((dx * Weapons[GetWeap(SelectedWeapon)].FovRcs / 3.f) + 30, 2) * CGlobal::GFovView;
+					float iFov = (base_fov / (pLocalPlayer->GetHitboxPosition(0).DistTo(BestHitBoxPos) * CGlobal::GFovView));
+
+					Vector m_vAimBestHitboxScreen;
+
+					if (CGlobal::WorldToScreen(BestHitBoxPos, m_vAimBestHitboxScreen) && _CanRCS)
 						GP_Render->DrawRing(m_vAimBestHitboxScreen.x, m_vAimBestHitboxScreen.y, iFov / int(1920 / CGlobal::iScreenWidth), 32, FovColor);
 				}
 				if (DrawSilentFov && iLastSilentBestHitBox != -1 && pOldBestTarget->GetHealth() > 0 && Weapons[GetWeap(SelectedWeapon)].Silent)
@@ -686,23 +716,18 @@ void CLegitAim::SetMainParams()
 	GSilentFov = Weapons[GetWeap(SelectedWeapon)].SilentFov;
 
 	/*========================================== Standard ========================================================*/
-	IsNearest = Weapons[GetWeap(SelectedWeapon)].HitBoxAfter1B && iShotsFired >= 1 ?
+	IsNearest = Weapons[GetWeap(SelectedWeapon)].HitBoxAfter1B && CanRCS ?
 		Weapons[GetWeap(SelectedWeapon)].NearestRcs : Weapons[GetWeap(SelectedWeapon)].Nearest;
 
-	HitBox = Weapons[GetWeap(SelectedWeapon)].HitBoxAfter1B && iShotsFired >= 1 ?
+	HitBox = Weapons[GetWeap(SelectedWeapon)].HitBoxAfter1B && CanRCS ?
 		Weapons[GetWeap(SelectedWeapon)].HitBoxRcs : Weapons[GetWeap(SelectedWeapon)].HitBox;
 
-	GFov = Weapons[GetWeap(SelectedWeapon)].FovRcs != 0 && iShotsFired >= 1 ?
+	GFov = Weapons[GetWeap(SelectedWeapon)].FovRcs != 0 && CanRCS ?
 		Weapons[GetWeap(SelectedWeapon)].FovRcs : Weapons[GetWeap(SelectedWeapon)].Fov;
 
-	if (GDrawRcsFov)
-	{
-		GFov = Weapons[GetWeap(SelectedWeapon)].FovRcs;
-		GDrawRcsFov = false;
-	}
-
-	GSmooth = Weapons[GetWeap(SelectedWeapon)].SmoothRcs != 0 && iShotsFired >= 1 ?
+	GSmooth = Weapons[GetWeap(SelectedWeapon)].SmoothRcs != 0 && CanRCS ?
 		Weapons[GetWeap(SelectedWeapon)].SmoothRcs : Weapons[GetWeap(SelectedWeapon)].Smooth;
+
 	/*==========================================================================================================*/
 	CanRCSStandelone = Weapons[GetWeap(SelectedWeapon)].RcsStandelone;
 
@@ -1083,13 +1108,10 @@ bool CLegitAim::CanShoot()
 		return false;
 
 	float server_time = pLocalPlayer->GetTickBase() * I::GlobalVars()->interval_per_tick;
-
 	float next_shot = pLocalWeapon->GetNextPrimaryAttack() - server_time;
 
 	if (next_shot > 0)
-	{
 		return false;
-	}
 
 	return true;
 }
@@ -1127,15 +1149,35 @@ bool CLegitAim::IsEnableRCS()
 {
 	bool Ret = false;
 
-	RCS_X = Weapons[GetWeap(SelectedWeapon)].RcsX;
-	RCS_Y = Weapons[GetWeap(SelectedWeapon)].RcsY;
-
 	bool CheckPistol = CGlobal::GWeaponType == WEAPON_TYPE_PISTOL ? true : iShotsFired > 1;
 
-	if ((RCS_X > 0 || RCS_Y > 0) && CheckPistol)
+	if ((Weapons[GetWeap(SelectedWeapon)].RcsX > 0 || Weapons[GetWeap(SelectedWeapon)].RcsY > 0) && CheckPistol)
+	{
 		Ret = true;
+		if (Weapons[GetWeap(SelectedWeapon)].RcsStartBullet > 0)
+			if (Weapons[GetWeap(SelectedWeapon)].RcsStartBullet - 1 > iShotsFired)
+				Ret = false;
+
+		if (Weapons[GetWeap(SelectedWeapon)].RcsEndBullet > 0 && Ret)
+			if (iShotsFired >= Weapons[GetWeap(SelectedWeapon)].RcsEndBullet)
+				Ret = false;
+	}
 	else
 		Ret = false;
+
+	if (Ret)
+	{
+		RCS_X = Weapons[GetWeap(SelectedWeapon)].RcsX;
+		RCS_Y = Weapons[GetWeap(SelectedWeapon)].RcsY;
+	}
+	else
+	{
+		RCS_X = 0;
+		RCS_Y = 0;
+	}
+
+	if (Ret)
+		Ret = CanShoot();
 
 	return Ret;
 }
@@ -1477,12 +1519,18 @@ void CLegitAim::MakeVector(const Vector& vIn, Vector& vOut)
 
 void CLegitAim::StandeloneRCS(CUserCmd* pCmd)
 {
-	if ((pCmd->buttons & IN_ATTACK) && CanRCS && CanRCSStandelone)
+	if ((pCmd->buttons & IN_ATTACK) && CanRCSStandelone)
 	{
-		Vector AimPunch = (AimPunchAngle * (Vector(RCS_X, RCS_Y, 0) / 100.f)) * 2.f;
+		Vector AimPunch = (AimPunchAngle * (Vector(Weapons[GetWeap(SelectedWeapon)].RcsX, Weapons[GetWeap(SelectedWeapon)].RcsY, 0) / 100.f)) * 2.f;
 		Vector StartPunch = pCmd->viewangles;
 		Vector EndPunch = OldStandRCS - AimPunch;
 		Vector BufPunch = StartPunch + EndPunch;
+
+		//Vector delta = BufPunch - pCmd->viewangles;
+		//float smooth = powf(0.55f, 0.4f);
+		//float coeff = fabsf(smooth - 1.f) / delta.Length() * 4.f;
+		//coeff = min(1.f, coeff);
+		//BufPunch = pCmd->viewangles + (delta * coeff);
 
 		Vector delta = BufPunch - pCmd->viewangles;
 		BufPunch = pCmd->viewangles + (delta * (min(1.f, (fabsf(powf(0.6f, 0.4f) - 1.f) / delta.Length() * 4.f))));
@@ -1543,7 +1591,7 @@ void CLegitAim::StandeloneRCS(CUserCmd* pCmd)
 		OldStandRCS = AimPunch;
 	}
 	else
-		OldStandRCS = (AimPunchAngle*(Vector(RCS_X, RCS_Y, 0) / 100.f)) * 2.f;
+		OldStandRCS = (AimPunchAngle * (Vector(RCS_X, RCS_Y, 0) / 100.f)) * 2.f;
 }
 
 void CLegitAim::LegitResolver()

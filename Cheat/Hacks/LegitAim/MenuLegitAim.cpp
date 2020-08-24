@@ -153,8 +153,8 @@ void CLegitAim::Menu()
 			X1Gui().Spacing();
 
 			DCheckBox("Legit Resolver", Resolver);
-		//	X1Gui().Spacing();
-		//	DCheckBox("Debug", Debug);
+			//X1Gui().Spacing();
+			//DCheckBox("Debug", Debug);
 		}
 	}
 	X1Gui().EndChild();
@@ -212,17 +212,23 @@ void CLegitAim::Menu()
 		}
 		else if (SubTabAimSelected == 1)
 		{
-
 			SliderFloats("RCS X", Weapons[GetWeap(SelectedWeapon)].RcsY, 0, 150);
 			SliderFloats("RCS Y", Weapons[GetWeap(SelectedWeapon)].RcsX, 0, 150);
 
 			X1Gui().Spacing();
+			X1Gui().Separator();
 			X1Gui().Spacing();
-			if (false)
-				X1Gui().PushItemWidth(260.f);
 
 			SliderFloats("Smooth", Weapons[GetWeap(SelectedWeapon)].SmoothRcs, 0, 100);
 			SliderFloats("FOV", Weapons[GetWeap(SelectedWeapon)].FovRcs, 0, 300);
+
+			X1Gui().Spacing();
+			X1Gui().Separator();
+			X1Gui().Spacing();
+
+			SliderInts("Start bullet##RCS", Weapons[GetWeap(SelectedWeapon)].RcsStartBullet, 0, 100);
+			SliderInts("End bullet##RCS", Weapons[GetWeap(SelectedWeapon)].RcsEndBullet, 0, 100);
+
 			X1Gui().Spacing();
 			X1Gui().Separator();
 			X1Gui().Spacing();
@@ -256,9 +262,16 @@ void CLegitAim::Menu()
 			if (!FaceIt)
 			{
 				DCheckBox("Silent", Weapons[GetWeap(SelectedWeapon)].Silent);
-				SliderInts("% chance", Weapons[GetWeap(SelectedWeapon)].SilentHitchance, 0, 100);
 
+				SliderInts("% chance", Weapons[GetWeap(SelectedWeapon)].SilentHitchance, 0, 100);
 				SliderFloats("FOV", Weapons[GetWeap(SelectedWeapon)].SilentFov, 0, 30,);
+
+				X1Gui().Spacing();
+				X1Gui().Separator();
+				X1Gui().Spacing();
+
+				SliderInts("Start bullet##Silent", Weapons[GetWeap(SelectedWeapon)].SilentStartBullet, 0, 100);
+				SliderInts("End bullet##Silent", Weapons[GetWeap(SelectedWeapon)].SilentEndBullet, 0, 100);
 
 				if (!EntityAim)
 				{
@@ -278,12 +291,6 @@ void CLegitAim::Menu()
 					X1Gui().Spacing();
 					X1Gui().Spacing();
 				}
-				X1Gui().Spacing();
-				X1Gui().Separator();
-				X1Gui().Spacing();
-
-				SliderInts("Start bullet", Weapons[GetWeap(SelectedWeapon)].SilentStartBullet, 0, 100);
-				SliderInts("End bullet", Weapons[GetWeap(SelectedWeapon)].SilentEndBullet, 0, 100);
 			}
 		}
 		else if (SubTabAimSelected == 3)

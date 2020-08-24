@@ -300,6 +300,9 @@ public:
 		int HitBoxRcs = 0;
 		bool NearestRcs = false;
 		bool RcsStandelone = false;
+
+		int RcsStartBullet = 0;
+		int RcsEndBullet = 1;
 		/*=======*/
 
 		bool AutoPistol = false;
@@ -362,6 +365,8 @@ public:
 			CHECK_VAR(HitBoxRcs);
 			CHECK_VAR(NearestRcs);
 			CHECK_VAR(RcsStandelone);
+			CHECK_VAR(RcsStartBullet);
+			CHECK_VAR(RcsEndBullet);
 			CHECK_VAR(AutoPistol);
 			CHECK_VAR(FastZoom);
 			CHECK_VAR(OnlyZoom);
