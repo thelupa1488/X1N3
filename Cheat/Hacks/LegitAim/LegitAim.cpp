@@ -324,6 +324,23 @@ void CLegitAim::Draw()
 	}
 }
 
+const float getLerp()
+{
+	auto ratio = clamp(GP_LegitAim->cvars.interpRatio->GetFloat(), GP_LegitAim->cvars.minInterpRatio->GetFloat(), GP_LegitAim->cvars.maxInterpRatio->GetFloat());
+
+	return max(GP_LegitAim->cvars.interp->GetFloat(), (ratio / ((GP_LegitAim->cvars.maxUpdateRate) ? GP_LegitAim->cvars.maxUpdateRate->GetFloat() : GP_LegitAim->cvars.UpdateRate->GetFloat())));
+}
+
+const bool valid(float simtime)
+{
+	auto network = I::Engine()->GetNetChannelInfo();
+	if (!network)
+		return false;
+
+	auto delta = clamp(network->GetLatency(FLOW_OUTGOING) + network->GetLatency(FLOW_INCOMING) + getLerp(), 0.f, GP_LegitAim->cvars.maxUnlag->GetFloat()) - (I::GlobalVars()->curtime - simtime);
+	return std::fabsf(delta) <= 0.2f;
+}
+
 void CLegitAim::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld)
 {
 	if (ShowBacktrack && Weapons[GetWeap(SelectedWeapon)].Backtrack && Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit)
@@ -355,7 +372,7 @@ void CLegitAim::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const Dr
 		if (!Local->IsDead)
 		{
 			auto& record = records.at(Entity->Idx);
-			if (record.size() > 0)
+			if (record.size() > 0 && valid(record.front().simtime))
 			{
 				switch (SBTick)
 				{
@@ -1893,23 +1910,6 @@ void CLegitAim::InitializeBacktrack()
 	cvars.minInterpRatio = I::GetConVar()->FindVar(XorStr("sv_client_min_interp_ratio"));
 	cvars.maxInterpRatio = I::GetConVar()->FindVar(XorStr("sv_client_max_interp_ratio"));
 	cvars.maxUnlag = I::GetConVar()->FindVar(XorStr("sv_maxunlag"));
-}
-
-const float getLerp()
-{
-	auto ratio = clamp(GP_LegitAim->cvars.interpRatio->GetFloat(), GP_LegitAim->cvars.minInterpRatio->GetFloat(), GP_LegitAim->cvars.maxInterpRatio->GetFloat());
-
-	return max(GP_LegitAim->cvars.interp->GetFloat(), (ratio / ((GP_LegitAim->cvars.maxUpdateRate) ? GP_LegitAim->cvars.maxUpdateRate->GetFloat() : GP_LegitAim->cvars.UpdateRate->GetFloat())));
-}
-
-const bool valid(float simtime)
-{
-	auto network = I::Engine()->GetNetChannelInfo();
-	if (!network)
-		return false;
-
-	auto delta = clamp(network->GetLatency(FLOW_OUTGOING) + network->GetLatency(FLOW_INCOMING) + getLerp(), 0.f, GP_LegitAim->cvars.maxUnlag->GetFloat()) - (I::GlobalVars()->curtime - simtime);
-	return std::fabsf(delta) <= 0.2f;
 }
 
 void CLegitAim::BacktrackCreateMoveEP(CUserCmd* pCmd)
