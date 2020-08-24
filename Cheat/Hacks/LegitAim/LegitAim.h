@@ -222,21 +222,15 @@ public:
 
 	struct BacktrackVars
 	{
-		float UpdateRate;
-		float minUpdateRate;
-		float maxUpdateRate;
-		float interp;
-		float interpRatio;
-		float minInterpRatio;
-		float maxInterpRatio;
-		float maxUnlag;
-
-		float flLerpRatio;
-		float CorrectTime;
-		float Latency;
-		float LerpTime;
+		ConVar* UpdateRate;
+		ConVar* maxUpdateRate;
+		ConVar* interp;
+		ConVar* interpRatio;
+		ConVar* minInterpRatio;
+		ConVar* maxInterpRatio;
+		ConVar* maxUnlag;
 	};
-	BacktrackVars vars;
+	BacktrackVars cvars;
 
 	struct BacktrackData
 	{

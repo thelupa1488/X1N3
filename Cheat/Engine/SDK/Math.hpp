@@ -13,7 +13,6 @@
 #define TICK_INTERVAL			(I::GlobalVars()->interval_per_tick)
 #define TIME_TO_TICKS(dt)		((int)(0.5f + (float)(dt) / TICK_INTERVAL))
 #define TICKS_TO_TIME(t)		(I::GlobalVars()->interval_per_tick * (t))
-#define MAXBACKTRACKTICKS(tl)  (static_cast<size_t> (TIME_TO_TICKS (static_cast<float> (tl) / 1000.f)) - 1)
 
 
 namespace SDK
