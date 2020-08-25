@@ -18,17 +18,6 @@ namespace SDK
 
 namespace Engine
 {
-	int CBaseEntity::GetSequenceActivity(int sequence)
-	{
-		studiohdr_t* hdr = I::ModelInfo()->GetStudioModel(this->GetModel());
-
-		if (!hdr)
-			return -1;
-
-		static auto GetSequenceActivity = reinterpret_cast<int(__fastcall*)(void*, studiohdr_t*, int)>(offsets["SequenceActivity"]);
-
-		return GetSequenceActivity(this, hdr, sequence);
-	}
 	char* CBaseEntity::GetPlayerName()
 	{
 		if (IsPlayer())
@@ -575,6 +564,18 @@ namespace Engine
 		return entIndex > I::GlobalVars()->maxClients;
 	}
 
+	int CBaseViewModel::GetSequenceActivity(int sequence)
+	{
+		studiohdr_t* hdr = I::ModelInfo()->GetStudioModel(this->GetModel());
+
+		if (!hdr)
+			return -1;
+
+		static auto GetSequenceActivity = reinterpret_cast<int(__fastcall*)(void*, studiohdr_t*, int)>(offsets["SequenceActivity"]);
+
+		return GetSequenceActivity(this, hdr, sequence);
+	}
+
 	void CBaseViewModel::SetModelIndex(int nModelIndex)
 	{
 		VirtualFn(void)(PVOID, int);
@@ -588,8 +589,8 @@ namespace Engine
 
 	void CBaseViewModel::SendViewModelMatchingSequence(int Sequence)
 	{
-		VirtualFn(void)(PVOID, int);
-		GetMethod<OriginalFn>(this, 246)(this, Sequence);
+		typedef void(__thiscall* SendViewModelMatchingSequenceFn)(void*, int);
+		return GetMethod<SendViewModelMatchingSequenceFn>(this, 246)(this, Sequence);
 	}
 
 	void CBaseViewModel::SetWeaponModel(const char* Filename, IClientEntity* Weapon)

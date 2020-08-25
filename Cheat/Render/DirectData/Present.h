@@ -44,7 +44,6 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDirect3DDevice9* pDevice, CONST RECT* pSour
 #else
 	CGlobal::IsGameReady = false;
 #endif 
-	CGlobal::LocalPlayer = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
 
 #ifdef ENABLE_CLEAR_CONSOLE
 	system("cls");

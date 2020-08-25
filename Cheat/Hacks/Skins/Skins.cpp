@@ -195,8 +195,8 @@ void CSkins::PostDataUpdate()
 
 				if (pEntity->GetClientClass()->m_ClassID == (int)CLIENT_CLASS_ID::CKnife)
 				{
-					int sel_mod = IsTT ? SelectedKnifeModelTT : SelectedKnifeModelCT;
-					ItemSettings* Item = IsTT ? &KnifeNamesTT[sel_mod] : &KnifeNames[sel_mod];
+					int sel_mod = (IsTT ? SelectedKnifeModelTT : SelectedKnifeModelCT);
+					ItemSettings* Item = (IsTT ? &KnifeNamesTT[sel_mod] : &KnifeNames[sel_mod]);
 					if (sel_mod)
 					{
 						int mdl_idx = GetKnifeModelIdx(sel_mod, IsTT);
@@ -222,7 +222,7 @@ void CSkins::PostDataUpdate()
 						else
 							*pAttrib->GetEntityQuality() = Item->Skin.quality;
 #endif
-						* pAttrib->GetEntityQuality() = Item->Skin.quality;
+						*pAttrib->GetEntityQuality() = Item->Skin.quality;
 					}
 				}
 

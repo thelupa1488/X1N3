@@ -408,31 +408,32 @@ void CRadar::Draw()
 {
 	if (Enable)
 	{
-		if (CGlobal::LocalPlayer)
+		CBaseEntity* plocal = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
+		if (plocal)
 		{
 			if (RadarActive)
 			{
-				if (CGlobal::LocalPlayer->IsDead())
+				if (plocal->IsDead())
 				{
-					CBaseEntity* pObserverTarget = (CBaseEntity*)I::EntityList()->GetClientEntityFromHandle(CGlobal::LocalPlayer->GetObserverTarget());
+					CBaseEntity* pObserverTarget = (CBaseEntity*)I::EntityList()->GetClientEntityFromHandle(plocal->GetObserverTarget());
 
 					if (!pObserverTarget)
 						return;
 
-					CGlobal::LocalPlayer = pObserverTarget;
+					plocal = pObserverTarget;
 				}
 
-				if (!CGlobal::LocalPlayer)
+				if (!plocal)
 					return;
 
-				if (CGlobal::LocalPlayer == (CBaseEntity*)0xE || CGlobal::LocalPlayer == (CBaseEntity*)0xF)
+				if (plocal == (CBaseEntity*)0xE || plocal == (CBaseEntity*)0xF)
 					return;
 
 
 				if (!CGlobal::FullUpdateCheck)
 				{
-					LocalRendOrig = CGlobal::LocalPlayer->GetRenderOrigin();
-					LocalViewOfst = CGlobal::LocalPlayer->GetViewOffset();
+					LocalRendOrig = plocal->GetRenderOrigin();
+					LocalViewOfst = plocal->GetViewOffset();
 				}
 
 				X1Gui().SetNextWindowPos(Vec2(RadarPosX, RadarPosY));
@@ -449,10 +450,10 @@ void CRadar::Draw()
 					Vec2 DrawSize = X1Gui().GetCurWindowSize();
 
 					if (TexturedRadar && CGlobal::IsGameReady)
-						DrawMapImage(CGlobal::LocalPlayer);
+						DrawMapImage(plocal);
 
 					if (CGlobal::IsGameReady)
-						RenderPlayer(CGlobal::LocalPlayer);
+						RenderPlayer(plocal);
 
 					if (Fov)
 					{
@@ -495,7 +496,7 @@ void CRadar::Draw()
 				X1Gui().GetStyle().clrBackground = old_color;
 			}
 			if (RadarInGame)
-				RenderPlayer(CGlobal::LocalPlayer);
+				RenderPlayer(plocal);
 		}
 	}
 }

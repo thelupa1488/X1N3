@@ -93,7 +93,6 @@ namespace Engine
 	{
 	public:
 		//[swap_lines]
-		int     GetSequenceActivity(int sequence);
 		char*	GetPlayerName();
 		bool    IsDefusing();
 
@@ -188,8 +187,9 @@ namespace Engine
 	public:
 
 		int     GetSequence();
+		int     GetSequenceActivity(int sequence);
 		void	SetModelIndex(int nModelIndex);
-		void	SendViewModelMatchingSequence(int Sequence);
+		void	SendViewModelMatchingSequence(int sequence);
 		void	SetWeaponModel(const char* Filename, IClientEntity* Weapon);
 
 		DWORD	GetOwner();
