@@ -222,15 +222,12 @@ void CLegitAim::Menu()
 			SliderFloats("Smooth", Weapons[GetWeap(SelectedWeapon)].SmoothRcs, 0, 100);
 			SliderFloats("FOV", Weapons[GetWeap(SelectedWeapon)].FovRcs, 0, 300);
 
-			if (CGlobal::GWeaponType != WEAPON_TYPE_PISTOL)
-			{
-				X1Gui().Spacing();
-				X1Gui().Separator();
-				X1Gui().Spacing();
+			X1Gui().Spacing();
+			X1Gui().Separator();
+			X1Gui().Spacing();
 
-				SliderInts("Start bullet##RCS", Weapons[GetWeap(SelectedWeapon)].RcsStartBullet, 0, 100);
-				SliderInts("End bullet##RCS", Weapons[GetWeap(SelectedWeapon)].RcsEndBullet, 0, 100);
-			}
+			SliderInts("Start bullet##RCS", Weapons[GetWeap(SelectedWeapon)].RcsStartBullet, 0, 100);
+			SliderInts("End bullet##RCS", Weapons[GetWeap(SelectedWeapon)].RcsEndBullet, 0, 100);
 
 			X1Gui().Spacing();
 			X1Gui().Separator();
@@ -269,15 +266,12 @@ void CLegitAim::Menu()
 				SliderInts("% chance", Weapons[GetWeap(SelectedWeapon)].SilentHitchance, 0, 100);
 				SliderFloats("FOV", Weapons[GetWeap(SelectedWeapon)].SilentFov, 0, 30,);
 
-				if (CGlobal::GWeaponType != WEAPON_TYPE_PISTOL)
-				{
-					X1Gui().Spacing();
-					X1Gui().Separator();
-					X1Gui().Spacing();
+				X1Gui().Spacing();
+				X1Gui().Separator();
+				X1Gui().Spacing();
 
-					SliderInts("Start bullet##Silent", Weapons[GetWeap(SelectedWeapon)].SilentStartBullet, 0, 100);
-					SliderInts("End bullet##Silent", Weapons[GetWeap(SelectedWeapon)].SilentEndBullet, 0, 100);
-				}
+				SliderInts("Start bullet##Silent", Weapons[GetWeap(SelectedWeapon)].SilentStartBullet, 0, 100);
+				SliderInts("End bullet##Silent", Weapons[GetWeap(SelectedWeapon)].SilentEndBullet, 0, 100);
 
 				if (!EntityAim)
 				{

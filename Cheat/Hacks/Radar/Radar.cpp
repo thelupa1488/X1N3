@@ -408,9 +408,9 @@ void CRadar::Draw()
 {
 	if (Enable)
 	{
-		if (RadarActive)
+		if (CGlobal::LocalPlayer)
 		{
-			if (CGlobal::LocalPlayer)
+			if (RadarActive)
 			{
 				if (CGlobal::LocalPlayer->IsDead())
 				{
@@ -494,13 +494,8 @@ void CRadar::Draw()
 				X1Gui().GetStyle().wndPadding = old_pad;
 				X1Gui().GetStyle().clrBackground = old_color;
 			}
-		}
-		if (RadarInGame)
-		{
-			if (CGlobal::IsGameReady && CGlobal::LocalPlayer)
-			{
+			if (RadarInGame)
 				RenderPlayer(CGlobal::LocalPlayer);
-			}
 		}
 	}
 }

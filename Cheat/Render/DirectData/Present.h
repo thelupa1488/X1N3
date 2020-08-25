@@ -44,6 +44,7 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDirect3DDevice9* pDevice, CONST RECT* pSour
 #else
 	CGlobal::IsGameReady = false;
 #endif 
+	CGlobal::LocalPlayer = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
 
 #ifdef ENABLE_CLEAR_CONSOLE
 	system("cls");
@@ -86,7 +87,6 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDirect3DDevice9* pDevice, CONST RECT* pSour
 #ifndef ONLY_DRAW_HOOK
 			I::Engine()->GetScreenSize(CGlobal::iScreenWidth, CGlobal::iScreenHeight);
 #endif
-
 			CGSettings::G().UpdateColors();
 
 			GP_Render->BeginDraw();
@@ -100,6 +100,9 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDirect3DDevice9* pDevice, CONST RECT* pSour
 					if (GP_Esp)
 						GP_Esp->Draw();
 
+					if (GP_Esp->GranadePrediction)
+						grenade_prediction::Get().Paint();
+
 					if (GP_Misc)
 						GP_Misc->Draw();
 
@@ -109,9 +112,6 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDirect3DDevice9* pDevice, CONST RECT* pSour
 
 					if (GP_LegitAim)
 						GP_LegitAim->Draw();
-
-					if (GP_Esp->GranadePrediction)
-						grenade_prediction::Get().Paint();
 				}
 				else
 				{
@@ -130,11 +130,11 @@ HRESULT STDMETHODCALLTYPE MyPresent(IDirect3DDevice9* pDevice, CONST RECT* pSour
 
 			if (CGlobal::IsGameReady)
 			{
-				if (GP_Radar)
-					GP_Radar->Draw();
-
 				if (GP_Misc->SpectatorList && !CGlobal::FullUpdateCheck)
 					GP_Misc->ShowSpectatorList();
+
+				if (GP_Radar)
+					GP_Radar->Draw();
 			}
 
 			Menu.Draw(MenuFont);
