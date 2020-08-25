@@ -26,8 +26,8 @@ template< typename Function > Function GetMethod( PVOID Base , DWORD Index )
 	PDWORD VTableFunctionBase = *VTablePointer;
 	DWORD dwAddress = VTableFunctionBase[Index];
 
-	//if (FastCall::G().t_IsBadReadPtr((Function)(dwAddress), sizeof(Function)))
-	//	return nullptr;
+//	if (FastCall::G().t_IsBadReadPtr((Function)(dwAddress), sizeof(Function)))
+//		return nullptr;
 
 	return (Function)( dwAddress );
 }

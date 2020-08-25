@@ -57,7 +57,7 @@ namespace SDK
         virtual bool        AddListener(IGameEventListener2* listener, const char* name, bool bServerSide) = 0;
         virtual bool        FindListener(IGameEventListener2* listener, const char* name) = 0;
         virtual int         RemoveListener(IGameEventListener2* listener) = 0;
-        virtual IGameEvent* CreateEvent(const char* name, bool bForce, unsigned int dwUnknown) = 0;
+        virtual IGameEvent* CreateEvent_(const char* name, bool bForce, unsigned int dwUnknown) = 0;
         virtual bool        FireEvent(IGameEvent* event, bool bDontBroadcast = false) = 0;
         virtual bool        FireEventClientSide(IGameEvent* event) = 0;
         virtual IGameEvent* DuplicateEvent(IGameEvent* event) = 0;

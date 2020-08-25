@@ -76,7 +76,8 @@ public:
 			ADD_LOG("2-1-11-7-2\n");
 			GP_Esp->InitVisuals();
 			GP_Esp->InitializeMaterials();
-			GP_LegitAim->InitializeBacktrack();
+			GP_LegitAim->InitializeConVar();
+			GP_Misc->InitializeConVar();
 			GP_Render->Initialize();
 			GP_GHelper->Initialize();
 			ADD_LOG("2-1-11-7-3\n");
@@ -97,6 +98,8 @@ public:
 		}
 		virtual void Shutdown()
 		{
+			GP_Misc->ResetConVar();
+
 			HookRender::Shutdown();
 			HookTables::Shutdown();
 

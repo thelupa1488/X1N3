@@ -95,7 +95,7 @@ namespace SDK
 		static IMaterialSystem*		  MaterialSystem();
 		static ISurface*			  Surface();
 		static IPhysicsSurfaceProps*  PhysSurface();
-		static ConVar*                GetConVar();
+		static Cvar*                  GetCvar();
 		static ILocalize*             Localize();
 		static ISteamGameCoordinator* SteamGameCoordinator();
 		static ISteamUser*            SteamUser();
@@ -121,7 +121,7 @@ namespace SDK
 		static ISurface*			  g_pSurface;
 		static IPhysicsSurfaceProps*  g_PhysSurface;
 		static IGameEventManager2*	  g_pGameEvent;
-		static ConVar*                g_pConVar;
+		static Cvar*                  g_pCvar;
 		static ILocalize*             g_pLocalize;
 		static ISteamGameCoordinator* g_pSteamGameCoordinator;
 		static ISteamUser*            g_pSteamUser;

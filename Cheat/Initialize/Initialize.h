@@ -62,12 +62,6 @@ public:
 				PVOID* ModelRenderTable = *reinterpret_cast<PVOID**>(I::ModelRender());
 				PVOID* SteamTable = *reinterpret_cast<PVOID**>(I::SteamGameCoordinator());
 
-				CGlobal::OrigRightHand = I::GetConVar()->FindVar(XorStr("cl_righthand"))->GetFloat();
-				CGlobal::OrigViewModelX = I::GetConVar()->FindVar(XorStr("viewmodel_offset_x"))->GetFloat();
-				CGlobal::OrigViewModelY = I::GetConVar()->FindVar(XorStr("viewmodel_offset_y"))->GetFloat();
-				CGlobal::OrigViewModelZ = I::GetConVar()->FindVar(XorStr("viewmodel_offset_z"))->GetFloat();
-				CGlobal::OrigAspectRatio = I::GetConVar()->FindVar(XorStr("r_aspectratio"))->GetFloat();
-
 				ADD_LOG("2-1-11-2\n");
 #ifndef ONLY_DRAW_HOOK
 				ADD_LOG("2-1-11-3\n");

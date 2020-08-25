@@ -332,8 +332,6 @@ bool CMisc::ChangeName(bool reconnect, const char* newName, float delay)
 {
 	static auto exploitInitialized = false;
 
-	static auto name = I::GetConVar()->FindVar(XorStr("name"));
-
 	if (reconnect)
 	{
 		exploitInitialized = false;
@@ -350,15 +348,15 @@ bool CMisc::ChangeName(bool reconnect, const char* newName, float delay)
 		}
 		else
 		{
-			*(int*)((DWORD)&name->fnChangeCallback + 0xC) = NULL;
-			name->SetValue(XorStr("\n\xAD\xAD\xAD"));
+			*(int*)((DWORD)&cvars.name->fnChangeCallback + 0xC) = NULL;
+			cvars.name->SetValue(XorStr("\n\xAD\xAD\xAD"));
 			return false;
 		}
 	}
 	static auto nextChangeTime = 0.0f;
 	if (nextChangeTime <= I::GlobalVars()->realtime)
 	{
-		name->SetValue(newName);
+		cvars.name->SetValue(newName);
 		nextChangeTime = I::GlobalVars()->realtime + delay;
 		return true;
 	}
@@ -393,12 +391,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				CGlobal::GWeaponID = (WEAPON_ID)*CGlobal::LocalPlayer->GetBaseWeapon()->GeteAttributableItem()->GetItemDefinitionIndex();
 		}
 	}
-
-	ConVar* cl_righthand = I::GetConVar()->FindVar(XorStr("cl_righthand"));
-	ConVar* viewmodel_offset_x = I::GetConVar()->FindVar(XorStr("viewmodel_offset_x"));
-	ConVar* viewmodel_offset_y = I::GetConVar()->FindVar(XorStr("viewmodel_offset_y"));
-	ConVar* viewmodel_offset_z = I::GetConVar()->FindVar(XorStr("viewmodel_offset_z"));
-	ConVar* r_aspectratio = I::GetConVar()->FindVar(XorStr("r_aspectratio"));
 
 	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
 	{
@@ -497,8 +489,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 						if (pCmd->forwardmove > 0.0f)
 							pCmd->forwardmove = 0.0f;
 
-						static auto cl_sidespeed = I::GetConVar()->FindVar(XorStr("cl_sidespeed"));
-
 						static float old_yaw = 0.f;
 						auto yaw_delta = remainderf(wish_angle.y - old_yaw, 360.0f);
 						auto abs_angle_delta = abs(yaw_delta);
@@ -515,26 +505,26 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 								if (-(retrack) <= velocity_delta || speed <= 15.0f)
 								{
 									wish_angle.y += side * ideal_strafe;
-									pCmd->sidemove = cl_sidespeed->GetFloat() * side;
+									pCmd->sidemove = cvars.cl_sidespeed->GetFloat() * side;
 								}
 								else
 								{
 									wish_angle.y = velocity_direction.y - retrack;
-									pCmd->sidemove = cl_sidespeed->GetFloat();
+									pCmd->sidemove = cvars.cl_sidespeed->GetFloat();
 								}
 							}
 							else
 							{
 								wish_angle.y = velocity_direction.y + retrack;
-								pCmd->sidemove = -cl_sidespeed->GetFloat();
+								pCmd->sidemove = -cvars.cl_sidespeed->GetFloat();
 							}
 
 							MovementFix(pCmd, wish_angle, pCmd->viewangles);
 						}
 						else if (yaw_delta > 0.0f)
-							pCmd->sidemove = -cl_sidespeed->GetFloat();
+							pCmd->sidemove = -cvars.cl_sidespeed->GetFloat();
 						else if (yaw_delta < 0.0f)
-							pCmd->sidemove = cl_sidespeed->GetFloat();
+							pCmd->sidemove = cvars.cl_sidespeed->GetFloat();
 					}
 				}
 			}
@@ -544,26 +534,26 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				static int hand = CGlobal::OrigRightHand;
 
 				if (CGlobal::GWeaponType == WEAPON_TYPE_KNIFE)
-					cl_righthand->SetValue(!hand);
+					cvars.cl_righthand->SetValue(!hand);
 				else
-					cl_righthand->SetValue(hand);
+					cvars.cl_righthand->SetValue(hand);
 
 				LeftHandKnifeReset = true;
 			}
 			if (!LRHandKnife && LeftHandKnifeReset)
 			{
-				cl_righthand->SetValue(CGlobal::OrigRightHand);
+				cvars.cl_righthand->SetValue(CGlobal::OrigRightHand);
 				LeftHandKnifeReset = false;
 			}
 			static bool SwapHandReset = false;
 			if (SwapHand)
 			{
-				cl_righthand->SetValue(!SwapHandBind.Check());
+				cvars.cl_righthand->SetValue(!SwapHandBind.Check());
 				SwapHandReset = true;
 			}
 			if (!SwapHand && SwapHandReset)
 			{
-				cl_righthand->SetValue(CGlobal::OrigRightHand);
+				cvars.cl_righthand->SetValue(CGlobal::OrigRightHand);
 				SwapHandReset = false;
 			}
 			if (InfiniteCrouch)
@@ -818,39 +808,39 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 			{
 				if (ViewModelX > 0 || ViewModelX < 0) 
 				{
-					*(float*)((DWORD)&viewmodel_offset_x->fnChangeCallback + 0xC) = NULL;
-					viewmodel_offset_x->SetValue(ViewModelX);
+					*(float*)((DWORD)&cvars.viewmodel_offset_x->fnChangeCallback + 0xC) = NULL;
+					cvars.viewmodel_offset_x->SetValue(ViewModelX);
 				}
 				if (ViewModelY > 0 || ViewModelY < 0)
 				{
-					*(float*)((DWORD)&viewmodel_offset_y->fnChangeCallback + 0xC) = NULL;
-					viewmodel_offset_y->SetValue(ViewModelY);
+					*(float*)((DWORD)&cvars.viewmodel_offset_y->fnChangeCallback + 0xC) = NULL;
+					cvars.viewmodel_offset_y->SetValue(ViewModelY);
 				}
 				if (ViewModelZ > 0 || ViewModelZ < 0) 
 				{
-					*(float*)((DWORD)&viewmodel_offset_z->fnChangeCallback + 0xC) = NULL;
-					viewmodel_offset_z->SetValue(ViewModelZ);
+					*(float*)((DWORD)&cvars.viewmodel_offset_z->fnChangeCallback + 0xC) = NULL;
+					cvars.viewmodel_offset_z->SetValue(ViewModelZ);
 				}
 
 				ViewModelXYZReset = true;
 			}
 			if (!ViewModelXYZ && ViewModelXYZReset)
 			{
-				viewmodel_offset_x->SetValue(CGlobal::OrigViewModelX);
-				viewmodel_offset_y->SetValue(CGlobal::OrigViewModelY);
-				viewmodel_offset_z->SetValue(CGlobal::OrigViewModelZ);
+				cvars.viewmodel_offset_x->SetValue(CGlobal::OrigViewModelX);
+				cvars.viewmodel_offset_y->SetValue(CGlobal::OrigViewModelY);
+				cvars.viewmodel_offset_z->SetValue(CGlobal::OrigViewModelZ);
 				ViewModelXYZReset = false;
 			}
 
 			static bool AspectRatioReset = false;
 			if (Aspect)
 			{
-				r_aspectratio->SetValue(AspectRation);
+				cvars.r_aspectratio->SetValue(AspectRation);
 				AspectRatioReset = true;
 			}
 			if (!Aspect && AspectRatioReset)
 			{
-				r_aspectratio->SetValue(CGlobal::OrigAspectRatio);
+				cvars.r_aspectratio->SetValue(CGlobal::OrigAspectRatio);
 				AspectRatioReset = false;
 			}
 
@@ -1593,10 +1583,8 @@ void CMisc::Night()
 	static bool NightModeReset = false;
 	if (NightMode)
 	{
-		static auto sv_skyname = I::GetConVar()->FindVar(XorStr("sv_skyname"));
-		static auto r_DrawSpecificStaticProp = I::GetConVar()->FindVar(XorStr("r_DrawSpecificStaticProp"));
-		r_DrawSpecificStaticProp->SetValue(1);
-		sv_skyname->SetValue(XorStr("sky_csgo_night02"));
+		cvars.r_DrawSpecificStaticProp->SetValue(1);
+		cvars.sv_skyname->SetValue(XorStr("sky_csgo_night02"));
 
 		for (MaterialHandle_t i = I::MaterialSystem()->FirstMaterial(); i != I::MaterialSystem()->InvalidMaterial(); i = I::MaterialSystem()->NextMaterial(i))
 		{
@@ -1723,6 +1711,25 @@ void CMisc::UpdateSoundList()
 	CGlobal::SearchFiles(SoundsDir.c_str(), ReadSounds, FALSE);
 }
 
+void CMisc::InitializeConVar()
+{
+	cvars.name = I::GetCvar()->FindVar(XorStr("name"));
+	cvars.cl_righthand = I::GetCvar()->FindVar(XorStr("cl_righthand"));
+	cvars.viewmodel_offset_x = I::GetCvar()->FindVar(XorStr("viewmodel_offset_x"));
+	cvars.viewmodel_offset_y = I::GetCvar()->FindVar(XorStr("viewmodel_offset_y"));
+	cvars.viewmodel_offset_z = I::GetCvar()->FindVar(XorStr("viewmodel_offset_z"));
+	cvars.r_aspectratio = I::GetCvar()->FindVar(XorStr("r_aspectratio"));
+	cvars.cl_sidespeed = I::GetCvar()->FindVar(XorStr("cl_sidespeed"));
+	cvars.sv_skyname = I::GetCvar()->FindVar(XorStr("sv_skyname"));
+	cvars.r_DrawSpecificStaticProp = I::GetCvar()->FindVar(XorStr("r_DrawSpecificStaticProp"));
+
+	CGlobal::OrigRightHand = cvars.cl_righthand->GetFloat();
+	CGlobal::OrigViewModelX = cvars.viewmodel_offset_x->GetFloat();
+	CGlobal::OrigViewModelY = cvars.viewmodel_offset_y->GetFloat();
+	CGlobal::OrigViewModelZ = cvars.viewmodel_offset_z->GetFloat();
+	CGlobal::OrigAspectRatio = cvars.r_aspectratio->GetFloat();
+}
+
 void CHitListener::RegListener()
 {
 	I::GameEvent()->AddListener(this, XorStr("player_hurt"), false);
@@ -1732,38 +1739,6 @@ void CHitListener::RegListener()
 void CHitListener::UnRegListener()
 {
 	I::GameEvent()->RemoveListener(this);
-}
-
-void ReadWavFileIntoMemory(string fname, BYTE** pb, DWORD* fsize) 
-{
-	ifstream f(fname, ios::binary);
-
-	f.seekg(0, ios::end);
-	int lim = f.tellg();
-	*fsize = lim;
-
-	*pb = new BYTE[lim];
-	f.seekg(0, ios::beg);
-
-	f.read((char*)*pb, lim);
-
-	f.close();
-}
-
-void PlaySound_Volume(string szFilename, float fVolume)
-{
-	DWORD dwFileSize;
-	BYTE* pFileBytes;
-	ReadWavFileIntoMemory(szFilename, &pFileBytes, &dwFileSize);
-
-	BYTE* pDataOffset = (pFileBytes + 40);
-
-	__int16* p = (__int16*)(pDataOffset + 8);
-
-	for (int i = 80 / sizeof(*p); i < dwFileSize / sizeof(*pFileBytes); i++)
-		p[i] = (float)p[i] * fVolume;
-
-	PlaySound((LPCSTR)pFileBytes, NULL, SND_MEMORY);
 }
 
 #define HIT_TRACE_SHOW_TIME 2.f

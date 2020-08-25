@@ -1900,16 +1900,16 @@ float DistancePointToLine(Vector Point, Vector LineOrigin, Vector Dir)
 	return (Point - PerpendicularPoint).Length();
 }
 
-void CLegitAim::InitializeBacktrack()
+void CLegitAim::InitializeConVar()
 {
 	records.clear();
-	cvars.UpdateRate = I::GetConVar()->FindVar(XorStr("cl_updaterate"));
-	cvars.maxUpdateRate = I::GetConVar()->FindVar(XorStr("sv_maxupdaterate"));
-	cvars.interp = I::GetConVar()->FindVar(XorStr("cl_interp"));
-	cvars.interpRatio = I::GetConVar()->FindVar(XorStr("cl_interp_ratio"));
-	cvars.minInterpRatio = I::GetConVar()->FindVar(XorStr("sv_client_min_interp_ratio"));
-	cvars.maxInterpRatio = I::GetConVar()->FindVar(XorStr("sv_client_max_interp_ratio"));
-	cvars.maxUnlag = I::GetConVar()->FindVar(XorStr("sv_maxunlag"));
+	cvars.UpdateRate = I::GetCvar()->FindVar(XorStr("cl_updaterate"));
+	cvars.maxUpdateRate = I::GetCvar()->FindVar(XorStr("sv_maxupdaterate"));
+	cvars.interp = I::GetCvar()->FindVar(XorStr("cl_interp"));
+	cvars.interpRatio = I::GetCvar()->FindVar(XorStr("cl_interp_ratio"));
+	cvars.minInterpRatio = I::GetCvar()->FindVar(XorStr("sv_client_min_interp_ratio"));
+	cvars.maxInterpRatio = I::GetCvar()->FindVar(XorStr("sv_client_max_interp_ratio"));
+	cvars.maxUnlag = I::GetCvar()->FindVar(XorStr("sv_maxunlag"));
 }
 
 void CLegitAim::BacktrackCreateMoveEP(CUserCmd* pCmd)
@@ -2073,6 +2073,8 @@ void CLegitAim::SaveWeapons(nlohmann::json &j)
 		SV("HitBoxRcs", v.HitBoxRcs);
 		SV("NearestRcs", v.NearestRcs);
 		SV("RcsStandelone", v.RcsStandelone);
+		SV("RcsStartBullet", v.RcsStartBullet);
+		SV("RcsEndBullet", v.RcsEndBullet);
 		SV("AutoPistol", v.AutoPistol);
 		SV("FastZoom", v.FastZoom);
 		SV("OnlyZoom", v.OnlyZoom);
@@ -2201,6 +2203,8 @@ void CLegitAim::LoadWeapons(nlohmann::json &j)
 				LV("HitBoxRcs", v.HitBoxRcs);
 				LV("NearestRcs", v.NearestRcs);
 				LV("RcsStandelone", v.RcsStandelone);
+				LV("RcsStartBullet", v.RcsStartBullet);
+				LV("RcsEndBullet", v.RcsEndBullet);
 				LV("AutoPistol", v.AutoPistol);
 				LV("OnlyZoom", v.OnlyZoom);
 				LV("TRIG_HITGROUP_HEAD", v.TRIG_HITGROUP_HEAD);
