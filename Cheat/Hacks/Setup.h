@@ -98,8 +98,6 @@ public:
 		}
 		virtual void Shutdown()
 		{
-			GP_Misc->ResetConVar();
-
 			HookRender::Shutdown();
 			HookTables::Shutdown();
 
