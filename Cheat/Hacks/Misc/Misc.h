@@ -62,7 +62,6 @@ protected:
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd) = 0;
 	virtual void CreateMoveEP(CUserCmd* pCmd) = 0;
 	virtual void OverrideView(CViewSetup* pSetup) = 0;
-	virtual void InitializeConVar() = 0; 
 };
 
 class CMisc : public IMisc
@@ -96,21 +95,6 @@ public:
 	virtual void Reset();
 	virtual void UpdateSoundList();
 	virtual void CustomWalls();
-	virtual void InitializeConVar();
-
-	struct MiscConVar
-	{
-		ConVar* name;
-		ConVar* cl_righthand;
-		ConVar* viewmodel_offset_x;
-		ConVar* viewmodel_offset_y;
-		ConVar* viewmodel_offset_z;
-		ConVar* r_aspectratio;
-		ConVar* cl_sidespeed;
-		ConVar* sv_skyname;
-		ConVar* r_DrawSpecificStaticProp;
-	};
-	MiscConVar cvars;
 
 	bool Enable = true;
 	bool BHop = false;

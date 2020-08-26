@@ -338,6 +338,7 @@ bool CMisc::ChangeName(bool reconnect, const char* newName, float delay)
 		return false;
 	}
 
+	static ConVar* name = I::GetCvar()->FindVar(XorStr("name"));
 	if (!exploitInitialized && CGlobal::IsGameReady)
 	{
 		PlayerInfo playerInfo;
@@ -348,15 +349,15 @@ bool CMisc::ChangeName(bool reconnect, const char* newName, float delay)
 		}
 		else
 		{
-			*(int*)((DWORD)&cvars.name->fnChangeCallback + 0xC) = NULL;
-			cvars.name->SetValue(XorStr("\n\xAD\xAD\xAD"));
+			*(int*)((DWORD)&name->fnChangeCallback + 0xC) = NULL;
+			name->SetValue(XorStr("\n\xAD\xAD\xAD"));
 			return false;
 		}
 	}
 	static auto nextChangeTime = 0.0f;
 	if (nextChangeTime <= I::GlobalVars()->realtime)
 	{
-		cvars.name->SetValue(newName);
+		name->SetValue(newName);
 		nextChangeTime = I::GlobalVars()->realtime + delay;
 		return true;
 	}
@@ -494,6 +495,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 						auto abs_angle_delta = abs(yaw_delta);
 						old_yaw = wish_angle.y;
 
+						static ConVar* cl_sidespeed = I::GetCvar()->FindVar(XorStr("cl_sidespeed"));
 						if (abs_angle_delta <= ideal_strafe || abs_angle_delta >= 30.0f)
 						{
 							QAngle velocity_direction;
@@ -505,55 +507,62 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 								if (-(retrack) <= velocity_delta || speed <= 15.0f)
 								{
 									wish_angle.y += side * ideal_strafe;
-									pCmd->sidemove = cvars.cl_sidespeed->GetFloat() * side;
+									pCmd->sidemove = cl_sidespeed->GetFloat() * side;
 								}
 								else
 								{
 									wish_angle.y = velocity_direction.y - retrack;
-									pCmd->sidemove = cvars.cl_sidespeed->GetFloat();
+									pCmd->sidemove = cl_sidespeed->GetFloat();
 								}
 							}
 							else
 							{
 								wish_angle.y = velocity_direction.y + retrack;
-								pCmd->sidemove = -cvars.cl_sidespeed->GetFloat();
+								pCmd->sidemove = -cl_sidespeed->GetFloat();
 							}
 
 							MovementFix(pCmd, wish_angle, pCmd->viewangles);
 						}
 						else if (yaw_delta > 0.0f)
-							pCmd->sidemove = -cvars.cl_sidespeed->GetFloat();
+							pCmd->sidemove = -cl_sidespeed->GetFloat();
 						else if (yaw_delta < 0.0f)
-							pCmd->sidemove = cvars.cl_sidespeed->GetFloat();
+							pCmd->sidemove = cl_sidespeed->GetFloat();
 					}
 				}
 			}
+
+			static ConVar* cl_righthand = I::GetCvar()->FindVar(XorStr("cl_righthand"));
 			static bool LeftHandKnifeReset = false;
 			if (LRHandKnife)
 			{
 				static int hand = CGlobal::OrigRightHand;
-
-				if (CGlobal::GWeaponType == WEAPON_TYPE_KNIFE)
-					cvars.cl_righthand->SetValue(!hand);
-				else
-					cvars.cl_righthand->SetValue(hand);
-
+				static bool swapKnife = false;
+				if (CGlobal::GWeaponType == WEAPON_TYPE_KNIFE && !swapKnife)
+				{
+					cl_righthand->SetValue(!hand);
+					swapKnife = true;
+				}
+				else if (CGlobal::GWeaponType != WEAPON_TYPE_KNIFE && swapKnife)
+				{
+					cl_righthand->SetValue(hand);
+					swapKnife = false;
+				}
 				LeftHandKnifeReset = true;
 			}
 			if (!LRHandKnife && LeftHandKnifeReset)
 			{
-				cvars.cl_righthand->SetValue(CGlobal::OrigRightHand);
+				cl_righthand->SetValue(CGlobal::OrigRightHand);
 				LeftHandKnifeReset = false;
 			}
 			static bool SwapHandReset = false;
 			if (SwapHand)
 			{
-				cvars.cl_righthand->SetValue(!SwapHandBind.Check());
+				cl_righthand->SetValue(!SwapHandBind.Check());
 				SwapHandReset = true;
 			}
 			if (!SwapHand && SwapHandReset)
 			{
-				cvars.cl_righthand->SetValue(CGlobal::OrigRightHand);
+				cl_righthand->SetValue(CGlobal::OrigRightHand);
 				SwapHandReset = false;
 			}
 			if (InfiniteCrouch)
@@ -803,44 +812,49 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					I::Engine()->ExecuteClientCmd(msg.c_str());
 				}
 			}
+
+			static ConVar* viewmodel_offset_x = I::GetCvar()->FindVar(XorStr("viewmodel_offset_x"));
+			static ConVar* viewmodel_offset_y = I::GetCvar()->FindVar(XorStr("viewmodel_offset_y"));
+			static ConVar* viewmodel_offset_z = I::GetCvar()->FindVar(XorStr("viewmodel_offset_z"));
 			static bool ViewModelXYZReset = false;
 			if (ViewModelXYZ)
 			{
 				if (ViewModelX > 0 || ViewModelX < 0) 
 				{
-					*(float*)((DWORD)&cvars.viewmodel_offset_x->fnChangeCallback + 0xC) = NULL;
-					cvars.viewmodel_offset_x->SetValue(ViewModelX);
+					*(float*)((DWORD)&viewmodel_offset_x->fnChangeCallback + 0xC) = NULL;
+					viewmodel_offset_x->SetValue(ViewModelX);
 				}
 				if (ViewModelY > 0 || ViewModelY < 0)
 				{
-					*(float*)((DWORD)&cvars.viewmodel_offset_y->fnChangeCallback + 0xC) = NULL;
-					cvars.viewmodel_offset_y->SetValue(ViewModelY);
+					*(float*)((DWORD)&viewmodel_offset_y->fnChangeCallback + 0xC) = NULL;
+					viewmodel_offset_y->SetValue(ViewModelY);
 				}
 				if (ViewModelZ > 0 || ViewModelZ < 0) 
 				{
-					*(float*)((DWORD)&cvars.viewmodel_offset_z->fnChangeCallback + 0xC) = NULL;
-					cvars.viewmodel_offset_z->SetValue(ViewModelZ);
+					*(float*)((DWORD)&viewmodel_offset_z->fnChangeCallback + 0xC) = NULL;
+					viewmodel_offset_z->SetValue(ViewModelZ);
 				}
 
 				ViewModelXYZReset = true;
 			}
 			if (!ViewModelXYZ && ViewModelXYZReset)
 			{
-				cvars.viewmodel_offset_x->SetValue(CGlobal::OrigViewModelX);
-				cvars.viewmodel_offset_y->SetValue(CGlobal::OrigViewModelY);
-				cvars.viewmodel_offset_z->SetValue(CGlobal::OrigViewModelZ);
+				viewmodel_offset_x->SetValue(CGlobal::OrigViewModelX);
+				viewmodel_offset_y->SetValue(CGlobal::OrigViewModelY);
+				viewmodel_offset_z->SetValue(CGlobal::OrigViewModelZ);
 				ViewModelXYZReset = false;
 			}
 
+			static ConVar* r_aspectratio = I::GetCvar()->FindVar(XorStr("r_aspectratio"));
 			static bool AspectRatioReset = false;
 			if (Aspect)
 			{
-				cvars.r_aspectratio->SetValue(AspectRation);
+				r_aspectratio->SetValue(AspectRation);
 				AspectRatioReset = true;
 			}
 			if (!Aspect && AspectRatioReset)
 			{
-				cvars.r_aspectratio->SetValue(CGlobal::OrigAspectRatio);
+				r_aspectratio->SetValue(CGlobal::OrigAspectRatio);
 				AspectRatioReset = false;
 			}
 
@@ -1211,47 +1225,49 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 			if (ThirdPerson)
 			{
 				if (!CGlobal::LocalPlayer->IsDead())
+				{
 					I::Input()->m_fCameraInThirdPerson = ThirdPersonBind.Check();
+
+					auto GetCorrectDistance = [](float ideal_distance) -> float
+					{
+						/* vector for the inverse angles */
+						QAngle inverseAngles;
+						I::Engine()->GetViewAngles(inverseAngles);
+
+						/* inverse angles by 180 */
+						inverseAngles.x *= -1.f, inverseAngles.y += 180.f;
+
+						/* vector for direction */
+						Vector direction;
+						AngleVectors(inverseAngles, direction);
+
+						/* ray, trace & filters */
+						Ray_t ray;
+						trace_t trace;
+						CTraceFilter filter;
+
+						/* dont trace local player */
+						filter.pSkip = CGlobal::LocalPlayer;
+
+						/* create ray */
+						ray.Init(CGlobal::LocalPlayer->GetEyePosition(), CGlobal::LocalPlayer->GetEyePosition() + (direction * ideal_distance));
+
+						/* trace ray */
+						I::EngineTrace()->TraceRay(ray, MASK_SHOT, &filter, &trace);
+
+						/* return the ideal distance */
+						return (ideal_distance * trace.fraction) - 10.f;
+					};
+
+					QAngle angles;
+					I::Engine()->GetViewAngles(angles);
+					angles.z = GetCorrectDistance(ThirdPersonDistance); // 150 is better distance
+					I::Input()->m_vecCameraOffset = Vector(angles.x, angles.y, angles.z);
+
+					ThirdPersonReset = true;
+				}
 				else
 					I::Input()->m_fCameraInThirdPerson = false;
-
-				auto GetCorrectDistance = [](float ideal_distance) -> float
-				{
-					/* vector for the inverse angles */
-					QAngle inverseAngles;
-					I::Engine()->GetViewAngles(inverseAngles);
-
-					/* inverse angles by 180 */
-					inverseAngles.x *= -1.f, inverseAngles.y += 180.f;
-
-					/* vector for direction */
-					Vector direction;
-					AngleVectors(inverseAngles, direction);
-
-					/* ray, trace & filters */
-					Ray_t ray;
-					trace_t trace;
-					CTraceFilter filter;
-
-					/* dont trace local player */
-					filter.pSkip = CGlobal::LocalPlayer;
-
-					/* create ray */
-					ray.Init(CGlobal::LocalPlayer->GetEyePosition(), CGlobal::LocalPlayer->GetEyePosition() + (direction * ideal_distance));
-
-					/* trace ray */
-					I::EngineTrace()->TraceRay(ray, MASK_SHOT, &filter, &trace);
-
-					/* return the ideal distance */
-					return (ideal_distance * trace.fraction) - 10.f;
-				};
-
-				QAngle angles;
-				I::Engine()->GetViewAngles(angles);
-				angles.z = GetCorrectDistance(ThirdPersonDistance); // 150 is better distance
-				I::Input()->m_vecCameraOffset = Vector(angles.x, angles.y, angles.z);
-
-				ThirdPersonReset = true;
 			}
 			if (!ThirdPerson && ThirdPersonReset)
 			{
@@ -1583,8 +1599,11 @@ void CMisc::Night()
 	static bool NightModeReset = false;
 	if (NightMode)
 	{
-		cvars.r_DrawSpecificStaticProp->SetValue(1);
-		cvars.sv_skyname->SetValue(XorStr("sky_csgo_night02"));
+		static ConVar* sv_skyname = I::GetCvar()->FindVar(XorStr("sv_skyname"));
+		static ConVar* r_DrawSpecificStaticProp = I::GetCvar()->FindVar(XorStr("r_DrawSpecificStaticProp"));
+
+		r_DrawSpecificStaticProp->SetValue(1);
+		sv_skyname->SetValue(XorStr("sky_csgo_night02"));
 
 		for (MaterialHandle_t i = I::MaterialSystem()->FirstMaterial(); i != I::MaterialSystem()->InvalidMaterial(); i = I::MaterialSystem()->NextMaterial(i))
 		{
@@ -1709,25 +1728,6 @@ void CMisc::UpdateSoundList()
 	SoundList.clear();
 	string SoundsDir = CGlobal::SystemDisk + XorStr("X1N3\\Resources\\Sounds\\*.wav");
 	CGlobal::SearchFiles(SoundsDir.c_str(), ReadSounds, FALSE);
-}
-
-void CMisc::InitializeConVar()
-{
-	cvars.name = I::GetCvar()->FindVar(XorStr("name"));
-	cvars.cl_righthand = I::GetCvar()->FindVar(XorStr("cl_righthand"));
-	cvars.viewmodel_offset_x = I::GetCvar()->FindVar(XorStr("viewmodel_offset_x"));
-	cvars.viewmodel_offset_y = I::GetCvar()->FindVar(XorStr("viewmodel_offset_y"));
-	cvars.viewmodel_offset_z = I::GetCvar()->FindVar(XorStr("viewmodel_offset_z"));
-	cvars.r_aspectratio = I::GetCvar()->FindVar(XorStr("r_aspectratio"));
-	cvars.cl_sidespeed = I::GetCvar()->FindVar(XorStr("cl_sidespeed"));
-	cvars.sv_skyname = I::GetCvar()->FindVar(XorStr("sv_skyname"));
-	cvars.r_DrawSpecificStaticProp = I::GetCvar()->FindVar(XorStr("r_DrawSpecificStaticProp"));
-
-	CGlobal::OrigRightHand = cvars.cl_righthand->GetFloat();
-	CGlobal::OrigViewModelX = cvars.viewmodel_offset_x->GetFloat();
-	CGlobal::OrigViewModelY = cvars.viewmodel_offset_y->GetFloat();
-	CGlobal::OrigViewModelZ = cvars.viewmodel_offset_z->GetFloat();
-	CGlobal::OrigAspectRatio = cvars.r_aspectratio->GetFloat();
 }
 
 void CHitListener::RegListener()

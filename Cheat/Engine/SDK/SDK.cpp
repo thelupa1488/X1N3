@@ -23,7 +23,7 @@ namespace SDK
 	ISurface*			   I::g_pSurface = nullptr;
 	IPhysicsSurfaceProps*  I::g_PhysSurface = nullptr;
 	IGameEventManager2*	   I::g_pGameEvent = nullptr;
-	Cvar*                  I::g_pCvar = nullptr;
+	ConVar*                  I::g_pCvar = nullptr;
 	ILocalize*             I::g_pLocalize = nullptr;
 	ISteamGameCoordinator* I::g_pSteamGameCoordinator = nullptr;
 	ISteamUser*            I::g_pSteamUser = nullptr;
@@ -202,11 +202,11 @@ namespace SDK
 		return g_pMaterialSystem;
 	}
 
-	Cvar* I::GetCvar()
+	ConVar* I::GetCvar()
 	{
 		if (!g_pCvar)
 		{
-			g_pCvar = GetInterface<Cvar>(valveStdFactory, XorStr("VEngineCvar"));
+			g_pCvar = GetInterface<ConVar>(valveStdFactory, XorStr("VEngineCvar"));
 			ADD_LOG("->Cvar -> %X\n", (DWORD)g_pCvar);
 		}
 		return g_pCvar;

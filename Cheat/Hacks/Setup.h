@@ -22,6 +22,10 @@ namespace HookTables
 {
 	extern void Shutdown();
 }
+namespace HookSequence
+{
+	extern void Shutdown();
+}
 
 #define DELETE_PTR(name) delete name; name = nullptr
 
@@ -77,7 +81,6 @@ public:
 			GP_Esp->InitVisuals();
 			GP_Esp->InitializeMaterials();
 			GP_LegitAim->InitializeConVar();
-			GP_Misc->InitializeConVar();
 			GP_Render->Initialize();
 			GP_GHelper->Initialize();
 			ADD_LOG("2-1-11-7-3\n");
@@ -100,6 +103,7 @@ public:
 		{
 			HookRender::Shutdown();
 			HookTables::Shutdown();
+			HookSequence::Shutdown();
 
 			GP_Misc->HitWorker.UnRegListener();
 			GP_Skins->FireEvent.UnRegListener();

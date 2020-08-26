@@ -565,9 +565,6 @@
     <ClInclude Include="Engine\SDK\CInput.hpp">
       <Filter>Engine\SDK</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\SDK\ICVar.h">
-      <Filter>Engine\SDK</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Utils\Utils.h">
       <Filter>Engine\Utils</Filter>
     </ClInclude>
@@ -581,12 +578,6 @@
       <Filter>Engine\SDK</Filter>
     </ClInclude>
     <ClInclude Include="Engine\SDK\CUserCmd.hpp">
-      <Filter>Engine\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\SDK\CUtlVector.h">
-      <Filter>Engine\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\SDK\CUtlMemory.h">
       <Filter>Engine\SDK</Filter>
     </ClInclude>
     <ClInclude Include="X1API\detours.h">
@@ -772,6 +763,9 @@
     <ClInclude Include="Engine\SDK\IMaterialVar.h" />
     <ClInclude Include="X1API\Cryptor\base64.h" />
     <ClInclude Include="X1API\Cryptor\Cryptor.h" />
+    <ClInclude Include="Engine\SDK\Cvar.h" />
+    <ClInclude Include="Engine\SDK\CUtlMemory.h" />
+    <ClInclude Include="Engine\SDK\CUtlVector.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">

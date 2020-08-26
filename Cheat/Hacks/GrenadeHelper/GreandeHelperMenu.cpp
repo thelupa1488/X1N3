@@ -35,8 +35,6 @@ void CGHelper::ChangeGHI(GHInfo* info, char NameBuf[], char DescpBuf[], char Map
 		{
 			strcpy(MapName, itemsGHSS[SelecteMapMode]);
 		}
-
-
 		//delete[] itemsGHSS;
 	}
 	else
@@ -185,7 +183,7 @@ void CGHelper::Menu()
 			if (X1Gui().IsItemClicked())
 			{
 				SelectedMap = &maps[i];
-				SelectedGHInf = nullptr;
+				//SelectedGHInf = nullptr; //no editing last grenade
 				Mode = 0;
 			}
 
@@ -204,7 +202,7 @@ void CGHelper::Menu()
 						selected, Vec2(selected ? 305 : 395, 0)))
 					{
 						SelectedGHInf = &maps[i].helpers[j];
-						SelectedMap = nullptr;
+						//SelectedMap = nullptr; //prosto na vsykiy sluchiy :)
 						Mode = 0;
 					}
 

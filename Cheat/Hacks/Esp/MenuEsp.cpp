@@ -243,9 +243,9 @@ void CEsp::Menu()
 			X1Gui().Separator();
 			X1Gui().Spacing();
 			DCheckBox("Flashed", Flashing);
-			X1Gui().SameLine();
+			X1Gui().SameLine(SAME_LINE_1);
 			DCheckBox("Defusing", Defusing);
-			X1Gui().SameLine();
+			X1Gui().SameLine(SAME_LINE_2);
 			DCheckBox("Scoped", Scope);
 			X1Gui().Spacing();
 			X1Gui().Separator();

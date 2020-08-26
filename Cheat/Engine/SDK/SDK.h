@@ -41,7 +41,7 @@
 #include "ISurface.h"
 #include "IGameEvent.h"
 #include "TextureGroupNames.h"
-#include "ICVar.h"
+#include "Cvar.h"
 #include "IPhysics.hpp"
 #include "KeyValues.h"
 #include "Math.hpp"
@@ -95,7 +95,7 @@ namespace SDK
 		static IMaterialSystem*		  MaterialSystem();
 		static ISurface*			  Surface();
 		static IPhysicsSurfaceProps*  PhysSurface();
-		static Cvar*                  GetCvar();
+		static ConVar*                  GetCvar();
 		static ILocalize*             Localize();
 		static ISteamGameCoordinator* SteamGameCoordinator();
 		static ISteamUser*            SteamUser();
@@ -121,7 +121,7 @@ namespace SDK
 		static ISurface*			  g_pSurface;
 		static IPhysicsSurfaceProps*  g_PhysSurface;
 		static IGameEventManager2*	  g_pGameEvent;
-		static Cvar*                  g_pCvar;
+		static ConVar*                  g_pCvar;
 		static ILocalize*             g_pLocalize;
 		static ISteamGameCoordinator* g_pSteamGameCoordinator;
 		static ISteamUser*            g_pSteamUser;

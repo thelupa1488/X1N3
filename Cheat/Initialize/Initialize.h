@@ -139,6 +139,13 @@ public:
 #endif
 #endif
 				ADD_LOG("2-1-11-8\n");
+
+				CGlobal::OrigRightHand = I::GetCvar()->FindVar(XorStr("cl_righthand"))->GetFloat();
+				CGlobal::OrigViewModelX = I::GetCvar()->FindVar(XorStr("viewmodel_offset_x"))->GetFloat();
+				CGlobal::OrigViewModelY = I::GetCvar()->FindVar(XorStr("viewmodel_offset_y"))->GetFloat();
+				CGlobal::OrigViewModelZ = I::GetCvar()->FindVar(XorStr("viewmodel_offset_z"))->GetFloat();
+				CGlobal::OrigAspectRatio = I::GetCvar()->FindVar(XorStr("r_aspectratio"))->GetFloat();
+
 				GP_Setup = new CSetup::ISetup();
 				GP_Setup->Setup();
 				ADD_LOG("2-1-11-9\n");

@@ -226,7 +226,6 @@ void CLegitAim::Draw()
 			float dx = CGlobal::iScreenWidth / CGlobal::GFovView;
 
 			bool _CanSilent = true;
-			bool _CanRCS = true;
 
 			if (Weapons[GetWeap(SelectedWeapon)].SilentEndBullet > 0)
 				if (iShotsFired >= Weapons[GetWeap(SelectedWeapon)].SilentEndBullet)
@@ -236,15 +235,6 @@ void CLegitAim::Draw()
 				if (Weapons[GetWeap(SelectedWeapon)].SilentStartBullet > 0)
 					if (Weapons[GetWeap(SelectedWeapon)].SilentStartBullet - 1 > iShotsFired)
 						_CanSilent = false;
-
-			if (Weapons[GetWeap(SelectedWeapon)].RcsEndBullet > 0)
-				if (iShotsFired >= Weapons[GetWeap(SelectedWeapon)].RcsEndBullet)
-					_CanRCS = false;
-
-			if (_CanRCS)
-				if (Weapons[GetWeap(SelectedWeapon)].RcsStartBullet > 0)
-					if (Weapons[GetWeap(SelectedWeapon)].RcsStartBullet - 1 > iShotsFired)
-						_CanRCS = false;
 
 			float x = CGlobal::iScreenWidth / 2.f;
 			float y = CGlobal::iScreenHeight / 2.f;
@@ -257,10 +247,6 @@ void CLegitAim::Draw()
 					{
 						if (DrawFov)
 							GP_Render->DrawRing(x, y, (dy * GFov / 3.f), 32, FovColor);
-
-						if (DrawFov && Weapons[GetWeap(SelectedWeapon)].FovRcs)
-							if (_CanRCS)
-								GP_Render->DrawRing(x, y, (dy * Weapons[GetWeap(SelectedWeapon)].FovRcs / 3.f), 32, FovColor);
 
 						if (DrawSilentFov && Weapons[GetWeap(SelectedWeapon)].Silent)
 							if (_CanSilent)
@@ -276,10 +262,6 @@ void CLegitAim::Draw()
 
 						if (DrawFov)
 							GP_Render->DrawRing(pos.x, pos.y, (dy * GFov / 3.f), 32, FovColor);
-
-						if (DrawFov && Weapons[GetWeap(SelectedWeapon)].FovRcs)
-							if (_CanRCS)
-								GP_Render->DrawRing(pos.x, pos.y, (dy * Weapons[GetWeap(SelectedWeapon)].FovRcs / 3.f), 32, FovColor);
 
 						if (DrawSilentFov && Weapons[GetWeap(SelectedWeapon)].Silent)
 							if (_CanSilent)
@@ -297,16 +279,6 @@ void CLegitAim::Draw()
 					Vector m_vAimBestHitboxScreen;
 
 					if (CGlobal::WorldToScreen(BestHitBoxPos, m_vAimBestHitboxScreen))
-						GP_Render->DrawRing(m_vAimBestHitboxScreen.x, m_vAimBestHitboxScreen.y, iFov / int(1920 / CGlobal::iScreenWidth), 32, FovColor);
-				}
-				if (DrawFov && iLastBestHitBox != -1 && pOldBestTarget->GetHealth() > 0 && Weapons[GetWeap(SelectedWeapon)].FovRcs)
-				{
-					float base_fov = pow((dx * Weapons[GetWeap(SelectedWeapon)].FovRcs / 3.f) + 30, 2) * CGlobal::GFovView;
-					float iFov = (base_fov / (pLocalPlayer->GetHitboxPosition(0).DistTo(BestHitBoxPos) * CGlobal::GFovView));
-
-					Vector m_vAimBestHitboxScreen;
-
-					if (CGlobal::WorldToScreen(BestHitBoxPos, m_vAimBestHitboxScreen) && _CanRCS)
 						GP_Render->DrawRing(m_vAimBestHitboxScreen.x, m_vAimBestHitboxScreen.y, iFov / int(1920 / CGlobal::iScreenWidth), 32, FovColor);
 				}
 				if (DrawSilentFov && iLastSilentBestHitBox != -1 && pOldBestTarget->GetHealth() > 0 && Weapons[GetWeap(SelectedWeapon)].Silent)
@@ -700,6 +672,19 @@ void CLegitAim::CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd*
 
 void CLegitAim::SetMainParams()
 {
+	/*========================================== Rcs switch =============================================================*/
+	bool _CanRCS = true;
+
+	if (Weapons[GetWeap(SelectedWeapon)].RcsEndBullet > 0)
+		if (iShotsFired >= Weapons[GetWeap(SelectedWeapon)].RcsEndBullet)
+			_CanRCS = false;
+
+	if (_CanRCS)
+		if (Weapons[GetWeap(SelectedWeapon)].RcsStartBullet > 0)
+			if (Weapons[GetWeap(SelectedWeapon)].RcsStartBullet - 1 > iShotsFired)
+				_CanRCS = false;
+
+	/*========================================== Delay & Smooth =============================================================*/
 	SmoothMethod = Weapons[GetWeap(SelectedWeapon)].SmoothMethod;
 	StartAcceleration = Weapons[GetWeap(SelectedWeapon)].StartAcceleration;
 	EndAcceleration = Weapons[GetWeap(SelectedWeapon)].EndAcceleration;
@@ -733,16 +718,16 @@ void CLegitAim::SetMainParams()
 	GSilentFov = Weapons[GetWeap(SelectedWeapon)].SilentFov;
 
 	/*========================================== Standard ========================================================*/
-	IsNearest = Weapons[GetWeap(SelectedWeapon)].HitBoxAfter1B && CanRCS ?
+	IsNearest = Weapons[GetWeap(SelectedWeapon)].HitBoxAfter1B && _CanRCS ?
 		Weapons[GetWeap(SelectedWeapon)].NearestRcs : Weapons[GetWeap(SelectedWeapon)].Nearest;
 
-	HitBox = Weapons[GetWeap(SelectedWeapon)].HitBoxAfter1B && CanRCS ?
+	HitBox = Weapons[GetWeap(SelectedWeapon)].HitBoxAfter1B && _CanRCS ?
 		Weapons[GetWeap(SelectedWeapon)].HitBoxRcs : Weapons[GetWeap(SelectedWeapon)].HitBox;
 
-	GFov = Weapons[GetWeap(SelectedWeapon)].FovRcs != 0 && CanRCS ?
+	GFov = Weapons[GetWeap(SelectedWeapon)].FovRcs != 0 && _CanRCS ?
 		Weapons[GetWeap(SelectedWeapon)].FovRcs : Weapons[GetWeap(SelectedWeapon)].Fov;
 
-	GSmooth = Weapons[GetWeap(SelectedWeapon)].SmoothRcs != 0 && CanRCS ?
+	GSmooth = Weapons[GetWeap(SelectedWeapon)].SmoothRcs != 0 && _CanRCS ?
 		Weapons[GetWeap(SelectedWeapon)].SmoothRcs : Weapons[GetWeap(SelectedWeapon)].Smooth;
 
 	/*==========================================================================================================*/
@@ -774,7 +759,7 @@ bool CLegitAim::CheckOpportWork(CUserCmd* pCmd)
 	if (!AimBind.Check())
 		return false;
 
-	pLocalPlayer = CGlobal::LocalPlayer;
+	pLocalPlayer = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
 
 	if (!pLocalPlayer)
 		return false;
@@ -1168,7 +1153,10 @@ bool CLegitAim::IsEnableRCS()
 
 	bool CheckPistol = CGlobal::GWeaponType == WEAPON_TYPE_PISTOL ? true : iShotsFired > 1;
 
-	if ((Weapons[GetWeap(SelectedWeapon)].RcsX > 0 || Weapons[GetWeap(SelectedWeapon)].RcsY > 0) && CheckPistol)
+	RCS_X = Weapons[GetWeap(SelectedWeapon)].RcsX;
+	RCS_Y = Weapons[GetWeap(SelectedWeapon)].RcsY;
+
+	if ((RCS_X > 0 || RCS_Y > 0) && CheckPistol)
 	{
 		Ret = true;
 		if (Weapons[GetWeap(SelectedWeapon)].RcsStartBullet > 0)
@@ -1181,17 +1169,6 @@ bool CLegitAim::IsEnableRCS()
 	}
 	else
 		Ret = false;
-
-	if (Ret)
-	{
-		RCS_X = Weapons[GetWeap(SelectedWeapon)].RcsX;
-		RCS_Y = Weapons[GetWeap(SelectedWeapon)].RcsY;
-	}
-	else
-	{
-		RCS_X = 0;
-		RCS_Y = 0;
-	}
 
 	if (Ret)
 		Ret = CanShoot();
@@ -1676,7 +1653,7 @@ void CLegitAim::TriggerCreateMove(CUserCmd* pCmd)
 	if (IsNonAimWeapon())
 		return;
 
-	pLocalPlayer = CGlobal::LocalPlayer;
+	pLocalPlayer = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
 
 	if (!pLocalPlayer)
 		return;
@@ -1916,7 +1893,7 @@ void CLegitAim::BacktrackCreateMoveEP(CUserCmd* pCmd)
 {
 	iBackTrackbestTarget = -1;
 
-	pLocalPlayer = CGlobal::LocalPlayer;
+	pLocalPlayer = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());
 
 	if (!pLocalPlayer || pLocalPlayer->IsDead())
 	    return;
