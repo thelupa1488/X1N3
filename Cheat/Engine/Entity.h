@@ -117,6 +117,9 @@ namespace Engine
 		CCSGOPlayerAnimState* GetBasePlayerAnimState();
 		AnimationLayer* GetAnimOverlays();
 		AnimationLayer* GetAnimOverlay(int i);
+		std::array<float, 24>& GetPoseParameter();
+		float           GetMaxDesyncAngle();
+		void            GetAnimations(bool value);
 		CUserCmd*&      GetCurrentCommand();
 		float           GetSpawnTime();
 
@@ -179,6 +182,8 @@ namespace Engine
 		void InvalidateBoneCache();
 		void SetAbsAngles(const QAngle& angles);
 		void SetAbsOrigin(const Vector& origin);
+		void CreateState(CCSGOPlayerAnimState* state);
+		void UpdateState(CCSGOPlayerAnimState* state, QAngle ang);
 		bool IsNotTarget();
 	};
 

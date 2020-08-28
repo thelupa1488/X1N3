@@ -14,12 +14,6 @@
 
 #define VirtualFn( cast ) typedef cast( __thiscall* OriginalFn )
 
-template <typename T>
-T GetVFunc(void *vTable, int iIndex) 
-{
-	return (*(T**)vTable)[iIndex];
-}
-
 template< typename Function > Function GetMethod( PVOID Base , DWORD Index )
 {
 	PDWORD* VTablePointer = (PDWORD*)Base;

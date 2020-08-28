@@ -15,6 +15,9 @@ Vector CGlobal::GViewAngle;
 vector<string> CGlobal::ConfigList;
 CBaseEntity* CGlobal::LocalPlayer;
 CUserCmd* CGlobal::UserCmd;
+bool CGlobal::bSendPacket;
+
+bool CGlobal::DesyncSide;
 
 int CGlobal::OrigRightHand;
 float CGlobal::OrigViewModelX;

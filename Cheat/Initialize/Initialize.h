@@ -240,10 +240,17 @@ public:
 				offsets["m_hWeaponWorldModel"] = mGetOffset("DT_BaseCombatWeapon", "m_hWeaponWorldModel");
 				offsets["m_iWorldModelIndex"] = mGetOffset("DT_BaseCombatWeapon", "m_iWorldModelIndex");
 				offsets["m_nHitboxSet"] = mGetOffset("DT_BaseAnimating", "m_nHitboxSet");
+				offsets["m_flPoseParameter"] = mGetOffset("DT_BaseAnimating", "m_flPoseParameter");
+				offsets["m_bClientSideAnimation"] = mGetOffset("DT_BaseAnimating", "m_bClientSideAnimation");
+
+				offsets["BasePlayerAnimState"] = 0x3914;
+				offsets["AnimOverlays"] = 0x2990;
+
 				offsets["d3d9TablePtrPtr"] = (Utils::PatternScan(shaderapidx9Factory, XorStr("A1 ? ? ? ? 50 8B 08 FF 51 0C")) + 1);
 				offsets["Input"] = (Utils::PatternScan(clientFactory, XorStr("B9 ? ? ? ? F3 0F 11 04 24 FF 50 10")) + 1);
 				offsets["MoveHelper"] = (Utils::PatternScan(clientFactory, XorStr("8B 0D ? ? ? ? 8B 45 ? 51 8B D4 89 02 8B 01")) + 2);
 				offsets["ClientState"] = (Utils::PatternScan(engineFactory, XorStr("A1 ? ? ? ? 8B 80 ? ? ? ? C3")) + 1);
+				offsets["GameRules"] = (Utils::PatternScan(clientFactory, XorStr("89 35 ? ? ? ? C7 46 ? ? ? ? ? 89 46 1C 5E")) + 2);
 				offsets["PredictionSeed"] = (Utils::PatternScan(clientFactory, "8B 0D ? ? ? ? BA ? ? ? ? E8 ? ? ? ? 83 C4 04") + 2);
 				offsets["PredictionPlayer"] = (Utils::PatternScan(clientFactory, "89 35 ? ? ? ? F3 0F 10 48 20") + 2);
 				offsets["SetLocalPlayerReady"] = (Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 8B 4D 08 BA ? ? ? ? E8 ? ? ? ? 85 C0 75 12")));
@@ -256,6 +263,8 @@ public:
 				offsets["SequenceActivity"] = (Utils::PatternScan(clientFactory, XorStr("55 8B EC 53 8B 5D 08 56 8B F1 83")));
 				offsets["CurrentCommand"] = (Utils::PatternScan(clientFactory, XorStr("89 BE ? ? ? ? E8 ? ? ? ? 85 FF")) + 2);
 				offsets["InvalidateBoneCache"] = (Utils::PatternScan(clientFactory, XorStr("80 3D ? ? ? ? ? 74 16 A1 ? ? ? ? 48 C7 81")));
+				offsets["CreateState"] = (Utils::PatternScan(clientFactory, XorStr("55 8B EC 56 8B F1 B9 ? ? ? ? C7 46")));
+				offsets["UpdateState"] = (Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 83 EC 18 56 57 8B F9 F3 0F 11 54 24")));
 				offsets["SetAbsAngles"] = (Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 83 EC 64 53 56 57 8B F1 E8")));
 				offsets["SetAbsOrigin"] = (Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8")));
 				offsets["FromString"] = (Utils::PatternScan(clientFactory, XorStr("E8 ? ? ? ? 83 C4 04 89 45 D8")) + 1);

@@ -1903,6 +1903,11 @@ void CLegitAim::BacktrackCreateMoveEP(CUserCmd* pCmd)
 
 	if (Weapons[GetWeap(SelectedWeapon)].Backtrack && !FaceIt && Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit)
 	{
+		//if (BacktrackFakeLatency && (Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit < 200))
+		//	Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit += 200;
+		//else if (!(BacktrackFakeLatency) && Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit > 200)
+		//	Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit -= 200;
+
 		PlayerInfo info;
 		float bestFov = FLT_MAX;
 		for (int i = 0; i <= I::Engine()->GetMaxClients(); i++)

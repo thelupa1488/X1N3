@@ -35,10 +35,9 @@ namespace SDK
 #define FLOW_INCOMING	1
 #define MAX_FLOWS		2		// in & out
 
-	class INetChannelInfo
+	class INetChannelInfo : public INetChannel
 	{
 	public:
-
 		enum 
 		{
 			GENERIC = 0,	// must be first and is default group

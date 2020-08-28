@@ -23,7 +23,7 @@ namespace SDK
 	ISurface*			   I::g_pSurface = nullptr;
 	IPhysicsSurfaceProps*  I::g_PhysSurface = nullptr;
 	IGameEventManager2*	   I::g_pGameEvent = nullptr;
-	ConVar*                  I::g_pCvar = nullptr;
+	ConVar*                I::g_pCvar = nullptr;
 	ILocalize*             I::g_pLocalize = nullptr;
 	ISteamGameCoordinator* I::g_pSteamGameCoordinator = nullptr;
 	ISteamUser*            I::g_pSteamUser = nullptr;
@@ -31,6 +31,7 @@ namespace SDK
 	IMoveHelper*           I::g_pMoveHelper = nullptr;
 	IGameMovement*         I::g_pGameMovement = nullptr;
 	IGameRules*            I::g_pGameRules = nullptr;
+	IMemAlloc*             I::g_pMemAlloc = nullptr;
 
 	class InterfaceReg
 	{
@@ -312,10 +313,20 @@ namespace SDK
 	{
 		if (!g_pGameRules)
 		{
-			g_pGameRules = *(IGameRules**)(offsets["GameRules"]);
+			g_pGameRules = **(IGameRules***)(offsets["GameRules"]);
 			ADD_LOG("->GameRules -> %X\n", (DWORD)g_pGameRules);
 		}
 		return g_pGameRules;
+	}
+
+	IMemAlloc* I::MemAlloc()
+	{
+		if (!g_pMemAlloc)
+		{
+			g_pMemAlloc = *(IMemAlloc**)(FastCall::G().t_GetProcAddress(FastCall::G().t_GetModuleHandleA(tierFactory), XorStr("g_pMemAlloc")));
+			ADD_LOG("->MemAlloc -> %X\n", (DWORD)g_pMemAlloc);
+		}
+		return g_pMemAlloc;
 	}
 
 	ISteamUser* I::SteamUser()

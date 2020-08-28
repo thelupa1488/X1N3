@@ -8,6 +8,7 @@ namespace SDK
 	{
 		return Vector(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
 	}
+
 	void MovementFix(CUserCmd* m_Cmd, QAngle wish_angle, QAngle old_angles) 
 	{
 		if (old_angles.x != wish_angle.x || old_angles.y != wish_angle.y || old_angles.z != wish_angle.z) 
@@ -68,7 +69,7 @@ namespace SDK
 		}
 	}
 
-	void FixMovement(CUserCmd* cmd, QAngle& wishangle)
+	void fix_movement(CUserCmd* cmd, QAngle& wishangle)
 	{
 		Vector view_fwd, view_right, view_up, cmd_fwd, cmd_right, cmd_up;
 		AngleVectors(wishangle, view_fwd, view_right, view_up);
@@ -408,8 +409,7 @@ namespace SDK
 	//---------------------------------------------------------------------------------
 	void CorrectMovement(QAngle vOldAngles, CUserCmd* pCmd, float fOldForward, float fOldSidemove)
 	{
-		// side/forward move correction
-		float deltaView;
+		float yaw_delta = pCmd->viewangles.y - vOldAngles.y;
 		float f1;
 		float f2;
 
@@ -424,14 +424,13 @@ namespace SDK
 			f2 = pCmd->viewangles.y;
 
 		if (f2 < f1)
-			deltaView = abs(f2 - f1);
+			yaw_delta = abs(f2 - f1);
 		else
-			deltaView = 360.0f - abs(f1 - f2);
+			yaw_delta = 360.0f - abs(f1 - f2);
+		yaw_delta = 360.0f - yaw_delta;
 
-		deltaView = 360.0f - deltaView;
-
-		pCmd->forwardmove = cos(DEG2RAD(deltaView)) * fOldForward + cos(DEG2RAD(deltaView + 90.f)) * fOldSidemove;
-		pCmd->sidemove = sin(DEG2RAD(deltaView)) * fOldForward + sin(DEG2RAD(deltaView + 90.f)) * fOldSidemove;
+		pCmd->forwardmove = cos(DEG2RAD(yaw_delta)) * fOldForward + cos(DEG2RAD(yaw_delta + 90.f)) * fOldSidemove;
+		pCmd->sidemove = sin(DEG2RAD(yaw_delta)) * fOldForward + sin(DEG2RAD(yaw_delta + 90.f)) * fOldSidemove;
 	}
 	//--------------------------------------------------------------------------------
 	void gAngleVectors(const Vector& angles, Vector& forward)

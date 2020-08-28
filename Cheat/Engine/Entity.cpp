@@ -185,20 +185,44 @@ namespace Engine
 
 	CCSGOPlayerAnimState* CBaseEntity::GetBasePlayerAnimState()
 	{
-		//return *(CCSGOPlayerAnimState**)((DWORD)this + 0x3914);
-		return ptr(*(CCSGOPlayerAnimState**), this, 0x3914);
+		return ptr(*(CCSGOPlayerAnimState**), this, offsets["BasePlayerAnimState"]);
 	}
 
 	AnimationLayer* CBaseEntity::GetAnimOverlays()
 	{
-		//return *reinterpret_cast<AnimationLayer**>(DWORD(this) + 0x2990);
-		return ptr(*reinterpret_cast<AnimationLayer**>, this, 0x2990);
+		return ptr(*reinterpret_cast<AnimationLayer**>, this, offsets["AnimOverlays"]);
 	}
 
 	AnimationLayer* CBaseEntity::GetAnimOverlay(int i)
 	{
 		if (i < 15)
 			return &GetAnimOverlays()[i];
+	}
+
+	std::array<float, 24>& CBaseEntity::GetPoseParameter()
+	{
+		return ptr(*(std::array<float, 24>*), this, offsets["m_flPoseParameter"]);
+	}
+
+	float CBaseEntity::GetMaxDesyncAngle()
+	{
+		const auto animState = GetBasePlayerAnimState();
+
+		if (!animState)
+			return 0.0f;
+
+		float yawModifier = (animState->m_flStopToFullRunningFraction * -0.3f - 0.2f) * clamp(animState->m_flFeetSpeedForwardsOrSideWays, 0.0f, 1.0f) + 1.0f;
+
+		if (animState->m_fDuckAmount > 0.0f)
+			yawModifier += (animState->m_fDuckAmount * clamp(animState->speed_2d, 0.0f, 1.0f) * (0.5f - yawModifier));
+
+		return animState->m_vVelocityY * yawModifier;
+	}
+
+	void CBaseEntity::GetAnimations(bool value)
+	{
+		static int m_bClientSideAnimation = offsets["m_bClientSideAnimation"];
+		*reinterpret_cast<bool*>((uintptr_t)this + m_bClientSideAnimation) = value;
 	}
 
 	CUserCmd*& CBaseEntity::GetCurrentCommand() 
@@ -550,6 +574,36 @@ namespace Engine
 		using SetAbsOriginFn = void(__thiscall*)(void*, const Vector&);
 		static SetAbsOriginFn SetAbsOrigin = (SetAbsOriginFn)offsets["SetAbsOrigin"];
 		SetAbsOrigin(this, origin);
+	}
+
+	void CBaseEntity::CreateState(CCSGOPlayerAnimState* state)
+	{
+		using fn = void(__thiscall*)(CCSGOPlayerAnimState*, CBaseEntity*);
+		static auto ret = (fn)offsets["CreateState"];
+		if (!ret)
+			return;
+
+		ret(state, this);
+	}
+
+	void CBaseEntity::UpdateState(CCSGOPlayerAnimState* state, QAngle ang)
+	{
+		if (!state)
+			return;
+		using fn = void(__vectorcall*)(void*, void*, float, float, float, void*);
+		static auto ret = reinterpret_cast<fn>(offsets["UpdateState"]); 
+
+		if (!ret)
+			return;
+
+		__asm {
+			push 0
+			mov ecx, state
+			movss xmm1, dword ptr[ang + 4]
+			movss xmm2, dword ptr[ang]
+
+			call ret
+		}
 	}
 
 	bool CBaseEntity::IsNotTarget()

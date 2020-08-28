@@ -72,6 +72,7 @@
 #define d3d9Factory                 XorStr("d3d9.dll")
 #define shaderapidx9Factory         XorStr("shaderapidx9.dll")
 #define filesysFactory              XorStr("filesystem_stdio.dll")
+#define tierFactory                 XorStr("tier0.dll")
 
 namespace SDK
 {
@@ -95,7 +96,7 @@ namespace SDK
 		static IMaterialSystem*		  MaterialSystem();
 		static ISurface*			  Surface();
 		static IPhysicsSurfaceProps*  PhysSurface();
-		static ConVar*                  GetCvar();
+		static ConVar*                GetCvar();
 		static ILocalize*             Localize();
 		static ISteamGameCoordinator* SteamGameCoordinator();
 		static ISteamUser*            SteamUser();
@@ -103,6 +104,7 @@ namespace SDK
 		static IMoveHelper*			  MoveHelper();
 		static IGameMovement*	      GameMovement();
 		static IGameRules*			  GameRules();
+		static IMemAlloc*             MemAlloc();
 	private:
 		static IVEngineClient*		  g_pEngine;
 		static IBaseClientDLL*		  g_pClient;
@@ -121,7 +123,7 @@ namespace SDK
 		static ISurface*			  g_pSurface;
 		static IPhysicsSurfaceProps*  g_PhysSurface;
 		static IGameEventManager2*	  g_pGameEvent;
-		static ConVar*                  g_pCvar;
+		static ConVar*                g_pCvar;
 		static ILocalize*             g_pLocalize;
 		static ISteamGameCoordinator* g_pSteamGameCoordinator;
 		static ISteamUser*            g_pSteamUser;
@@ -129,6 +131,7 @@ namespace SDK
 		static IMoveHelper*           g_pMoveHelper;
 		static IGameMovement*         g_pGameMovement;
 		static IGameRules*            g_pGameRules;
+		static IMemAlloc*             g_pMemAlloc;
 	};
 
 	template <typename T>

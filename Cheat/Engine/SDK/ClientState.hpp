@@ -3,6 +3,7 @@
 #include <cstdint>
 #include "SDK.h"
 // Created with ReClass.NET by KN4CK3R
+
 #pragma pack(push, 1)
 namespace SDK
 {

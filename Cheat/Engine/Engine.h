@@ -62,7 +62,6 @@ public:
 	bool Hold = false;
 	int Button = 0;
 
-
 	CBind(int _Button, bool _Enable = false, bool _Hold = false)
 	{
 		Button = _Button;
@@ -116,7 +115,6 @@ void ReadConfigs(LPCTSTR lpszFileName);
 class CGlobal
 {
 public:
-
 	static WEAPON_TYPE GWeaponType;
 	static WEAPON_ID GWeaponID;
 	static bool IsGuiVisible;
@@ -131,6 +129,9 @@ public:
 	static vector<string> ConfigList;
 	static CBaseEntity* LocalPlayer;
 	static CUserCmd* UserCmd;
+	static bool bSendPacket;
+
+	static bool DesyncSide;
 
 	static int OrigRightHand;
 	static float OrigViewModelX;

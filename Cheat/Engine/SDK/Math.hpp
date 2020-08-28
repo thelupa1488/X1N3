@@ -80,7 +80,7 @@ namespace SDK
 
 	void AngleVector(const Vector& angles, Vector& forward);
 	void MovementFix(CUserCmd* m_Cmd, QAngle wish_angle, QAngle old_angles);
-	void FixMovement(CUserCmd* cmd, QAngle& wishangle);
+	void fix_movement(CUserCmd* cmd, QAngle& wishangle);
 	void Normalize(Vector& f);
 	//void correct_movement(CUserCmd* cmd, const QAngle& old_angles);
 	void CorrectMovement(QAngle vOldAngles, CUserCmd* pCmd, float fOldForward, float fOldSidemove);

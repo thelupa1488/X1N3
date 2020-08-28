@@ -479,6 +479,7 @@ public:
 	CBaseWeapon *pLocalWeapon;
 	CBaseEntity *pBestBacktrackTarget;
 
+	//bool BacktrackFakeLatency = false;
 	bool IgnoreSmokeBacktrack = false;
 	bool ShowBacktrack = false;
 	bool SBVisibleOnly = false;

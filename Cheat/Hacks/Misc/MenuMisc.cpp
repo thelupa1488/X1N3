@@ -15,7 +15,7 @@ void CMisc::Menu()
 		X1Gui().SameLine(SAME_LINE_1);
 		X1Gui().PushItemWidth(PUSH_1);
 		VectorEx<const char* >itemsCSS = { lolc("Default"), lolc("Legit") };
-		DComboBox("Type##BHop", BHopType, itemsCSS)
+		DComboBox("Type##BHop", BHopType, itemsCSS);
 		if (BHopType == 1)
 		{
 			X1Gui().PushItemWidth(PUSH_2);
@@ -77,6 +77,21 @@ void CMisc::Menu()
 		HotsKey("Button##ThirdPerson", ThirdPersonBind.Button);
 		X1Gui().SameLine();
 		DCheckBox("Hold##ThirdPerson", ThirdPersonBind.Hold);
+	}
+	X1Gui().Spacing();
+	X1Gui().Separator();
+	X1Gui().Spacing();
+	DCheckBox("Legit desync", LDesync);
+	if (LDesync)
+	{
+		X1Gui().SameLine(SAME_LINE_1);
+		X1Gui().PushItemWidth(PUSH_1);
+		HotsKey("Button##desync", LDesyncBind.Button);
+		X1Gui().SameLine();
+		DCheckBox("Hold##desync", LDesyncBind.Hold);
+		DCheckBox("Desync arrows", LDesyncArrows);
+		if (LDesyncArrows)
+			DColorEdit("Color##desync", ArrowsColor);
 	}
 	X1Gui().Spacing();
 	X1Gui().Separator();

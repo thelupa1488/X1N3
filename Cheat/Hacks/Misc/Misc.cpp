@@ -176,33 +176,33 @@ void CMisc::Draw()
 			CustomWalls();
 		}
 
-		//if (Desync)
-		//{
-		//	if (DesyncArrows)
-		//	{
-		//		auto client_viewangles = QAngle();
-		//		I::Engine()->GetViewAngles(client_viewangles);
-		//		const auto screen_center = Vector2D(CGlobal::iScreenWidth / 2, CGlobal::iScreenHeight / 2);
+		if (LDesync && LDesyncArrows)
+		{
+			auto client_viewangles = QAngle();
+			I::Engine()->GetViewAngles(client_viewangles);
+			const auto screen_center = Vector2D(CGlobal::iScreenWidth / 2, CGlobal::iScreenHeight / 2);
 
-		//		constexpr auto radius = 225.f;
-		//		auto DrawArrow = [&](float rot, Color color) -> void
-		//		{
-		//			vector<Vec2> vertices;
-		//			vertices.push_back((Vec2(screen_center.x + cosf(rot) * radius, screen_center.y + sinf(rot) * radius)));
-		//			vertices.push_back((Vec2(screen_center.x + cosf(rot + DEG2RAD(2)) * (radius - 6), screen_center.y + sinf(rot + DEG2RAD(2)) * (radius - 6)))); //25
-		//			vertices.push_back((Vec2(screen_center.x + cosf(rot - DEG2RAD(2)) * (radius - 6), screen_center.y + sinf(rot - DEG2RAD(2)) * (radius - 6)))); //25
+			constexpr auto radius = 225.f;
+			auto DrawArrow = [&](float rot, Color color) -> void
+			{
+				vector<Vec2> vertices;
+				vertices.push_back((Vec2(screen_center.x + cosf(rot) * radius, screen_center.y + sinf(rot) * radius)));
+				vertices.push_back((Vec2(screen_center.x + cosf(rot + DEG2RAD(2)) * (radius - 6), screen_center.y + sinf(rot + DEG2RAD(2)) * (radius - 6)))); //25
+				vertices.push_back((Vec2(screen_center.x + cosf(rot - DEG2RAD(2)) * (radius - 6), screen_center.y + sinf(rot - DEG2RAD(2)) * (radius - 6)))); //25
 
-		//			GP_Render->RenderTriangle(vertices.at(0), vertices.at(1), vertices.at(2), ArrowsColor, 2.f);
-		//		};
+				GP_Render->RenderTriangle(vertices.at(0), vertices.at(1), vertices.at(2), ArrowsColor, 2.f);
+			};
 
-		//		static auto alpha = 0.f;
-		//		static auto plus_or_minus = false;
-		//		if (alpha <= 0.f || alpha >= 255.f) plus_or_minus = !plus_or_minus;
-		//		alpha += plus_or_minus ? (255.f / 7 * 0.015) : -(255.f / 7 * 0.015); alpha = clamp(alpha, 0.f, 255.f);
+			static auto alpha = 0.f;
+			static auto plus_or_minus = false;
+			if (alpha <= 0.f || alpha >= 255.f)
+				plus_or_minus = !plus_or_minus;
 
-		//		const auto FakeRot = DEG2RAD((side < 0.0f ? 90 : -90) - 90);
-		//		DrawArrow(FakeRot, ArrowsColor);
-		//	}
+			alpha += plus_or_minus ? (255.f / 7 * 0.015) : -(255.f / 7 * 0.015); alpha = clamp(alpha, 0.f, 255.f);
+
+			const auto FakeRot = DEG2RAD((CGlobal::DesyncSide ? 90 : -90) - 90);
+			DrawArrow(FakeRot, ArrowsColor);
+		}
 
 		//	if (AngleLines && ThirdPersonBind.Check())
 		//	{
@@ -241,9 +241,88 @@ void CMisc::Draw()
 	}
 }
 
-void CMisc::LegitPeek(CUserCmd* pCmd, bool& bSendPacket)
+float ServerCurtime() 
 {
-	int choke_factor = /*Desync ? min(MaxChokeTicks(), FakeLagFactor) :*/ FakeLagFactor;
+	const auto v1 = static_cast<INetChannelInfo*> (I::Engine()->GetNetChannelInfo());
+
+	const auto v3 = v1->GetLatency(FLOW_INCOMING); //local player
+	const auto v4 = v1->GetLatency(FLOW_OUTGOING); //generic
+
+	return v3 + v4 + TICKS_TO_TIME(1) + TICKS_TO_TIME(CGlobal::UserCmd->tick_count);
+}
+
+bool UpdateLBY()
+{
+	static auto next_lby_update_time = -1.f;
+
+	auto spawn_time = CGlobal::LocalPlayer->GetSpawnTime();
+	auto anim_state = CGlobal::LocalPlayer->GetBasePlayerAnimState();
+
+	const auto current_time = ServerCurtime();
+	{
+		if (spawn_time != CGlobal::LocalPlayer->GetSpawnTime())
+		{
+			spawn_time = CGlobal::LocalPlayer->GetSpawnTime();
+			next_lby_update_time = -1.f;
+		}
+
+		if (anim_state->speed_2d > 0.1 || !(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
+			next_lby_update_time = current_time + 0.22f;
+		else if (next_lby_update_time == -1.f || current_time >= next_lby_update_time)
+		{
+			next_lby_update_time = current_time + 1.1f;
+		}
+	}
+
+	if (anim_state->speed_2d > 0.1)
+		return false;
+
+	if (!(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
+		return false;
+
+	return next_lby_update_time - current_time <= I::GlobalVars()->interval_per_tick;
+}
+
+bool LbyBreaker()
+{
+	static float NextUpdate = 0;
+	auto velocity = CGlobal::LocalPlayer->GetVelocity().Length();
+	auto currenttime = ServerCurtime();
+	if (!(CGlobal::LocalPlayer->GetFlags() & 1) || CGlobal::LocalPlayer->IsDead())
+		return false;
+
+	if ((CGlobal::LocalPlayer->GetFlags() & 1) || (fabsf(CGlobal::LocalPlayer->GetBasePlayerAnimState()->flUpVelocity) > 99.9f)) 
+		NextUpdate = currenttime + 0.22f;
+
+	if (NextUpdate <= currenttime)
+	{
+		NextUpdate = currenttime + 1.1f;
+		return true;
+	}
+
+	return false;
+}
+
+int MaxChokeTicks()
+{
+	int maxticks = I::GameRules() && I::GameRules()->IsValveDS() ? 11 : 15;
+	static int max_choke_ticks = 0;
+	static int latency_ticks = 0;
+	float fl_latency = I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING);
+	int latency = TIME_TO_TICKS(fl_latency);
+	if (I::ClientState()->chokedcommands <= 0)
+		latency_ticks = latency;
+	else latency_ticks = max(latency, latency_ticks);
+
+	if (fl_latency >= I::GlobalVars()->interval_per_tick)
+		max_choke_ticks = 11 - latency_ticks;
+	else max_choke_ticks = 11;
+	return max_choke_ticks;
+}
+
+void LegitPeek(CUserCmd* pCmd, bool& bSendPacket)
+{
+	int choke_factor = GP_Misc->LDesync ? min(MaxChokeTicks(), GP_Misc->FakeLagFactor) : GP_Misc->FakeLagFactor;
 
 	static bool m_bIsPeeking = false;
 	if (m_bIsPeeking)
@@ -320,7 +399,7 @@ void CMisc::LegitPeek(CUserCmd* pCmd, bool& bSendPacket)
 	}
 }
 
-void CMisc::SetNewClan(string New, string Name)
+void SetNewClan(string New, string Name)
 {
 	static auto pSetClanTag = reinterpret_cast<void(__fastcall*)(const char*, const char*)>(offsets["SetClanTag"]);
 
@@ -328,7 +407,7 @@ void CMisc::SetNewClan(string New, string Name)
 		pSetClanTag(New.c_str(), Name.c_str());
 }
 
-bool CMisc::ChangeName(bool reconnect, const char* newName, float delay)
+bool ChangeName(bool reconnect, const char* newName, float delay)
 {
 	static auto exploitInitialized = false;
 
@@ -362,23 +441,6 @@ bool CMisc::ChangeName(bool reconnect, const char* newName, float delay)
 		return true;
 	}
 	return false;
-}
-
-int CMisc::MaxChokeTicks() 
-{
-	int maxticks = I::GameRules() && I::GameRules()->IsValveDS() ? 11 : 15;
-	static int max_choke_ticks = 0;
-	static int latency_ticks = 0;
-	float fl_latency = I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING);
-	int latency = TIME_TO_TICKS(fl_latency);;
-	if (I::ClientState()->chokedcommands <= 0)
-		latency_ticks = latency;
-	else latency_ticks = max(latency, latency_ticks);
-
-	if (fl_latency >= I::GlobalVars()->interval_per_tick)
-		max_choke_ticks = 11 - latency_ticks;
-	else max_choke_ticks = 11;
-	return max_choke_ticks;
 }
 
 void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCmd)
@@ -535,18 +597,11 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 			static bool LeftHandKnifeReset = false;
 			if (LRHandKnife)
 			{
-				static int hand = CGlobal::OrigRightHand;
-				static bool swapKnife = false;
-				if (CGlobal::GWeaponType == WEAPON_TYPE_KNIFE && !swapKnife)
-				{
-					cl_righthand->SetValue(!hand);
-					swapKnife = true;
-				}
-				else if (CGlobal::GWeaponType != WEAPON_TYPE_KNIFE && swapKnife)
-				{
-					cl_righthand->SetValue(hand);
-					swapKnife = false;
-				}
+				if (CGlobal::GWeaponType == WEAPON_TYPE_KNIFE)
+					cl_righthand->SetValue(!CGlobal::OrigRightHand);
+				else
+					cl_righthand->SetValue(CGlobal::OrigRightHand);
+
 				LeftHandKnifeReset = true;
 			}
 			if (!LRHandKnife && LeftHandKnifeReset)
@@ -557,7 +612,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 			static bool SwapHandReset = false;
 			if (SwapHand)
 			{
-				cl_righthand->SetValue(!SwapHandBind.Check());
+				cl_righthand->SetValue(SwapHandBind.Check());
 				SwapHandReset = true;
 			}
 			if (!SwapHand && SwapHandReset)
@@ -1076,7 +1131,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 	}
 }
 
-void CMisc::CreateMoveEP(CUserCmd* pCmd)
+void CMisc::CreateMoveEP(CUserCmd* pCmd, bool& bSendPacket)
 {
 	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
 	{
@@ -1133,6 +1188,75 @@ void CMisc::CreateMoveEP(CUserCmd* pCmd)
 					pCmd->sidemove = 250.f;
 				else if (angles.y > 0.0f)
 					pCmd->sidemove = -250.f;
+			}
+		}
+	}
+}
+
+void CMisc::Desync(CUserCmd* pCmd, bool& bSendPacket)
+{
+	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
+	{
+		if (CGlobal::LocalPlayer)
+		{
+			Vector vOldAngles = pCmd->viewangles;
+			float fOldForward = pCmd->forwardmove;
+			float fOldSidemove = pCmd->sidemove;
+
+			if (LDesync)
+			{
+				if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
+					CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER || CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP
+					|| CGlobal::LocalPlayer->IsDead())
+					return;
+
+				if (I::GameRules() && I::GameRules()->IsFreezePeriod())
+					return;
+
+				auto weapon = CGlobal::LocalPlayer->GetBaseWeapon();
+				if (!weapon)
+					return;
+
+				if ((CGlobal::GWeaponID == WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_FAMAS) && weapon->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
+					return;
+
+				if (CGlobal::GWeaponType == WEAPON_TYPE_GRENADE)
+				{
+					if (!weapon->GetPinPulled())
+					{
+						float throwTime = weapon->GetThrowTime();
+						if (throwTime > 0.f)
+							return;
+					}
+					if ((pCmd->buttons & IN_ATTACK) || (pCmd->buttons & IN_ATTACK2))
+					{
+						if (weapon->GetThrowTime() > 0.f)
+							return;
+					}
+				}
+
+				CGlobal::bSendPacket = I::ClientState()->m_NetChannel->m_nChokedPackets >= 2;
+				CGlobal::DesyncSide = LDesyncBind.Check();
+				//float invert = flip ? -1 : 1;
+				//CGlobal::DesyncSide = invert;
+
+				if (UpdateLBY())
+				{
+					if (CGlobal::DesyncSide)
+						pCmd->viewangles.y += 120;
+					else
+						pCmd->viewangles.y -= 120;
+					bSendPacket = false;
+				}
+				else if (!bSendPacket)
+				{
+					if (CGlobal::DesyncSide)
+						pCmd->viewangles.y -= 120;
+					else
+						pCmd->viewangles.y += 120;
+				}
+
+				CorrectMovement(vOldAngles, pCmd, fOldForward, fOldSidemove);
 			}
 		}
 	}

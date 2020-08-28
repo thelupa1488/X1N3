@@ -83,31 +83,31 @@ namespace SDK
 		void SetLocalViewangles(Vector& angle)
 		{
 			using original_fn = void(__thiscall*)(void*, Vector&);
-			GetVFunc< original_fn >(this, 13)(this, angle);
+			GetMethod<original_fn>(this, 13)(this, angle);
 		}
 
 		bool InPrediction()
 		{
 			typedef bool(__thiscall* oInPrediction)(void*);
-			return GetVFunc<oInPrediction>(this, 14)(this);
+			return GetMethod<oInPrediction>(this, 14)(this);
 		}
 
 		void RunCommand(CBaseEntity* player, CUserCmd* pCmd, IMoveHelper* moveHelper)
 		{
 			typedef void(__thiscall* oRunCommand)(void*, CBaseEntity*, CUserCmd*, IMoveHelper*);
-			return GetVFunc<oRunCommand>(this, 19)(this, player, pCmd, moveHelper);
+			return GetMethod<oRunCommand>(this, 19)(this, player, pCmd, moveHelper);
 		}
 
 		void SetupMove(CBaseEntity* player, CUserCmd* pCmd, IMoveHelper* moveHelper, void* pMoveData)
 		{
 			typedef void(__thiscall* oSetupMove)(void*, CBaseEntity*, CUserCmd*, IMoveHelper*, void*);
-			return GetVFunc<oSetupMove>(this, 20)(this, player, pCmd, moveHelper, pMoveData);
+			return GetMethod<oSetupMove>(this, 20)(this, player, pCmd, moveHelper, pMoveData);
 		}
 
 		void FinishMove(CBaseEntity* player, CUserCmd* pCmd, void* pMoveData)
 		{
 			typedef void(__thiscall* oFinishMove)(void*, CBaseEntity*, CUserCmd*, void*);
-			return GetVFunc<oFinishMove>(this, 21)(this, player, pCmd, pMoveData);
+			return GetMethod<oFinishMove>(this, 21)(this, player, pCmd, pMoveData);
 		}
 	};
 }

@@ -58,9 +58,9 @@ protected:
 	virtual void CustomWalls() = 0;
 	virtual void Menu() = 0;
 	virtual void Draw() = 0;
-	virtual int  MaxChokeTicks() = 0;
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd) = 0;
-	virtual void CreateMoveEP(CUserCmd* pCmd) = 0;
+	virtual void CreateMoveEP(CUserCmd* pCmd, bool& bSendPacket) = 0;
+	virtual void Desync(CUserCmd* pCmd, bool& bSendPacket) = 0;
 	virtual void OverrideView(CViewSetup* pSetup) = 0;
 };
 
@@ -79,12 +79,9 @@ public:
 
 	virtual void Menu();
 	virtual void Draw();
-	virtual void LegitPeek(CUserCmd* pCmd, bool& bSendPacket);
-	virtual void SetNewClan(string New, string Name);
-	virtual bool ChangeName(bool reconnect, const char* newName, float delay);
-	virtual int  MaxChokeTicks();
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd);
-	virtual void CreateMoveEP(CUserCmd* pCmd);
+	virtual void CreateMoveEP(CUserCmd* pCmd, bool& bSendPacket);
+	virtual void Desync(CUserCmd* pCmd, bool& bSendPacket);
 	virtual void OverrideView(CViewSetup* pSetup);
 	virtual void GetViewModelFOV(float &Fov);
 	virtual void AutoAcceptEmit();
@@ -116,14 +113,18 @@ public:
 	int ThirdPersonDistance = 150;
 	CBind ThirdPersonBind = CBind(0, true);
 
+	bool LDesync = false;
+	CBind LDesyncBind = CBind(0, true);
+	bool LDesyncArrows = false;
+
 	bool FovChanger = false;
 	int FovView = 100;
 	bool FovModelChanger = false;
 	int FovModel = 80;
 	bool NoVisualRecoil = false;
+
 	bool FreeCam = false;
 	int FreeCamSpeed = 5;
-
 	CBind FreeCamBind = CBind(0, true);
 
 	bool Crosshair = false;
@@ -245,7 +246,7 @@ public:
 	Color WeaponGlowColor = Color(255, 198, 0, 255);
 	Color DamageInfoColor = Color(255, 100, 100, 255);
 	Color ColoredWallsColor = Color(255, 100, 100, 255);
-//	Color ArrowsColor = Color(255, 0, 0, 255);
+	Color ArrowsColor = Color(255, 0, 0, 255);
 
 	vector<string> SoundList;
 
@@ -261,7 +262,7 @@ public:
 		RV(WeaponGlowColor, "WeaponGlowColor");
 		RV(DamageInfoColor, "DamageInfoColor");
 		RV(ColoredWallsColor, "ColoredWallsColor");
-//		RV(ArrowsColor, "ArrowsColor");
+		RV(ArrowsColor, "ArrowsColor");
 
 		RV(BHop, "BHop");
 		RV(BHopType, "BHopType");
@@ -279,6 +280,9 @@ public:
 		RV(ThirdPerson, "ThirdPerson");
 		RV(ThirdPersonDistance, "ThirdPersonDistance");
 		RV(ThirdPersonBind, "ThirdPersonBind");
+		RV(LDesync, "LDesync");
+		RV(LDesyncBind, "LDesyncBind");
+		RV(LDesyncArrows, "LDesyncArrows");
 		RV(FovChanger, "FovChanger");
 		RV(FovView, "FovView");
 		RV(FovModelChanger, "FovModelChanger");

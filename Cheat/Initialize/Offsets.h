@@ -79,6 +79,13 @@ namespace Offsets
 	extern DWORD m_bPinPulled;
 	extern DWORD m_fThrowTime;
 
+	extern DWORD BasePlayerAnimState;
+	extern DWORD AnimOverlays;
+	extern DWORD m_flPoseParameter;
+	extern DWORD m_bClientSideAnimation;
+	extern DWORD CreateState;
+	extern DWORD UpdateState;
+
 	extern DWORD m_iItemDefinitionIndex;
 	extern DWORD m_iItemIDHigh;
 	extern DWORD m_iAccountID;
@@ -113,6 +120,7 @@ namespace Offsets
 	extern DWORD Input;
 	extern DWORD MoveHelper;
 	extern DWORD ClientState;
+	extern DWORD GameRules;
 
 	extern DWORD d3d9TablePtrPtr;
 

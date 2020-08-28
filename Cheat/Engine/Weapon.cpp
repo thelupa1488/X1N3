@@ -10,7 +10,7 @@ namespace Engine
 	float CBaseWeapon::GetInaccuracy()
 	{
 		typedef float(__thiscall* OriginalFn)(void*);
-		return GetVFunc<OriginalFn>(this, 482)(this);
+		return GetMethod<OriginalFn>(this, 482)(this);
 	}
 
 	HANDLE* CBaseWeapon::GetWeaponWorldModel()

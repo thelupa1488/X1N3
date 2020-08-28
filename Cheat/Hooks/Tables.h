@@ -18,6 +18,7 @@ namespace HookTables
 	using EmitSoundFn = void(__fastcall*)(IEngineSound*, int, IRecipientFilter&, int, int, const char*, 
 		unsigned int, const char*, float, float, int, int, int, const Vector*, 
 		const Vector*, CUtlVector<Vector>*, bool, int, int, SndInfo_t&);
+	//using SendDatagramfn = int(__thiscall*)(INetChannelInfo*, void*);
 #ifdef ENABLE_INVENTORY
 	using RetrieveMessageFn = EGCResults(__thiscall*)(void*, uint32_t*, void*, uint32_t, uint32_t*);
 	using SendMessageFn = EGCResults(__thiscall*)(void*, uint32_t, const void*, uint32_t);
@@ -32,6 +33,7 @@ namespace HookTables
 	cDetour<LockCursorFn>* pLockCursor;
 	cDetour<PostDataUpdateFn>* pPostDataUpdate;
 	cDetour<EmitSoundFn>* pEmitSound;
+	//cDetour<SendDatagramfn>* pSendDatagram;
 #ifdef ENABLE_INVENTORY
 	cDetour<RetrieveMessageFn>* pRetrieveMessage;
 	cDetour<SendMessageFn>* pSendMessage;

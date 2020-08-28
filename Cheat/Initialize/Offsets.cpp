@@ -80,6 +80,13 @@ namespace Offsets
 	DWORD m_bPinPulled = 0;
 	DWORD m_fThrowTime = 0;
 
+	DWORD BasePlayerAnimState;
+	DWORD AnimOverlays = 0;
+	DWORD m_flPoseParameter = 0;
+	DWORD m_bClientSideAnimation = 0;
+	DWORD CreateState = 0;
+	DWORD UpdateState = 0;
+
 	DWORD m_iItemDefinitionIndex = 0;
 	DWORD m_iItemIDHigh = 0;
 	DWORD m_iAccountID = 0;
@@ -113,6 +120,7 @@ namespace Offsets
 	DWORD Input = 0;
 	DWORD MoveHelper = 0;
 	DWORD ClientState = 0;
+	DWORD GameRules = 0;
 
 	DWORD d3d9TablePtrPtr = 0;
 
