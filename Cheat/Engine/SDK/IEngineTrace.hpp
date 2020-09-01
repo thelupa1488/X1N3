@@ -146,7 +146,8 @@ namespace SDK
             return TraceType::TRACE_EVERYTHING;
         }
         char* ccIgnore = "";
-        void* pSkip;
+        IHandleEntity* pSkip;
+        int m_icollisionGroup;
     };
 
     class CTraceFilterSkipEntity : public ITraceFilter

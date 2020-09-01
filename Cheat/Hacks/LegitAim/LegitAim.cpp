@@ -1600,7 +1600,7 @@ void CLegitAim::LegitResolver()
 			if (!Entity || Entity == Local || Entity->IsDormant || Entity->IsDead || Local->Team == Entity->Team)
 				continue;
 
-			if (pLocalPlayer->GetBasePlayerAnimState())
+			if (pLocalPlayer->GetPlayerAnimState())
 			{
 				Vector vVelocity = pLocalPlayer->GetVelocity();
 				float flSpeed = vVelocity.Length2D();
@@ -1611,7 +1611,7 @@ void CLegitAim::LegitResolver()
 					float flLowerBody = remainderf(pLocalPlayer->GetLowerBodyYawTarget(), 360.f);
 
 					if (flLowerBody - remainderf(vEyeAngles.y, 360.f) >= 60.f)
-						pLocalPlayer->GetBasePlayerAnimState()->m_flGoalFeetYaw = NormalizeYaw(remainderf(pLocalPlayer->GetLowerBodyYawTarget() + 180.f, 360.f));
+						pLocalPlayer->GetPlayerAnimState()->m_flGoalFeetYaw = NormalizeYaw(remainderf(pLocalPlayer->GetLowerBodyYawTarget() + 180.f, 360.f));
 				}
 			}
 		}
@@ -1877,7 +1877,7 @@ float DistancePointToLine(Vector Point, Vector LineOrigin, Vector Dir)
 	return (Point - PerpendicularPoint).Length();
 }
 
-void CLegitAim::InitializeConVar()
+void CLegitAim::InitConVar()
 {
 	records.clear();
 	cvars.UpdateRate = I::GetCvar()->FindVar(XorStr("cl_updaterate"));

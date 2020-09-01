@@ -24,7 +24,8 @@ bool __stdcall hkCreateMove(float flInputSampleTime, CUserCmd* pCmd)
 
 		DWORD* FirstP;
 		__asm mov FirstP, ebp;
-		CGlobal::bSendPacket = true;
+
+		bool bSendPacket = true;
 
 		if (CGlobal::IsGuiVisible)
 			pCmd->buttons &= ~IN_ATTACK;
@@ -36,14 +37,14 @@ bool __stdcall hkCreateMove(float flInputSampleTime, CUserCmd* pCmd)
 			GP_LegitAim->SetSelectedWeapon();
 
 			if (GP_LegitAim->Enable)
-				GP_LegitAim->CreateMove(CGlobal::bSendPacket, flInputSampleTime, pCmd);
+				GP_LegitAim->CreateMove(bSendPacket, flInputSampleTime, pCmd);
 
 			if (GP_LegitAim->TriggerEnable)
 				GP_LegitAim->TriggerCreateMove(pCmd);
 		}
 
 		if (GP_Misc)
-			GP_Misc->CreateMove(CGlobal::bSendPacket, flInputSampleTime, pCmd);
+			GP_Misc->CreateMove(bSendPacket, flInputSampleTime, pCmd);
 
 		EnginePrediction::Run(pCmd);
 		{
@@ -51,18 +52,16 @@ bool __stdcall hkCreateMove(float flInputSampleTime, CUserCmd* pCmd)
 				GP_LegitAim->BacktrackCreateMoveEP(pCmd);
 
 			if (GP_Misc)
-				GP_Misc->CreateMoveEP(pCmd, CGlobal::bSendPacket);
-
-			if (GP_Misc && std::fabsf(CGlobal::LocalPlayer->GetSpawnTime() - I::GlobalVars()->curtime) > 1.0f)
-				GP_Misc->Desync(pCmd, CGlobal::bSendPacket);
+				GP_Misc->CreateMoveEP(bSendPacket, pCmd);
 		}
 		EnginePrediction::End();
 
 		CGlobal::ClampAngles(pCmd->viewangles);
 		CGlobal::AngleNormalize(pCmd->viewangles);
-		*(bool*)(*FirstP - 0x1C) = CGlobal::bSendPacket;
 
-		if (!CGlobal::bSendPacket)
+		*(bool*)(*FirstP - 0x1C) = bSendPacket;
+
+		if (!bSendPacket)
 			return false;
 	}
 

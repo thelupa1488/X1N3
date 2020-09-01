@@ -47,6 +47,7 @@ public:
 	virtual void DrawPlayerEx(CEntityPlayer* Entity, CEntityPlayer* Local, bool IsDormant) = 0;
 	virtual void DrawSkeletonLine(int point1, int point2, CEntityPlayer* Entity) = 0;
 	virtual void Draw3DBox(CEntityPlayer* Entity, Color color) = 0;
+	virtual void InitMaterials() = 0;
 
 	vector<float> OldAlphs;
 };
@@ -162,7 +163,7 @@ public:
 	virtual void DrawPlayerEx(CEntityPlayer* Entity, CEntityPlayer* Local, bool IsDormant);
 	virtual void DrawSkeletonLine(int point1, int point2, CEntityPlayer* Entity);
 	virtual void Draw3DBox(CEntityPlayer* Entity, Color color);
-	virtual void InitializeMaterials();
+	virtual void InitMaterials();
 	virtual void OverrideMaterial(bool IgnoreZ, int dMaterial, int Type, Color RGBA, bool Glow = false, const float Pulse = 0);
 	virtual void DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld);
 

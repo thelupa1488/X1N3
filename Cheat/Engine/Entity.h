@@ -113,13 +113,19 @@ namespace Engine
 		float   GetLowerBodyYawTarget();
 		Vector  GetPredicted(Vector p0);
 		QAngle& GetVAngles();
-		void    UpdateClientSideAnimation();
-		CCSGOPlayerAnimState* GetBasePlayerAnimState();
+		void            InvalidateBoneCache();
+		int             GetNumAnimOverlays();
 		AnimationLayer* GetAnimOverlays();
 		AnimationLayer* GetAnimOverlay(int i);
-		std::array<float, 24>& GetPoseParameter();
-		float           GetMaxDesyncAngle();
-		void            GetAnimations(bool value);
+		int             GetSequenceActivity(int sequence);
+		CCSGOPlayerAnimState* GetPlayerAnimState();
+
+		void UpdateAnimationState(CCSGOPlayerAnimState* state, QAngle angle);
+		void ResetAnimationState(CCSGOPlayerAnimState* state);
+		void CreateAnimationState(CCSGOPlayerAnimState* state);
+
+		float           GetMaxDesyncDelta();
+
 		CUserCmd*&      GetCurrentCommand();
 		float           GetSpawnTime();
 
@@ -179,11 +185,9 @@ namespace Engine
 		mstudiobbox_t* GetHitBox(int nHitbox);
 
 		mstudiohitboxset_t* GetHitBoxSet();
-		void InvalidateBoneCache();
+		void UpdateClientSideAnimation();
 		void SetAbsAngles(const QAngle& angles);
 		void SetAbsOrigin(const Vector& origin);
-		void CreateState(CCSGOPlayerAnimState* state);
-		void UpdateState(CCSGOPlayerAnimState* state, QAngle ang);
 		bool IsNotTarget();
 	};
 
@@ -192,7 +196,6 @@ namespace Engine
 	public:
 
 		int     GetSequence();
-		int     GetSequenceActivity(int sequence);
 		void	SetModelIndex(int nModelIndex);
 		void	SendViewModelMatchingSequence(int sequence);
 		void	SetWeaponModel(const char* Filename, IClientEntity* Weapon);

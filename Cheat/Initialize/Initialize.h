@@ -55,7 +55,7 @@ public:
 				ADD_LOG("2-1-11-0\n");
 				auto& pContext = cContext::GetInstance();
 				ADD_LOG("2-1-11-1\n");
-				PVOID* SoundTable = *reinterpret_cast<PVOID * *>(I::Sound());
+				PVOID* SoundTable = *reinterpret_cast<PVOID**>(I::Sound());
 				PVOID* SurfaceTable = *reinterpret_cast<PVOID**>(I::Surface());
 				PVOID* ClientModeTable = *reinterpret_cast<PVOID**>(I::ClientMode());
 				PVOID* ClientTable = *reinterpret_cast<PVOID**>(I::Client());
@@ -240,10 +240,8 @@ public:
 				offsets["m_hWeaponWorldModel"] = mGetOffset("DT_BaseCombatWeapon", "m_hWeaponWorldModel");
 				offsets["m_iWorldModelIndex"] = mGetOffset("DT_BaseCombatWeapon", "m_iWorldModelIndex");
 				offsets["m_nHitboxSet"] = mGetOffset("DT_BaseAnimating", "m_nHitboxSet");
-				offsets["m_flPoseParameter"] = mGetOffset("DT_BaseAnimating", "m_flPoseParameter");
-				offsets["m_bClientSideAnimation"] = mGetOffset("DT_BaseAnimating", "m_bClientSideAnimation");
 
-				offsets["BasePlayerAnimState"] = 0x3914;
+				offsets["PlayerAnimState"] = 0x3914;
 				offsets["AnimOverlays"] = 0x2990;
 
 				offsets["d3d9TablePtrPtr"] = (Utils::PatternScan(shaderapidx9Factory, XorStr("A1 ? ? ? ? 50 8B 08 FF 51 0C")) + 1);
@@ -263,8 +261,9 @@ public:
 				offsets["SequenceActivity"] = (Utils::PatternScan(clientFactory, XorStr("55 8B EC 53 8B 5D 08 56 8B F1 83")));
 				offsets["CurrentCommand"] = (Utils::PatternScan(clientFactory, XorStr("89 BE ? ? ? ? E8 ? ? ? ? 85 FF")) + 2);
 				offsets["InvalidateBoneCache"] = (Utils::PatternScan(clientFactory, XorStr("80 3D ? ? ? ? ? 74 16 A1 ? ? ? ? 48 C7 81")));
-				offsets["CreateState"] = (Utils::PatternScan(clientFactory, XorStr("55 8B EC 56 8B F1 B9 ? ? ? ? C7 46")));
-				offsets["UpdateState"] = (Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 83 EC 18 56 57 8B F9 F3 0F 11 54 24")));
+				offsets["CreateAnimState"] = (Utils::PatternScan(clientFactory, XorStr("55 8B EC 56 8B F1 B9 ? ? ? ? C7 46")));
+				offsets["UpdateAnimState"] = (Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 83 EC 18 56 57 8B F9 F3 0F 11 54 24")));
+				offsets["ResetAnimState"] = (Utils::PatternScan(clientFactory, XorStr("56 6A 01 68 ? ? ? ? 8B F1")));
 				offsets["SetAbsAngles"] = (Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 83 EC 64 53 56 57 8B F1 E8")));
 				offsets["SetAbsOrigin"] = (Utils::PatternScan(clientFactory, XorStr("55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8")));
 				offsets["FromString"] = (Utils::PatternScan(clientFactory, XorStr("E8 ? ? ? ? 83 C4 04 89 45 D8")) + 1);

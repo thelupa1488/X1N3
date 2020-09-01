@@ -178,16 +178,6 @@ namespace Engine
 		return ptr(*(QAngle*), this, offsets["deadflag"] + 0x4);
 	}
 
-	void CBaseEntity::UpdateClientSideAnimation()
-	{
-		return GetMethod<void(__thiscall*)(void*)>(this, 223)(this);
-	}
-
-	CCSGOPlayerAnimState* CBaseEntity::GetBasePlayerAnimState()
-	{
-		return ptr(*(CCSGOPlayerAnimState**), this, offsets["BasePlayerAnimState"]);
-	}
-
 	AnimationLayer* CBaseEntity::GetAnimOverlays()
 	{
 		return ptr(*reinterpret_cast<AnimationLayer**>, this, offsets["AnimOverlays"]);
@@ -199,36 +189,91 @@ namespace Engine
 			return &GetAnimOverlays()[i];
 	}
 
-	std::array<float, 24>& CBaseEntity::GetPoseParameter()
+	float CBaseEntity::GetMaxDesyncDelta()
 	{
-		return ptr(*(std::array<float, 24>*), this, offsets["m_flPoseParameter"]);
-	}
+		auto animstate = uintptr_t(this->GetPlayerAnimState());
 
-	float CBaseEntity::GetMaxDesyncAngle()
-	{
-		const auto animState = GetBasePlayerAnimState();
+		float duckammount = *(float*)(animstate + 0xA4);
+		float speedfraction = std::max<float>(0, std::min<float>(*reinterpret_cast<float*>(animstate + 0xF8), 1));
 
-		if (!animState)
-			return 0.0f;
+		float speedfactor = std::max<float>(0, std::min<float>(1, *reinterpret_cast<float*> (animstate + 0xFC)));
 
-		float yawModifier = (animState->m_flStopToFullRunningFraction * -0.3f - 0.2f) * clamp(animState->m_flFeetSpeedForwardsOrSideWays, 0.0f, 1.0f) + 1.0f;
+		float unk1 = ((*reinterpret_cast<float*> (animstate + 0x11C) * -0.30000001) - 0.19999999)* speedfraction;
+		float unk2 = unk1 + 1.f;
+		float unk3;
 
-		if (animState->m_fDuckAmount > 0.0f)
-			yawModifier += (animState->m_fDuckAmount * clamp(animState->speed_2d, 0.0f, 1.0f) * (0.5f - yawModifier));
+		if (duckammount > 0) {
+			unk2 += ((duckammount * speedfactor) * (0.5f - unk2));
+		}
 
-		return animState->m_vVelocityY * yawModifier;
-	}
+		unk3 = *(float*)(animstate + 0x334) * unk2;
 
-	void CBaseEntity::GetAnimations(bool value)
-	{
-		static int m_bClientSideAnimation = offsets["m_bClientSideAnimation"];
-		*reinterpret_cast<bool*>((uintptr_t)this + m_bClientSideAnimation) = value;
+		return unk3;
 	}
 
 	CUserCmd*& CBaseEntity::GetCurrentCommand() 
 	{
 		static auto currentCommand = *(uint32_t*)(offsets["CurrentCommand"]);
 		return *(CUserCmd**)((DWORD)this + currentCommand);
+	}
+
+	int CBaseEntity::GetSequenceActivity(int sequence)
+	{
+		auto hdr = I::ModelInfo()->GetStudioModel(this->GetModel());
+
+		if (!hdr)
+			return -1;
+
+		static auto get_sequence_activity = reinterpret_cast<int(__fastcall*)(void*, studiohdr_t*, int)>(offsets["SequenceActivity"]);
+
+		return get_sequence_activity(this, hdr, sequence);
+	}
+
+	CCSGOPlayerAnimState* CBaseEntity::GetPlayerAnimState()
+	{
+		return ptr(*(CCSGOPlayerAnimState**), this, offsets["PlayerAnimState"]);
+	}
+
+	void CBaseEntity::UpdateAnimationState(CCSGOPlayerAnimState* state, QAngle angle)
+	{
+		static auto UpdateAnimState = offsets["UpdateAnimState"];
+
+		if (!UpdateAnimState)
+			return;
+
+		__asm {
+			push 0
+		}
+
+		__asm
+		{
+			mov ecx, state
+
+			movss xmm1, dword ptr[angle + 4]
+			movss xmm2, dword ptr[angle]
+
+			call UpdateAnimState
+		}
+	}
+
+	void CBaseEntity::ResetAnimationState(CCSGOPlayerAnimState* state)
+	{
+		using ResetAnimState_t = void(__thiscall*)(CCSGOPlayerAnimState*);
+		static auto ResetAnimState = (ResetAnimState_t)offsets["ResetAnimState"];
+		if (!ResetAnimState)
+			return;
+
+		ResetAnimState(state);
+	}
+
+	void CBaseEntity::CreateAnimationState(CCSGOPlayerAnimState* state)
+	{
+		using CreateAnimState_t = void(__thiscall*)(CCSGOPlayerAnimState*, CBaseEntity*);
+		static auto CreateAnimState = (CreateAnimState_t)offsets["CreateAnimState"];
+		if (!CreateAnimState)
+			return;
+
+		CreateAnimState(state, this);
 	}
 
 	float CBaseEntity::GetSpawnTime()
@@ -550,6 +595,11 @@ namespace Engine
 		return vRet;
 	}
 
+	void CBaseEntity::UpdateClientSideAnimation()
+	{
+		return GetMethod<void(__thiscall*)(void*)>(this, 224)(this);
+	}
+
 	void CBaseEntity::InvalidateBoneCache()
 	{
 		static auto addr = offsets["InvalidateBoneCache"];
@@ -576,36 +626,6 @@ namespace Engine
 		SetAbsOrigin(this, origin);
 	}
 
-	void CBaseEntity::CreateState(CCSGOPlayerAnimState* state)
-	{
-		using fn = void(__thiscall*)(CCSGOPlayerAnimState*, CBaseEntity*);
-		static auto ret = (fn)offsets["CreateState"];
-		if (!ret)
-			return;
-
-		ret(state, this);
-	}
-
-	void CBaseEntity::UpdateState(CCSGOPlayerAnimState* state, QAngle ang)
-	{
-		if (!state)
-			return;
-		using fn = void(__vectorcall*)(void*, void*, float, float, float, void*);
-		static auto ret = reinterpret_cast<fn>(offsets["UpdateState"]); 
-
-		if (!ret)
-			return;
-
-		__asm {
-			push 0
-			mov ecx, state
-			movss xmm1, dword ptr[ang + 4]
-			movss xmm2, dword ptr[ang]
-
-			call ret
-		}
-	}
-
 	bool CBaseEntity::IsNotTarget()
 	{
 		if (this->GetHealth() <= 0)
@@ -616,18 +636,6 @@ namespace Engine
 
 		int entIndex = this->EntIndex();
 		return entIndex > I::GlobalVars()->maxClients;
-	}
-
-	int CBaseViewModel::GetSequenceActivity(int sequence)
-	{
-		studiohdr_t* hdr = I::ModelInfo()->GetStudioModel(this->GetModel());
-
-		if (!hdr)
-			return -1;
-
-		static auto GetSequenceActivity = reinterpret_cast<int(__fastcall*)(void*, studiohdr_t*, int)>(offsets["SequenceActivity"]);
-
-		return GetSequenceActivity(this, hdr, sequence);
 	}
 
 	void CBaseViewModel::SetModelIndex(int nModelIndex)

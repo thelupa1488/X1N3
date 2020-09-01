@@ -58,9 +58,9 @@ protected:
 	virtual void CustomWalls() = 0;
 	virtual void Menu() = 0;
 	virtual void Draw() = 0;
+	virtual int MaxChokeTicks() = 0;
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd) = 0;
-	virtual void CreateMoveEP(CUserCmd* pCmd, bool& bSendPacket) = 0;
-	virtual void Desync(CUserCmd* pCmd, bool& bSendPacket) = 0;
+	virtual void CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd) = 0;
 	virtual void OverrideView(CViewSetup* pSetup) = 0;
 };
 
@@ -79,9 +79,9 @@ public:
 
 	virtual void Menu();
 	virtual void Draw();
+	virtual int MaxChokeTicks();
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd);
-	virtual void CreateMoveEP(CUserCmd* pCmd, bool& bSendPacket);
-	virtual void Desync(CUserCmd* pCmd, bool& bSendPacket);
+	virtual void CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd);
 	virtual void OverrideView(CViewSetup* pSetup);
 	virtual void GetViewModelFOV(float &Fov);
 	virtual void AutoAcceptEmit();
@@ -92,6 +92,12 @@ public:
 	virtual void Reset();
 	virtual void UpdateSoundList();
 	virtual void CustomWalls();
+
+	/*Desync*/
+	float side = 1.f;
+	Vector real_angle;
+	Vector fake_angle;
+	/*======*/
 
 	bool Enable = true;
 	bool BHop = false;
@@ -115,7 +121,12 @@ public:
 
 	bool LDesync = false;
 	CBind LDesyncBind = CBind(0, true);
+	bool LDesyncLines = false;
+	int LDesyncLinesLength = 0;
 	bool LDesyncArrows = false;
+	//bool LDesyncChams = false;
+	//int LDesyncChamsStyle = 0;
+	//int LDesyncChamsDStyle = 0;
 
 	bool FovChanger = false;
 	int FovView = 100;
@@ -247,6 +258,8 @@ public:
 	Color DamageInfoColor = Color(255, 100, 100, 255);
 	Color ColoredWallsColor = Color(255, 100, 100, 255);
 	Color ArrowsColor = Color(255, 0, 0, 255);
+	Color DesyncChamsColor = Color(255, 0, 0, 255);
+	Color DesyncGlowColor = Color(255, 0, 0, 255);
 
 	vector<string> SoundList;
 
@@ -282,6 +295,8 @@ public:
 		RV(ThirdPersonBind, "ThirdPersonBind");
 		RV(LDesync, "LDesync");
 		RV(LDesyncBind, "LDesyncBind");
+		RV(LDesyncLines, "LDesyncLines");
+		RV(LDesyncLinesLength, "LDesyncLinesLength");
 		RV(LDesyncArrows, "LDesyncArrows");
 		RV(FovChanger, "FovChanger");
 		RV(FovView, "FovView");

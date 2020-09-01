@@ -168,6 +168,68 @@ void CMisc::Draw()
 					}
 				}
 			}
+
+			if (LDesync)
+			{
+				if (LDesyncLines && I::Input()->m_fCameraInThirdPerson)
+				{
+					Vector w2sOrigin;
+					auto DrawAngleLine = [&](const Vector& origin, const Vector& w2sOrigin, const float& angle, const char* text, Color clr)
+					{
+						Vector forward;
+						AngleVectors(QAngle(0.0f, angle, 0.0f), forward);
+						float AngleLinesLength = (float)LDesyncLinesLength;
+
+						Vector w2sReal;
+						if (CGlobal::WorldToScreen(origin + forward * AngleLinesLength, w2sReal) && w2sOrigin.x > 0.f && w2sOrigin.y > 0)
+						{
+							GP_Render->DrawLine(w2sOrigin.x, w2sOrigin.y, w2sReal.x, w2sReal.y, Color::White(), 1.0f);
+							GP_Render->DrawString(w2sReal.x, w2sReal.y + 10.0f, 14.0f, clr, true, true, text);
+						}
+					};
+
+					if (!CGlobal::LocalPlayer || !CGlobal::LocalPlayer->GetPlayerAnimState())
+						return;
+
+					if (CGlobal::LocalPlayer->IsDead())
+						return;
+
+					if (CGlobal::WorldToScreen(CGlobal::LocalPlayer->GetOrigin(), w2sOrigin))
+					{
+						DrawAngleLine(CGlobal::LocalPlayer->GetOrigin(), w2sOrigin, real_angle.y, "Real", Color::Green());
+						DrawAngleLine(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, fake_angle.y, "Fake", Color::Red());
+						DrawAngleLine(CGlobal::LocalPlayer->GetOrigin(), w2sOrigin, CGlobal::LocalPlayer->GetLowerBodyYawTarget(), "LBY", Color::DarkBlue());
+					}
+				}
+
+				if (LDesyncArrows)
+				{
+					auto client_viewangles = QAngle();
+					I::Engine()->GetViewAngles(client_viewangles);
+					const auto screen_center = Vector2D(CGlobal::iScreenWidth / 2, CGlobal::iScreenHeight / 2);
+
+					constexpr auto radius = 225.f;
+					auto DrawArrow = [&](float rot, Color color) -> void
+					{
+						vector<Vec2> vertices;
+						vertices.push_back((Vec2(screen_center.x + cosf(rot) * radius, screen_center.y + sinf(rot) * radius)));
+						vertices.push_back((Vec2(screen_center.x + cosf(rot + DEG2RAD(2)) * (radius - 6), screen_center.y + sinf(rot + DEG2RAD(2)) * (radius - 6)))); //25
+						vertices.push_back((Vec2(screen_center.x + cosf(rot - DEG2RAD(2)) * (radius - 6), screen_center.y + sinf(rot - DEG2RAD(2)) * (radius - 6)))); //25
+
+						GP_Render->RenderTriangle(vertices.at(0), vertices.at(1), vertices.at(2), ArrowsColor, 2.f);
+					};
+
+					static auto alpha = 0.f;
+					static auto plus_or_minus = false;
+					if (alpha <= 0.f || alpha >= 255.f)
+						plus_or_minus = !plus_or_minus;
+
+					alpha += plus_or_minus ? (255.f / 7 * 0.015) : -(255.f / 7 * 0.015); alpha = clamp(alpha, 0.f, 255.f);
+
+					const auto FakeRot = DEG2RAD((side < 0.f ? 90 : -90) - 90);
+					DrawArrow(FakeRot, ArrowsColor);
+				}
+			}
 		}
 
 		if (CGlobal::IsGameReady)
@@ -176,136 +238,13 @@ void CMisc::Draw()
 			CustomWalls();
 		}
 
-		if (LDesync && LDesyncArrows)
-		{
-			auto client_viewangles = QAngle();
-			I::Engine()->GetViewAngles(client_viewangles);
-			const auto screen_center = Vector2D(CGlobal::iScreenWidth / 2, CGlobal::iScreenHeight / 2);
-
-			constexpr auto radius = 225.f;
-			auto DrawArrow = [&](float rot, Color color) -> void
-			{
-				vector<Vec2> vertices;
-				vertices.push_back((Vec2(screen_center.x + cosf(rot) * radius, screen_center.y + sinf(rot) * radius)));
-				vertices.push_back((Vec2(screen_center.x + cosf(rot + DEG2RAD(2)) * (radius - 6), screen_center.y + sinf(rot + DEG2RAD(2)) * (radius - 6)))); //25
-				vertices.push_back((Vec2(screen_center.x + cosf(rot - DEG2RAD(2)) * (radius - 6), screen_center.y + sinf(rot - DEG2RAD(2)) * (radius - 6)))); //25
-
-				GP_Render->RenderTriangle(vertices.at(0), vertices.at(1), vertices.at(2), ArrowsColor, 2.f);
-			};
-
-			static auto alpha = 0.f;
-			static auto plus_or_minus = false;
-			if (alpha <= 0.f || alpha >= 255.f)
-				plus_or_minus = !plus_or_minus;
-
-			alpha += plus_or_minus ? (255.f / 7 * 0.015) : -(255.f / 7 * 0.015); alpha = clamp(alpha, 0.f, 255.f);
-
-			const auto FakeRot = DEG2RAD((CGlobal::DesyncSide ? 90 : -90) - 90);
-			DrawArrow(FakeRot, ArrowsColor);
-		}
-
-		//	if (AngleLines && ThirdPersonBind.Check())
-		//	{
-		//		auto DrawAngleLines = [&](const Vector& origin, const Vector& w2sOrigin, const float& angle, const char* text, Color clr)
-		//		{
-		//			Vector forward;
-		//			AngleVectors(QAngle(0.f, angle, 0.f), forward);
-		//			float AngleLinesLength = 30.0f;
-
-		//			Vector w2sReal;
-		//			if (CGlobal::WorldToScreen(origin + forward * AngleLinesLength, w2sReal))
-		//			{
-		//				GP_Render->DrawLine(w2sOrigin.x, w2sOrigin.y, w2sReal.x, w2sReal.y, Color::White(), 1.0f);
-		//				GP_Render->DrawString(w2sReal.x, w2sReal.y /* - 5.0f, 14.f*/, clr, true, true, text);
-		//			}
-		//		};
-
-		//		if (!CGlobal::LocalPlayer || !CGlobal::LocalPlayer->GetBasePlayerAnimState())
-		//			return;
-
-		//		if (CGlobal::LocalPlayer->IsDead())
-		//			return;
-
-		//		Vector w2sOrigin;
-		//		if (CGlobal::WorldToScreen(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin))
-		//		{
-		//			DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, anglefake, XorStr("fake"), Color::Orange());
-		//			DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, CGlobal::LocalPlayer->GetLowerBodyYawTarget(), XorStr("lby"), Color::Blue());
-		//			DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, anglereal, XorStr("real"), Color::Green());
-		//			DrawAngleLines(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, view, XorStr("view"), Color::Red());
-		//		}
-		//	}
-		//}
-
 		HitWorker.Draw();
 	}
 }
 
-float ServerCurtime() 
+int CMisc::MaxChokeTicks()
 {
-	const auto v1 = static_cast<INetChannelInfo*> (I::Engine()->GetNetChannelInfo());
-
-	const auto v3 = v1->GetLatency(FLOW_INCOMING); //local player
-	const auto v4 = v1->GetLatency(FLOW_OUTGOING); //generic
-
-	return v3 + v4 + TICKS_TO_TIME(1) + TICKS_TO_TIME(CGlobal::UserCmd->tick_count);
-}
-
-bool UpdateLBY()
-{
-	static auto next_lby_update_time = -1.f;
-
-	auto spawn_time = CGlobal::LocalPlayer->GetSpawnTime();
-	auto anim_state = CGlobal::LocalPlayer->GetBasePlayerAnimState();
-
-	const auto current_time = ServerCurtime();
-	{
-		if (spawn_time != CGlobal::LocalPlayer->GetSpawnTime())
-		{
-			spawn_time = CGlobal::LocalPlayer->GetSpawnTime();
-			next_lby_update_time = -1.f;
-		}
-
-		if (anim_state->speed_2d > 0.1 || !(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
-			next_lby_update_time = current_time + 0.22f;
-		else if (next_lby_update_time == -1.f || current_time >= next_lby_update_time)
-		{
-			next_lby_update_time = current_time + 1.1f;
-		}
-	}
-
-	if (anim_state->speed_2d > 0.1)
-		return false;
-
-	if (!(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
-		return false;
-
-	return next_lby_update_time - current_time <= I::GlobalVars()->interval_per_tick;
-}
-
-bool LbyBreaker()
-{
-	static float NextUpdate = 0;
-	auto velocity = CGlobal::LocalPlayer->GetVelocity().Length();
-	auto currenttime = ServerCurtime();
-	if (!(CGlobal::LocalPlayer->GetFlags() & 1) || CGlobal::LocalPlayer->IsDead())
-		return false;
-
-	if ((CGlobal::LocalPlayer->GetFlags() & 1) || (fabsf(CGlobal::LocalPlayer->GetBasePlayerAnimState()->flUpVelocity) > 99.9f)) 
-		NextUpdate = currenttime + 0.22f;
-
-	if (NextUpdate <= currenttime)
-	{
-		NextUpdate = currenttime + 1.1f;
-		return true;
-	}
-
-	return false;
-}
-
-int MaxChokeTicks()
-{
-	int maxticks = I::GameRules() && I::GameRules()->IsValveDS() ? 11 : 15;
+	int maxticks = I::GameRules() && I::GameRules()->IsValveDS() ? 11 : 14;
 	static int max_choke_ticks = 0;
 	static int latency_ticks = 0;
 	float fl_latency = I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING);
@@ -322,7 +261,7 @@ int MaxChokeTicks()
 
 void LegitPeek(CUserCmd* pCmd, bool& bSendPacket)
 {
-	int choke_factor = GP_Misc->LDesync ? min(MaxChokeTicks(), GP_Misc->FakeLagFactor) : GP_Misc->FakeLagFactor;
+	int choke_factor = GP_Misc->LDesync ? min(GP_Misc->MaxChokeTicks(), GP_Misc->FakeLagFactor) : GP_Misc->FakeLagFactor;
 
 	static bool m_bIsPeeking = false;
 	if (m_bIsPeeking)
@@ -924,7 +863,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				if (FakeLagFactor <= 0)
 					return;
 
-				int choke_factor = /*Desync ? min(MaxChokeTicks(), FakeLagFactor) :*/ FakeLagFactor;
+				int choke_factor = LDesync ? min(MaxChokeTicks(), FakeLagFactor) : FakeLagFactor;
 
 				auto speed = CGlobal::LocalPlayer->GetVelocity().Length();
 				bool standing = speed <= 1.0f;
@@ -1131,7 +1070,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 	}
 }
 
-void CMisc::CreateMoveEP(CUserCmd* pCmd, bool& bSendPacket)
+void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
 {
 	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
 	{
@@ -1145,6 +1084,82 @@ void CMisc::CreateMoveEP(CUserCmd* pCmd, bool& bSendPacket)
 
 				if ((EnginePrediction::GetFlags() & FL_ONGROUND) && !(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
 					pCmd->buttons |= IN_JUMP;
+			}
+
+			if (LDesync)
+			{
+				Vector OldAngles = pCmd->viewangles;
+
+				if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
+					CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER || CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP
+					|| CGlobal::LocalPlayer->IsDead())
+					return;
+
+				if (I::GameRules() && I::GameRules()->IsFreezePeriod())
+					return;
+
+				auto weapon = CGlobal::LocalPlayer->GetBaseWeapon();
+				if (!weapon)
+					return;
+
+				if ((CGlobal::GWeaponID == WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_FAMAS) && weapon->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
+					return;
+
+				if (CGlobal::GWeaponType == WEAPON_TYPE_GRENADE)
+				{
+					if (!weapon->GetPinPulled())
+					{
+						float throwTime = weapon->GetThrowTime();
+						if (throwTime > 0.f)
+							return;
+					}
+					if ((pCmd->buttons & IN_ATTACK) || (pCmd->buttons & IN_ATTACK2))
+					{
+						if (weapon->GetThrowTime() > 0.f)
+							return;
+					}
+				}
+
+				if (std::fabsf(CGlobal::LocalPlayer->GetSpawnTime() - I::GlobalVars()->curtime) < 1.0f)
+					return;
+
+				side = LDesyncBind.Check() ? 1.f : -1.f;
+
+				float minimal_move = 2.5f;
+
+				if (CGlobal::LocalPlayer->GetFlags() & FL_DUCKING)
+					minimal_move = 2.5f;
+
+				if (pCmd->buttons & IN_WALK)
+					minimal_move = 2.5f;
+
+				static bool ok = false;
+
+				if (!ok)
+				{
+					pCmd->sidemove -= minimal_move;
+					bSendPacket = false;
+					ok = true;
+				}
+				else
+				{
+					bSendPacket = true;
+					pCmd->sidemove += minimal_move;
+					ok = false;
+				}
+
+				Clamp(pCmd->sidemove, -450.0f, 450.0f);
+
+				if (!bSendPacket) 
+				{
+					real_angle.y = pCmd->viewangles.y + (58.f * side);
+					pCmd->viewangles.y = real_angle.y;
+				}
+				else 
+					fake_angle = pCmd->viewangles;
+
+				FixAngles(pCmd->viewangles);
+				MovementFix(pCmd, OldAngles, pCmd->viewangles);
 			}
 
 			if (AutoBlock && AutoBlockBind.Check())
@@ -1188,75 +1203,6 @@ void CMisc::CreateMoveEP(CUserCmd* pCmd, bool& bSendPacket)
 					pCmd->sidemove = 250.f;
 				else if (angles.y > 0.0f)
 					pCmd->sidemove = -250.f;
-			}
-		}
-	}
-}
-
-void CMisc::Desync(CUserCmd* pCmd, bool& bSendPacket)
-{
-	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
-	{
-		if (CGlobal::LocalPlayer)
-		{
-			Vector vOldAngles = pCmd->viewangles;
-			float fOldForward = pCmd->forwardmove;
-			float fOldSidemove = pCmd->sidemove;
-
-			if (LDesync)
-			{
-				if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
-					CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER || CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP
-					|| CGlobal::LocalPlayer->IsDead())
-					return;
-
-				if (I::GameRules() && I::GameRules()->IsFreezePeriod())
-					return;
-
-				auto weapon = CGlobal::LocalPlayer->GetBaseWeapon();
-				if (!weapon)
-					return;
-
-				if ((CGlobal::GWeaponID == WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_FAMAS) && weapon->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
-					return;
-
-				if (CGlobal::GWeaponType == WEAPON_TYPE_GRENADE)
-				{
-					if (!weapon->GetPinPulled())
-					{
-						float throwTime = weapon->GetThrowTime();
-						if (throwTime > 0.f)
-							return;
-					}
-					if ((pCmd->buttons & IN_ATTACK) || (pCmd->buttons & IN_ATTACK2))
-					{
-						if (weapon->GetThrowTime() > 0.f)
-							return;
-					}
-				}
-
-				CGlobal::bSendPacket = I::ClientState()->m_NetChannel->m_nChokedPackets >= 2;
-				CGlobal::DesyncSide = LDesyncBind.Check();
-				//float invert = flip ? -1 : 1;
-				//CGlobal::DesyncSide = invert;
-
-				if (UpdateLBY())
-				{
-					if (CGlobal::DesyncSide)
-						pCmd->viewangles.y += 120;
-					else
-						pCmd->viewangles.y -= 120;
-					bSendPacket = false;
-				}
-				else if (!bSendPacket)
-				{
-					if (CGlobal::DesyncSide)
-						pCmd->viewangles.y -= 120;
-					else
-						pCmd->viewangles.y += 120;
-				}
-
-				CorrectMovement(vOldAngles, pCmd, fOldForward, fOldSidemove);
 			}
 		}
 	}
@@ -1483,6 +1429,45 @@ void CMisc::AutoAcceptEmit()
 
 void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld)
 {
+	//if (Enable && LDesyncChams)
+	//{
+	//	static auto fnDME = HookTables::pDrawModelExecute->GetTrampoline();
+	//	const char* ModelName = I::ModelInfo()->GetModelName((model_t*)pInfo.pModel);
+
+	//	if (!ModelName)
+	//		return;
+
+	//	if (!strstr(ModelName, XorStr("models/player")))
+	//		return;
+
+	//	CEntityPlayer* Local = GP_EntPlayers->EntityLocal;
+
+	//	if (!Local)
+	//		return;
+
+	//	if (!Local->IsUpdated)
+	//		return;
+
+	//	if (Local->IsDead || Local->Health <= 0)
+	//		return;
+
+	//	if (LDesync && I::Input()->m_fCameraInThirdPerson)
+	//	{
+	//		matrix3x4_t matrix[128];
+	//		Local->BaseEntity->SetAbsAngles(real_angle);
+
+	//		if (Local->BaseEntity->SetupBones(matrix, 128, 0x100, 0))
+	//		{
+	//			DesyncChamsColor[4];
+	//			GP_Esp->OverrideMaterial(false, LDesyncChamsDStyle, LDesyncChamsStyle, DesyncChamsColor, false);
+	//			fnDME(thisptr, ctx, state, pInfo, matrix);
+	//			I::ModelRender()->ForcedMaterialOverride(nullptr);
+	//		}
+
+	//		Local->BaseEntity->SetAbsAngles(Vector(0, fake_angle.y, 0));
+	//	}
+	//}
+
 	if (Enable && HandChams || HandGlow)
 	{
 		static auto fnDME = HookTables::pDrawModelExecute->GetTrampoline();
@@ -1491,10 +1476,10 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 		if (!ModelName)
 			return;
 
+		IMaterial* Material = I::MaterialSystem()->FindMaterial(ModelName, TEXTURE_GROUP_MODEL);
+
 		if (strstr(ModelName, XorStr("arms")))
 		{
-			IMaterial* Material = I::MaterialSystem()->FindMaterial(ModelName, TEXTURE_GROUP_MODEL);
-
 			if (HandChams)
 			{
 				HandChamsColor[4];
@@ -1506,7 +1491,6 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 				}
 				fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 			}
-
 			if (HandGlow)
 			{
 				HandGlowColor[4];
@@ -1525,10 +1509,10 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 		if (!ModelName)
 			return;
 
+		IMaterial* Material = I::MaterialSystem()->FindMaterial(ModelName, TEXTURE_GROUP_MODEL);
+
 		if (strstr(ModelName, ("models/weapons/v_")) && !strstr(ModelName, XorStr("arms")))
 		{
-			IMaterial* Material = I::MaterialSystem()->FindMaterial(ModelName, TEXTURE_GROUP_MODEL);
-
 			if (WeaponChams)
 			{
 				WeaponChamsColor[4];
@@ -1540,7 +1524,6 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 				}
 				fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 			}
-
 			if (WeaponGlow)
 			{
 				WeaponGlowColor[4];

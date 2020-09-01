@@ -79,8 +79,8 @@ public:
 			GP_Misc->UpdateSoundList();
 			ADD_LOG("2-1-11-7-2\n");
 			GP_Esp->InitVisuals();
-			GP_Esp->InitializeMaterials();
-			GP_LegitAim->InitializeConVar();
+			GP_Esp->InitMaterials();
+			GP_LegitAim->InitConVar();
 			GP_Render->Initialize();
 			GP_GHelper->Initialize();
 			ADD_LOG("2-1-11-7-3\n");

@@ -154,7 +154,7 @@ void CEsp::SoundFrameStage()
 	}
 }
 
-void CEsp::InitializeMaterials()
+void CEsp::InitMaterials()
 {
 	if (!Texture)
 		Texture = I::MaterialSystem()->CreateMaterial("Texture", KeyValues::FromString("VertexLitGeneric", nullptr));
@@ -248,18 +248,19 @@ void CEsp::OverrideMaterial(bool IgnoreZ, int dMaterial, int Type, Color RGBA, b
 		if (!GlowMaterial || GlowMaterial->IsErrorMaterial())
 			return;
 
-		static bool bFoundColor = false;
-		IMaterialVar* pMatColor = GlowMaterial->FindVar("$envmaptint", &bFoundColor);
-		if (bFoundColor)
-			pMatColor->SetVecValue(RGBA.G1R(), RGBA.G1G(), RGBA.G1B());
-
-		if (Type == 2)
+		if (GlowMaterial == GlowDPulse)
 		{
 			static bool bFoundPulse = false;
 			IMaterialVar* pMatPulse = GlowMaterial->FindVar("$envmapfresnelminmaxexp", &bFoundPulse);
 			if (bFoundPulse)
 				pMatPulse->SetVecComponentValue(0.5f * (1.2f - Pulse), 2);
 		}
+
+		static bool bFoundColor = false;
+		IMaterialVar* pMatColor = GlowMaterial->FindVar("$envmaptint", &bFoundColor);
+		if (bFoundColor)
+			pMatColor->SetVecValue(RGBA.G1R(), RGBA.G1G(), RGBA.G1B());
+
 		GlowMaterial->AlphaModulate(RGBA.G1A());
 
 		GlowMaterial->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, IgnoreZ);

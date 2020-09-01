@@ -49,12 +49,12 @@ namespace SDK
 	Vector CrossProduct2(const Vector& a, const Vector& b);
 	Vector gCalcAngle(Vector src, Vector dst);
 	void AngleVectors(const Vector& angles, Vector* forward, Vector* right, Vector* up);
-//	void VectorTransform(const Vector& in1, const matrix3x4_t& in2, Vector& out);
 	void NormalizeAngles(QAngle& angles);
 	void NormalizePitch(float& pitch);
 	bool IntersectionBoundingBox(const Vector& start, const Vector& dir, const Vector& min, const Vector& max, Vector* hit_point = nullptr);
 	void Clamp(float& value, float min, float max);
 	int RandomInt(int min, int max);
+	float AngleDiff(float destAngle, float srcAngle);
 
 	template<class T>
 	void Normalize3(T& vec)
@@ -79,8 +79,7 @@ namespace SDK
 	}
 
 	void AngleVector(const Vector& angles, Vector& forward);
-	void MovementFix(CUserCmd* m_Cmd, QAngle wish_angle, QAngle old_angles);
-	void fix_movement(CUserCmd* cmd, QAngle& wishangle);
+	void MovementFix(CUserCmd* m_Cmd, Vector wish_angle, Vector old_angles);
 	void Normalize(Vector& f);
 	//void correct_movement(CUserCmd* cmd, const QAngle& old_angles);
 	void CorrectMovement(QAngle vOldAngles, CUserCmd* pCmd, float fOldForward, float fOldSidemove);

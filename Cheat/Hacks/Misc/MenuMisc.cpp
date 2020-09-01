@@ -86,12 +86,33 @@ void CMisc::Menu()
 	{
 		X1Gui().SameLine(SAME_LINE_1);
 		X1Gui().PushItemWidth(PUSH_1);
-		HotsKey("Button##desync", LDesyncBind.Button);
+		HotsKey("Button##Desync", LDesyncBind.Button);
 		X1Gui().SameLine();
-		DCheckBox("Hold##desync", LDesyncBind.Hold);
+		DCheckBox("Hold##Desync", LDesyncBind.Hold);		
+		DCheckBox("Angle lines", LDesyncLines);
+		if (LDesyncLines)
+		{
+			X1Gui().SameLine(SAME_LINE_1);
+			X1Gui().PushItemWidth(PUSH_1);
+			SliderInts("Lines length", LDesyncLinesLength, 15, 30);
+		}
 		DCheckBox("Desync arrows", LDesyncArrows);
 		if (LDesyncArrows)
-			DColorEdit("Color##desync", ArrowsColor);
+			DColorEdit("Color##Desync", ArrowsColor);
+		//DCheckBox("Desync chams", LDesyncChams);
+		//if (LDesyncChams)
+		//{
+		//	X1Gui().SameLine(SAME_LINE_1);
+		//	X1Gui().PushItemWidth(PUSH_1);
+		//	VectorEx<const char* >itemsLDCS = { lolc("Textured"),lolc("Flat"), lolc("Metallic"), lolc("Metallic Plus"), lolc("Pearlescent"), lolc("Animated") };
+		//	DComboBox("Style##DesyncChams", LDesyncChamsStyle, itemsLDCS);
+		//	X1Gui().Spacing();
+		//	X1Gui().SameLine(SAME_LINE_1);
+		//	X1Gui().PushItemWidth(PUSH_1);
+		//	VectorEx<const char* >itemsLDCDS = { lolc("None"),lolc("Wireframe") };
+		//	DComboBox("Double##DesyncChams", LDesyncChamsDStyle, itemsLDCDS);
+		//	DColorEdit("Color##Desync", DesyncGlowColor);
+		//}
 	}
 	X1Gui().Spacing();
 	X1Gui().Separator();
