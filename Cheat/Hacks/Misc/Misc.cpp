@@ -1124,7 +1124,6 @@ void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
 					return;
 
 				side = LDesyncBind.Check() ? 1.f : -1.f;
-
 				float minimal_move = 2.5f;
 
 				if (CGlobal::LocalPlayer->GetFlags() & FL_DUCKING)
@@ -1150,12 +1149,12 @@ void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
 
 				Clamp(pCmd->sidemove, -450.0f, 450.0f);
 
-				if (!bSendPacket) 
+				if (!bSendPacket)
 				{
-					real_angle.y = pCmd->viewangles.y + (58.f * side);
+					real_angle.y = pCmd->viewangles.y + (59.f * side);
 					pCmd->viewangles.y = real_angle.y;
 				}
-				else 
+				else
 					fake_angle = pCmd->viewangles;
 
 				FixAngles(pCmd->viewangles);

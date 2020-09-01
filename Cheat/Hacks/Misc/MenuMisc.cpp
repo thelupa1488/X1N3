@@ -88,7 +88,7 @@ void CMisc::Menu()
 		X1Gui().PushItemWidth(PUSH_1);
 		HotsKey("Button##Desync", LDesyncBind.Button);
 		X1Gui().SameLine();
-		DCheckBox("Hold##Desync", LDesyncBind.Hold);		
+		DCheckBox("Hold##Desync", LDesyncBind.Hold);
 		DCheckBox("Angle lines", LDesyncLines);
 		if (LDesyncLines)
 		{
