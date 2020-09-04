@@ -29,13 +29,20 @@ void CEntityPlayers::Update()
 				continue;
 			}
 
-				if (GP_Esp->Skeleton)
-				{
-					for (int i(0); i < 19; i++)
-						EntityPlayer[EntIndex].HitBoxes[i] = pEntity->GetHitboxPosition(i);
-				}
-				else
-					EntityPlayer[EntIndex].HitBoxes[HITBOX_HEAD] = pEntity->GetHitboxPosition(HITBOX_HEAD);
+			EntityPlayer[EntIndex].AbsOrigin = pEntity->GetAbsOrigin();
+			if (EntityPlayer[EntIndex].AbsOrigin.IsZero())
+			{
+				EntityPlayer[EntIndex].IsUpdated = false;
+				continue;
+			}
+
+			if (GP_Esp->Skeleton)
+			{
+				for (int i(0); i < 19; i++)
+					EntityPlayer[EntIndex].HitBoxes[i] = pEntity->GetHitboxPosition(i);
+			}
+			else
+				EntityPlayer[EntIndex].HitBoxes[HITBOX_HEAD] = pEntity->GetHitboxPosition(HITBOX_HEAD);
 
 			EntityPlayer[EntIndex].EyeAngle = pEntity->GetEyeAngles();
 			EntityPlayer[EntIndex].EyePosition = pEntity->GetEyePosition();

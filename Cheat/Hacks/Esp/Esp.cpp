@@ -38,7 +38,7 @@ void CEsp::PlaySounds(Vector _Pos, int EntityIdx)
 			if (AddedPos.size() > 100)
 				AddedPos.clear();
 
-			if (_Pos.DistTo(Entity->RenderOrigin) < 1.f)
+			if (_Pos.DistTo(Entity->AbsOrigin) < 10.f)
 			{
 				GP_Esp->SoundEsp.Add(_Pos, Entity->Team, EntityIdx);
 			}
@@ -115,7 +115,7 @@ void CSoundEsp::Draw(CEntityPlayer* Local)
 					if (GP_Esp->SoundEspDistance)
 					{
 						GP_Render->DrawString(GP_Esp->TextSoundSize, Vec2((int)ScreenPos.x, (int)ScreenPos.y),
-							GP_Esp->SoundDistanceColor, true, true, XorStr("%6.1lfm"), Sounds[i].Pos.DistTo(Local->RenderOrigin) / 33);
+							GP_Esp->SoundDistanceColor, true, true, XorStr("%6.1lfm"), Sounds[i].Pos.DistTo(Local->AbsOrigin) / 33);
 					}
 				}
 			}
@@ -132,6 +132,7 @@ void CEsp::SoundFrameStage()
 	if (Enable && SoundEspEnable)
 	{
 		CUtlVector<SndInfo_t> sndList;
+		sndList.RemoveAll();
 		I::Sound()->GetActiveSounds(sndList);
 		if (sndList.Count() < 1)
 			return;
@@ -146,7 +147,7 @@ void CEsp::SoundFrameStage()
 			if (!sndList[i].m_pOrigin || !sndList[i].m_nSoundSource || !sndList[i].m_bUpdatePositions || sndList[i].m_nChannel != 4)
 				continue;
 
-			if (CGlobal::LocalPlayer->GetOrigin().DistTo(*sndList[i].m_pOrigin) > 900)
+			if (CGlobal::LocalPlayer->GetAbsOrigin().DistTo(*sndList[i].m_pOrigin) > 900)
 				continue;
 
 			GP_Esp->PlaySounds(*sndList[i].m_pOrigin, sndList[i].m_nSoundSource);
