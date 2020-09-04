@@ -38,7 +38,7 @@ void CEsp::PlaySounds(Vector _Pos, int EntityIdx)
 			if (AddedPos.size() > 100)
 				AddedPos.clear();
 
-			if (_Pos.DistTo(Entity->RenderOrigin) < 10.f)
+			if (_Pos.DistTo(Entity->RenderOrigin) < 1.f)
 			{
 				GP_Esp->SoundEsp.Add(_Pos, Entity->Team, EntityIdx);
 			}

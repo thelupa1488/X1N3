@@ -58,7 +58,6 @@ protected:
 	virtual void CustomWalls() = 0;
 	virtual void Menu() = 0;
 	virtual void Draw() = 0;
-	virtual int MaxChokeTicks() = 0;
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd) = 0;
 	virtual void CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd) = 0;
 	virtual void OverrideView(CViewSetup* pSetup) = 0;
@@ -79,7 +78,6 @@ public:
 
 	virtual void Menu();
 	virtual void Draw();
-	virtual int MaxChokeTicks();
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd);
 	virtual void CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd);
 	virtual void OverrideView(CViewSetup* pSetup);
@@ -94,6 +92,8 @@ public:
 	virtual void CustomWalls();
 
 	/*Desync*/
+	CCSGOPlayerAnimState AnimState;
+	float next_lby = 0.f;
 	float side = 1.f;
 	Vector real_angle;
 	Vector fake_angle;
@@ -120,13 +120,11 @@ public:
 	CBind ThirdPersonBind = CBind(0, true);
 
 	bool LDesync = false;
+	int LDesyncType = 0;
 	CBind LDesyncBind = CBind(0, true);
 	bool LDesyncLines = false;
 	int LDesyncLinesLength = 0;
 	bool LDesyncArrows = false;
-	//bool LDesyncChams = false;
-	//int LDesyncChamsStyle = 0;
-	//int LDesyncChamsDStyle = 0;
 
 	bool FovChanger = false;
 	int FovView = 100;
@@ -257,9 +255,7 @@ public:
 	Color WeaponGlowColor = Color(255, 198, 0, 255);
 	Color DamageInfoColor = Color(255, 100, 100, 255);
 	Color ColoredWallsColor = Color(255, 100, 100, 255);
-	Color ArrowsColor = Color(255, 0, 0, 255);
-	Color DesyncChamsColor = Color(255, 0, 0, 255);
-	Color DesyncGlowColor = Color(255, 0, 0, 255);
+	Color LDesyncArrowsColor = Color(0, 255, 0, 255);
 
 	vector<string> SoundList;
 
@@ -275,7 +271,7 @@ public:
 		RV(WeaponGlowColor, "WeaponGlowColor");
 		RV(DamageInfoColor, "DamageInfoColor");
 		RV(ColoredWallsColor, "ColoredWallsColor");
-		RV(ArrowsColor, "ArrowsColor");
+		RV(LDesyncArrowsColor, "LDesyncArrowsColor");
 
 		RV(BHop, "BHop");
 		RV(BHopType, "BHopType");
@@ -294,6 +290,7 @@ public:
 		RV(ThirdPersonDistance, "ThirdPersonDistance");
 		RV(ThirdPersonBind, "ThirdPersonBind");
 		RV(LDesync, "LDesync");
+		RV(LDesyncType, "LDesyncType");
 		RV(LDesyncBind, "LDesyncBind");
 		RV(LDesyncLines, "LDesyncLines");
 		RV(LDesyncLinesLength, "LDesyncLinesLength");

@@ -296,14 +296,14 @@ void CLegitAim::Draw()
 	}
 }
 
-const float getLerp()
+static float getLerp()
 {
 	auto ratio = clamp(GP_LegitAim->cvars.interpRatio->GetFloat(), GP_LegitAim->cvars.minInterpRatio->GetFloat(), GP_LegitAim->cvars.maxInterpRatio->GetFloat());
 
 	return max(GP_LegitAim->cvars.interp->GetFloat(), (ratio / ((GP_LegitAim->cvars.maxUpdateRate) ? GP_LegitAim->cvars.maxUpdateRate->GetFloat() : GP_LegitAim->cvars.UpdateRate->GetFloat())));
-}
+};
 
-const bool valid(float simtime)
+static bool valid(float simtime)
 {
 	auto network = I::Engine()->GetNetChannelInfo();
 	if (!network)
@@ -311,7 +311,7 @@ const bool valid(float simtime)
 
 	auto delta = clamp(network->GetLatency(FLOW_OUTGOING) + network->GetLatency(FLOW_INCOMING) + getLerp(), 0.f, GP_LegitAim->cvars.maxUnlag->GetFloat()) - (I::GlobalVars()->curtime - simtime);
 	return std::fabsf(delta) <= 0.2f;
-}
+};
 
 void CLegitAim::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld)
 {
@@ -1853,30 +1853,6 @@ void CLegitAim::TriggerRCS(int X, int Y, CUserCmd* pCmd, bool Enable)
 	}
 }
 
-Vector AngleVector(QAngle meme)
-{
-	auto sy = sin(meme.y / 180.f * static_cast<float>(3.141592654f));
-	auto cy = cos(meme.y / 180.f * static_cast<float>(3.141592654f));
-
-	auto sp = sin(meme.x / 180.f * static_cast<float>(3.141592654f));
-	auto cp = cos(meme.x / 180.f * static_cast<float>(3.141592654f));
-
-	return Vector(cp * cy, cp * sy, -sp);
-}
-
-float DistancePointToLine(Vector Point, Vector LineOrigin, Vector Dir)
-{
-	auto PointDir = Point - LineOrigin;
-
-	auto TempOffset = PointDir.Dot(Dir) / (Dir.x * Dir.x + Dir.y * Dir.y + Dir.z * Dir.z);
-	if (TempOffset < 0.000001f)
-		return FLT_MAX;
-
-	auto PerpendicularPoint = LineOrigin + (Dir * TempOffset);
-
-	return (Point - PerpendicularPoint).Length();
-}
-
 void CLegitAim::InitConVar()
 {
 	records.clear();
@@ -1891,6 +1867,30 @@ void CLegitAim::InitConVar()
 
 void CLegitAim::BacktrackCreateMoveEP(CUserCmd* pCmd)
 {
+	auto AngleVector = [&](QAngle meme)
+	{
+		auto sy = sin(meme.y / 180.f * static_cast<float>(3.141592654f));
+		auto cy = cos(meme.y / 180.f * static_cast<float>(3.141592654f));
+
+		auto sp = sin(meme.x / 180.f * static_cast<float>(3.141592654f));
+		auto cp = cos(meme.x / 180.f * static_cast<float>(3.141592654f));
+
+		return Vector(cp * cy, cp * sy, -sp);
+	};
+
+	auto DistancePointToLine = [&](Vector Point, Vector LineOrigin, Vector Dir)
+	{
+		auto PointDir = Point - LineOrigin;
+
+		auto TempOffset = PointDir.Dot(Dir) / (Dir.x * Dir.x + Dir.y * Dir.y + Dir.z * Dir.z);
+		if (TempOffset < 0.000001f)
+			return FLT_MAX;
+
+		auto PerpendicularPoint = LineOrigin + (Dir * TempOffset);
+
+		return (Point - PerpendicularPoint).Length();
+	};
+
 	iBackTrackbestTarget = -1;
 
 	pLocalPlayer = (CBaseEntity*)I::EntityList()->GetClientEntity(I::Engine()->GetLocalPlayer());

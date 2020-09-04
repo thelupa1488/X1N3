@@ -285,71 +285,71 @@ public:
 		return vForward;
 	}
 
-	//static void CorrectMouse(CUserCmd* pCmd)
-	//{
-	//	static ConVar* m_yaw = m_yaw = I::GetCvar()->FindVar(XorStr("m_yaw"));
-	//	static ConVar* m_pitch = m_pitch = I::GetCvar()->FindVar(XorStr("m_pitch"));
-	//	static ConVar* sensitivity = sensitivity = I::GetCvar()->FindVar(XorStr("sensitivity"));
+	static void CorrectMouse(CUserCmd* pCmd)
+	{
+		static ConVar* m_yaw = m_yaw = I::GetCvar()->FindVar(XorStr("m_yaw"));
+		static ConVar* m_pitch = m_pitch = I::GetCvar()->FindVar(XorStr("m_pitch"));
+		static ConVar* sensitivity = sensitivity = I::GetCvar()->FindVar(XorStr("sensitivity"));
 
-	//	static QAngle m_angOldViewangles = I::ClientState()->viewangles;
+		static QAngle m_angOldViewangles = I::ClientState()->viewangles;
 
-	//	float delta_x = std::remainderf(pCmd->viewangles.x - m_angOldViewangles.x, 360.0f);
-	//	float delta_y = std::remainderf(pCmd->viewangles.y - m_angOldViewangles.y, 360.0f);
+		float delta_x = std::remainderf(pCmd->viewangles.x - m_angOldViewangles.x, 360.0f);
+		float delta_y = std::remainderf(pCmd->viewangles.y - m_angOldViewangles.y, 360.0f);
 
-	//	if (delta_x != 0.0f) 
-	//	{
-	//		float mouse_y = -((delta_x / m_pitch->GetFloat()) / sensitivity->GetFloat());
-	//		short mousedy;
-	//		if (mouse_y <= 32767.0f) 
-	//		{
-	//			if (mouse_y >= -32768.0f) 
-	//			{
-	//				if (mouse_y >= 1.0f || mouse_y < 0.0f) 
-	//				{
-	//					if (mouse_y <= -1.0f || mouse_y > 0.0f)
-	//						mousedy = static_cast<short>(mouse_y);
-	//					else
-	//						mousedy = -1;
-	//				}
-	//				else 
-	//					mousedy = 1;
-	//			}
-	//			else 
-	//				mousedy = 0x8000u;
-	//		}
-	//		else 
-	//			mousedy = 0x7FFF;
+		if (delta_x != 0.0f) 
+		{
+			float mouse_y = -((delta_x / m_pitch->GetFloat()) / sensitivity->GetFloat());
+			short mousedy;
+			if (mouse_y <= 32767.0f) 
+			{
+				if (mouse_y >= -32768.0f) 
+				{
+					if (mouse_y >= 1.0f || mouse_y < 0.0f) 
+					{
+						if (mouse_y <= -1.0f || mouse_y > 0.0f)
+							mousedy = static_cast<short>(mouse_y);
+						else
+							mousedy = -1;
+					}
+					else 
+						mousedy = 1;
+				}
+				else 
+					mousedy = 0x8000u;
+			}
+			else 
+				mousedy = 0x7FFF;
 
-	//		pCmd->mousedy = mousedy;
-	//	}
+			pCmd->mousedy = mousedy;
+		}
 
-	//	if (delta_y != 0.0f) 
-	//	{
-	//		float mouse_x = -((delta_y / m_yaw->GetFloat()) / sensitivity->GetFloat());
-	//		short mousedx;
-	//		if (mouse_x <= 32767.0f) 
-	//		{
-	//			if (mouse_x >= -32768.0f) 
-	//			{
-	//				if (mouse_x >= 1.0f || mouse_x < 0.0f) 
-	//				{
-	//					if (mouse_x <= -1.0f || mouse_x > 0.0f)
-	//						mousedx = static_cast<short>(mouse_x);
-	//					else
-	//						mousedx = -1;
-	//				}
-	//				else
-	//					mousedx = 1;
-	//			}
-	//			else
-	//				mousedx = 0x8000u;
-	//		}
-	//		else
-	//			mousedx = 0x7FFF;
+		if (delta_y != 0.0f) 
+		{
+			float mouse_x = -((delta_y / m_yaw->GetFloat()) / sensitivity->GetFloat());
+			short mousedx;
+			if (mouse_x <= 32767.0f) 
+			{
+				if (mouse_x >= -32768.0f) 
+				{
+					if (mouse_x >= 1.0f || mouse_x < 0.0f) 
+					{
+						if (mouse_x <= -1.0f || mouse_x > 0.0f)
+							mousedx = static_cast<short>(mouse_x);
+						else
+							mousedx = -1;
+					}
+					else
+						mousedx = 1;
+				}
+				else
+					mousedx = 0x8000u;
+			}
+			else
+				mousedx = 0x7FFF;
 
-	//		pCmd->mousedx = mousedx;
-	//	}
-	//}
+			pCmd->mousedx = mousedx;
+		}
+	}
 
 	static bool WorldToScreen(const Vector& origin, Vector& screen)
 	{

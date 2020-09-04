@@ -204,6 +204,9 @@ void CMisc::Draw()
 
 				if (LDesyncArrows)
 				{
+					if (CGlobal::LocalPlayer->IsDead())
+						return;
+
 					auto client_viewangles = QAngle();
 					I::Engine()->GetViewAngles(client_viewangles);
 					const auto screen_center = Vector2D(CGlobal::iScreenWidth / 2, CGlobal::iScreenHeight / 2);
@@ -216,7 +219,7 @@ void CMisc::Draw()
 						vertices.push_back((Vec2(screen_center.x + cosf(rot + DEG2RAD(2)) * (radius - 6), screen_center.y + sinf(rot + DEG2RAD(2)) * (radius - 6)))); //25
 						vertices.push_back((Vec2(screen_center.x + cosf(rot - DEG2RAD(2)) * (radius - 6), screen_center.y + sinf(rot - DEG2RAD(2)) * (radius - 6)))); //25
 
-						GP_Render->RenderTriangle(vertices.at(0), vertices.at(1), vertices.at(2), ArrowsColor, 2.f);
+						GP_Render->RenderTriangle(vertices.at(0), vertices.at(1), vertices.at(2), LDesyncArrowsColor, 2.f);
 					};
 
 					static auto alpha = 0.f;
@@ -226,8 +229,8 @@ void CMisc::Draw()
 
 					alpha += plus_or_minus ? (255.f / 7 * 0.015) : -(255.f / 7 * 0.015); alpha = clamp(alpha, 0.f, 255.f);
 
-					const auto FakeRot = DEG2RAD((side < 0.f ? 90 : -90) - 90);
-					DrawArrow(FakeRot, ArrowsColor);
+					const auto FakeRot = DEG2RAD(((side < 0.f) ? 90 : -90) - 90);
+					DrawArrow(FakeRot, LDesyncArrowsColor);
 				}
 			}
 		}
@@ -240,146 +243,6 @@ void CMisc::Draw()
 
 		HitWorker.Draw();
 	}
-}
-
-int CMisc::MaxChokeTicks()
-{
-	int maxticks = I::GameRules() && I::GameRules()->IsValveDS() ? 11 : 14;
-	static int max_choke_ticks = 0;
-	static int latency_ticks = 0;
-	float fl_latency = I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING);
-	int latency = TIME_TO_TICKS(fl_latency);
-	if (I::ClientState()->chokedcommands <= 0)
-		latency_ticks = latency;
-	else latency_ticks = max(latency, latency_ticks);
-
-	if (fl_latency >= I::GlobalVars()->interval_per_tick)
-		max_choke_ticks = 11 - latency_ticks;
-	else max_choke_ticks = 11;
-	return max_choke_ticks;
-}
-
-void LegitPeek(CUserCmd* pCmd, bool& bSendPacket)
-{
-	int choke_factor = GP_Misc->LDesync ? min(GP_Misc->MaxChokeTicks(), GP_Misc->FakeLagFactor) : GP_Misc->FakeLagFactor;
-
-	static bool m_bIsPeeking = false;
-	if (m_bIsPeeking)
-	{
-		bSendPacket = !(I::ClientState()->chokedcommands < choke_factor);
-		if (bSendPacket)
-			m_bIsPeeking = false;
-		return;
-	}
-
-	auto speed = CGlobal::LocalPlayer->GetVelocity().Length();
-	if (speed <= 70.0f)
-		return;
-
-	auto collidable = CGlobal::LocalPlayer->GetCollideable();
-
-	Vector min, max;
-	min = collidable->OBBMins();
-	max = collidable->OBBMaxs();
-
-	min += CGlobal::LocalPlayer->GetOrigin();
-	max += CGlobal::LocalPlayer->GetOrigin();
-
-	Vector center = (min + max) * 0.5f;
-
-	for (int EntIndex = 1; EntIndex <= I::Engine()->GetMaxClients(); ++EntIndex)
-	{
-		CBaseEntity* Entity = (CBaseEntity*)I::EntityList()->GetClientEntity(EntIndex);
-
-		if (!Entity || Entity->IsDead() || Entity->IsDormant())
-			continue;
-
-		if (Entity == CGlobal::LocalPlayer || (PLAYER_TEAM)CGlobal::LocalPlayer->GetTeam() == (PLAYER_TEAM)Entity->GetTeam())
-			continue;
-
-		CBaseWeapon* WeaponEntity = Entity->GetBaseWeapon();
-		if (!WeaponEntity || WeaponEntity->GetWeaponAmmo() <= 0)
-			continue;
-
-		auto WeaponDataEntity = WeaponEntity->GetWeaponInfo();
-		auto WeaponTypeEntity = CGlobal::GetWeaponType(WeaponEntity);
-
-		if (!WeaponDataEntity || WeaponTypeEntity <= WEAPON_TYPE_KNIFE || WeaponTypeEntity >= WEAPON_TYPE_C4)
-			continue;
-
-		auto eye_pos = Entity->GetEyePosition();
-
-		Vector direction;
-		AngleVectors(Entity->GetEyeAngles(), direction);
-		direction.NormalizeInPlace();
-
-		Vector hit_point;
-		bool hit = IntersectionBoundingBox(eye_pos, direction, min, max, &hit_point);
-		if (hit && eye_pos.DistTo(hit_point) <= WeaponDataEntity->flRange)
-		{
-			Ray_t ray;
-			trace_t tr;
-			CTraceFilterSkipEntity filter((CBaseEntity*)Entity);
-			ray.Init(eye_pos, hit_point);
-
-			I::EngineTrace()->TraceRay(ray, MASK_SHOT_HULL | CONTENTS_HITBOX, &filter, &tr);
-			if (tr.contents & CONTENTS_WINDOW) // skip windows
-			{																					
-				filter.pSkip = tr.hit_entity;// at this moment, we dont care about local player
-				ray.Init(tr.endpos, hit_point);
-				I::EngineTrace()->TraceRay(ray, MASK_SHOT_HULL | CONTENTS_HITBOX, &filter, &tr);
-			}
-			if (tr.fraction == 1.0f || tr.hit_entity == CGlobal::LocalPlayer)
-			{
-				m_bIsPeeking = true;
-				break;
-			}
-		}
-	}
-}
-
-void SetNewClan(string New, string Name)
-{
-	static auto pSetClanTag = reinterpret_cast<void(__fastcall*)(const char*, const char*)>(offsets["SetClanTag"]);
-
-	if (pSetClanTag)
-		pSetClanTag(New.c_str(), Name.c_str());
-}
-
-bool ChangeName(bool reconnect, const char* newName, float delay)
-{
-	static auto exploitInitialized = false;
-
-	if (reconnect)
-	{
-		exploitInitialized = false;
-		return false;
-	}
-
-	static ConVar* name = I::GetCvar()->FindVar(XorStr("name"));
-	if (!exploitInitialized && CGlobal::IsGameReady)
-	{
-		PlayerInfo playerInfo;
-		if (CGlobal::LocalPlayer && I::Engine()->GetPlayerInfo(CGlobal::LocalPlayer->EntIndex(), &playerInfo) && (!strcmp(playerInfo.szName, XorStr("?empty")) ||
-			!strcmp(playerInfo.szName, XorStr("\n\xAD\xAD\xAD"))))
-		{
-			exploitInitialized = true;
-		}
-		else
-		{
-			*(int*)((DWORD)&name->fnChangeCallback + 0xC) = NULL;
-			name->SetValue(XorStr("\n\xAD\xAD\xAD"));
-			return false;
-		}
-	}
-	static auto nextChangeTime = 0.0f;
-	if (nextChangeTime <= I::GlobalVars()->realtime)
-	{
-		name->SetValue(newName);
-		nextChangeTime = I::GlobalVars()->realtime + delay;
-		return true;
-	}
-	return false;
 }
 
 void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCmd)
@@ -614,14 +477,47 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				}
 				NoSmokeReset = false;
 			}
-
 			if (ShowCompetitiveRank && pCmd->buttons & IN_SCORE)
 			{
 				I::Client()->DispatchUserMessage(CS_UM_ServerRankRevealAll, 0, 0, nullptr);
 			}
-
 			if (NameStealer)
 			{
+				auto ChangeName = [&](bool reconnect, const char* newName, float delay)
+				{
+					static auto exploitInitialized = false;
+
+					if (reconnect)
+					{
+						exploitInitialized = false;
+						return false;
+					}
+
+					static ConVar* name = I::GetCvar()->FindVar(XorStr("name"));
+					if (!exploitInitialized && CGlobal::IsGameReady)
+					{
+						PlayerInfo playerInfo;
+						if (CGlobal::LocalPlayer && I::Engine()->GetPlayerInfo(CGlobal::LocalPlayer->EntIndex(), &playerInfo) && (!strcmp(playerInfo.szName, XorStr("?empty")) ||
+							!strcmp(playerInfo.szName, XorStr("\n\xAD\xAD\xAD"))))
+						{
+							exploitInitialized = true;
+						}
+						else
+						{
+							*(int*)((DWORD)&name->fnChangeCallback + 0xC) = NULL;
+							name->SetValue(XorStr("\n\xAD\xAD\xAD"));
+							return false;
+						}
+					}
+					static auto nextChangeTime = 0.0f;
+					if (nextChangeTime <= I::GlobalVars()->realtime)
+					{
+						name->SetValue(newName);
+						nextChangeTime = I::GlobalVars()->realtime + delay;
+						return true;
+					}
+					return false;
+				};
 				static std::vector<int> stolenIds;
 				for (int EntIndex = 1; EntIndex <= I::Engine()->GetMaxClients(); ++EntIndex)
 				{
@@ -644,8 +540,14 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				}
 				stolenIds.clear();
 			}
-
 			static bool ClanTagReset = false;
+			auto SetNewClan = [&](string New, string Name)
+			{
+				static auto pSetClanTag = reinterpret_cast<void(__fastcall*)(const char*, const char*)>(offsets["SetClanTag"]);
+
+				if (pSetClanTag)
+					pSetClanTag(New.c_str(), Name.c_str());
+			};
 			if (ClanTagChanger)
 			{
 				static string old_tag = "";
@@ -768,7 +670,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				SetNewClan("", "");
 				ClanTagReset = false;
 			}
-
 			if (ChatSpam && ChatSpamStart)
 			{
 				vector<string> chatspam;
@@ -789,7 +690,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					I::Engine()->ExecuteClientCmd(msg.c_str());
 				}
 			}
-
 			if (RadioSpam && RadioSpamStart)
 			{
 				vector<string> RadioSpam = { lols("coverme") , lols("takepoint"), lols("holdpos"), lols("regroup"), lols("followme"),
@@ -806,7 +706,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					I::Engine()->ExecuteClientCmd(msg.c_str());
 				}
 			}
-
 			static ConVar* viewmodel_offset_x = I::GetCvar()->FindVar(XorStr("viewmodel_offset_x"));
 			static ConVar* viewmodel_offset_y = I::GetCvar()->FindVar(XorStr("viewmodel_offset_y"));
 			static ConVar* viewmodel_offset_z = I::GetCvar()->FindVar(XorStr("viewmodel_offset_z"));
@@ -838,7 +737,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				viewmodel_offset_z->SetValue(CGlobal::OrigViewModelZ);
 				ViewModelXYZReset = false;
 			}
-
 			static ConVar* r_aspectratio = I::GetCvar()->FindVar(XorStr("r_aspectratio"));
 			static bool AspectRatioReset = false;
 			if (Aspect)
@@ -851,9 +749,103 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				r_aspectratio->SetValue(CGlobal::OrigAspectRatio);
 				AspectRatioReset = false;
 			}
-
 			if (FakeLag && FakeLagBind.Check())
 			{
+				auto MaxChokeTicks = [&]()
+				{
+					int maxticks = I::GameRules() && I::GameRules()->IsValveDS() ? 11 : 14;
+					static int max_choke_ticks = 0;
+					static int latency_ticks = 0;
+					float fl_latency = I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING);
+					int latency = TIME_TO_TICKS(fl_latency);
+					if (I::ClientState()->chokedcommands <= 0)
+						latency_ticks = latency;
+					else latency_ticks = max(latency, latency_ticks);
+
+					if (fl_latency >= I::GlobalVars()->interval_per_tick)
+						max_choke_ticks = 11 - latency_ticks;
+					else max_choke_ticks = 11;
+					return max_choke_ticks;
+				};
+				auto LegitPeek = [&](CUserCmd* pCmd, bool& bSendPacket)
+				{
+					int choke_factor = LDesync ? min(MaxChokeTicks(), FakeLagFactor) : FakeLagFactor;
+
+					static bool m_bIsPeeking = false;
+					if (m_bIsPeeking)
+					{
+						bSendPacket = !(I::ClientState()->chokedcommands < choke_factor);
+						if (bSendPacket)
+							m_bIsPeeking = false;
+						return;
+					}
+
+					auto speed = CGlobal::LocalPlayer->GetVelocity().Length();
+					if (speed <= 70.0f)
+						return;
+
+					auto collidable = CGlobal::LocalPlayer->GetCollideable();
+
+					Vector min, max;
+					min = collidable->OBBMins();
+					max = collidable->OBBMaxs();
+
+					min += CGlobal::LocalPlayer->GetOrigin();
+					max += CGlobal::LocalPlayer->GetOrigin();
+
+					Vector center = (min + max) * 0.5f;
+
+					for (int EntIndex = 1; EntIndex <= I::Engine()->GetMaxClients(); ++EntIndex)
+					{
+						CBaseEntity* Entity = (CBaseEntity*)I::EntityList()->GetClientEntity(EntIndex);
+
+						if (!Entity || Entity->IsDead() || Entity->IsDormant())
+							continue;
+
+						if (Entity == CGlobal::LocalPlayer || (PLAYER_TEAM)CGlobal::LocalPlayer->GetTeam() == (PLAYER_TEAM)Entity->GetTeam())
+							continue;
+
+						CBaseWeapon* WeaponEntity = Entity->GetBaseWeapon();
+						if (!WeaponEntity || WeaponEntity->GetWeaponAmmo() <= 0)
+							continue;
+
+						auto WeaponDataEntity = WeaponEntity->GetWeaponInfo();
+						auto WeaponTypeEntity = CGlobal::GetWeaponType(WeaponEntity);
+
+						if (!WeaponDataEntity || WeaponTypeEntity <= WEAPON_TYPE_KNIFE || WeaponTypeEntity >= WEAPON_TYPE_C4)
+							continue;
+
+						auto eye_pos = Entity->GetEyePosition();
+
+						Vector direction;
+						AngleVectors(Entity->GetEyeAngles(), direction);
+						direction.NormalizeInPlace();
+
+						Vector hit_point;
+						bool hit = IntersectionBoundingBox(eye_pos, direction, min, max, &hit_point);
+						if (hit && eye_pos.DistTo(hit_point) <= WeaponDataEntity->flRange)
+						{
+							Ray_t ray;
+							trace_t tr;
+							CTraceFilterSkipEntity filter((CBaseEntity*)Entity);
+							ray.Init(eye_pos, hit_point);
+
+							I::EngineTrace()->TraceRay(ray, MASK_SHOT_HULL | CONTENTS_HITBOX, &filter, &tr);
+							if (tr.contents & CONTENTS_WINDOW) // skip windows
+							{
+								filter.pSkip = tr.hit_entity;// at this moment, we dont care about local player
+								ray.Init(tr.endpos, hit_point);
+								I::EngineTrace()->TraceRay(ray, MASK_SHOT_HULL | CONTENTS_HITBOX, &filter, &tr);
+							}
+							if (tr.fraction == 1.0f || tr.hit_entity == CGlobal::LocalPlayer)
+							{
+								m_bIsPeeking = true;
+								break;
+							}
+						}
+					}
+				};
+
 				if (FakeLagUnducking && CGlobal::LocalPlayer->GetDuckAmount() > 0.05f && CGlobal::LocalPlayer->GetDuckAmount() < 0.95f)
 				{
 					bSendPacket = !(I::ClientState()->chokedcommands < MaxChokeTicks());
@@ -953,7 +945,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					break;
 				}
 			}
-
 			if (KnifeBot && KnifeBotBind.Check())
 			{
 				if (CGlobal::GWeaponType == WEAPON_TYPE_KNIFE)
@@ -1098,24 +1089,20 @@ void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
 				if (I::GameRules() && I::GameRules()->IsFreezePeriod())
 					return;
 
-				auto weapon = CGlobal::LocalPlayer->GetBaseWeapon();
-				if (!weapon)
-					return;
-
-				if ((CGlobal::GWeaponID == WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_FAMAS) && weapon->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
+				if ((CGlobal::GWeaponID == WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_FAMAS) && CGlobal::LocalPlayer->GetBaseWeapon()->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
 					return;
 
 				if (CGlobal::GWeaponType == WEAPON_TYPE_GRENADE)
 				{
-					if (!weapon->GetPinPulled())
+					if (!CGlobal::LocalPlayer->GetBaseWeapon()->GetPinPulled())
 					{
-						float throwTime = weapon->GetThrowTime();
+						float throwTime = CGlobal::LocalPlayer->GetBaseWeapon()->GetThrowTime();
 						if (throwTime > 0.f)
 							return;
 					}
 					if ((pCmd->buttons & IN_ATTACK) || (pCmd->buttons & IN_ATTACK2))
 					{
-						if (weapon->GetThrowTime() > 0.f)
+						if (CGlobal::LocalPlayer->GetBaseWeapon()->GetThrowTime() > 0.f)
 							return;
 					}
 				}
@@ -1125,6 +1112,8 @@ void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
 
 				side = LDesyncBind.Check() ? 1.f : -1.f;
 				float minimal_move = 2.5f;
+				static bool shouldmove = false;
+				static bool broke_lby = false;
 
 				if (CGlobal::LocalPlayer->GetFlags() & FL_DUCKING)
 					minimal_move = 2.5f;
@@ -1132,31 +1121,81 @@ void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
 				if (pCmd->buttons & IN_WALK)
 					minimal_move = 2.5f;
 
-				static bool ok = false;
+				auto UpdateLBY = [&](CCSGOPlayerAnimState* animstate)
+				{
+					if (animstate->speed_2d > 0.1f || std::fabsf(animstate->flUpVelocity))
+						next_lby = I::GlobalVars()->curtime + 0.22f;
+					else if (I::GlobalVars()->curtime > next_lby)
+						if (std::fabsf(AngleDiff(animstate->m_flGoalFeetYaw, animstate->m_flEyeYaw)) > 35.0f)
+							next_lby = I::GlobalVars()->curtime + 1.1f;
+				};
 
-				if (!ok)
+				auto anim_state = CGlobal::LocalPlayer->GetPlayerAnimState();
+				if (anim_state)
 				{
-					pCmd->sidemove -= minimal_move;
-					bSendPacket = false;
-					ok = true;
-				}
-				else
-				{
-					bSendPacket = true;
-					pCmd->sidemove += minimal_move;
-					ok = false;
+					CCSGOPlayerAnimState anim_state_backup = *anim_state;
+					*anim_state = AnimState;
+					CGlobal::LocalPlayer->GetVAngles() = pCmd->viewangles;
+					CGlobal::LocalPlayer->UpdateClientSideAnimation();
+
+					UpdateLBY(anim_state);
+
+					AnimState = *anim_state;
+					*anim_state = anim_state_backup;
 				}
 
 				Clamp(pCmd->sidemove, -450.0f, 450.0f);
 
-				if (!bSendPacket)
+				if (LDesyncType == 0)
 				{
-					real_angle.y = pCmd->viewangles.y + (59.f * side);
-					pCmd->viewangles.y = real_angle.y;
-				}
-				else
-					fake_angle = pCmd->viewangles;
+					if (!shouldmove)
+					{
+						pCmd->sidemove -= minimal_move;
+						bSendPacket = false;
+						shouldmove = true;
+					}
+					else
+					{
+						bSendPacket = true;
+						pCmd->sidemove += minimal_move;
+						shouldmove = false;
+					}
 
+					if (!bSendPacket)
+					{
+						real_angle.y = pCmd->viewangles.y + (59.f * side);
+						pCmd->viewangles.y = real_angle.y;
+					}
+					else
+						fake_angle = pCmd->viewangles;
+
+				}
+				else if (LDesyncType == 1)
+				{
+					if (next_lby >= I::GlobalVars()->curtime)
+					{
+						if (bSendPacket)
+							fake_angle = pCmd->viewangles;
+
+						if (!broke_lby && bSendPacket && I::ClientState()->chokedcommands > 0)
+							return;
+
+						broke_lby = false;
+						bSendPacket = false;
+						real_angle.y = pCmd->viewangles.y + (69.f * side);
+						pCmd->viewangles.y = real_angle.y;
+					}
+					else
+					{
+						if (bSendPacket)
+							fake_angle = pCmd->viewangles;
+
+						broke_lby = true;
+						bSendPacket = false;
+						real_angle.y = pCmd->viewangles.y + (69.f * -side);
+						pCmd->viewangles.y = real_angle.y;
+					}
+				}
 				FixAngles(pCmd->viewangles);
 				MovementFix(pCmd, OldAngles, pCmd->viewangles);
 			}
@@ -1428,45 +1467,6 @@ void CMisc::AutoAcceptEmit()
 
 void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld)
 {
-	//if (Enable && LDesyncChams)
-	//{
-	//	static auto fnDME = HookTables::pDrawModelExecute->GetTrampoline();
-	//	const char* ModelName = I::ModelInfo()->GetModelName((model_t*)pInfo.pModel);
-
-	//	if (!ModelName)
-	//		return;
-
-	//	if (!strstr(ModelName, XorStr("models/player")))
-	//		return;
-
-	//	CEntityPlayer* Local = GP_EntPlayers->EntityLocal;
-
-	//	if (!Local)
-	//		return;
-
-	//	if (!Local->IsUpdated)
-	//		return;
-
-	//	if (Local->IsDead || Local->Health <= 0)
-	//		return;
-
-	//	if (LDesync && I::Input()->m_fCameraInThirdPerson)
-	//	{
-	//		matrix3x4_t matrix[128];
-	//		Local->BaseEntity->SetAbsAngles(real_angle);
-
-	//		if (Local->BaseEntity->SetupBones(matrix, 128, 0x100, 0))
-	//		{
-	//			DesyncChamsColor[4];
-	//			GP_Esp->OverrideMaterial(false, LDesyncChamsDStyle, LDesyncChamsStyle, DesyncChamsColor, false);
-	//			fnDME(thisptr, ctx, state, pInfo, matrix);
-	//			I::ModelRender()->ForcedMaterialOverride(nullptr);
-	//		}
-
-	//		Local->BaseEntity->SetAbsAngles(Vector(0, fake_angle.y, 0));
-	//	}
-	//}
-
 	if (Enable && HandChams || HandGlow)
 	{
 		static auto fnDME = HookTables::pDrawModelExecute->GetTrampoline();
@@ -1648,8 +1648,8 @@ void CMisc::Reset()
 	if (!HitWorker.DamageVector.empty())
 		HitWorker.DamageVector.clear();
 
-	if (!GP_Misc->HitImpacts.empty())
-		GP_Misc->HitImpacts.clear();
+	if (!HitImpacts.empty())
+		HitImpacts.clear();
 
 	HitWorker.HitMarkerEndTime = 0;
 }

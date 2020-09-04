@@ -53,6 +53,8 @@ bool __stdcall hkCreateMove(float flInputSampleTime, CUserCmd* pCmd)
 
 			if (GP_Misc)
 				GP_Misc->CreateMoveEP(bSendPacket, pCmd);
+
+			CGlobal::CorrectMouse(pCmd);
 		}
 		EnginePrediction::End();
 
