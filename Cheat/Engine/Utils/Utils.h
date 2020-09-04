@@ -6,8 +6,6 @@ using namespace std;
 
 namespace Utils
 {
-	/* Random Int Range */
-	int RandomIntRange(int min, int max);
 	/* Wait dwMsec Load Module */
 	bool IsModuleLoad(PCHAR szModule, DWORD dwMsec = 5000);
 	/* Get Module File Path */

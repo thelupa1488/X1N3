@@ -14,26 +14,10 @@ static const DWORD dwModuleDelay = 100;
 
 namespace Utils
 {
-	/* Random Int Range */
-
-	int RandomIntRange(int min, int max)
-	{
-		static bool first = true;
-
-		if (first)
-		{
-			srand(FastCall::G().t_GetTickCount64());
-			first = false;
-		}
-
-		return min + rand() % (max - min);
-	}
-
 	/* Wait dwMsec Load Module */
 
 	bool IsModuleLoad(PCHAR szModule, DWORD dwMsec)
 	{
-		VMP_MUTATION("IsModuleLoad")
 		HMODULE hModule = FastCall::G().t_GetModuleHandleA(szModule);
 		if (!hModule)
 		{
@@ -57,7 +41,6 @@ namespace Utils
 				dwMsecFind += dwModuleDelay;
 			}
 		}
-		VMP_END
 
 		return true;
 	}
@@ -89,7 +72,6 @@ namespace Utils
 
 	DWORD PatternScan(std::string moduleName, std::string Mask)
 	{
-		VMP_MUTATION("PatternScan")
 		const char* pat = Mask.c_str();
 		DWORD firstMatch = 0;
 		DWORD rangeStart = (DWORD)FastCall::G().t_GetModuleHandleA(moduleName.c_str());
@@ -121,7 +103,6 @@ namespace Utils
 				firstMatch = 0;
 			}
 		}
-		VMP_END
 
 		return NULL;
 	}

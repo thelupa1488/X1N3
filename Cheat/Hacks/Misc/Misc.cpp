@@ -229,7 +229,7 @@ void CMisc::Draw()
 
 					alpha += plus_or_minus ? (255.f / 7 * 0.015) : -(255.f / 7 * 0.015); alpha = clamp(alpha, 0.f, 255.f);
 
-					const auto FakeRot = DEG2RAD(((side < 0.f) ? 90 : -90) - 90);
+					const auto FakeRot = DEG2RAD(((side < 0.f) ? -90 : 90) - 90);
 					DrawArrow(FakeRot, LDesyncArrowsColor);
 				}
 			}
@@ -1067,6 +1067,9 @@ void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
 	{
 		if (CGlobal::LocalPlayer)
 		{
+			if (CGlobal::LocalPlayer->IsDead())
+				return;
+
 			if (EdgeJump && EdgeJumpBind.Check())
 			{
 				if (CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER ||
@@ -1082,8 +1085,7 @@ void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
 				Vector OldAngles = pCmd->viewangles;
 
 				if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
-					CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER || CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP
-					|| CGlobal::LocalPlayer->IsDead())
+					CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER || CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP)
 					return;
 
 				if (I::GameRules() && I::GameRules()->IsFreezePeriod())
@@ -1163,7 +1165,7 @@ void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
 
 					if (!bSendPacket)
 					{
-						real_angle.y = pCmd->viewangles.y + (59.f * side);
+						real_angle.y = pCmd->viewangles.y - (LDesyncYaw * side);
 						pCmd->viewangles.y = real_angle.y;
 					}
 					else
@@ -1182,7 +1184,7 @@ void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
 
 						broke_lby = false;
 						bSendPacket = false;
-						real_angle.y = pCmd->viewangles.y + (69.f * side);
+						real_angle.y = pCmd->viewangles.y - (LDesyncYaw * side);
 						pCmd->viewangles.y = real_angle.y;
 					}
 					else
@@ -1192,7 +1194,7 @@ void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
 
 						broke_lby = true;
 						bSendPacket = false;
-						real_angle.y = pCmd->viewangles.y + (69.f * -side);
+						real_angle.y = pCmd->viewangles.y + (LDesyncYaw * -side);
 						pCmd->viewangles.y = real_angle.y;
 					}
 				}

@@ -92,6 +92,8 @@ void CMisc::Menu()
 		HotsKey("Button##Desync", LDesyncBind.Button);
 		X1Gui().SameLine();
 		DCheckBox("Hold##Desync", LDesyncBind.Hold);
+		X1Gui().PushItemWidth(PUSH_2);
+		SliderFloats("Yaw##Desync", LDesyncYaw, 1, 120);
 		DCheckBox("Angle lines", LDesyncLines);
 		if (LDesyncLines)
 		{

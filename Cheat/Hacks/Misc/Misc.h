@@ -121,6 +121,7 @@ public:
 
 	bool LDesync = false;
 	int LDesyncType = 0;
+	float LDesyncYaw = 0;
 	CBind LDesyncBind = CBind(0, true);
 	bool LDesyncLines = false;
 	int LDesyncLinesLength = 0;
@@ -291,6 +292,7 @@ public:
 		RV(ThirdPersonBind, "ThirdPersonBind");
 		RV(LDesync, "LDesync");
 		RV(LDesyncType, "LDesyncType");
+		RV(LDesyncYaw, "LDesyncYaw");
 		RV(LDesyncBind, "LDesyncBind");
 		RV(LDesyncLines, "LDesyncLines");
 		RV(LDesyncLinesLength, "LDesyncLinesLength");
