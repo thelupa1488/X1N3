@@ -121,10 +121,10 @@ public:
 
 	bool LDesync = false;
 	int LDesyncType = 0;
-	float LDesyncYaw = 0;
+	float LDesyncYaw = 69;
 	CBind LDesyncBind = CBind(0, true);
 	bool LDesyncLines = false;
-	int LDesyncLinesLength = 0;
+	int LDesyncLinesLength = 25;
 	bool LDesyncArrows = false;
 
 	bool FovChanger = false;

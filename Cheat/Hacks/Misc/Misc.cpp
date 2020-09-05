@@ -174,7 +174,7 @@ void CMisc::Draw()
 				if (LDesyncLines && I::Input()->m_fCameraInThirdPerson)
 				{
 					Vector w2sOrigin;
-					auto DrawAngleLine = [&](const Vector& origin, const Vector& w2sOrigin, const float& angle, const char* text, Color clr)
+					auto DrawAngleLine = [&](const Vector& origin, const Vector& w2sOrigin, const float& angle, const char* text, Color clr)-> void
 					{
 						Vector forward;
 						AngleVectors(QAngle(0.0f, angle, 0.0f), forward);
@@ -211,7 +211,7 @@ void CMisc::Draw()
 					I::Engine()->GetViewAngles(client_viewangles);
 					const auto screen_center = Vector2D(CGlobal::iScreenWidth / 2, CGlobal::iScreenHeight / 2);
 
-					constexpr auto radius = 225.f;
+					constexpr auto radius = 250.f; //225
 					auto DrawArrow = [&](float rot, Color color) -> void
 					{
 						vector<Vec2> vertices;
@@ -229,7 +229,7 @@ void CMisc::Draw()
 
 					alpha += plus_or_minus ? (255.f / 7 * 0.015) : -(255.f / 7 * 0.015); alpha = clamp(alpha, 0.f, 255.f);
 
-					const auto FakeRot = DEG2RAD(((side < 0.f) ? -90 : 90) - 90);
+					const auto FakeRot = DEG2RAD(((side > 0.f) ? -90 : 90) - 90);
 					DrawArrow(FakeRot, LDesyncArrowsColor);
 				}
 			}
@@ -483,7 +483,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 			}
 			if (NameStealer)
 			{
-				auto ChangeName = [&](bool reconnect, const char* newName, float delay)
+				auto ChangeName = [&](bool reconnect, const char* newName, float delay)-> bool
 				{
 					static auto exploitInitialized = false;
 
@@ -541,7 +541,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 				stolenIds.clear();
 			}
 			static bool ClanTagReset = false;
-			auto SetNewClan = [&](string New, string Name)
+			auto SetNewClan = [&](string New, string Name)-> void
 			{
 				static auto pSetClanTag = reinterpret_cast<void(__fastcall*)(const char*, const char*)>(offsets["SetClanTag"]);
 
@@ -751,7 +751,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 			}
 			if (FakeLag && FakeLagBind.Check())
 			{
-				auto MaxChokeTicks = [&]()
+				auto MaxChokeTicks = [&]()-> int
 				{
 					int maxticks = I::GameRules() && I::GameRules()->IsValveDS() ? 11 : 14;
 					static int max_choke_ticks = 0;
@@ -1088,8 +1088,8 @@ void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
 					CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER || CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP)
 					return;
 
-				if (I::GameRules() && I::GameRules()->IsFreezePeriod())
-					return;
+				//if (I::GameRules() && I::GameRules()->IsFreezePeriod()) //need fix
+				//	return;
 
 				if ((CGlobal::GWeaponID == WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_FAMAS) && CGlobal::LocalPlayer->GetBaseWeapon()->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
 					return;
@@ -1112,18 +1112,10 @@ void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
 				if (std::fabsf(CGlobal::LocalPlayer->GetSpawnTime() - I::GlobalVars()->curtime) < 1.0f)
 					return;
 
-				side = LDesyncBind.Check() ? 1.f : -1.f;
-				float minimal_move = 2.5f;
-				static bool shouldmove = false;
+				side = LDesyncBind.Check() ? -1.f : 1.f;
 				static bool broke_lby = false;
 
-				if (CGlobal::LocalPlayer->GetFlags() & FL_DUCKING)
-					minimal_move = 2.5f;
-
-				if (pCmd->buttons & IN_WALK)
-					minimal_move = 2.5f;
-
-				auto UpdateLBY = [&](CCSGOPlayerAnimState* animstate)
+				auto UpdateLBY = [&](CCSGOPlayerAnimState* animstate)-> void
 				{
 					if (animstate->speed_2d > 0.1f || std::fabsf(animstate->flUpVelocity))
 						next_lby = I::GlobalVars()->curtime + 0.22f;
@@ -1148,53 +1140,51 @@ void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
 
 				Clamp(pCmd->sidemove, -450.0f, 450.0f);
 
+				if (bSendPacket)
+					fake_angle = pCmd->viewangles;
+
 				if (LDesyncType == 0)
 				{
-					if (!shouldmove)
-					{
-						pCmd->sidemove -= minimal_move;
-						bSendPacket = false;
-						shouldmove = true;
-					}
-					else
-					{
-						bSendPacket = true;
-						pCmd->sidemove += minimal_move;
-						shouldmove = false;
-					}
+					float minimal_move = 2.0f;
+					if (CGlobal::LocalPlayer->GetFlags() & FL_DUCKING)
+						minimal_move *= 3.f;
 
-					if (!bSendPacket)
+					if (pCmd->buttons & IN_WALK)
+						minimal_move *= 3.f;
+
+					bool should_move = CGlobal::LocalPlayer->GetVelocity().Length2D() <= 0.0f
+						|| std::fabsf(CGlobal::LocalPlayer->GetVelocity().z) <= 100.0f;
+
+					if ((pCmd->command_number % 2) == 1)
 					{
-						real_angle.y = pCmd->viewangles.y - (LDesyncYaw * side);
+						real_angle.y = (pCmd->viewangles.y += (LDesyncYaw * side));
 						pCmd->viewangles.y = real_angle.y;
-					}
-					else
-						fake_angle = pCmd->viewangles;
 
+						if (should_move)
+							pCmd->sidemove -= minimal_move;
+
+						bSendPacket = false;
+					}
+					else if (should_move)
+						pCmd->sidemove += minimal_move;
 				}
 				else if (LDesyncType == 1)
 				{
 					if (next_lby >= I::GlobalVars()->curtime)
 					{
-						if (bSendPacket)
-							fake_angle = pCmd->viewangles;
-
 						if (!broke_lby && bSendPacket && I::ClientState()->chokedcommands > 0)
 							return;
 
 						broke_lby = false;
 						bSendPacket = false;
-						real_angle.y = pCmd->viewangles.y - (LDesyncYaw * side);
+						real_angle.y = (pCmd->viewangles.y += (LDesyncYaw * side));
 						pCmd->viewangles.y = real_angle.y;
 					}
 					else
 					{
-						if (bSendPacket)
-							fake_angle = pCmd->viewangles;
-
 						broke_lby = true;
 						bSendPacket = false;
-						real_angle.y = pCmd->viewangles.y + (LDesyncYaw * -side);
+						real_angle.y = (pCmd->viewangles.y += (LDesyncYaw * -side));
 						pCmd->viewangles.y = real_angle.y;
 					}
 				}
