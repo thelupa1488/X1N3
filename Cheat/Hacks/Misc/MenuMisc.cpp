@@ -88,10 +88,15 @@ void CMisc::Menu()
 		X1Gui().PushItemWidth(PUSH_1);
 		VectorEx<const char* >itemsLDT = { lolc("Static") , lolc("Balanced") };
 		DComboBox("Type##Desync", LDesyncType, itemsLDT);
-		X1Gui().PushItemWidth(PUSH_1);
-		HotsKey("Button##Desync", LDesyncBind.Button);
-		X1Gui().SameLine();
-		DCheckBox("Hold##Desync", LDesyncBind.Hold);
+		DCheckBox("Autodirection##Desync", LDesyncAd);
+		if (!LDesyncAd)
+		{
+			X1Gui().SameLine();
+			X1Gui().PushItemWidth(PUSH_1);
+			HotsKey("Button##Desync", LDesyncBind.Button);
+			X1Gui().SameLine();
+			DCheckBox("Hold##Desync", LDesyncBind.Hold);
+		}
 		X1Gui().PushItemWidth(PUSH_2);
 		SliderFloats("Yaw##Desync", LDesyncYaw, 1, 120);
 		DCheckBox("Angle lines", LDesyncLines);

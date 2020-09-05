@@ -97,6 +97,7 @@ public:
 	float side = 1.f;
 	Vector real_angle;
 	Vector fake_angle;
+	float vangle;
 	/*======*/
 
 	bool Enable = true;
@@ -122,6 +123,7 @@ public:
 	bool LDesync = false;
 	int LDesyncType = 0;
 	float LDesyncYaw = 69;
+	bool LDesyncAd = false;
 	CBind LDesyncBind = CBind(0, true);
 	bool LDesyncLines = false;
 	int LDesyncLinesLength = 25;

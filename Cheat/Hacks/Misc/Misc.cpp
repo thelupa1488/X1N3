@@ -1082,39 +1082,43 @@ void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
 
 			if (LDesync)
 			{
-				Vector OldAngles = pCmd->viewangles;
-
-				if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
-					CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER || CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP)
-					return;
-
-				//if (I::GameRules() && I::GameRules()->IsFreezePeriod()) //need fix
-				//	return;
-
-				if ((CGlobal::GWeaponID == WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_FAMAS) && CGlobal::LocalPlayer->GetBaseWeapon()->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
-					return;
-
-				if (CGlobal::GWeaponType == WEAPON_TYPE_GRENADE)
+				auto GetBestHeadAngle = [&](float yaw)-> float
 				{
-					if (!CGlobal::LocalPlayer->GetBaseWeapon()->GetPinPulled())
-					{
-						float throwTime = CGlobal::LocalPlayer->GetBaseWeapon()->GetThrowTime();
-						if (throwTime > 0.f)
-							return;
-					}
-					if ((pCmd->buttons & IN_ATTACK) || (pCmd->buttons & IN_ATTACK2))
-					{
-						if (CGlobal::LocalPlayer->GetBaseWeapon()->GetThrowTime() > 0.f)
-							return;
-					}
-				}
+					float Right, Left;
 
-				if (std::fabsf(CGlobal::LocalPlayer->GetSpawnTime() - I::GlobalVars()->curtime) < 1.0f)
-					return;
+					Vector src3D, dst3D, forward, right, up;
+					trace_t tr;
+					Ray_t ray, ray2;
+					CTraceFilter filter;
 
-				side = LDesyncBind.Check() ? -1.f : 1.f;
-				static bool broke_lby = false;
+					QAngle engineViewAngles;
 
+					engineViewAngles.x = 0;
+					engineViewAngles.y = yaw;
+
+					AngleVectors(engineViewAngles, forward, right, up);
+
+					filter.pSkip = CGlobal::LocalPlayer;
+					src3D = CGlobal::LocalPlayer->GetEyePosition();
+					dst3D = src3D + (forward * 384);
+
+					ray.Init(src3D + right * 35, dst3D + right * 35);
+					I::EngineTrace()->TraceRay(ray, MASK_SHOT, &filter, &tr);
+					Right = (tr.endpos - tr.startpos).Length();
+
+					ray2.Init(src3D - right * 35, dst3D - right * 35);
+					I::EngineTrace()->TraceRay(ray2, MASK_SHOT, &filter, &tr);
+					Left = (tr.endpos - tr.startpos).Length();
+
+					static int result = 0;
+
+					if (Left > Right)
+						result = -1.f;
+					else if (Right > Left)
+						result = 1.f;
+
+					return result;
+				};
 				auto UpdateLBY = [&](CCSGOPlayerAnimState* animstate)-> void
 				{
 					if (animstate->speed_2d > 0.1f || std::fabsf(animstate->flUpVelocity))
@@ -1123,6 +1127,113 @@ void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
 						if (std::fabsf(AngleDiff(animstate->m_flGoalFeetYaw, animstate->m_flEyeYaw)) > 35.0f)
 							next_lby = I::GlobalVars()->curtime + 1.1f;
 				};
+				auto MaxChokeTicks = [&]()-> int
+				{
+					int maxticks = I::GameRules() && I::GameRules()->IsValveDS() ? 11 : 14;
+					static int max_choke_ticks = 0;
+					static int latency_ticks = 0;
+					float fl_latency = I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING);
+					int latency = TIME_TO_TICKS(fl_latency);
+					if (I::ClientState()->chokedcommands <= 0)
+						latency_ticks = latency;
+					else latency_ticks = max(latency, latency_ticks);
+
+					if (fl_latency >= I::GlobalVars()->interval_per_tick)
+						max_choke_ticks = 11 - latency_ticks;
+					else max_choke_ticks = 11;
+					return max_choke_ticks;
+				};
+
+				if (pCmd->command_number % 2 == 1 && bSendPacket && LDesync)
+					bSendPacket = false;
+
+				Vector OldAngles = pCmd->viewangles;
+
+				if (LDesync && I::ClientState()->chokedcommands >= MaxChokeTicks())
+				{
+					bSendPacket = true;
+					pCmd->viewangles = I::ClientState()->viewangles;
+				}
+
+				auto Desync = [&](bool& bSendPacket, CUserCmd* pCmd)-> void
+				{
+					if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
+						CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER || CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP)
+						return;
+
+					//if (I::GameRules() && I::GameRules()->IsFreezePeriod()) //need fix
+					//	return;
+
+					if ((CGlobal::GWeaponID == WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_FAMAS) && CGlobal::LocalPlayer->GetBaseWeapon()->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
+						return;
+
+					if (CGlobal::GWeaponType == WEAPON_TYPE_GRENADE)
+					{
+						if (!CGlobal::LocalPlayer->GetBaseWeapon()->GetPinPulled())
+						{
+							float throwTime = CGlobal::LocalPlayer->GetBaseWeapon()->GetThrowTime();
+							if (throwTime > 0.f)
+								return;
+						}
+						if ((pCmd->buttons & IN_ATTACK) || (pCmd->buttons & IN_ATTACK2))
+						{
+							if (CGlobal::LocalPlayer->GetBaseWeapon()->GetThrowTime() > 0.f)
+								return;
+						}
+					}
+
+					if (std::fabsf(CGlobal::LocalPlayer->GetSpawnTime() - I::GlobalVars()->curtime) < 1.0f)
+						return;
+
+					auto sideauto = GetBestHeadAngle(vangle);
+
+					if (!LDesyncAd)
+						side = LDesyncBind.Check() ? -1.f : 1.f;
+					else
+						side = sideauto;
+
+					static bool broke_lby = false;
+
+					if (LDesyncType == 0)
+					{
+						float minimal_move = CGlobal::LocalPlayer->GetFlags() & IN_DUCK ? 3.0f : 1.0f;
+
+						if (!bSendPacket)
+						{
+							real_angle.y = (pCmd->viewangles.y += (LDesyncYaw * side));
+							pCmd->viewangles.y = real_angle.y;
+						}
+
+						static bool flip = 1;
+						flip = !flip;
+
+						pCmd->sidemove += flip ? minimal_move : -minimal_move;
+					}
+					else if (LDesyncType == 1)
+					{
+						if (next_lby >= I::GlobalVars()->curtime)
+						{
+							if (!broke_lby && bSendPacket && I::ClientState()->chokedcommands > 0)
+								return;
+
+							broke_lby = false;
+							bSendPacket = false;
+							real_angle.y = (pCmd->viewangles.y += (LDesyncYaw * side));
+							pCmd->viewangles.y = real_angle.y;
+						}
+						else
+						{
+							broke_lby = true;
+							bSendPacket = false;
+							real_angle.y = (pCmd->viewangles.y += (LDesyncYaw * -side));
+							pCmd->viewangles.y = real_angle.y;
+						}
+					}
+					FixAngles(pCmd->viewangles);
+				};
+				Desync(bSendPacket, pCmd);
+
+				CGlobal::CorrectMouse(pCmd);
 
 				auto anim_state = CGlobal::LocalPlayer->GetPlayerAnimState();
 				if (anim_state)
@@ -1138,57 +1249,13 @@ void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
 					*anim_state = anim_state_backup;
 				}
 
-				Clamp(pCmd->sidemove, -450.0f, 450.0f);
-
 				if (bSendPacket)
-					fake_angle = pCmd->viewangles;
-
-				if (LDesyncType == 0)
 				{
-					float minimal_move = 2.0f;
-					if (CGlobal::LocalPlayer->GetFlags() & FL_DUCKING)
-						minimal_move *= 3.f;
-
-					if (pCmd->buttons & IN_WALK)
-						minimal_move *= 3.f;
-
-					bool should_move = CGlobal::LocalPlayer->GetVelocity().Length2D() <= 0.0f
-						|| std::fabsf(CGlobal::LocalPlayer->GetVelocity().z) <= 100.0f;
-
-					if ((pCmd->command_number % 2) == 1)
-					{
-						real_angle.y = (pCmd->viewangles.y += (LDesyncYaw * side));
-						pCmd->viewangles.y = real_angle.y;
-
-						if (should_move)
-							pCmd->sidemove -= minimal_move;
-
-						bSendPacket = false;
-					}
-					else if (should_move)
-						pCmd->sidemove += minimal_move;
+					vangle = pCmd->viewangles.y;
+					if (anim_state)
+						fake_angle.y = anim_state->m_flGoalFeetYaw;
 				}
-				else if (LDesyncType == 1)
-				{
-					if (next_lby >= I::GlobalVars()->curtime)
-					{
-						if (!broke_lby && bSendPacket && I::ClientState()->chokedcommands > 0)
-							return;
 
-						broke_lby = false;
-						bSendPacket = false;
-						real_angle.y = (pCmd->viewangles.y += (LDesyncYaw * side));
-						pCmd->viewangles.y = real_angle.y;
-					}
-					else
-					{
-						broke_lby = true;
-						bSendPacket = false;
-						real_angle.y = (pCmd->viewangles.y += (LDesyncYaw * -side));
-						pCmd->viewangles.y = real_angle.y;
-					}
-				}
-				FixAngles(pCmd->viewangles);
 				MovementFix(pCmd, OldAngles, pCmd->viewangles);
 			}
 
@@ -1358,8 +1425,7 @@ void CMisc::OverrideView(CViewSetup* pSetup)
 						/* return the ideal distance */
 						return (ideal_distance * trace.fraction) - 10.f;
 					};
-
-					QAngle angles;
+					Vector angles;
 					I::Engine()->GetViewAngles(angles);
 					angles.z = GetCorrectDistance(ThirdPersonDistance); // 150 is better distance
 					I::Input()->m_vecCameraOffset = Vector(angles.x, angles.y, angles.z);
@@ -1459,6 +1525,34 @@ void CMisc::AutoAcceptEmit()
 
 void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld)
 {
+	//if (Enable && LDesyncChams)
+	//{
+	//	static auto fnDME = HookTables::pDrawModelExecute->GetTrampoline();
+	//	const char* ModelName = I::ModelInfo()->GetModelName((model_t*)pInfo.pModel);
+
+	//	if (!ModelName)
+	//		return;
+
+	//	if (strstr(ModelName, XorStr("models/player")))
+	//	{
+	//		CEntityPlayer* Entity = GP_EntPlayers->GetByIdx(pInfo.entity_index);
+	//		CEntityPlayer* Local = GP_EntPlayers->EntityLocal;
+
+	//		if (LDesyncChams && Local == Entity)
+	//		{
+	//			matrix3x4_t fake_matrix[128];
+	//			Entity->BaseEntity->SetAbsAngles(real_angle);
+	//			if (Entity->BaseEntity->SetupBones(fake_matrix, 128, 0x100, Local->BaseEntity->GetSimTime()))
+	//			{
+	//				LDesyncArrowsColor[4];
+	//				GP_Esp->OverrideMaterial(false, 0, 0, LDesyncArrowsColor);
+	//				fnDME(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
+	//			}
+	//			Entity->BaseEntity->SetAbsAngles(Vector(0, fake_angle.y, 0));
+	//		}
+	//	}
+	//}
+
 	if (Enable && HandChams || HandGlow)
 	{
 		static auto fnDME = HookTables::pDrawModelExecute->GetTrampoline();
