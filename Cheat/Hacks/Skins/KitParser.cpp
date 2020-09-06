@@ -255,18 +255,12 @@ static auto random_sequence(const int low, const int high) -> int
 //	}
 //}
 
-namespace HookSequence
+namespace HookTables
 {
-	cDetour<RecvVarProxyFn>* fnSequenceProxyFn;
-	cDetour<RecvVarProxyFn>* oRecvnModelIndex;
-
-	void Shutdown()
-	{
-		fnSequenceProxyFn->Remove();
-		oRecvnModelIndex->Remove();
-	}
+	extern cDetour<RecvVarProxyFn>* fnSequenceProxyFn;
+	extern cDetour<RecvVarProxyFn>* oRecvnModelIndex;
 }
-using namespace HookSequence;
+using namespace HookTables;
 
 void Hook_SetViewModelSequence(const CRecvProxyData* pDataConst, void* pStruct, void* pOut)
 {

@@ -37,6 +37,8 @@ protected:
 	virtual void Load(nlohmann::json j) = 0;
 };
 
+#define RV(a,b) Config.RegVar(a, XorStr(b));
+
 class CConfig : public IConfig
 {
 private:

@@ -6,6 +6,10 @@ using namespace SDK;
 
 namespace HookTables
 {
+	using oEndScene = HRESULT(STDMETHODCALLTYPE*)(IDirect3DDevice9*);
+	using oPresent = HRESULT(STDMETHODCALLTYPE*)(IDirect3DDevice9*, CONST RECT*, CONST RECT*, HWND, CONST RGNDATA*);
+	using oReset = HRESULT(STDMETHODCALLTYPE*)(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*);
+
 	using CreateMoveFn = bool(__stdcall*)(float, CUserCmd*);
 	using OverrideViewFn = bool(__stdcall*)(CViewSetup*);
 	using GetViewModelFOVFn = float(__stdcall*)();
@@ -24,6 +28,13 @@ namespace HookTables
 	using SendMessageFn = EGCResults(__thiscall*)(void*, uint32_t, const void*, uint32_t);
 #endif
 
+	cDetour<oPresent>* pPresent;
+	cDetour<oEndScene>* pEndScene;
+	cDetour<oReset>* pReset;
+
+	cDetour<RecvVarProxyFn>* fnSequenceProxyFn;
+	cDetour<RecvVarProxyFn>* oRecvnModelIndex;
+
 	cDetour<CreateMoveFn>* pCreateMove;
 	cDetour<OverrideViewFn>* pOverrideView;
 	cDetour<GetViewModelFOVFn>* pGetViewModelFOV;
@@ -40,6 +51,18 @@ namespace HookTables
 #endif
 	void Shutdown()
 	{
+		/*Render hook*/
+		pEndScene->Remove();
+		pPresent->Remove();
+		pReset->Remove();
+		/*===========*/
+
+		/*Animation hook for knive*/
+		fnSequenceProxyFn->Remove();
+		oRecvnModelIndex->Remove();
+		/*========================*/
+
+		/*Function hook*/
 		pCreateMove->Remove();
 		pOverrideView->Remove();
 		pGetViewModelFOV->Remove();
@@ -53,5 +76,6 @@ namespace HookTables
 		pRetrieveMessage->Remove();
 		pSendMessage->Remove();
 #endif
+		/*=============*/
 	}
 }

@@ -14,20 +14,10 @@
 #include "../Include/Def.h"
 #include "../X1API/MinHook/hook.h"
 
-namespace HookRender
-{
-	extern void Shutdown();
-}
 namespace HookTables
 {
 	extern void Shutdown();
 }
-namespace HookSequence
-{
-	extern void Shutdown();
-}
-
-#define DELETE_PTR(name) delete name; name = nullptr
 
 class IISetup
 {
@@ -103,9 +93,7 @@ public:
 		}
 		virtual void Shutdown()
 		{
-			HookRender::Shutdown();
 			HookTables::Shutdown();
-			HookSequence::Shutdown();
 
 			GP_Misc->HitWorker.UnRegListener();
 			GP_Skins->FireEvent.UnRegListener();

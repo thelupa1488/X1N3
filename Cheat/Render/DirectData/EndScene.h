@@ -7,5 +7,5 @@ HRESULT WINAPI MyEndScene(IDirect3DDevice9* pDevice)
 	{
 		//...//
 	}
-	return HookRender::pEndScene->GetTrampoline()(pDevice);
+	return HookTables::pEndScene->GetTrampoline()(pDevice);
 }

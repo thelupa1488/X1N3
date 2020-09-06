@@ -6,7 +6,7 @@
 #include  "color.h"
 #include  "..//X1API/MinHook/hook.h"
 
-namespace HookRender
+namespace HookTables
 {
 	using oEndScene = HRESULT(STDMETHODCALLTYPE*)(IDirect3DDevice9*);
 	using oPresent = HRESULT(STDMETHODCALLTYPE*)(IDirect3DDevice9*, CONST RECT*, CONST RECT*, HWND, CONST RGNDATA*);
@@ -16,6 +16,7 @@ namespace HookRender
 	extern cDetour<oEndScene>* pEndScene;
 	extern cDetour<oReset>* pReset;
 }
+using namespace HookTables;
 
 extern IDirect3DDevice9* g_pDevice;
 
