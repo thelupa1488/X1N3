@@ -14,7 +14,6 @@ void CMisc::Draw()
 		if (CGlobal::LocalPlayer)
 		{
 			CBaseWeapon* pWeapon = CGlobal::LocalPlayer->GetBaseWeapon();
-
 			if (pWeapon)
 			{
 				if (Crosshair)
@@ -198,6 +197,7 @@ void CMisc::Draw()
 					{
 						DrawAngleLine(CGlobal::LocalPlayer->GetOrigin(), w2sOrigin, real_angle.y, "Real", Color::Green());
 						DrawAngleLine(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, fake_angle.y, "Fake", Color::Red());
+						DrawAngleLine(CGlobal::LocalPlayer->GetRenderOrigin(), w2sOrigin, view_angle.y, "View", Color::Orange());
 						DrawAngleLine(CGlobal::LocalPlayer->GetOrigin(), w2sOrigin, CGlobal::LocalPlayer->GetLowerBodyYawTarget(), "LBY", Color::DarkBlue());
 					}
 				}
@@ -211,8 +211,8 @@ void CMisc::Draw()
 					I::Engine()->GetViewAngles(client_viewangles);
 					const auto screen_center = Vector2D(CGlobal::iScreenWidth / 2, CGlobal::iScreenHeight / 2);
 
-					constexpr auto radius = 250.f; //225
-					auto DrawArrow = [&](float rot, Color color) -> void
+					constexpr auto radius = 250.f;
+					auto DrawArrow = [&](float rot, Color color)-> void
 					{
 						vector<Vec2> vertices;
 						vertices.push_back((Vec2(screen_center.x + cosf(rot) * radius, screen_center.y + sinf(rot) * radius)));
@@ -1143,18 +1143,6 @@ void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
 					else max_choke_ticks = 11;
 					return max_choke_ticks;
 				};
-
-				if (pCmd->command_number % 2 == 1 && bSendPacket && LDesync)
-					bSendPacket = false;
-
-				Vector OldAngles = pCmd->viewangles;
-
-				if (LDesync && I::ClientState()->chokedcommands >= MaxChokeTicks())
-				{
-					bSendPacket = true;
-					pCmd->viewangles = I::ClientState()->viewangles;
-				}
-
 				auto Desync = [&](bool& bSendPacket, CUserCmd* pCmd)-> void
 				{
 					if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
@@ -1185,7 +1173,7 @@ void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
 					if (std::fabsf(CGlobal::LocalPlayer->GetSpawnTime() - I::GlobalVars()->curtime) < 1.0f)
 						return;
 
-					auto sideauto = GetBestHeadAngle(vangle);
+					auto sideauto = GetBestHeadAngle(view_angle.y);
 
 					if (!LDesyncAd)
 						side = LDesyncBind.Check() ? -1.f : 1.f;
@@ -1231,6 +1219,18 @@ void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
 					}
 					FixAngles(pCmd->viewangles);
 				};
+
+				if (pCmd->command_number % 2 == 1 && bSendPacket && LDesync)
+					bSendPacket = false;
+
+				Vector OldAngles = pCmd->viewangles;
+
+				if (LDesync && I::ClientState()->chokedcommands >= MaxChokeTicks())
+				{
+					bSendPacket = true;
+					pCmd->viewangles = I::ClientState()->viewangles;
+				}
+
 				Desync(bSendPacket, pCmd);
 
 				CGlobal::CorrectMouse(pCmd);
@@ -1251,9 +1251,10 @@ void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
 
 				if (bSendPacket)
 				{
-					vangle = pCmd->viewangles.y;
 					if (anim_state)
 						fake_angle.y = anim_state->m_flGoalFeetYaw;
+
+					view_angle = pCmd->viewangles;
 				}
 
 				MovementFix(pCmd, OldAngles, pCmd->viewangles);
@@ -1622,6 +1623,52 @@ void CMisc::DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawMo
 
 void CMisc::ShowSpectatorList()
 {
+	auto GetObservervators = [&](int playerId)-> vector<int>
+	{
+		vector<int> SpectatorList;
+
+		CBaseEntity* pPlayer = (CBaseEntity*)I::EntityList()->GetClientEntity(playerId);
+
+		if (!pPlayer)
+			return SpectatorList;
+
+		if (pPlayer->IsDead())
+		{
+			CBaseEntity* pObserverTarget = (CBaseEntity*)I::EntityList()->GetClientEntityFromHandle(pPlayer->GetObserverTarget());
+
+			if (!pObserverTarget)
+				return SpectatorList;
+
+			pPlayer = pObserverTarget;
+		}
+
+		for (int PlayerIndex = 0; PlayerIndex < I::EntityList()->GetHighestEntityIndex(); PlayerIndex++)
+		{
+			CBaseEntity* pCheckPlayer = (CBaseEntity*)I::EntityList()->GetClientEntity(PlayerIndex);
+
+			if (!pCheckPlayer)
+				continue;
+
+			if (!pCheckPlayer->IsPlayer())
+				continue;
+
+			if (pCheckPlayer->IsDormant() || !pCheckPlayer->IsDead())
+				continue;
+
+			CBaseEntity* pObserverTarget = (CBaseEntity*)I::EntityList()->GetClientEntityFromHandle(pCheckPlayer->GetObserverTarget());
+
+			if (!pObserverTarget)
+				continue;
+
+			if (pPlayer != pObserverTarget)
+				continue;
+
+			SpectatorList.push_back(PlayerIndex);
+		}
+
+		return SpectatorList;
+	};
+
 	if (CGlobal::FullUpdateCheck)
 		return;
 
@@ -1643,9 +1690,9 @@ void CMisc::ShowSpectatorList()
 	style.wndPadding = Vec2(3, 3);
 
 	color_t old_color = style.clrBackground;
-	style.clrBackground = Color(MainSettings().BackgroundColor.r(),
-		MainSettings().BackgroundColor.g(),
-		MainSettings().BackgroundColor.b(), SpectatorListAlpha);
+	style.clrBackground = Color(GP_Main->BackgroundColor.r(),
+		GP_Main->BackgroundColor.g(),
+		GP_Main->BackgroundColor.b(), SpectatorListAlpha);
 
 	X1Gui().SetNextWindowPos(Vec2(SpectatorListPosX, SpectatorListPosY));
 
@@ -1738,52 +1785,6 @@ void CMisc::Reset()
 		HitImpacts.clear();
 
 	HitWorker.HitMarkerEndTime = 0;
-}
-
-vector<int> CMisc::GetObservervators(int playerId)
-{
-	vector<int> SpectatorList;
-
-	CBaseEntity* pPlayer = (CBaseEntity*)I::EntityList()->GetClientEntity(playerId);
-
-	if (!pPlayer)
-		return SpectatorList;
-
-	if (pPlayer->IsDead())
-	{
-		CBaseEntity* pObserverTarget = (CBaseEntity*)I::EntityList()->GetClientEntityFromHandle(pPlayer->GetObserverTarget());
-
-		if (!pObserverTarget)
-			return SpectatorList;
-
-		pPlayer = pObserverTarget;
-	}
-
-	for (int PlayerIndex = 0; PlayerIndex < I::EntityList()->GetHighestEntityIndex(); PlayerIndex++)
-	{
-		CBaseEntity* pCheckPlayer = (CBaseEntity*)I::EntityList()->GetClientEntity(PlayerIndex);
-
-		if (!pCheckPlayer)
-			continue;
-
-		if (!pCheckPlayer->IsPlayer())
-			continue;
-
-		if (pCheckPlayer->IsDormant() || !pCheckPlayer->IsDead())
-			continue;
-
-		CBaseEntity* pObserverTarget = (CBaseEntity*)I::EntityList()->GetClientEntityFromHandle(pCheckPlayer->GetObserverTarget());
-
-		if (!pObserverTarget)
-			continue;
-
-		if (pPlayer != pObserverTarget)
-			continue;
-
-		SpectatorList.push_back(PlayerIndex);
-	}
-
-	return SpectatorList;
 }
 
 void CMisc::Night()
@@ -2017,16 +2018,16 @@ void CHitListener::FireGameEvent(IGameEvent *event)
 	}
 }
 
-void HitMark(const int &size, const int &tick, const int& pos_x, const int& pos_y, const Color& color)
-{
-	GP_Render->DrawLine(pos_x - size, pos_y - size, pos_x - (size / 4), pos_y - (size / 4), color, tick);
-	GP_Render->DrawLine(pos_x - size, pos_y + size, pos_x - (size / 4), pos_y + (size / 4), color, tick);
-	GP_Render->DrawLine(pos_x + size, pos_y + size, pos_x + (size / 4), pos_y + (size / 4), color, tick);
-	GP_Render->DrawLine(pos_x + size, pos_y - size, pos_x + (size / 4), pos_y - (size / 4), color, tick);
-}
-
 void CHitListener::Draw()
 {
+	auto HitMark = [&](const int& size, const int& tick, const int& pos_x, const int& pos_y, const Color& color)-> void
+	{
+		GP_Render->DrawLine(pos_x - size, pos_y - size, pos_x - (size / 4), pos_y - (size / 4), color, tick);
+		GP_Render->DrawLine(pos_x - size, pos_y + size, pos_x - (size / 4), pos_y + (size / 4), color, tick);
+		GP_Render->DrawLine(pos_x + size, pos_y + size, pos_x + (size / 4), pos_y + (size / 4), color, tick);
+		GP_Render->DrawLine(pos_x + size, pos_y - size, pos_x + (size / 4), pos_y - (size / 4), color, tick);
+	};
+
 	if (GP_Misc)
 	{
 		if (GP_Misc->HitMarker)

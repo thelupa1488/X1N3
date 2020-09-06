@@ -51,7 +51,6 @@ protected:
 	virtual void AutoAcceptEmit() = 0;
 	virtual void DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t &state, const ModelRenderInfo_t &pInfo, matrix3x4_t *pCustomBoneToWorld) = 0;
 	virtual void ShowSpectatorList() = 0;
-	virtual vector<int> GetObservervators(int playerId) = 0;
 	virtual void Night() = 0;
 	virtual void Reset() = 0;
 	virtual void UpdateSoundList() = 0;
@@ -59,7 +58,7 @@ protected:
 	virtual void Menu() = 0;
 	virtual void Draw() = 0;
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd) = 0;
-	virtual void CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd) = 0;
+	virtual void CreateMoveEP(bool &bSendPacket, CUserCmd* pCmd) = 0;
 	virtual void OverrideView(CViewSetup* pSetup) = 0;
 };
 
@@ -79,26 +78,25 @@ public:
 	virtual void Menu();
 	virtual void Draw();
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd);
-	virtual void CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd);
+	virtual void CreateMoveEP(bool &bSendPacket, CUserCmd* pCmd);
 	virtual void OverrideView(CViewSetup* pSetup);
 	virtual void GetViewModelFOV(float &Fov);
 	virtual void AutoAcceptEmit();
 	virtual void DrawModelExecute(void* thisptr, IMatRenderContext* ctx, const DrawModelState_t &state, const ModelRenderInfo_t &pInfo, matrix3x4_t *pCustomBoneToWorld);
 	virtual void ShowSpectatorList();
-	virtual vector<int> GetObservervators(int playerId);
 	virtual void Night();
 	virtual void Reset();
 	virtual void UpdateSoundList();
 	virtual void CustomWalls();
 
-	/*Desync*/
+	/*Desync varible*/
 	CCSGOPlayerAnimState AnimState;
 	float next_lby = 0.f;
 	float side = 1.f;
 	Vector real_angle;
 	Vector fake_angle;
-	float vangle;
-	/*======*/
+	Vector view_angle;
+	/*=============*/
 
 	bool Enable = true;
 	bool BHop = false;

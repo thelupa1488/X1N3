@@ -50,6 +50,7 @@
 #define VMP_ProtectStringA(e) 
 #endif
 
+#define RV(a,b) Config.RegVar(a, XorStr(b));
 #define DELETE_PTR(name) delete name; name = nullptr
 
 #define EX_ARRAYSIZE(_ARR)      ((int)(sizeof(_ARR)/sizeof(*_ARR)))

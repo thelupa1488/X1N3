@@ -160,8 +160,8 @@ void CGHelper::Menu()
 
 			Vec2 next_pos = Vec2(cur_pos.x + len + cor_x, cur_pos.y);
 
-			X1Gui().DrawLine(Vec2(cur_pos.x + cor_x, cur_pos.y + 9), Vec2(next_pos.x - 3, next_pos.y + 9), MainSettings().LineColor);
-			X1Gui().DrawLine(Vec2(cur_pos.x + cor_x, (prev.y != 0) ? prev.y : (cur_pos.y - (check ? 9 : 3))), Vec2(cur_pos.x + cor_x, next_pos.y + 9), MainSettings().LineColor);
+			X1Gui().DrawLine(Vec2(cur_pos.x + cor_x, cur_pos.y + 9), Vec2(next_pos.x - 3, next_pos.y + 9), GP_Main->LineColor);
+			X1Gui().DrawLine(Vec2(cur_pos.x + cor_x, (prev.y != 0) ? prev.y : (cur_pos.y - (check ? 9 : 3))), Vec2(cur_pos.x + cor_x, next_pos.y + 9), GP_Main->LineColor);
 
 			prev = Vec2(cur_pos.x + cor_x, next_pos.y + 9);
 
@@ -188,7 +188,7 @@ void CGHelper::Menu()
 			}
 
 			if (CurrentMapName == maps[i].game_name)
-				style.clrText = MainSettings().TextColor;
+				style.clrText = GP_Main->TextColor;
 
 			if (tree_open)
 			{
@@ -210,15 +210,15 @@ void CGHelper::Menu()
 					{
 						X1Gui().SameLine();
 
-						style.clrFrame = Color(MainSettings().FrameColor.r() + 18.f,
-							MainSettings().FrameColor.g() + 18.f,
-							MainSettings().FrameColor.b() + 18.f, 255);
+						style.clrFrame = Color(GP_Main->FrameColor.r() + 18.f,
+							GP_Main->FrameColor.g() + 18.f,
+							GP_Main->FrameColor.b() + 18.f, 255);
 						float old_pad_y = style.itmPadding.y;
 						style.itmPadding.y = 0;
 
 						DCheckBox("Enable", maps[i].helpers[j].enable);
 
-						style.clrFrame = MainSettings().FrameColor;
+						style.clrFrame = GP_Main->FrameColor;
 						style.itmPadding.y = old_pad_y;
 					}
 				}

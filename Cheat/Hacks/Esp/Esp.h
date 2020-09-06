@@ -54,16 +54,6 @@ public:
 
 class CEsp : public IEsp
 {
-private:
-	IMaterial* Texture = nullptr;
-	IMaterial* Flat = nullptr;
-	IMaterial* Metallic = nullptr;
-	IMaterial* MetallicPlus = nullptr;
-	IMaterial* Pearlescent = nullptr;
-	IMaterial* Animated = nullptr;
-	IMaterial* GlowDef = nullptr;
-	IMaterial* GlowSPulse = nullptr;
-	IMaterial* GlowDPulse = nullptr;
 public:
 	enum Sides
 	{
@@ -181,6 +171,18 @@ public:
 	void LoadVisuals(nlohmann::json &j);
 
 	void Menu();
+
+	/*Material for chams/glow*/
+	IMaterial* Texture = nullptr;
+	IMaterial* Flat = nullptr;
+	IMaterial* Metallic = nullptr;
+	IMaterial* MetallicPlus = nullptr;
+	IMaterial* Pearlescent = nullptr;
+	IMaterial* Animated = nullptr;
+	IMaterial* GlowDef = nullptr;
+	IMaterial* GlowSPulse = nullptr;
+	IMaterial* GlowDPulse = nullptr;
+	/*=======================*/
 
 	bool ShowPreview = true;
 

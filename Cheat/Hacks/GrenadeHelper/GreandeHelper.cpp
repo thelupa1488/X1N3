@@ -369,14 +369,14 @@ void CGHelper::Draw()
 
 				desc_size.x = (g_name_size.x > desc_size.x ? g_name_size.x + 6.f : desc_size.x);
 
-				GP_Render->DrawFilledBox(desc_pos.x, desc_pos.y - g_name_size.y - 3.f, desc_size.x + 6, g_name_size.y + 3.f, Color(MainSettings().BackgroundColor.r(),
-					MainSettings().BackgroundColor.g(),
-					MainSettings().BackgroundColor.b(),
+				GP_Render->DrawFilledBox(desc_pos.x, desc_pos.y - g_name_size.y - 3.f, desc_size.x + 6, g_name_size.y + 3.f, Color(GP_Main->BackgroundColor.r(),
+					GP_Main->BackgroundColor.g(),
+					GP_Main->BackgroundColor.b(),
 					200));
 
-				GP_Render->DrawString(14, Vec2(desc_pos.x + 3.f, desc_pos.y + 3.f), MainSettings().TextColor, BestInfo.descn.c_str());
+				GP_Render->DrawString(14, Vec2(desc_pos.x + 3.f, desc_pos.y + 3.f), GP_Main->TextColor, BestInfo.descn.c_str());
 
-				GP_Render->DrawString(14, Vec2(desc_pos.x + 3.f, desc_pos.y - 3.f - g_name_size.y), MainSettings().TextColor, name.c_str());
+				GP_Render->DrawString(14, Vec2(desc_pos.x + 3.f, desc_pos.y - 3.f - g_name_size.y), GP_Main->TextColor, name.c_str());
 			}
 		}
 	}

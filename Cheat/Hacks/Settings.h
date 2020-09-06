@@ -1,10 +1,7 @@
 #pragma once
-#include "../Main.h"
 #include "../Json/Json.hpp"
+#include "../Main.h"
 
-
-//class Color;
-//class CBind;
 template<typename T>
 class Singleton__
 {
@@ -31,8 +28,6 @@ public:
 		return inst;
 	}
 };
-
-#define RV(a,b) Config.RegVar(a, XorStr(b));
 
 class IConfig
 {
@@ -66,7 +61,6 @@ private:
 
 	string SectionName = "";
 public:
-
 	CConfig(const string Name)
 	{
 		SectionName = Name;
@@ -119,8 +113,7 @@ public:
 	virtual void Load(nlohmann::json j);
 };
 
-class CGSettings
-	: public Singleton__<CGSettings>
+class CGSettings : public Singleton__<CGSettings>
 {
 private:
 	string config_name;
@@ -133,7 +126,6 @@ private:
 	};
 
 	vector<CfgInfo_s> AllSettings;
-
 public:
 	void SetName(const string _name);
 	void SaveEx(nlohmann::json &j);
@@ -151,5 +143,42 @@ public:
 		ofstream fl(filename_in);
 		fl << bf;
 		fl.close();
+	}
+};
+
+class IMain
+{
+protected:
+	virtual void SetMenuColors() = 0;
+};
+
+class CMain : IMain
+{
+public:
+	CConfig Config = CConfig(XorStr("MainCheatConfig"));
+
+	virtual void SetMenuColors();
+
+	int MenuButton = VK_INSERT;
+	string HintMsg = "";
+
+	Color BackgroundColor = Color(18, 18, 22, 255);
+	Color TitleColor = Color(112, 112, 116, 255);
+	Color TextColor = Color(255, 255, 255, 255);
+	Color FrameColor = Color(34, 35, 37, 255);
+	Color ButtonColor = Color(128, 135, 140, 255);
+	Color DisableButtonColor = Color(225, 20, 20, 255);
+	Color LineColor = Color(120, 121, 123, 255);
+
+	CMain()
+	{
+		RV(MenuButton, "MenuButton");
+		RV(BackgroundColor, "BackgroundColor");
+		RV(TitleColor, "TitleColor");
+		RV(TextColor, "TextColor");
+		RV(FrameColor, "FrameColor");
+		RV(ButtonColor, "ButtonColor");
+		RV(DisableButtonColor, "DisableButtonColor");
+		RV(LineColor, "LineColor");
 	}
 };

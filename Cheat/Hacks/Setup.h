@@ -51,6 +51,7 @@ extern CSkins*				GP_Skins;
 extern CInventory*          GP_Inventory;
 #endif
 extern CGHelper*			GP_GHelper;
+extern CMain*               GP_Main;
 
 
 class CSetup : public IISetup
@@ -74,6 +75,7 @@ public:
 			GP_Inventory =  new CInventory();
 #endif
 			GP_GHelper =	new CGHelper();
+			GP_Main =       new CMain();
 			ADD_LOG("2-1-11-7-1\n");
 			CGSettings::G().UpdateList();
 			GP_Misc->UpdateSoundList();
@@ -119,6 +121,7 @@ public:
 			DELETE_PTR(GP_Inventory);
 #endif
 			DELETE_PTR(GP_GHelper);
+			DELETE_PTR(GP_Main);
 		}
 	};
 };

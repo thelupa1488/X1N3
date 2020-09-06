@@ -2,30 +2,24 @@
 #include "Setup.h"
 #include "../GUI/Gui.h"
 
-bool isDirectoryExists(const char *filename)
-{
-	DWORD dwFileAttributes = GetFileAttributes(filename);
-	if (dwFileAttributes == 0xFFFFFFFF)
-		return false;
-	return dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY;
-}
+//bool isDirectoryExists(const char *filename)
+//{
+//	DWORD dwFileAttributes = FastCall::G().t_GetFileAttributesA(filename);
+//	if (dwFileAttributes == 0xFFFFFFFF)
+//		return false;
+//	return dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY;
+//}
 
 void CGSettings::SaveEx(nlohmann::json &j)
 {
-	if (GP_Misc)
-		GP_Misc->Config.Save(j);
-
-	if (GP_Radar)
-		GP_Radar->Config.Save(j);
-
-	if (GP_GHelper)
-		GP_GHelper->Config.Save(j);
-
 	if (GP_Esp)
 	{
 		GP_Esp->Config.Save(j);
 		GP_Esp->SaveVisuals(j);
 	}
+
+	if (GP_GHelper)
+		GP_GHelper->Config.Save(j);
 #ifdef ENABLE_INVENTORY
 	if (GP_Inventory)
 	{
@@ -39,45 +33,32 @@ void CGSettings::SaveEx(nlohmann::json &j)
 		GP_LegitAim->SaveWeapons(j);
 	}
 
+	if (GP_Misc)
+		GP_Misc->Config.Save(j);
+
+	if (GP_Radar)
+		GP_Radar->Config.Save(j);
+
 	if (GP_Skins)
 	{
 		GP_Skins->Config.Save(j);
 		GP_Skins->SaveSkins(j);
 	}
 
-#define MCC XorStr("MainCheatConfig")
-#define SSS(a,b) j[MCC][XorStr(b)] = a;
-
-	SSS(MainSettings().MenuButton, "MenuButton");
-
-	CConfig Config = CConfig(XorStr("MainCheatConfig"));
-
-	RV(MainSettings().BackgroundColor, "BackgroundColor");
-	RV(MainSettings().TitleColor, "TitleColor");
-	RV(MainSettings().TextColor, "TextColor");
-	RV(MainSettings().FrameColor, "FrameColor");
-	RV(MainSettings().ButtonColor, "ButtonColor");
-	RV(MainSettings().DisableButtonColor, "DisableButtonColor");
-	RV(MainSettings().LineColor, "LineColor");
-	Config.Save(j);
+	if (GP_Main)
+		GP_Main->Config.Save(j);
 }
 
 void CGSettings::LoadEx(nlohmann::json &j)
 {
-	if (GP_Misc)
-		GP_Misc->Config.Load(j);
-
-	if (GP_Radar)
-		GP_Radar->Config.Load(j);
-
-	if (GP_GHelper)
-		GP_GHelper->Config.Load(j);
-
 	if (GP_Esp)
 	{
 		GP_Esp->Config.Load(j);
 		GP_Esp->LoadVisuals(j);
 	}
+
+	if (GP_GHelper)
+		GP_GHelper->Config.Load(j);
 #ifdef ENABLE_INVENTORY
 	if (GP_Inventory)
 	{
@@ -91,27 +72,20 @@ void CGSettings::LoadEx(nlohmann::json &j)
 		GP_LegitAim->LoadWeapons(j);
 	}
 
+	if (GP_Misc)
+		GP_Misc->Config.Load(j);
+
+	if (GP_Radar)
+		GP_Radar->Config.Load(j);
+
 	if (GP_Skins)
 	{
 		GP_Skins->Config.Load(j);
 		GP_Skins->LoadSkins(j);
 	}
 
-#define MCC XorStr("MainCheatConfig")
-#define SSS(a,b) if(!j[MCC][XorStr(b)].is_null()){ a = j[MCC][XorStr(b)];}
-
-	SSS(MainSettings().MenuButton, "MenuButton");
-
-	CConfig Config = CConfig(XorStr("MainCheatConfig"));
-
-	RV(MainSettings().BackgroundColor, "BackgroundColor");
-	RV(MainSettings().TitleColor, "TitleColor");
-	RV(MainSettings().TextColor, "TextColor");
-	RV(MainSettings().FrameColor, "FrameColor");
-	RV(MainSettings().ButtonColor, "ButtonColor");
-	RV(MainSettings().DisableButtonColor, "DisableButtonColor");
-	RV(MainSettings().LineColor, "LineColor");
-	Config.Load(j);
+	if (GP_Main)
+		GP_Main->Config.Load(j);
 }
 
 bool CGSettings::Save(string name)
@@ -157,17 +131,20 @@ bool CGSettings::Load()
 
 void CGSettings::UpdateColors()
 {
+	if (GP_Esp)
+		GP_Esp->Config.UpdateColors();
+
 	if (GP_LegitAim)
 		GP_LegitAim->Config.UpdateColors();
 
 	if (GP_Misc)
 		GP_Misc->Config.UpdateColors();
 
-	if (GP_Esp)
-		GP_Esp->Config.UpdateColors();
-
 	if (GP_Radar)
 		GP_Radar->Config.UpdateColors();
+
+	if (GP_Main)
+		GP_Main->Config.UpdateColors();
 }
 
 void CGSettings::SetName(const string _name)
@@ -216,18 +193,6 @@ void CGSettings::UpdateList()
 	}
 }
 
-bool CheckRus(string& check)
-{
-	string alph_rus = XorStr("АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЪъЫыЬьЭэЮюЯя");
-
-	for (auto& v_check : check)
-		for (auto& v_rus : alph_rus)
-			if (v_check == v_rus)
-				return true;
-
-	return false;
-}
-
 void CGSettings::Menu()
 {
 	static int ConfigSelect = 0;
@@ -263,6 +228,18 @@ void CGSettings::Menu()
 
 	string SettignBaseDir = CGlobal::SystemDisk + XorStr("X1N3\\Configurations\\");
 	string SettingsFormat = XorStr(".json");
+
+	auto CheckRus = [&](string& check)-> bool
+	{
+		string alph_rus = XorStr("АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЪъЫыЬьЭэЮюЯя");
+
+		for (auto& v_check : check)
+			for (auto& v_rus : alph_rus)
+				if (v_check == v_rus)
+					return true;
+
+		return false;
+	};
 
 	if (X1Gui().Button(XorStr("Create & save new config")))
 	{
@@ -333,17 +310,11 @@ void CGSettings::Menu()
 	{
 		if (ConfigSelect >= 0 && ConfigSelect < (int)AllSettings.size())
 		{
-			auto DeleteBackup = [&](string pref)->void
-			{
-
-			};
-
-			DeleteBackup(XorStr("_delete_copy_"));
 			string FulDel = SettignBaseDir + AllSettings[ConfigSelect].name;
 
 			if (AllSettings.size() > 0)
 			{
-				DeleteFile(FulDel.c_str());
+				FastCall::G().t_DeleteFileA(FulDel.c_str());
 			}
 
 			UpdateList();
@@ -364,6 +335,47 @@ string CGSettings::readFile(const string& fileName)
 	stringstream ss;
 	ss << f.rdbuf();
 	return ss.str();
+}
+
+void CMain::SetMenuColors()
+{
+	GuiStyle& style = X1Gui().GetStyle();
+
+	auto AutoChangeColor = [&](Color col, float ch) -> Color
+	{
+		Color entry;
+
+		entry.SetR(((col.r() + ch < 0) ? 0 : ((col.r() + ch > 255) ? 255 : (col.r() + ch))));
+		entry.SetG(((col.g() + ch < 0) ? 0 : ((col.g() + ch > 255) ? 255 : (col.g() + ch))));
+		entry.SetB(((col.b() + ch < 0) ? 0 : ((col.b() + ch > 255) ? 255 : (col.b() + ch))));
+		entry.SetA(col.a());
+
+		return entry;
+	};
+
+	style.clrLine = LineColor;
+	style.clrBackground = BackgroundColor;
+	style.clrText = TextColor;
+
+	style.clrFrame = FrameColor;
+	style.clrFrameHover = AutoChangeColor(FrameColor, -5);
+	style.clrFrameHold = AutoChangeColor(FrameColor, -9);
+
+	style.clrTabLabel = color_t(ButtonColor.r(), ButtonColor.g(), ButtonColor.b(), 120);
+	style.clrTabLabelText = color_t(TextColor.r(), TextColor.g(), TextColor.b(), 160);
+
+	style.clrButton = ButtonColor;
+	style.clrButtonHover = AutoChangeColor(ButtonColor, -10);
+	style.clrButtonHold = AutoChangeColor(ButtonColor, -20);
+
+	style.clrDisButton = DisableButtonColor;
+	style.clrDisButtonHover = AutoChangeColor(DisableButtonColor, -10);
+	style.clrDisButtonHold = AutoChangeColor(DisableButtonColor, -20);
+
+	style.clrScroll = AutoChangeColor(ButtonColor, -20);
+	style.clrScrollHover = AutoChangeColor(ButtonColor, -20);
+	style.clrScrollHold = AutoChangeColor(ButtonColor, -20);
+	style.clrTitle = TitleColor;
 }
 
 void CConfig::Save(nlohmann::json &j)

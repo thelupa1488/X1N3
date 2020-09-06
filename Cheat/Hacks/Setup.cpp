@@ -12,3 +12,4 @@ CSkins*				GP_Skins = nullptr;
 CInventory*         GP_Inventory = nullptr;
 #endif
 CGHelper*			GP_GHelper = nullptr;
+CMain*              GP_Main = nullptr;

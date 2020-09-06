@@ -242,12 +242,12 @@ bool check_closed = false;
 
 LRESULT WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	if (FastCall::G().t_GetAsyncKeyState(MainSettings().MenuButton))
+	if (FastCall::G().t_GetAsyncKeyState(GP_Main->MenuButton))
 	{
 		is_clicked = false;
 		is_down = true;
 	}
-	else if (!FastCall::G().t_GetAsyncKeyState(MainSettings().MenuButton) && is_down)
+	else if (!FastCall::G().t_GetAsyncKeyState(GP_Main->MenuButton) && is_down)
 	{
 		is_clicked = true;
 		is_down = false;

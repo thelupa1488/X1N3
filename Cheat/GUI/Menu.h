@@ -41,11 +41,11 @@ private:
 		if (SelectedSettings == 0)
 		{
 			CGSettings::G().Menu();
-			MainSettings().SetMenuColors();
+			GP_Main->SetMenuColors();
 		}
 		else if (SelectedSettings == 1)
 		{
-			HotsKey("Menu key", MainSettings().MenuButton);
+			HotsKey("Menu key", GP_Main->MenuButton);
 			X1Gui().Spacing();
 			X1Gui().Separator();
 			X1Gui().Spacing();
@@ -53,28 +53,28 @@ private:
 			X1Gui().Spacing();
 			X1Gui().Separator();
 			X1Gui().Spacing();
-			DColorEdit("Background color", MainSettings().BackgroundColor);
-			DColorEdit("Title color", MainSettings().TitleColor);
-			DColorEdit("Text color",  MainSettings().TextColor);
-			DColorEdit("Frame color", MainSettings().FrameColor);
-			DColorEdit("Button color", MainSettings().ButtonColor);
+			DColorEdit("Background color", GP_Main->BackgroundColor);
+			DColorEdit("Title color", GP_Main->TitleColor);
+			DColorEdit("Text color",  GP_Main->TextColor);
+			DColorEdit("Frame color", GP_Main->FrameColor);
+			DColorEdit("Button color", GP_Main->ButtonColor);
 			X1Gui().SameLine();
-			DColorEdit("Disabled button color", MainSettings().DisableButtonColor);
-			DColorEdit("Line color", MainSettings().LineColor);
+			DColorEdit("Disabled button color", GP_Main->DisableButtonColor);
+			DColorEdit("Line color", GP_Main->LineColor);
 			X1Gui().Spacing();
 			X1Gui().Separator();
 			X1Gui().Spacing();
 			if (X1Gui().Button(XorStr("Reset colors")))
 			{
-				MainSettings().BackgroundColor = Color(18, 18, 22, 255);
-				MainSettings().TitleColor = Color(112, 112, 116, 255);
-				MainSettings().TextColor = Color(255, 255, 255, 255);
-				MainSettings().FrameColor = Color(34, 35, 37, 255);
-				MainSettings().ButtonColor = Color(128, 135, 140, 255);
-				MainSettings().DisableButtonColor = Color(225, 0, 0, 255);
-				MainSettings().LineColor = Color(120, 121, 123, 255);
+				GP_Main->BackgroundColor = Color(18, 18, 22, 255);
+				GP_Main->TitleColor = Color(112, 112, 116, 255);
+				GP_Main->TextColor = Color(255, 255, 255, 255);
+				GP_Main->FrameColor = Color(34, 35, 37, 255);
+				GP_Main->ButtonColor = Color(128, 135, 140, 255);
+				GP_Main->DisableButtonColor = Color(225, 0, 0, 255);
+				GP_Main->LineColor = Color(120, 121, 123, 255);
 			}
-			MainSettings().SetMenuColors();
+			GP_Main->SetMenuColors();
 		}
 	}
 
@@ -209,7 +209,7 @@ public:
 			{
 				X1Gui().GetStyle().ScrollEnable = LabelWinEnd && MainWinEnd;
 
-				MainSettings().HintMsg = "";
+				GP_Main->HintMsg = "";
 
 				Vec2 oldWinPadding = X1Gui().GetStyle().wndPadding;
 				X1Gui().GetStyle().wndPadding = Vec2(2, 1);
@@ -329,9 +329,9 @@ public:
 							X1Gui().End();
 						}
 
-						if (MainSettings().HintMsg != "")
+						if (GP_Main->HintMsg != "")
 						{
-							int HintSizeY = X1Gui().CalcTextSize(MainSettings().HintMsg).y + 9;
+							int HintSizeY = X1Gui().CalcTextSize(GP_Main->HintMsg).y + 9;
 							X1Gui().SetNextWindowPos(Vec2(MainWinPos.x, MainWinPos.y - HintSizeY - 4));
 							if (X1Gui().Begin(XorStr("Hint"), GWF_NoTitleBar, Vec2(WINDOW2_SIZE_X, HintSizeY), Vec2(1, 1)))
 							{
