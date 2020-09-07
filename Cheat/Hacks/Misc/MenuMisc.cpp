@@ -171,7 +171,8 @@ void CMisc::Menu()
 	if (Aspect)
 	{
 		X1Gui().PushItemWidth(PUSH_2);
-		SliderFloats("Aspect ratio", AspectRation, 0.1, 5);
+		SliderInts("Width", AspectWidth, 1, CGlobal::iScreenWidth);
+		SliderInts("Height", AspectHeight, 1, CGlobal::iScreenHeight);
 	}
 	X1Gui().Spacing();
 	X1Gui().Separator();

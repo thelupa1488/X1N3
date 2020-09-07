@@ -5,11 +5,14 @@ void __fastcall hkFrameStageNotify(void* ecx, void* edx, ClientFrameStage_t Stag
 {
 	static auto ofunc = HookTables::pFrameStageNotify->GetTrampoline();
 
-	if (GP_Skins && CGlobal::IsGameReady && Stage == FRAME_NET_UPDATE_POSTDATAUPDATE_START)
-		GP_Skins->PostDataUpdate();
+	if (GP_Skins && CGlobal::IsGameReady)
+		GP_Skins->PostDataUpdate(Stage);
 
-	if (GP_Esp && CGlobal::IsGameReady && Stage == FRAME_NET_UPDATE_END)
-		GP_Esp->SoundFrameStage();
+	if (GP_Esp && CGlobal::IsGameReady)
+		GP_Esp->SoundFrameStage(Stage);
+
+	if (GP_Misc && CGlobal::IsGameReady)
+		GP_Misc->HandFrameStage(Stage);
 
 	ofunc(ecx, Stage);
 }

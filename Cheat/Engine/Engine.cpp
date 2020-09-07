@@ -16,7 +16,7 @@ vector<string> CGlobal::ConfigList;
 CBaseEntity* CGlobal::LocalPlayer;
 CUserCmd* CGlobal::UserCmd;
 
-int CGlobal::OrigRightHand;
+bool CGlobal::OrigRightHand;
 float CGlobal::OrigViewModelX;
 float CGlobal::OrigViewModelY;
 float CGlobal::OrigViewModelZ;

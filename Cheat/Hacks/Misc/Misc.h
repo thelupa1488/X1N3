@@ -59,6 +59,7 @@ protected:
 	virtual void Draw() = 0;
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd) = 0;
 	virtual void CreateMoveEP(bool &bSendPacket, CUserCmd* pCmd) = 0;
+	virtual void HandFrameStage(ClientFrameStage_t Stage) = 0;
 	virtual void OverrideView(CViewSetup* pSetup) = 0;
 };
 
@@ -79,6 +80,7 @@ public:
 	virtual void Draw();
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd);
 	virtual void CreateMoveEP(bool &bSendPacket, CUserCmd* pCmd);
+	virtual void HandFrameStage(ClientFrameStage_t Stage);
 	virtual void OverrideView(CViewSetup* pSetup);
 	virtual void GetViewModelFOV(float &Fov);
 	virtual void AutoAcceptEmit();
@@ -97,6 +99,7 @@ public:
 	Vector fake_angle;
 	Vector view_angle;
 	/*=============*/
+	bool aspect_update = false;
 
 	bool Enable = true;
 	bool BHop = false;
@@ -224,7 +227,8 @@ public:
 	float ViewModelZ = 0;
 
 	bool Aspect = false;
-	float AspectRation = 0;
+	int AspectWidth = 800;
+	int AspectHeight = 600;
 
 	bool FakeLag = false;
 	int FakeLagFactor = 0;
@@ -371,7 +375,8 @@ public:
 		RV(ViewModelY, "ViewModelY");
 		RV(ViewModelZ, "ViewModelZ");
 		RV(Aspect, "Aspect");
-		RV(AspectRation, "Aspect Ration");
+		RV(AspectWidth, "AspectWidth");
+		RV(AspectHeight, "AspectHeight");
 		RV(FakeLag, "FakeLag");
 		RV(FakeLagType, "FakeLagType");
 		RV(FakeLagStanding, "FakeLagStanding");

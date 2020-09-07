@@ -40,6 +40,7 @@ public:
 class IEsp
 {
 public:
+	virtual void SoundFrameStage(ClientFrameStage_t Stage) = 0;
 	virtual void Draw() = 0;
 	virtual void PlayerEsp(CEntityPlayer* Local) = 0;
 	virtual void SetPlayerAlpha(float NewAlph) = 0;
@@ -144,7 +145,7 @@ public:
 
 	CConfig Config = CConfig(XorStr("Esp"));
 
-	virtual void SoundFrameStage();
+	virtual void SoundFrameStage(ClientFrameStage_t Stage);
 	virtual void Draw();
 	virtual void PlayerEsp(CEntityPlayer* Local);
 	virtual void WorldEsp();

@@ -394,34 +394,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					}
 				}
 			}
-
-			static ConVar* cl_righthand = I::GetCvar()->FindVar(XorStr("cl_righthand"));
-			static bool LeftHandKnifeReset = false;
-			if (LRHandKnife)
-			{
-				if (CGlobal::GWeaponType == WEAPON_TYPE_KNIFE)
-					cl_righthand->SetValue(!CGlobal::OrigRightHand);
-				else
-					cl_righthand->SetValue(CGlobal::OrigRightHand);
-
-				LeftHandKnifeReset = true;
-			}
-			if (!LRHandKnife && LeftHandKnifeReset)
-			{
-				cl_righthand->SetValue(CGlobal::OrigRightHand);
-				LeftHandKnifeReset = false;
-			}
-			static bool SwapHandReset = false;
-			if (SwapHand)
-			{
-				cl_righthand->SetValue(SwapHandBind.Check());
-				SwapHandReset = true;
-			}
-			if (!SwapHand && SwapHandReset)
-			{
-				cl_righthand->SetValue(CGlobal::OrigRightHand);
-				SwapHandReset = false;
-			}
 			if (InfiniteCrouch)
 			{
 				if (!CGlobal::LocalPlayer->IsDead())
@@ -533,7 +505,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					if (playerInfo.fakeplayer || std::find(stolenIds.cbegin(), stolenIds.cend(), playerInfo.userId) != stolenIds.cend())
 						continue;
 
-					if (ChangeName(false, (std::string(playerInfo.szName) +'\x1').c_str(), 1.0f))
+					if (ChangeName(I::Engine()->IsConnected(), (std::string(playerInfo.szName) +'\x1').c_str(), 1.0f))
 						stolenIds.push_back(playerInfo.userId);
 
 					return;
@@ -705,49 +677,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					string msg = RadioSpam[rand() % RadioSpam.size()];
 					I::Engine()->ExecuteClientCmd(msg.c_str());
 				}
-			}
-			static ConVar* viewmodel_offset_x = I::GetCvar()->FindVar(XorStr("viewmodel_offset_x"));
-			static ConVar* viewmodel_offset_y = I::GetCvar()->FindVar(XorStr("viewmodel_offset_y"));
-			static ConVar* viewmodel_offset_z = I::GetCvar()->FindVar(XorStr("viewmodel_offset_z"));
-			static bool ViewModelXYZReset = false;
-			if (ViewModelXYZ)
-			{
-				if (ViewModelX > 0 || ViewModelX < 0) 
-				{
-					*(float*)((DWORD)&viewmodel_offset_x->fnChangeCallback + 0xC) = NULL;
-					viewmodel_offset_x->SetValue(ViewModelX);
-				}
-				if (ViewModelY > 0 || ViewModelY < 0)
-				{
-					*(float*)((DWORD)&viewmodel_offset_y->fnChangeCallback + 0xC) = NULL;
-					viewmodel_offset_y->SetValue(ViewModelY);
-				}
-				if (ViewModelZ > 0 || ViewModelZ < 0) 
-				{
-					*(float*)((DWORD)&viewmodel_offset_z->fnChangeCallback + 0xC) = NULL;
-					viewmodel_offset_z->SetValue(ViewModelZ);
-				}
-
-				ViewModelXYZReset = true;
-			}
-			if (!ViewModelXYZ && ViewModelXYZReset)
-			{
-				viewmodel_offset_x->SetValue(CGlobal::OrigViewModelX);
-				viewmodel_offset_y->SetValue(CGlobal::OrigViewModelY);
-				viewmodel_offset_z->SetValue(CGlobal::OrigViewModelZ);
-				ViewModelXYZReset = false;
-			}
-			static ConVar* r_aspectratio = I::GetCvar()->FindVar(XorStr("r_aspectratio"));
-			static bool AspectRatioReset = false;
-			if (Aspect)
-			{
-				r_aspectratio->SetValue(AspectRation);
-				AspectRatioReset = true;
-			}
-			if (!Aspect && AspectRatioReset)
-			{
-				r_aspectratio->SetValue(CGlobal::OrigAspectRatio);
-				AspectRatioReset = false;
 			}
 			if (FakeLag && FakeLagBind.Check())
 			{
@@ -1302,6 +1231,102 @@ void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
 				else if (angles.y > 0.0f)
 					pCmd->sidemove = -250.f;
 			}
+		}
+	}
+}
+
+void CMisc::HandFrameStage(ClientFrameStage_t Stage)
+{
+	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
+	{
+		if (CGlobal::LocalPlayer)
+		{
+			if (Stage != FRAME_RENDER_START && Stage != FRAME_RENDER_END)
+				return;
+
+			static ConVar* cl_righthand = I::GetCvar()->FindVar(XorStr("cl_righthand"));
+			static ConVar* viewmodel_offset_x = I::GetCvar()->FindVar(XorStr("viewmodel_offset_x"));
+			static ConVar* viewmodel_offset_y = I::GetCvar()->FindVar(XorStr("viewmodel_offset_y"));
+			static ConVar* viewmodel_offset_z = I::GetCvar()->FindVar(XorStr("viewmodel_offset_z"));
+			static ConVar* r_aspectratio = I::GetCvar()->FindVar(XorStr("r_aspectratio"));
+
+			if (Stage == FRAME_RENDER_START)
+			{
+				static bool LeftHandKnifeReset = false;
+				if (LRHandKnife)
+				{
+					if (CGlobal::GWeaponType == WEAPON_TYPE_KNIFE)
+						cl_righthand->SetValue(!CGlobal::OrigRightHand);
+					else
+						cl_righthand->SetValue(CGlobal::OrigRightHand);
+					LeftHandKnifeReset = true;
+				}
+				if (!LRHandKnife && LeftHandKnifeReset)
+				{
+					cl_righthand->SetValue(CGlobal::OrigRightHand);
+					LeftHandKnifeReset = false;
+				}
+				static bool SwapHandReset = false;
+				if (SwapHand)
+				{
+					cl_righthand->SetValue(SwapHandBind.Check());
+					SwapHandReset = true;
+				}
+				if (!SwapHand && SwapHandReset)
+				{
+					cl_righthand->SetValue(CGlobal::OrigRightHand);
+					SwapHandReset = false;
+				}
+				static bool ViewModelXYZReset = false;
+				if (ViewModelXYZ)
+				{
+					if (ViewModelX > 0 || ViewModelX < 0)
+					{
+						*(float*)((DWORD)&viewmodel_offset_x->fnChangeCallback + 0xC) = NULL;
+						viewmodel_offset_x->SetValue(ViewModelX);
+					}
+					if (ViewModelY > 0 || ViewModelY < 0)
+					{
+						*(float*)((DWORD)&viewmodel_offset_y->fnChangeCallback + 0xC) = NULL;
+						viewmodel_offset_y->SetValue(ViewModelY);
+					}
+					if (ViewModelZ > 0 || ViewModelZ < 0)
+					{
+						*(float*)((DWORD)&viewmodel_offset_z->fnChangeCallback + 0xC) = NULL;
+						viewmodel_offset_z->SetValue(ViewModelZ);
+					}
+
+					ViewModelXYZReset = true;
+				}
+				if (!ViewModelXYZ && ViewModelXYZReset)
+				{
+					viewmodel_offset_x->SetValue(CGlobal::OrigViewModelX);
+					viewmodel_offset_y->SetValue(CGlobal::OrigViewModelY);
+					viewmodel_offset_z->SetValue(CGlobal::OrigViewModelZ);
+					ViewModelXYZReset = false;
+				}
+				static bool AspectRatioReset = false;
+				if (Aspect)
+				{
+					float AspectRation = I::Engine()->GetScreenAspectRatio(AspectWidth, AspectHeight);
+					*(int*)((DWORD)&r_aspectratio->fnChangeCallback + 0xC) = NULL;
+					r_aspectratio->SetValue(AspectRation);
+					AspectRatioReset = true;
+				}
+				if (!Aspect && AspectRatioReset)
+				{
+					r_aspectratio->SetValue(CGlobal::OrigAspectRatio);
+					AspectRatioReset = false;
+				}
+			}
+			else
+			{
+				cl_righthand->SetValue(CGlobal::OrigRightHand);
+				viewmodel_offset_x->SetValue(CGlobal::OrigViewModelX);
+				viewmodel_offset_y->SetValue(CGlobal::OrigViewModelY);
+				viewmodel_offset_z->SetValue(CGlobal::OrigViewModelZ);
+				r_aspectratio->SetValue(CGlobal::OrigAspectRatio);
+			}				
 		}
 	}
 }

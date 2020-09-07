@@ -66,6 +66,14 @@ private:
 			X1Gui().Spacing();
 			if (X1Gui().Button(XorStr("Reset colors")))
 			{
+				GP_Main->BackgroundColor.brainbow = false;
+				GP_Main->TitleColor.brainbow = false;
+				GP_Main->TextColor.brainbow = false;
+				GP_Main->FrameColor.brainbow = false;
+				GP_Main->ButtonColor.brainbow = false;
+				GP_Main->DisableButtonColor.brainbow = false;
+				GP_Main->LineColor.brainbow = false;
+
 				GP_Main->BackgroundColor = Color(18, 18, 22, 255);
 				GP_Main->TitleColor = Color(112, 112, 116, 255);
 				GP_Main->TextColor = Color(255, 255, 255, 255);

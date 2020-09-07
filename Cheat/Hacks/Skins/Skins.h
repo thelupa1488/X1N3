@@ -37,7 +37,7 @@ public:
 	//virtual void Preview() = 0;
 	//auto initialize_kits() -> void;
 
-	virtual void PostDataUpdate() = 0;
+	virtual void PostDataUpdate(ClientFrameStage_t Stage) = 0;
 	virtual void RecvProxy_Viewmodel(CRecvProxyData *pData, void *pStruct, void *pOut) = 0;
 
 	virtual void ApplyCustomSkin(CBaseAttributableItem* pWeapon, int nWeaponIndex, bool IsTT) = 0;
@@ -342,7 +342,7 @@ public:
 	//virtual void Preview();
 	auto initialize_kits() -> void;
 
-	virtual void PostDataUpdate();
+	virtual void PostDataUpdate(ClientFrameStage_t Stage);
 	virtual void RecvProxy_Viewmodel(CRecvProxyData *pData, void *pStruct, void *pOut);
 
 	virtual void ApplyCustomSkin(CBaseAttributableItem* pWeapon, int nWeaponIndex, bool IsTT);

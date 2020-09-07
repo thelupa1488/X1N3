@@ -152,167 +152,173 @@ void CSkins::RecvProxy_Viewmodel(CRecvProxyData *pData, void *pStruct, void *pOu
 	}
 }
 
-void CSkins::PostDataUpdate()
+void CSkins::PostDataUpdate(ClientFrameStage_t Stage)
 {
 	if (SkinsEnable && SelectedWeapon || SelectedKnifeModelCT || SelectedKnifeModelTT)
 	{
-		HANDLE worldmodel_handle = 0;
-
-		CBaseEntity* worldmodel = nullptr;
-
-		int nLocalPlayerID = I::Engine()->GetLocalPlayer();
-
-		CBaseEntity* pLocal = (CBaseEntity*)I::EntityList()->GetClientEntity(nLocalPlayerID);
-
-		if (!pLocal)
-			return;
-
-		PlayerInfo LocalPlayerInfo;
-		if (!I::Engine()->GetPlayerInfo(nLocalPlayerID, &LocalPlayerInfo))
-			return;
-
-		bool IsTT = pLocal->GetTeam() == 2;
-		CBaseHandle* weapons = pLocal->GetWeapons();
-
-		for (size_t i = 0; weapons[i] != INVALID_EHANDLE_INDEX; i++)
+		if (Stage == FRAME_NET_UPDATE_POSTDATAUPDATE_START)
 		{
-			CBaseEntity* pEntity = I::EntityList()->GetClientEntityFromHandle(weapons[i]);
-			if (pEntity)
+			HANDLE worldmodel_handle = 0;
+
+			CBaseEntity* worldmodel = nullptr;
+
+			int nLocalPlayerID = I::Engine()->GetLocalPlayer();
+
+			CBaseEntity* pLocal = (CBaseEntity*)I::EntityList()->GetClientEntity(nLocalPlayerID);
+
+			if (!pLocal)
+				return;
+
+			PlayerInfo LocalPlayerInfo;
+			if (!I::Engine()->GetPlayerInfo(nLocalPlayerID, &LocalPlayerInfo))
+				return;
+
+			bool IsTT = pLocal->GetTeam() == 2;
+			CBaseHandle* weapons = pLocal->GetWeapons();
+
+			for (size_t i = 0; weapons[i] != INVALID_EHANDLE_INDEX; i++)
 			{
-				CBaseWeapon* pWeapon = (CBaseWeapon*)pEntity;
-				CBaseAttributableItem* pAttrib = pWeapon->GeteAttributableItem();
-
-				if (!pAttrib)
-					continue;
-
-				ApplyStickerHooks(pAttrib);
-
-				if (LocalPlayerInfo.xuid_low != *pAttrib->GetOriginalOwnerXuidLow())
-					continue;
-
-				if (LocalPlayerInfo.xuid_high != *pAttrib->GetOriginalOwnerXuidHigh())
-					continue;
-
-				if (pEntity->GetClientClass()->m_ClassID == (int)CLIENT_CLASS_ID::CKnife)
+				CBaseEntity* pEntity = I::EntityList()->GetClientEntityFromHandle(weapons[i]);
+				if (pEntity)
 				{
-					int sel_mod = (IsTT ? SelectedKnifeModelTT : SelectedKnifeModelCT);
-					ItemSettings* Item = (IsTT ? &KnifeNamesTT[sel_mod] : &KnifeNames[sel_mod]);
-					if (sel_mod)
+					CBaseWeapon* pWeapon = (CBaseWeapon*)pEntity;
+					CBaseAttributableItem* pAttrib = pWeapon->GeteAttributableItem();
+
+					if (!pAttrib)
+						continue;
+
+					ApplyStickerHooks(pAttrib);
+
+					if (LocalPlayerInfo.xuid_low != *pAttrib->GetOriginalOwnerXuidLow())
+						continue;
+
+					if (LocalPlayerInfo.xuid_high != *pAttrib->GetOriginalOwnerXuidHigh())
+						continue;
+
+					if (pEntity->GetClientClass()->m_ClassID == (int)CLIENT_CLASS_ID::CKnife)
 					{
-						int mdl_idx = GetKnifeModelIdx(sel_mod, IsTT);
-						worldmodel_handle = pWeapon->GetWeaponWorldModel();
-						if (worldmodel_handle)
-							worldmodel = I::EntityList()->GetClientEntityFromHandleknife(worldmodel_handle);
-
-						*pWeapon->ModelIndex() = mdl_idx;
-						*pWeapon->ViewModelIndex() = mdl_idx;
-
-						if (worldmodel)
-							*pWeapon->ModelIndex() = mdl_idx + 1;
-
-						*pWeapon->fixskins() = Item->ID;
-#ifdef ENABLE_INVENTORY
-						if (Item->IsInventory)
+						int sel_mod = (IsTT ? SelectedKnifeModelTT : SelectedKnifeModelCT);
+						ItemSettings* Item = (IsTT ? &KnifeNamesTT[sel_mod] : &KnifeNames[sel_mod]);
+						if (sel_mod)
 						{
-							if (IsTT)
-								*pAttrib->GetEntityQuality() = Item->Skin.quality;
+							int mdl_idx = GetKnifeModelIdx(sel_mod, IsTT);
+							worldmodel_handle = pWeapon->GetWeaponWorldModel();
+							if (worldmodel_handle)
+								worldmodel = I::EntityList()->GetClientEntityFromHandleknife(worldmodel_handle);
+
+							*pWeapon->ModelIndex() = mdl_idx;
+							*pWeapon->ViewModelIndex() = mdl_idx;
+
+							if (worldmodel)
+								*pWeapon->ModelIndex() = mdl_idx + 1;
+
+							*pWeapon->fixskins() = Item->ID;
+#ifdef ENABLE_INVENTORY
+							if (Item->IsInventory)
+							{
+								if (IsTT)
+									*pAttrib->GetEntityQuality() = Item->Skin.quality;
+								else
+									*pAttrib->GetEntityQuality() = Item->SkinTT.quality;
+							}
 							else
-								*pAttrib->GetEntityQuality() = Item->SkinTT.quality;
-						}
-						else
-							*pAttrib->GetEntityQuality() = Item->Skin.quality;
+								*pAttrib->GetEntityQuality() = Item->Skin.quality;
 #endif
-						*pAttrib->GetEntityQuality() = Item->Skin.quality;
+							* pAttrib->GetEntityQuality() = Item->Skin.quality;
+						}
 					}
+
+					ApplyCustomSkin(pAttrib, *pAttrib->GetItemDefinitionIndex(), IsTT);
+
+					*pWeapon->OwnerXuidLow() = 0;
+					*pWeapon->OwnerXuidHigh() = 0;
+					*pWeapon->fixItemIDHigh() = 1;
 				}
-
-				ApplyCustomSkin(pAttrib, *pAttrib->GetItemDefinitionIndex(), IsTT);
-
-				*pWeapon->OwnerXuidLow() = 0;
-				*pWeapon->OwnerXuidHigh() = 0;
-				*pWeapon->fixItemIDHigh() = 1;
 			}
 		}
 	}
 	if (SkinsEnable && SelectedGloveCT || SelectedGloveTT)
 	{
-		int nLocalPlayerID = I::Engine()->GetLocalPlayer();
-
-		CBaseEntity* pLocal = (CBaseEntity*)I::EntityList()->GetClientEntity(nLocalPlayerID);
-
-		if (!pLocal)
-			return;
-
-		PlayerInfo LocalPlayerInfo;
-		if (!I::Engine()->GetPlayerInfo(nLocalPlayerID, &LocalPlayerInfo))
-			return;
-
-		bool IsTT = pLocal->GetTeam() == 2;
-		int CurGlove = IsTT ? SelectedGloveTT : SelectedGloveCT;
-
-		if (CurGlove)
+		if (Stage == FRAME_NET_UPDATE_POSTDATAUPDATE_START)
 		{
-			CBaseHandle* wearables = pLocal->GetWearables();
+			int nLocalPlayerID = I::Engine()->GetLocalPlayer();
 
-			if (!wearables)
+			CBaseEntity* pLocal = (CBaseEntity*)I::EntityList()->GetClientEntity(nLocalPlayerID);
+
+			if (!pLocal)
 				return;
 
-			static auto glove_handle = CBaseHandle(0);
+			PlayerInfo LocalPlayerInfo;
+			if (!I::Engine()->GetPlayerInfo(nLocalPlayerID, &LocalPlayerInfo))
+				return;
 
-			auto glove = (CBaseAttributableItem*)I::EntityList()->GetClientEntityFromHandle(wearables[0]);
+			bool IsTT = pLocal->GetTeam() == 2;
+			int CurGlove = IsTT ? SelectedGloveTT : SelectedGloveCT;
 
-			if (!glove)
+			if (CurGlove)
 			{
-				const auto our_glove = (CBaseAttributableItem*)I::EntityList()->GetClientEntityFromHandle(glove_handle);
+				CBaseHandle* wearables = pLocal->GetWearables();
 
-				if (our_glove)
+				if (!wearables)
+					return;
+
+				static auto glove_handle = CBaseHandle(0);
+
+				auto glove = (CBaseAttributableItem*)I::EntityList()->GetClientEntityFromHandle(wearables[0]);
+
+				if (!glove)
 				{
-					wearables[0] = glove_handle;
-					glove = our_glove;
+					const auto our_glove = (CBaseAttributableItem*)I::EntityList()->GetClientEntityFromHandle(glove_handle);
+
+					if (our_glove)
+					{
+						wearables[0] = glove_handle;
+						glove = our_glove;
+					}
 				}
-			}
-			if (pLocal->IsDead() || pLocal->GetHealth() <= 0)
-			{
+				if (pLocal->IsDead() || pLocal->GetHealth() <= 0)
+				{
+					if (glove)
+					{
+						glove->GetClientNetworkable()->SetDestroyedOnRecreateEntities();
+						glove->GetClientNetworkable()->Release();
+					}
+					return;
+				}
+				if (!glove || !UpdateGlove)
+				{
+					const auto entry = I::EntityList()->GetHighestEntityIndex() + 1;
+					const auto serial = rand() % 0x1000;
+					glove = MakeGlove(entry, serial);
+					wearables[0] = entry | serial << 16;
+					glove_handle = wearables[0];
+					UpdateGlove = true;
+				}
+
 				if (glove)
 				{
-					glove->GetClientNetworkable()->SetDestroyedOnRecreateEntities();
-					glove->GetClientNetworkable()->Release();
-				}
-				return;
-			}
-			if (!glove || !UpdateGlove)
-			{
-				const auto entry = I::EntityList()->GetHighestEntityIndex() + 1;
-				const auto serial = rand() % 0x1000;
-				glove = MakeGlove(entry, serial);
-				wearables[0] = entry | serial << 16;
-				glove_handle = wearables[0];
-				UpdateGlove = true;
-			}
+					*glove->GetIndex() = -1;
 
-			if (glove)
-			{
-				*glove->GetIndex() = -1;
+					*glove->GetItemIDHigh() = -1;
+					*glove->GetAccountID() = LocalPlayerInfo.xuid_low;
 
-				*glove->GetItemIDHigh() = -1;
-				*glove->GetAccountID() = LocalPlayerInfo.xuid_low;
+					*glove->GetEntityQuality() = 4;
+					*glove->GetFallbackWear() = IsTT ? GloveTTWear : GloveCTWear;
+					*glove->GetFallbackSeed() = 0;
+					*glove->GetFallbackStatTrak() = -1;
+					*glove->GetFallbackPaintKit() = GlovesSkin_Array[CurGlove - 1].PaintKit;
 
-				*glove->GetEntityQuality() = 4;
-				*glove->GetFallbackWear() = IsTT ? GloveTTWear : GloveCTWear;
-				*glove->GetFallbackSeed() = 0;
-				*glove->GetFallbackStatTrak() = -1;
-				*glove->GetFallbackPaintKit() = GlovesSkin_Array[CurGlove - 1].PaintKit;
+					auto& definition_index = *glove->GetItemDefinitionIndex();
 
-				auto& definition_index = *glove->GetItemDefinitionIndex();
+					if (GlovesSkin_Array[CurGlove - 1].ItemIndex != definition_index)
+					{
+						int ModelIndex = I::ModelInfo()->GetModelIndex(GlovesSkin_Array[CurGlove - 1].szModel);
 
-				if (GlovesSkin_Array[CurGlove - 1].ItemIndex != definition_index)
-				{
-					int ModelIndex = I::ModelInfo()->GetModelIndex(GlovesSkin_Array[CurGlove - 1].szModel);
+						*glove->GetItemDefinitionIndex() = GlovesSkin_Array[CurGlove - 1].ItemIndex;
 
-					*glove->GetItemDefinitionIndex() = GlovesSkin_Array[CurGlove - 1].ItemIndex;
-
-					glove->SetModelIndex(ModelIndex);
-					glove->GetClientNetworkable()->PreDataUpdate(DATA_UPDATE_CREATED);
+						glove->SetModelIndex(ModelIndex);
+						glove->GetClientNetworkable()->PreDataUpdate(DATA_UPDATE_CREATED);
+					}
 				}
 			}
 		}

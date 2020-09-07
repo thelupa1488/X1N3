@@ -127,30 +127,33 @@ void CSoundEsp::Draw(CEntityPlayer* Local)
 	}
 }
 
-void CEsp::SoundFrameStage()
+void CEsp::SoundFrameStage(ClientFrameStage_t Stage)
 {
 	if (Enable && SoundEspEnable)
 	{
-		CUtlVector<SndInfo_t> sndList;
-		sndList.RemoveAll();
-		I::Sound()->GetActiveSounds(sndList);
-		if (sndList.Count() < 1)
-			return;
-
-		for (int i = 0; i < sndList.Count(); i++)
+		if (Stage == FRAME_NET_UPDATE_END)
 		{
-			SndInfo_t& sound = sndList.Element(i);
+			CUtlVector<SndInfo_t> sndList;
+			sndList.RemoveAll();
+			I::Sound()->GetActiveSounds(sndList);
+			if (sndList.Count() < 1)
+				return;
 
-			if (sound.m_nSoundSource < 1)
-				continue;
+			for (int i = 0; i < sndList.Count(); i++)
+			{
+				SndInfo_t& sound = sndList.Element(i);
 
-			if (!sndList[i].m_pOrigin || !sndList[i].m_nSoundSource || !sndList[i].m_bUpdatePositions || sndList[i].m_nChannel != 4)
-				continue;
+				if (sound.m_nSoundSource < 1)
+					continue;
 
-			if (CGlobal::LocalPlayer->GetAbsOrigin().DistTo(*sndList[i].m_pOrigin) > 900)
-				continue;
+				if (!sndList[i].m_pOrigin || !sndList[i].m_nSoundSource || !sndList[i].m_bUpdatePositions || sndList[i].m_nChannel != 4)
+					continue;
 
-			GP_Esp->PlaySounds(*sndList[i].m_pOrigin, sndList[i].m_nSoundSource);
+				if (CGlobal::LocalPlayer->GetAbsOrigin().DistTo(*sndList[i].m_pOrigin) > 900)
+					continue;
+
+				GP_Esp->PlaySounds(*sndList[i].m_pOrigin, sndList[i].m_nSoundSource);
+			}
 		}
 	}
 }
