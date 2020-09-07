@@ -99,7 +99,6 @@ public:
 	Vector fake_angle;
 	Vector view_angle;
 	/*=============*/
-	bool aspect_update = false;
 
 	bool Enable = true;
 	bool BHop = false;
