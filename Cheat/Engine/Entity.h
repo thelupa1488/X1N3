@@ -114,7 +114,6 @@ namespace Engine
 		Vector  GetPredicted(Vector p0);
 		QAngle& GetVAngles();
 		void            InvalidateBoneCache();
-		int             GetNumAnimOverlays();
 		AnimationLayer* GetAnimOverlays();
 		std::array<float, 24>& GetPoseParameters();
 		AnimationLayer* GetAnimOverlay(int i);
@@ -122,7 +121,7 @@ namespace Engine
 		bool            setupBones(matrix3x4_t* out, int maxBones, int boneMask, float currentTime);
 		CCSGOPlayerAnimState* GetPlayerAnimState();
 
-		void UpdateAnimationState(CCSGOPlayerAnimState* state, QAngle angle);
+		void UpdateAnimationState(CCSGOPlayerAnimState* state, Vector angle);
 		void ResetAnimationState(CCSGOPlayerAnimState* state);
 		void CreateAnimationState(CCSGOPlayerAnimState* state);
 

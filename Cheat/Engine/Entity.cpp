@@ -666,9 +666,10 @@ namespace Engine
 		return entIndex > I::GlobalVars()->maxClients;
 	}
 
-	int& CBaseEntity::GetModelIndex()
+	void CBaseViewModel::SetModelIndex(int nModelIndex)
 	{
-		return ptr(*(int*), this, offsets["m_nModelIndex"]);
+		VirtualFn(void)(PVOID, int);
+		GetMethod< OriginalFn >(this, 75)(this, nModelIndex);
 	}
 
 	int CBaseViewModel::GetSequence()

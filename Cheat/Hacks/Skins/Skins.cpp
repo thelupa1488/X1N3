@@ -320,7 +320,7 @@ void CSkins::PostDataUpdate(ClientFrameStage_t Stage)
 			}
 		}
 	}
-	if (SelectedAgentCT || SelectedAgentTT)
+	if (SkinsEnable && SelectedAgentCT || SelectedAgentTT)
 	{
 		if (Stage != FRAME_RENDER_START && Stage != FRAME_RENDER_END)
 			return;
@@ -329,7 +329,8 @@ void CSkins::PostDataUpdate(ClientFrameStage_t Stage)
 		CBaseEntity* pLocal = (CBaseEntity*)I::EntityList()->GetClientEntity(nLocalPlayerID);
 		static int originalIdx = 0;
 
-		if (!pLocal) {
+		if (!pLocal) 
+		{
 			originalIdx = 0;
 			return;
 		}
