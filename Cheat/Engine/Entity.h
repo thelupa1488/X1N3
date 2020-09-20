@@ -156,6 +156,7 @@ namespace Engine
 		int		GetTickBase();
 
 		float* GetFlashMaxAlpha();
+		int    GetRagdoll();
 
 		ObserverMode_t GetObserverMode();
 		PVOID GetObserverTarget();

@@ -401,6 +401,11 @@ namespace Engine
 		return ptr((float*), this, offsets["m_flFlashMaxAlpha"]);
 	}
 
+	int CBaseEntity::GetRagdoll()
+	{
+		return ptr(*(PINT), this, offsets["m_hRagdoll"]);
+	}
+
 	ObserverMode_t CBaseEntity::GetObserverMode()
 	{
 		return ptr(*(ObserverMode_t*), this, offsets["m_iObserverMode"]);
@@ -661,10 +666,9 @@ namespace Engine
 		return entIndex > I::GlobalVars()->maxClients;
 	}
 
-	void CBaseViewModel::SetModelIndex(int nModelIndex)
+	int& CBaseEntity::GetModelIndex()
 	{
-		VirtualFn(void)(PVOID, int);
-		GetMethod< OriginalFn >(this, 75)(this, nModelIndex);
+		return ptr(*(int*), this, offsets["m_nModelIndex"]);
 	}
 
 	int CBaseViewModel::GetSequence()

@@ -11,6 +11,7 @@ namespace Offsets
 	DWORD m_hViewModel = 0;
 	DWORD m_nTickBase = 0;
 	DWORD m_flFlashMaxAlpha = 0;
+	DWORD m_hRagdoll = 0;
 	DWORD m_iObserverMode = 0;
 	DWORD m_hObserverTarget = 0;
 

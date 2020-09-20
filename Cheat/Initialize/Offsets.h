@@ -13,6 +13,7 @@ namespace Offsets
 	extern DWORD m_hViewModel;
 	extern DWORD m_nTickBase;
 	extern DWORD m_flFlashMaxAlpha;
+	extern DWORD m_hRagdoll;
 	extern DWORD m_iObserverMode;
 	extern DWORD m_hObserverTarget;
 	extern DWORD m_vecOrigin;

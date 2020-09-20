@@ -176,6 +176,7 @@ public:
 				offsets["m_iAccount"] = mGetOffset("DT_CSPlayer", "m_iAccount");
 				offsets["m_lifeState"] = mGetOffset("DT_CSPlayer", "m_lifeState");
 				offsets["m_flFlashDuration"] = mGetOffset("DT_CSPlayer", "m_flFlashDuration");
+				offsets["m_hRagdoll"] = mGetOffset("DT_CSPlayer", "m_hRagdoll");
 				offsets["m_flSpawnTime"] = mGetOffset("DT_CSPlayer", "m_flSpawnTime");
 				offsets["m_flC4Blow"] = mGetOffset("DT_PlantedC4", "m_flC4Blow");
 				offsets["m_flDefuseCountDown"] = mGetOffset("DT_PlantedC4", "m_flDefuseCountDown");

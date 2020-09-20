@@ -319,23 +319,33 @@ void CSkins::PostDataUpdate(ClientFrameStage_t Stage)
 				}
 			}
 		}
-		if (SelectedAgentCT || SelectedAgentTT)
+	}
+	if (SelectedAgentCT || SelectedAgentTT)
+	{
+		if (Stage != FRAME_RENDER_START && Stage != FRAME_RENDER_END)
+			return;
+
+		int nLocalPlayerID = I::Engine()->GetLocalPlayer();
+		CBaseEntity* pLocal = (CBaseEntity*)I::EntityList()->GetClientEntity(nLocalPlayerID);
+		static int originalIdx = 0;
+
+		if (!pLocal) {
+			originalIdx = 0;
+			return;
+		}
+
+		bool IsTT = pLocal->GetTeam() == 2;
+		int CurAgent = IsTT ? SelectedAgentTT : SelectedAgentCT;
+		if (CurAgent)
 		{
-			int nLocalPlayerID = I::Engine()->GetLocalPlayer();
-			CBaseEntity* pLocal = (CBaseEntity*)I::EntityList()->GetClientEntity(nLocalPlayerID);
+			if (Stage == FRAME_RENDER_START)
+				originalIdx = pLocal->GetModelIndex();
 
-			if (!pLocal)
-				return;
+			const auto idx = Stage == FRAME_RENDER_END && originalIdx ? originalIdx : I::ModelInfo()->GetModelIndex(Agents_Array[CurAgent - 1].szModel);
+			pLocal->SetModelIndex(idx);
 
-			bool IsTT = pLocal->GetTeam() == 2;
-			int CurAgent = IsTT ? SelectedAgentTT : SelectedAgentCT;
-			if (CurAgent)
-			{
-				int ModelIndex = I::ModelInfo()->GetModelIndex(Agents_Array[CurAgent - 1].szModel);
-
-				if (ModelIndex)
-					pLocal->SetModelIndex(ModelIndex);
-			}
+			if (const auto ragdoll = I::EntityList()->GetClientEntityFromHandle(pLocal->GetRagdoll()))
+				ragdoll->SetModelIndex(idx);
 		}
 	}
 }
