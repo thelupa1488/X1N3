@@ -232,6 +232,12 @@ public:
 		string Url;
 	};
 
+	struct Agents_s
+	{
+		int ItemIndex;
+		const char* szModel;
+	};
+
 	struct SortedKits_s
 	{
 		int kit = 0;
@@ -260,6 +266,29 @@ public:
 	const char* motorcycle = lol("models/weapons/w_models/arms/w_glove_motorcycle.mdl").c_str();
 	const char* specialist = lol("models/weapons/w_models/arms/w_glove_specialist.mdl").c_str();
 	const char* hydra = lol("models/weapons/w_models/arms/w_glove_bloodhound_hydra.mdl").c_str();
+
+	const char* fbi_variantb = lol("models/player/custom_player/legacy/ctm_fbi_variantb.mdl").c_str(); //Agent Ava
+	const char* fbi_variantf = lol("models/player/custom_player/legacy/ctm_fbi_variantf.mdl").c_str(); //Operator
+	const char* fbi_variantg = lol("models/player/custom_player/legacy/ctm_fbi_variantg.mdl").c_str(); //Markus Delrow
+	const char* fbi_varianth = lol("models/player/custom_player/legacy/ctm_fbi_varianth.mdl").c_str(); //Michael Syfers
+	const char* sas_variantf = lol("models/player/custom_player/legacy/ctm_sas_variantf.mdl").c_str(); //Seal Team 6 Soldier
+	const char* st6_variante = lol("models/player/custom_player/legacy/ctm_st6_variante.mdl").c_str(); //Buckshot
+	const char* st6_variantg = lol("models/player/custom_player/legacy/ctm_st6_variantg.mdl").c_str(); //Ricksaw
+	const char* st6_varianti = lol("models/player/custom_player/legacy/ctm_st6_varianti.mdl").c_str(); //3rd Commando Compan
+	const char* st6_variantk = lol("models/player/custom_player/legacy/ctm_st6_variantk.mdl").c_str(); //McCoy
+	const char* st6_variantm = lol("models/player/custom_player/legacy/ctm_st6_variantm.mdl").c_str(); //B Squadron Officer
+	const char* balkan_variantf = lol("models/player/custom_player/legacy/tm_balkan_variantf.mdl").c_str(); //Mr Muhlik
+	const char* balkan_variantg = lol("models/player/custom_player/legacy/tm_balkan_variantg.mdl").c_str(); //Prof. Shahmat
+	const char* balkan_varianth = lol("models/player/custom_player/legacy/tm_balkan_varianth.mdl").c_str(); //Osiris
+	const char* balkan_varianti = lol("models/player/custom_player/legacy/tm_balkan_varianti.mdl").c_str(); //Ground Rebel
+	const char* balkan_variantj = lol("models/player/custom_player/legacy/tm_balkan_variantj.mdl").c_str(); //Dragomir
+	const char* leet_variantf = lol("models/player/custom_player/legacy/tm_leet_variantf.mdl").c_str(); //Rezan The Ready
+	const char* leet_variantg = lol("models/player/custom_player/legacy/tm_leet_variantg.mdl").c_str(); //Doctor Romanov
+	const char* leet_varianth = lol("models/player/custom_player/legacy/tm_leet_varianth.mdl").c_str(); //Maximus
+	const char* leet_varianti = lol("models/player/custom_player/legacy/tm_leet_varianti.mdl").c_str(); //Blackwolf
+	const char* phoenix_variantf = lol("models/player/custom_player/legacy/tm_phoenix_variantf.mdl").c_str(); //Enforcer
+	const char* phoenix_variantg = lol("models/player/custom_player/legacy/tm_phoenix_variantg.mdl").c_str(); //Slingshot
+	const char* phoenix_varianth = lol("models/player/custom_player/legacy/tm_phoenix_varianth.mdl").c_str(); //Soldier Phoenix
 
 	GlovesSkins_s GlovesSkin_Array[49] =
 	{
@@ -311,6 +340,32 @@ public:
 	{ GLOVE_HYDRA,10059,hydra,lol("studded_hydra_gloves_bloodhound_hydra_snakeskin_brass") },
 	{ GLOVE_HYDRA,10058,hydra,lol("studded_hydra_gloves_bloodhound_hydra_green_leather_mesh_brass") },
 	{ GLOVE_HYDRA,10057,hydra,lol("studded_hydra_gloves_bloodhound_hydra_black_green") },
+	};
+
+	Agents_s Agents_Array[23] =
+	{
+	{ 5105,balkan_varianti }, //Ground Rebel | Elite Crew
+	{ 5106,balkan_varianth }, //Osiris | Elite Crew
+	{ 5107,balkan_variantg }, //Prof. Shahmat | Elite Crew
+	{ 5108,balkan_variantf }, //The Elite Mr. Muhlik | Elite Crew
+	{ 5205,phoenix_varianth }, //Soldier | Phoenix
+	{ 5206,phoenix_variantf }, //Enforcer | Phoenix
+	{ 5207,phoenix_variantg }, //Slingshot | Phoenix
+	{ 5305,fbi_variantf }, //Operator | FBI SWAT
+	{ 5306,fbi_variantg }, //Markus Delrow | FBI HRT
+	{ 5307,fbi_varianth }, //Michael Syfers | FBI Sniper
+	{ 5308,fbi_variantb }, //Special Agent Ava | FBI
+	{ 5400,st6_varianti }, //3rd Commando Company | KSK
+	{ 5401,sas_variantf }, //Seal Team 6 Soldier | NSWC SEAL
+	{ 5402,st6_variante }, //Buckshot | NSWC SEAL
+	{ 5403,st6_variantk }, //'Two Times' McCoy | USAF TACP
+	{ 5404,st6_variantg }, //Lt. Commander Ricksaw | NSWC SEAL
+	{ 5500,balkan_variantj }, //Dragomir | Sabre
+	{ 5501,leet_varianth }, //Maximus | Sabre
+	{ 5502,leet_variantf }, //Rezan The Ready | Sabre
+	{ 5503,leet_varianti }, //Blackwolf | Sabre
+	{ 5504,leet_variantg }, //'The Doctor' Romanov | Sabre
+	{ 5601,st6_variantm }, //B Squadron Officer | SAS
 	};
 
 	virtual void SetSkin(CBaseAttributableItem* pWeapon, SkinSettings *SkinParam, int id, bool IsCT, bool IsKnife) = 0;
@@ -377,6 +432,9 @@ public:
 
 	float GloveCTWear = 0.001f;
 	float GloveTTWear = 0.001f;
+
+	int SelectedAgentCT = 0;
+	int SelectedAgentTT = 0;
 
 	bool ShowSkinPreview = false;
 

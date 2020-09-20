@@ -116,8 +116,10 @@ namespace Engine
 		void            InvalidateBoneCache();
 		int             GetNumAnimOverlays();
 		AnimationLayer* GetAnimOverlays();
+		std::array<float, 24>& GetPoseParameters();
 		AnimationLayer* GetAnimOverlay(int i);
 		int             GetSequenceActivity(int sequence);
+		bool            setupBones(matrix3x4_t* out, int maxBones, int boneMask, float currentTime);
 		CCSGOPlayerAnimState* GetPlayerAnimState();
 
 		void UpdateAnimationState(CCSGOPlayerAnimState* state, QAngle angle);

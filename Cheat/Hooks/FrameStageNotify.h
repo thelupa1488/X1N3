@@ -12,7 +12,7 @@ void __fastcall hkFrameStageNotify(void* ecx, void* edx, ClientFrameStage_t Stag
 		GP_Esp->SoundFrameStage(Stage);
 
 	if (GP_Misc && CGlobal::IsGameReady)
-		GP_Misc->HandFrameStage(Stage);
+		GP_Misc->FrameStageNotify(Stage);
 
 	ofunc(ecx, Stage);
 }

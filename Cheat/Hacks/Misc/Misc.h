@@ -59,7 +59,7 @@ protected:
 	virtual void Draw() = 0;
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd) = 0;
 	virtual void CreateMoveEP(bool &bSendPacket, CUserCmd* pCmd) = 0;
-	virtual void HandFrameStage(ClientFrameStage_t Stage) = 0;
+	virtual void FrameStageNotify(ClientFrameStage_t Stage) = 0;
 	virtual void OverrideView(CViewSetup* pSetup) = 0;
 };
 
@@ -80,7 +80,7 @@ public:
 	virtual void Draw();
 	virtual void CreateMove(bool &bSendPacket, float flInputSampleTime, CUserCmd* pCmd);
 	virtual void CreateMoveEP(bool &bSendPacket, CUserCmd* pCmd);
-	virtual void HandFrameStage(ClientFrameStage_t Stage);
+	virtual void FrameStageNotify(ClientFrameStage_t Stage);
 	virtual void OverrideView(CViewSetup* pSetup);
 	virtual void GetViewModelFOV(float &Fov);
 	virtual void AutoAcceptEmit();
@@ -91,14 +91,14 @@ public:
 	virtual void UpdateSoundList();
 	virtual void CustomWalls();
 
-	/*Desync varible*/
+	/*NO SAVE*/
 	CCSGOPlayerAnimState AnimState;
 	float next_lby = 0.f;
 	float side = 1.f;
 	Vector real_angle;
 	Vector fake_angle;
 	Vector view_angle;
-	/*=============*/
+	/*=======*/
 
 	bool Enable = true;
 	bool BHop = false;

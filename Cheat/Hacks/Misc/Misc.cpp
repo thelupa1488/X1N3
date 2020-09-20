@@ -678,25 +678,322 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					I::Engine()->ExecuteClientCmd(msg.c_str());
 				}
 			}
+			if (KnifeBot && KnifeBotBind.Check())
+			{
+				if (CGlobal::GWeaponType == WEAPON_TYPE_KNIFE)
+				{
+					CBaseWeapon* pLocalWeapon = CGlobal::LocalPlayer->GetBaseWeapon();
+					if (pLocalWeapon)
+					{
+						for (int EntIndex = 0; EntIndex < I::Engine()->GetMaxClients(); EntIndex++)
+						{
+							CEntityPlayer* Entity = &GP_EntPlayers->EntityPlayer[EntIndex];
+
+							if (!Entity->IsUpdated)
+								continue;
+
+							if (Entity->IsLocal)
+								continue;
+
+							if (!Entity->IsPlayer)
+								continue;
+
+							if (Entity->IsDead)
+								continue;
+
+							float Distance = Entity->Distance * 33;
+
+							if (Distance > KnifeBotDistance)
+								continue;
+
+							if (KnifeBotFilter == 1)
+							{
+								if ((int)Entity->Team != CGlobal::LocalPlayer->GetTeam())
+									continue;
+							}
+							else if (KnifeBotFilter == 2)
+							{
+								if ((int)Entity->Team == CGlobal::LocalPlayer->GetTeam())
+									continue;
+							}
+
+							Vector OrignWorld = Entity->RenderOrigin;
+							Vector OrignScreen;
+
+							if (!CGlobal::WorldToScreen(OrignWorld, OrignScreen))
+								continue;
+
+							switch (KnifeBotMode)
+							{
+							case 0:
+							{
+								static int cur_attack = 0;
+
+								if (Distance > 60.f)
+									pCmd->buttons |= IN_ATTACK;
+								else
+								{
+									if ((CGlobal::LocalPlayer->GetTickBase() * I::GlobalVars()->interval_per_tick) - pLocalWeapon->GetNextPrimaryAttack() > 0)
+									{
+										if (Entity->Armor > 0)
+										{
+											if (Entity->Health - 21 <= 0)
+												pCmd->buttons |= IN_ATTACK;
+											else
+												pCmd->buttons |= IN_ATTACK2;
+										}
+										else
+										{
+											if (Entity->Health - 34 <= 0)
+												pCmd->buttons |= IN_ATTACK;
+											else
+												pCmd->buttons |= IN_ATTACK2;
+										}
+									}
+
+								}
+								break;
+							}
+							case 1:
+							{
+								static int cur_attack = 0;
+
+								if (Distance > 60.f)
+								{
+									pCmd->buttons |= IN_ATTACK;
+									cur_attack = 1;
+								}
+								else
+								{
+									float TimeSinceFire = (CGlobal::LocalPlayer->GetTickBase() * I::GlobalVars()->interval_per_tick) - pLocalWeapon->GetNextPrimaryAttack();
+
+									if (cur_attack > 0 && TimeSinceFire > 0)
+									{
+										pCmd->buttons |= IN_ATTACK2;
+										TimeSinceFire = -1;
+										cur_attack = 0;
+									}
+
+									if (cur_attack == 0 && TimeSinceFire > 0)
+									{
+										pCmd->buttons |= IN_ATTACK;
+										cur_attack++;
+									}
+								}
+								break;
+							}
+							case 2: pCmd->buttons |= IN_ATTACK2; break;
+							case 3: pCmd->buttons |= IN_ATTACK; break;
+							default: break;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
+{
+	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
+	{
+		auto MaxChokeTicks = [&]()-> int
+		{
+			int maxticks = I::GameRules() && I::GameRules()->IsValveDS() ? 11 : 14;
+			static int max_choke_ticks = 0;
+			static int latency_ticks = 0;
+			float fl_latency = I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING);
+			int latency = TIME_TO_TICKS(fl_latency);
+			if (I::ClientState()->chokedcommands <= 0)
+				latency_ticks = latency;
+			else latency_ticks = max(latency, latency_ticks);
+
+			if (fl_latency >= I::GlobalVars()->interval_per_tick)
+				max_choke_ticks = 11 - latency_ticks;
+			else max_choke_ticks = 11;
+			return max_choke_ticks;
+		};
+		if (CGlobal::LocalPlayer)
+		{
+			if (CGlobal::LocalPlayer->IsDead())
+				return;
+
+			if (EdgeJump && EdgeJumpBind.Check())
+			{
+				if (CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER ||
+					CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP)
+					return;
+
+				if ((EnginePrediction::GetFlags() & FL_ONGROUND) && !(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
+					pCmd->buttons |= IN_JUMP;
+			}
+
+			if (LDesync)
+			{
+				auto GetBestHeadAngle = [&](float yaw)-> float
+				{
+					float Right, Left;
+
+					Vector src3D, dst3D, forward, right, up;
+					trace_t tr;
+					Ray_t ray, ray2;
+					CTraceFilter filter;
+
+					QAngle engineViewAngles;
+
+					engineViewAngles.x = 0;
+					engineViewAngles.y = yaw;
+
+					AngleVectors(engineViewAngles, forward, right, up);
+
+					filter.pSkip = CGlobal::LocalPlayer;
+					src3D = CGlobal::LocalPlayer->GetEyePosition();
+					dst3D = src3D + (forward * 384);
+
+					ray.Init(src3D + right * 35, dst3D + right * 35);
+					I::EngineTrace()->TraceRay(ray, MASK_SHOT, &filter, &tr);
+					Right = (tr.endpos - tr.startpos).Length();
+
+					ray2.Init(src3D - right * 35, dst3D - right * 35);
+					I::EngineTrace()->TraceRay(ray2, MASK_SHOT, &filter, &tr);
+					Left = (tr.endpos - tr.startpos).Length();
+
+					static int result = 0;
+
+					if (Left > Right)
+						result = -1.f;
+					else if (Right > Left)
+						result = 1.f;
+
+					return result;
+				};
+				auto UpdateLBY = [&](CCSGOPlayerAnimState* animstate)-> void
+				{
+					if (animstate->speed_2d > 0.1f || std::fabsf(animstate->flUpVelocity))
+						next_lby = I::GlobalVars()->curtime + 0.22f;
+					else if (I::GlobalVars()->curtime > next_lby)
+						if (std::fabsf(AngleDiff(animstate->m_flGoalFeetYaw, animstate->m_flEyeYaw)) > 35.0f)
+							next_lby = I::GlobalVars()->curtime + 1.1f;
+				};
+				auto DesyncFn = [&](bool& bSendPacket, CUserCmd* pCmd)-> void
+				{
+					if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
+						CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER || CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP)
+						return;
+
+					//if (I::GameRules() && I::GameRules()->IsFreezePeriod()) //need fix
+					//	return;
+
+					if ((CGlobal::GWeaponID == WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_FAMAS) && CGlobal::LocalPlayer->GetBaseWeapon()->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
+						return;
+
+					if (CGlobal::GWeaponType == WEAPON_TYPE_GRENADE)
+					{
+						if (!CGlobal::LocalPlayer->GetBaseWeapon()->GetPinPulled())
+						{
+							float throwTime = CGlobal::LocalPlayer->GetBaseWeapon()->GetThrowTime();
+							if (throwTime > 0.f)
+								return;
+						}
+						if ((pCmd->buttons & IN_ATTACK) || (pCmd->buttons & IN_ATTACK2))
+						{
+							if (CGlobal::LocalPlayer->GetBaseWeapon()->GetThrowTime() > 0.f)
+								return;
+						}
+					}
+
+					auto sideauto = GetBestHeadAngle(view_angle.y);
+
+					if (!LDesyncAd)
+						side = LDesyncBind.Check() ? -1.f : 1.f;
+					else
+						side = sideauto;
+
+					static bool broke_lby = false;
+
+					if (LDesyncType == 0)
+					{
+						float minimal_move = CGlobal::LocalPlayer->GetFlags() & IN_DUCK ? 3.0f : 1.0f;
+
+						if (!bSendPacket)
+						{
+							real_angle.y = (pCmd->viewangles.y += (LDesyncYaw * side));
+							pCmd->viewangles.y = real_angle.y;
+						}
+
+						static bool flip = 1;
+						flip = !flip;
+
+						pCmd->sidemove += flip ? minimal_move : -minimal_move;
+					}
+					else if (LDesyncType == 1)
+					{
+						if (next_lby >= I::GlobalVars()->curtime)
+						{
+							if (!broke_lby && bSendPacket && I::ClientState()->chokedcommands > 0)
+								return;
+
+							broke_lby = false;
+							bSendPacket = false;
+							real_angle.y = (pCmd->viewangles.y += (LDesyncYaw * side));
+							pCmd->viewangles.y = real_angle.y;
+						}
+						else
+						{
+							broke_lby = true;
+							bSendPacket = false;
+							real_angle.y = (pCmd->viewangles.y += (LDesyncYaw * -side));
+							pCmd->viewangles.y = real_angle.y;
+						}
+					}
+					FixAngles(pCmd->viewangles);
+				};
+
+				if (pCmd->command_number % 2 == 1 && bSendPacket)
+					bSendPacket = false;
+
+				Vector OldAngles = pCmd->viewangles;
+
+				if (I::ClientState()->chokedcommands >= MaxChokeTicks())
+				{
+					bSendPacket = true;
+					pCmd->viewangles = I::ClientState()->viewangles;
+				}
+
+				if (std::fabsf(CGlobal::LocalPlayer->GetSpawnTime() - I::GlobalVars()->curtime) > 1.0f)
+					DesyncFn(bSendPacket, pCmd);
+
+				CGlobal::CorrectMouse(pCmd);
+
+				auto anim_state = CGlobal::LocalPlayer->GetPlayerAnimState();
+				if (anim_state)
+				{
+					CCSGOPlayerAnimState anim_state_backup = *anim_state;
+					*anim_state = AnimState;
+					CGlobal::LocalPlayer->GetVAngles() = pCmd->viewangles;
+					CGlobal::LocalPlayer->UpdateClientSideAnimation();
+
+					UpdateLBY(anim_state);
+
+					AnimState = *anim_state;
+					*anim_state = anim_state_backup;
+				}
+
+				if (bSendPacket)
+				{
+					if (anim_state)
+						fake_angle.y = anim_state->m_flGoalFeetYaw;
+
+					view_angle = pCmd->viewangles;
+				}
+
+				MovementFix(pCmd, OldAngles, pCmd->viewangles);
+			}
+
 			if (FakeLag && FakeLagBind.Check())
 			{
-				auto MaxChokeTicks = [&]()-> int
-				{
-					int maxticks = I::GameRules() && I::GameRules()->IsValveDS() ? 11 : 14;
-					static int max_choke_ticks = 0;
-					static int latency_ticks = 0;
-					float fl_latency = I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING);
-					int latency = TIME_TO_TICKS(fl_latency);
-					if (I::ClientState()->chokedcommands <= 0)
-						latency_ticks = latency;
-					else latency_ticks = max(latency, latency_ticks);
-
-					if (fl_latency >= I::GlobalVars()->interval_per_tick)
-						max_choke_ticks = 11 - latency_ticks;
-					else max_choke_ticks = 11;
-					return max_choke_ticks;
-				};
-				auto LegitPeek = [&](CUserCmd* pCmd, bool& bSendPacket)
+				auto LegitPeek = [&](CUserCmd* pCmd, bool& bSendPacket)-> void
 				{
 					int choke_factor = LDesync ? min(MaxChokeTicks(), FakeLagFactor) : FakeLagFactor;
 
@@ -821,7 +1118,7 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					bSendPacket = !(I::ClientState()->chokedcommands < choke_factor);
 					break;
 				case FakelagAdaptive:
-					if (standing) 
+					if (standing)
 					{
 						bSendPacket = !(I::ClientState()->chokedcommands < choke_factor);
 						break;
@@ -829,17 +1126,17 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 
 					UnitsPerTick = CGlobal::LocalPlayer->GetVelocity().Length() * I::GlobalVars()->interval_per_tick;
 					while ((WishTicks * UnitsPerTick) <= 68.0f) {
-						if (((AdaptiveTicks - 1) * UnitsPerTick) > 68.0f) 
+						if (((AdaptiveTicks - 1) * UnitsPerTick) > 68.0f)
 						{
 							++WishTicks;
 							break;
 						}
-						if ((AdaptiveTicks * UnitsPerTick) > 68.0f) 
+						if ((AdaptiveTicks * UnitsPerTick) > 68.0f)
 						{
 							WishTicks += 2;
 							break;
 						}
-						if (((AdaptiveTicks + 1) * UnitsPerTick) > 68.0f) 
+						if (((AdaptiveTicks + 1) * UnitsPerTick) > 68.0f)
 						{
 							WishTicks += 3;
 							break;
@@ -858,11 +1155,11 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					bSendPacket = !(I::ClientState()->chokedcommands < WishTicks);
 					break;
 				case FakelagRandom:
-					if (I::ClientState()->chokedcommands < LastRandomNumber) 
+					if (I::ClientState()->chokedcommands < LastRandomNumber)
 					{
 						bSendPacket = false;
 					}
-					else 
+					else
 					{
 						randomSeed = 0x41C64E6D * randomSeed + 12345;
 						LastRandomNumber = (randomSeed / 0x10000 & 0x7FFFu) % choke_factor;
@@ -873,320 +1170,6 @@ void CMisc::CreateMove(bool& bSendPacket, float flInputSampleTime, CUserCmd* pCm
 					LegitPeek(pCmd, bSendPacket);
 					break;
 				}
-			}
-			if (KnifeBot && KnifeBotBind.Check())
-			{
-				if (CGlobal::GWeaponType == WEAPON_TYPE_KNIFE)
-				{
-					CBaseWeapon* pLocalWeapon = CGlobal::LocalPlayer->GetBaseWeapon();
-					if (pLocalWeapon)
-					{
-						for (int EntIndex = 0; EntIndex < I::Engine()->GetMaxClients(); EntIndex++)
-						{
-							CEntityPlayer* Entity = &GP_EntPlayers->EntityPlayer[EntIndex];
-
-							if (!Entity->IsUpdated)
-								continue;
-
-							if (Entity->IsLocal)
-								continue;
-
-							if (!Entity->IsPlayer)
-								continue;
-
-							if (Entity->IsDead)
-								continue;
-
-							float Distance = Entity->Distance * 33;
-
-							if (Distance > KnifeBotDistance)
-								continue;
-
-							if (KnifeBotFilter == 1)
-							{
-								if ((int)Entity->Team != CGlobal::LocalPlayer->GetTeam())
-									continue;
-							}
-							else if (KnifeBotFilter == 2)
-							{
-								if ((int)Entity->Team == CGlobal::LocalPlayer->GetTeam())
-									continue;
-							}
-
-							Vector OrignWorld = Entity->RenderOrigin;
-							Vector OrignScreen;
-
-							if (!CGlobal::WorldToScreen(OrignWorld, OrignScreen))
-								continue;
-
-							switch (KnifeBotMode)
-							{
-							case 0:
-							{
-								static int cur_attack = 0;
-
-								if (Distance > 60.f)
-									pCmd->buttons |= IN_ATTACK;
-								else
-								{
-									if ((CGlobal::LocalPlayer->GetTickBase() * I::GlobalVars()->interval_per_tick) - pLocalWeapon->GetNextPrimaryAttack() > 0)
-									{
-										if (Entity->Armor > 0)
-										{
-											if (Entity->Health - 21 <= 0)
-												pCmd->buttons |= IN_ATTACK;
-											else
-												pCmd->buttons |= IN_ATTACK2;
-										}
-										else
-										{
-											if (Entity->Health - 34 <= 0)
-												pCmd->buttons |= IN_ATTACK;
-											else
-												pCmd->buttons |= IN_ATTACK2;
-										}
-									}
-
-								}
-								break;
-							}
-							case 1:
-							{
-								static int cur_attack = 0;
-
-								if (Distance > 60.f)
-								{
-									pCmd->buttons |= IN_ATTACK;
-									cur_attack = 1;
-								}
-								else
-								{
-									float TimeSinceFire = (CGlobal::LocalPlayer->GetTickBase() * I::GlobalVars()->interval_per_tick) - pLocalWeapon->GetNextPrimaryAttack();
-
-									if (cur_attack > 0 && TimeSinceFire > 0)
-									{
-										pCmd->buttons |= IN_ATTACK2;
-										TimeSinceFire = -1;
-										cur_attack = 0;
-									}
-
-									if (cur_attack == 0 && TimeSinceFire > 0)
-									{
-										pCmd->buttons |= IN_ATTACK;
-										cur_attack++;
-									}
-								}
-								break;
-							}
-							case 2: pCmd->buttons |= IN_ATTACK2; break;
-							case 3: pCmd->buttons |= IN_ATTACK; break;
-							default: break;
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
-void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
-{
-	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
-	{
-		if (CGlobal::LocalPlayer)
-		{
-			if (CGlobal::LocalPlayer->IsDead())
-				return;
-
-			if (EdgeJump && EdgeJumpBind.Check())
-			{
-				if (CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER ||
-					CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP)
-					return;
-
-				if ((EnginePrediction::GetFlags() & FL_ONGROUND) && !(CGlobal::LocalPlayer->GetFlags() & FL_ONGROUND))
-					pCmd->buttons |= IN_JUMP;
-			}
-
-			if (LDesync)
-			{
-				auto GetBestHeadAngle = [&](float yaw)-> float
-				{
-					float Right, Left;
-
-					Vector src3D, dst3D, forward, right, up;
-					trace_t tr;
-					Ray_t ray, ray2;
-					CTraceFilter filter;
-
-					QAngle engineViewAngles;
-
-					engineViewAngles.x = 0;
-					engineViewAngles.y = yaw;
-
-					AngleVectors(engineViewAngles, forward, right, up);
-
-					filter.pSkip = CGlobal::LocalPlayer;
-					src3D = CGlobal::LocalPlayer->GetEyePosition();
-					dst3D = src3D + (forward * 384);
-
-					ray.Init(src3D + right * 35, dst3D + right * 35);
-					I::EngineTrace()->TraceRay(ray, MASK_SHOT, &filter, &tr);
-					Right = (tr.endpos - tr.startpos).Length();
-
-					ray2.Init(src3D - right * 35, dst3D - right * 35);
-					I::EngineTrace()->TraceRay(ray2, MASK_SHOT, &filter, &tr);
-					Left = (tr.endpos - tr.startpos).Length();
-
-					static int result = 0;
-
-					if (Left > Right)
-						result = -1.f;
-					else if (Right > Left)
-						result = 1.f;
-
-					return result;
-				};
-				auto UpdateLBY = [&](CCSGOPlayerAnimState* animstate)-> void
-				{
-					if (animstate->speed_2d > 0.1f || std::fabsf(animstate->flUpVelocity))
-						next_lby = I::GlobalVars()->curtime + 0.22f;
-					else if (I::GlobalVars()->curtime > next_lby)
-						if (std::fabsf(AngleDiff(animstate->m_flGoalFeetYaw, animstate->m_flEyeYaw)) > 35.0f)
-							next_lby = I::GlobalVars()->curtime + 1.1f;
-				};
-				auto MaxChokeTicks = [&]()-> int
-				{
-					int maxticks = I::GameRules() && I::GameRules()->IsValveDS() ? 11 : 14;
-					static int max_choke_ticks = 0;
-					static int latency_ticks = 0;
-					float fl_latency = I::Engine()->GetNetChannelInfo()->GetLatency(FLOW_OUTGOING);
-					int latency = TIME_TO_TICKS(fl_latency);
-					if (I::ClientState()->chokedcommands <= 0)
-						latency_ticks = latency;
-					else latency_ticks = max(latency, latency_ticks);
-
-					if (fl_latency >= I::GlobalVars()->interval_per_tick)
-						max_choke_ticks = 11 - latency_ticks;
-					else max_choke_ticks = 11;
-					return max_choke_ticks;
-				};
-				auto Desync = [&](bool& bSendPacket, CUserCmd* pCmd)-> void
-				{
-					if (pCmd->buttons & (IN_ATTACK | IN_ATTACK2 | IN_USE) ||
-						CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_LADDER || CGlobal::LocalPlayer->GetMoveType() == MOVETYPE_NOCLIP)
-						return;
-
-					//if (I::GameRules() && I::GameRules()->IsFreezePeriod()) //need fix
-					//	return;
-
-					if ((CGlobal::GWeaponID == WEAPON_GLOCK || CGlobal::GWeaponID == WEAPON_FAMAS) && CGlobal::LocalPlayer->GetBaseWeapon()->GetNextPrimaryAttack() >= I::GlobalVars()->curtime)
-						return;
-
-					if (CGlobal::GWeaponType == WEAPON_TYPE_GRENADE)
-					{
-						if (!CGlobal::LocalPlayer->GetBaseWeapon()->GetPinPulled())
-						{
-							float throwTime = CGlobal::LocalPlayer->GetBaseWeapon()->GetThrowTime();
-							if (throwTime > 0.f)
-								return;
-						}
-						if ((pCmd->buttons & IN_ATTACK) || (pCmd->buttons & IN_ATTACK2))
-						{
-							if (CGlobal::LocalPlayer->GetBaseWeapon()->GetThrowTime() > 0.f)
-								return;
-						}
-					}
-
-					if (std::fabsf(CGlobal::LocalPlayer->GetSpawnTime() - I::GlobalVars()->curtime) < 1.0f)
-						return;
-
-					auto sideauto = GetBestHeadAngle(view_angle.y);
-
-					if (!LDesyncAd)
-						side = LDesyncBind.Check() ? -1.f : 1.f;
-					else
-						side = sideauto;
-
-					static bool broke_lby = false;
-
-					if (LDesyncType == 0)
-					{
-						float minimal_move = CGlobal::LocalPlayer->GetFlags() & IN_DUCK ? 3.0f : 1.0f;
-
-						if (!bSendPacket)
-						{
-							real_angle.y = (pCmd->viewangles.y += (LDesyncYaw * side));
-							pCmd->viewangles.y = real_angle.y;
-						}
-
-						static bool flip = 1;
-						flip = !flip;
-
-						pCmd->sidemove += flip ? minimal_move : -minimal_move;
-					}
-					else if (LDesyncType == 1)
-					{
-						if (next_lby >= I::GlobalVars()->curtime)
-						{
-							if (!broke_lby && bSendPacket && I::ClientState()->chokedcommands > 0)
-								return;
-
-							broke_lby = false;
-							bSendPacket = false;
-							real_angle.y = (pCmd->viewangles.y += (LDesyncYaw * side));
-							pCmd->viewangles.y = real_angle.y;
-						}
-						else
-						{
-							broke_lby = true;
-							bSendPacket = false;
-							real_angle.y = (pCmd->viewangles.y += (LDesyncYaw * -side));
-							pCmd->viewangles.y = real_angle.y;
-						}
-					}
-					FixAngles(pCmd->viewangles);
-				};
-
-				if (pCmd->command_number % 2 == 1 && bSendPacket && LDesync)
-					bSendPacket = false;
-
-				Vector OldAngles = pCmd->viewangles;
-
-				if (LDesync && I::ClientState()->chokedcommands >= MaxChokeTicks())
-				{
-					bSendPacket = true;
-					pCmd->viewangles = I::ClientState()->viewangles;
-				}
-
-				Desync(bSendPacket, pCmd);
-
-				CGlobal::CorrectMouse(pCmd);
-
-				auto anim_state = CGlobal::LocalPlayer->GetPlayerAnimState();
-				if (anim_state)
-				{
-					CCSGOPlayerAnimState anim_state_backup = *anim_state;
-					*anim_state = AnimState;
-					CGlobal::LocalPlayer->GetVAngles() = pCmd->viewangles;
-					CGlobal::LocalPlayer->UpdateClientSideAnimation();
-
-					UpdateLBY(anim_state);
-
-					AnimState = *anim_state;
-					*anim_state = anim_state_backup;
-				}
-
-				if (bSendPacket)
-				{
-					if (anim_state)
-						fake_angle.y = anim_state->m_flGoalFeetYaw;
-
-					view_angle = pCmd->viewangles;
-				}
-
-				MovementFix(pCmd, OldAngles, pCmd->viewangles);
 			}
 
 			if (AutoBlock && AutoBlockBind.Check())
@@ -1235,15 +1218,12 @@ void CMisc::CreateMoveEP(bool& bSendPacket, CUserCmd* pCmd)
 	}
 }
 
-void CMisc::HandFrameStage(ClientFrameStage_t Stage)
+void CMisc::FrameStageNotify(ClientFrameStage_t Stage)
 {
 	if (Enable && CGlobal::IsGameReady && !CGlobal::FullUpdateCheck)
 	{
 		if (CGlobal::LocalPlayer)
 		{
-			if (Stage != FRAME_RENDER_START && Stage != FRAME_RENDER_END)
-				return;
-
 			static ConVar* cl_righthand = I::GetCvar()->FindVar(XorStr("cl_righthand"));
 			static ConVar* viewmodel_offset_x = I::GetCvar()->FindVar(XorStr("viewmodel_offset_x"));
 			static ConVar* viewmodel_offset_y = I::GetCvar()->FindVar(XorStr("viewmodel_offset_y"));

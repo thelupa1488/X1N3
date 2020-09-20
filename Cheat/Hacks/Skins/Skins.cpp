@@ -154,9 +154,9 @@ void CSkins::RecvProxy_Viewmodel(CRecvProxyData *pData, void *pStruct, void *pOu
 
 void CSkins::PostDataUpdate(ClientFrameStage_t Stage)
 {
-	if (SkinsEnable && SelectedWeapon || SelectedKnifeModelCT || SelectedKnifeModelTT)
+	if (SkinsEnable && Stage == FRAME_NET_UPDATE_POSTDATAUPDATE_START)
 	{
-		if (Stage == FRAME_NET_UPDATE_POSTDATAUPDATE_START)
+		if (SelectedWeapon || SelectedKnifeModelCT || SelectedKnifeModelTT)
 		{
 			HANDLE worldmodel_handle = 0;
 
@@ -236,10 +236,7 @@ void CSkins::PostDataUpdate(ClientFrameStage_t Stage)
 				}
 			}
 		}
-	}
-	if (SkinsEnable && SelectedGloveCT || SelectedGloveTT)
-	{
-		if (Stage == FRAME_NET_UPDATE_POSTDATAUPDATE_START)
+		if (SelectedGloveCT || SelectedGloveTT)
 		{
 			int nLocalPlayerID = I::Engine()->GetLocalPlayer();
 
@@ -320,6 +317,24 @@ void CSkins::PostDataUpdate(ClientFrameStage_t Stage)
 						glove->GetClientNetworkable()->PreDataUpdate(DATA_UPDATE_CREATED);
 					}
 				}
+			}
+		}
+		if (SelectedAgentCT || SelectedAgentTT)
+		{
+			int nLocalPlayerID = I::Engine()->GetLocalPlayer();
+			CBaseEntity* pLocal = (CBaseEntity*)I::EntityList()->GetClientEntity(nLocalPlayerID);
+
+			if (!pLocal)
+				return;
+
+			bool IsTT = pLocal->GetTeam() == 2;
+			int CurAgent = IsTT ? SelectedAgentTT : SelectedAgentCT;
+			if (CurAgent)
+			{
+				int ModelIndex = I::ModelInfo()->GetModelIndex(Agents_Array[CurAgent - 1].szModel);
+
+				if (ModelIndex)
+					pLocal->SetModelIndex(ModelIndex);
 			}
 		}
 	}

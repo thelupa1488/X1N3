@@ -326,6 +326,7 @@ public:
 		float TriggerDelay = 0;
 
 		bool Backtrack = false;
+		bool BacktrackIgnoreSmoke = false;
 		int BacktrackTimeLimit = 0;
 
 #define CHECK_VAR(l) if(l != src.##l) return false;
@@ -444,7 +445,6 @@ public:
 		RV(DrawSilentFov, "DrawSilentFov");
 		RV(FovColor, "FovColor");
 		RV(SilentFovColor, "SilentFovColor");
-		RV(IgnoreSmokeBacktrack, "IgnoreSmokeBacktrack");
 		RV(ShowBacktrack, "ShowBacktrack");
 		RV(SBVisibleOnly, "SBVisibleOnly");
 		RV(SBTick, "SBTick");
@@ -480,7 +480,6 @@ public:
 	CBaseEntity *pBestBacktrackTarget;
 
 	//bool BacktrackFakeLatency = false;
-	bool IgnoreSmokeBacktrack = false;
 	bool ShowBacktrack = false;
 	bool SBVisibleOnly = false;
 	int SBTick = 0;

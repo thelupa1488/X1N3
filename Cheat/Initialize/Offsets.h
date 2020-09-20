@@ -81,6 +81,7 @@ namespace Offsets
 
 	extern DWORD PlayerAnimState;
 	extern DWORD AnimOverlays;
+	extern DWORD m_flPoseParameter;
 	extern DWORD CreateAnimState;
 	extern DWORD UpdateAnimState;
 	extern DWORD ResetAnimState;

@@ -13,6 +13,7 @@ void CLegitAim::Menu()
 
 	DCheckBox("Enabled", Enable);
 
+	float long_item_w = X1Gui().GetThis()->Info.Size.x - (X1Gui().GetStyle().wndPadding.x * 2);
 	VectorEx<const char*> CustomTypes = { lolc("One weapon"),lolc("Standard subsections") , lolc("Custom subsections"), lolc("All weapons") };
 
 	static int old_type = WeaponCustomTypes;
@@ -60,7 +61,7 @@ void CLegitAim::Menu()
 		VectorEx<const char*> AimP = { lolc("Page 1"), lolc("Page 2") };
 		static int SubtabAimMiscSelected = 0;
 
-		TabsLabels(SubtabAimMiscSelected, AimP, Vec2(X1Gui().GetCurWindowSize().x - (X1Gui().GetStyle().wndPadding.x * 2), 0), false);
+		TabsLabels(SubtabAimMiscSelected, AimP, Vec2(long_item_w - 12, 0), false);
 		if (SubtabAimMiscSelected == 0)
 		{
 			X1Gui().Spacing();
@@ -161,7 +162,7 @@ void CLegitAim::Menu()
 
 	VectorEx<const char*> AimPSettings = { lolc("Basic"), lolc("RCS"), lolc("Silent"), lolc("Backtrack"), lolc("Delays") };
 
-	TabsLabels(SubTabAimSelected, AimPSettings, Vec2(453, 0), false);
+	TabsLabels(SubTabAimSelected, AimPSettings, Vec2(long_item_w - 9, 0), false);
 
 	if (X1Gui().BeginChild(XorStr("Main2Child4"), Vec2(0, 200), true))
 	{
@@ -298,8 +299,8 @@ void CLegitAim::Menu()
 			if (!FaceIt)
 			{
 				DCheckBox("Backtrack", Weapons[GetWeap(SelectedWeapon)].Backtrack);
-
-				DCheckBox("Ignore smoke##Backtrack", IgnoreSmokeBacktrack);
+				X1Gui().SameLine();
+				DCheckBox("Ignore smoke##Backtrack", Weapons[GetWeap(SelectedWeapon)].BacktrackIgnoreSmoke);
 
 				SliderInts("Time (Ms)##Backtrack", Weapons[GetWeap(SelectedWeapon)].BacktrackTimeLimit, 0, 200);
 
@@ -376,7 +377,7 @@ void CLegitAim::Menu()
 
 		VectorEx<const char*> AimTrigSettings = { lolc("Basic##trigger"),  lolc("Bind##trigger") };
 
-		TabsLabels(SubtabTrigMiscSelected, AimTrigSettings, Vec2(X1Gui().GetCurWindowSize().x - (X1Gui().GetStyle().wndPadding.x * 2), 0), false);
+		TabsLabels(SubtabTrigMiscSelected, AimTrigSettings, Vec2(long_item_w - 12, 0), false);
 
 		X1Gui().Spacing();
 		X1Gui().PushItemWidth(240.f);

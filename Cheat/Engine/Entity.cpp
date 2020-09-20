@@ -183,6 +183,12 @@ namespace Engine
 		return ptr(*reinterpret_cast<AnimationLayer**>, this, offsets["AnimOverlays"]);
 	}
 
+	std::array<float, 24>& CBaseEntity::GetPoseParameters()
+	{
+		//return ptr((std::array<float, 24>&), this, offsets["m_flPoseParameter"]);
+		return *reinterpret_cast<std::add_pointer_t<std::array<float, 24>>>((uintptr_t)this + offsets["m_flPoseParameter"]);
+	}
+
 	AnimationLayer* CBaseEntity::GetAnimOverlay(int i)
 	{
 		if (i < 15)
@@ -229,12 +235,29 @@ namespace Engine
 		return get_sequence_activity(this, hdr, sequence);
 	}
 
+	bool CBaseEntity::setupBones(matrix3x4_t* out, int maxBones, int boneMask, float currentTime)
+	{
+		if (CGlobal::LocalPlayer && this == CGlobal::LocalPlayer && !CGlobal::LocalPlayer->IsDead())
+		{
+			uint32_t* effects = (uint32_t*)((uintptr_t)this + 0xF0);
+			uint32_t* shouldskipframe = (uint32_t*)((uintptr_t)this + 0xA68);
+			uint32_t backup_effects = *effects;
+			uint32_t backup_shouldskipframe = *shouldskipframe;
+			*shouldskipframe = 0;
+			*effects |= 8;
+			auto result = this->setupBones(out, maxBones, boneMask, currentTime);
+			*effects = backup_effects;
+			*shouldskipframe = backup_shouldskipframe;
+			return result;
+		}
+	}
+
 	CCSGOPlayerAnimState* CBaseEntity::GetPlayerAnimState()
 	{
 		return ptr(*(CCSGOPlayerAnimState**), this, offsets["PlayerAnimState"]);
 	}
 
-	void CBaseEntity::UpdateAnimationState(CCSGOPlayerAnimState* state, QAngle angle)
+	void CBaseEntity::UpdateAnimationState(CCSGOPlayerAnimState* state, Vector angle)
 	{
 		static auto UpdateAnimState = offsets["UpdateAnimState"];
 

@@ -766,6 +766,7 @@
     <ClInclude Include="Engine\SDK\Cvar.h" />
     <ClInclude Include="Engine\SDK\CUtlMemory.h" />
     <ClInclude Include="Engine\SDK\CUtlVector.h" />
+    <ClInclude Include="Engine\SDK\NetworkStringTable.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">

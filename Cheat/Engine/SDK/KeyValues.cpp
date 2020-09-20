@@ -1,7 +1,7 @@
 #include "SDK.h"
 #include "../../Main.h"
 template <typename T>
-static constexpr auto relativeToAbsolute(int* address) noexcept
+const auto relativeToAbsolute(int* address)
 {
     return reinterpret_cast<T>(reinterpret_cast<char*>(address + 1) + *address);
 }
@@ -27,12 +27,16 @@ namespace SDK
 
     KeyValues* KeyValues::FindKey(const char* keyName, bool create)
     {
+        //using FindKeyFn = KeyValues*(__thiscall*)(KeyValues*, const char*, bool);
+        //static auto pFindKey = (FindKeyFn)offsets["FindKey"];
         auto pFindKey = relativeToAbsolute<decltype(keyValuesFindKey)>(reinterpret_cast<int*>(offsets["FindKey"]));
         return pFindKey(this, keyName, create);
     }
 
     void KeyValues::SetString(const char* keyName, const char* value)
     {
+        //using SetStringFn = void(__thiscall*)(KeyValues*, const char*);
+        //static auto pSetSring = (SetStringFn)offsets["FindKey"];
         auto pSetSring = relativeToAbsolute<decltype(keyValuesSetString)>(reinterpret_cast<int*>(offsets["SetString"]));
         if (const auto key = FindKey(keyName, true))
             pSetSring(key, value);

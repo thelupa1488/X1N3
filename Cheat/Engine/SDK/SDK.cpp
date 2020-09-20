@@ -18,6 +18,7 @@ namespace SDK
 	IVModelInfo*	       I::g_pModelInfo = nullptr;
 	IEngineSound*		   I::g_pSound = nullptr;
 	IVModelRender*		   I::g_pModelRender = nullptr;
+	NetworkStringTableContainer* I::g_pNetworkSTC = nullptr;
 	IViewRender*		   I::g_pRenderView = nullptr;
 	IMaterialSystem*	   I::g_pMaterialSystem = nullptr;
 	ISurface*			   I::g_pSurface = nullptr;
@@ -151,6 +152,16 @@ namespace SDK
 			ADD_LOG("->ModelRender -> %X\n", (DWORD)g_pModelRender);
 		}
 		return g_pModelRender;
+	}
+
+	NetworkStringTableContainer* I::NetworkSTC()
+	{
+		if (!g_pNetworkSTC)
+		{
+			g_pNetworkSTC = GetInterface<NetworkStringTableContainer>(engineFactory, XorStr("VEngineClientStringTable"));
+			ADD_LOG("->networkStringTableContainer -> %X\n", (DWORD)g_pNetworkSTC);
+		}
+		return g_pNetworkSTC;
 	}
 
 	IViewRender* I::RenderView()

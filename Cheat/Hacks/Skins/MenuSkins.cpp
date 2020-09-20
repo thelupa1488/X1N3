@@ -63,6 +63,33 @@ string GlovesModels[49] =
 	lol("Hydra Emerald")
 };
 
+string AgentsModels[23] =
+{
+	lol("default"),
+	lol("Ground Rebel | Elite Crew"),
+	lol("Osiris | Elite Crew"),
+	lol("Prof. Shahmat | Elite Crew"),
+	lol("The Elite Mr. Muhlik | Elite Crew"),
+	lol("Soldier | Phoenix"),
+	lol("Enforcer | Phoenix"),
+	lol("Slingshot | Phoenix"),
+	lol("Operator | FBI SWAT"),
+	lol("Markus Delrow | FBI HRT"),
+	lol("Michael Syfers | FBI Sniper"),
+	lol("Special Agent Ava | FBI"),
+	lol("3rd Commando Company | KSK"),
+	lol("Seal Team 6 Soldier | NSWC SEAL"),
+	lol("Buckshot | NSWC SEAL"),
+	lol("'Two Times' McCoy | USAF TACP"),
+	lol("Lt. Commander Ricksaw | NSWC SEAL"),
+	lol("Dragomir | Sabre"),
+	lol("Maximus | Sabre"),
+	lol("Rezan The Ready | Sabre"),
+	lol("Blackwolf | Sabre"),
+	lol("'The Doctor' Romanov | Sabre"),
+	lol("B Squadron Officer | SAS")
+};
+
 int Page = 0;
 
 static bool FindLower(string data, string find)
@@ -164,11 +191,11 @@ void CSkins::Menu()
 		X1Gui().InputText(XorStr("Name##custom_name"), Item.custom_name, 32);
 	};
 
-	VectorEx<const char*> SkinArr = { lolc("Weapon"), lolc("Knife"), lolc("Gloves") };
+	VectorEx<const char*> SkinArr = { lolc("Weapon"), lolc("Knife"), lolc("Gloves"), lolc("Agents") };
 
 	static int SkinSettingsMode = 0;
 
-	TabsLabels(SkinSettingsMode, SkinArr, Vec2(long_item_w - 3, 0), false);
+	TabsLabels(SkinSettingsMode, SkinArr, Vec2(long_item_w - 6, 0), false);
 	X1Gui().Spacing();
 	if (SkinSettingsMode == 0)
 	{
@@ -517,6 +544,49 @@ void CSkins::Menu()
 			//	X1Gui().InputText(XorStr("Name##Glove"), GloveTTName, 32);
 			}
 		}	
+	}
+	else if (SkinSettingsMode == 3)
+	{
+		VectorEx<const char*> agtTeamArr = { lolc("CT"), lolc("T") };
+		static int agtTeamSettingsMode = 0;
+
+		TabsLabels(agtTeamSettingsMode, agtTeamArr, Vec2(long_item_w, 0), false);
+
+		X1Gui().Spacing();
+		X1Gui().Separator();
+		X1Gui().Spacing();
+
+		if (X1Gui().Button(XorStr("Update"), Vec2(long_item_w, 22)))
+		{
+			UpdateSkins();
+			Message::Get().Start(XorStr("Updated!"));
+		}
+
+		X1Gui().Spacing();
+
+		if (agtTeamSettingsMode == 0)
+		{
+			X1Gui().ListBoxHeader(XorStr("##Agents"), Vec2(long_item_w, 550));
+			for (int i = 0; i < sizeof(AgentsModels) / sizeof(AgentsModels[0]); i++)
+			{
+				bool selected = i == SelectedAgentCT;
+				if (X1Gui().SelectLabel(AgentsModels[i].c_str(), selected))
+					SelectedAgentCT = i;
+			}
+			X1Gui().ListBoxFooter();
+		}
+
+		else if (agtTeamSettingsMode == 1)
+		{
+			X1Gui().ListBoxHeader(XorStr("##Agents"), Vec2(long_item_w, 550));
+			for (int i = 0; i < sizeof(AgentsModels) / sizeof(AgentsModels[0]); i++)
+			{
+				bool selected = i == SelectedAgentTT;
+				if (X1Gui().SelectLabel(AgentsModels[i].c_str(), selected))
+					SelectedAgentTT = i;
+			}
+			X1Gui().ListBoxFooter();
+		}
 	}
 }
 

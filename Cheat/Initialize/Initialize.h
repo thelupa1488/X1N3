@@ -240,6 +240,7 @@ public:
 				offsets["m_hWeaponWorldModel"] = mGetOffset("DT_BaseCombatWeapon", "m_hWeaponWorldModel");
 				offsets["m_iWorldModelIndex"] = mGetOffset("DT_BaseCombatWeapon", "m_iWorldModelIndex");
 				offsets["m_nHitboxSet"] = mGetOffset("DT_BaseAnimating", "m_nHitboxSet");
+				offsets["m_flPoseParameter"] = mGetOffset("DT_BaseAnimating", "m_flPoseParameter");
 
 				offsets["PlayerAnimState"] = 0x3914;
 				offsets["AnimOverlays"] = 0x2990;

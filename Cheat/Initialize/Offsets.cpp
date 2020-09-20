@@ -82,6 +82,7 @@ namespace Offsets
 
 	DWORD PlayerAnimState;
 	DWORD AnimOverlays = 0;
+	DWORD m_flPoseParameter = 0;
 	DWORD CreateAnimState = 0;
 	DWORD UpdateAnimState = 0;
 	DWORD ResetAnimState = 0;

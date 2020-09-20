@@ -73,6 +73,7 @@
     <ClInclude Include="Engine\SDK\CUtlVector.h" />
     <ClInclude Include="Engine\SDK\Cvar.h" />
     <ClInclude Include="Engine\SDK\IMaterialVar.h" />
+    <ClInclude Include="Engine\SDK\NetworkStringTable.h" />
     <ClInclude Include="Engine\Utils\Utils.h" />
     <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="Engine\Entity.h" />

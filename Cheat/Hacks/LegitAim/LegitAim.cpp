@@ -1972,7 +1972,7 @@ void CLegitAim::BacktrackCreateMoveEP(CUserCmd* pCmd)
 
 				for (auto& bd : cur_data)
 				{
-					if (cur_data.size() <= 3 || (!IgnoreSmokeBacktrack && CGlobal::LineGoesThroughSmoke(pLocalPlayer->GetEyePosition(), bd.origin)))
+					if (cur_data.size() <= 3 || (!Weapons[GetWeap(SelectedWeapon)].BacktrackIgnoreSmoke && CGlobal::LineGoesThroughSmoke(pLocalPlayer->GetEyePosition(), bd.origin)))
 						return;
 
 					if (!valid(bd.simtime))
@@ -2073,6 +2073,7 @@ void CLegitAim::SaveWeapons(nlohmann::json &j)
 		SV("TriggerRcsY", v.TriggerRcsY);
 		SV("TriggerDelay", v.TriggerDelay);
 		SV("Backtrack", v.Backtrack);
+		SV("BacktrackIgnoreSmoke", v.BacktrackIgnoreSmoke);
 		SV("BacktrackTimeLimit", v.BacktrackTimeLimit);
 		SV("SmoothMoveFactor", v.SmoothMoveFactor);
 	}
@@ -2202,6 +2203,7 @@ void CLegitAim::LoadWeapons(nlohmann::json &j)
 				LV("TriggerRcsY", v.TriggerRcsY);
 				LV("TriggerDelay", v.TriggerDelay);
 				LV("Backtrack", v.Backtrack);
+				LV("BacktrackIgnoreSmoke", v.BacktrackIgnoreSmoke);
 				LV("BacktrackTimeLimit", v.BacktrackTimeLimit);
 				LV("SmoothMoveFactor", v.SmoothMoveFactor);
 			}
