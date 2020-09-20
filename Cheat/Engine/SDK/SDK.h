@@ -49,7 +49,6 @@
 #include "checksum_md5.hpp"
 #include "IGameRules.h"
 #include "CUserCmd.hpp"
-#include "NetworkStringTable.h"
 
 #include <Windows.h>
 #include <WinInet.h>
@@ -93,7 +92,6 @@ namespace SDK
 		static IVModelInfo*	          ModelInfo();
 		static IEngineSound*		  Sound();
 		static IVModelRender*		  ModelRender();
-		static NetworkStringTableContainer* NetworkSTC();
 		static IViewRender*		      RenderView();
 		static IMaterialSystem*		  MaterialSystem();
 		static ISurface*			  Surface();
@@ -120,7 +118,6 @@ namespace SDK
 		static IVModelInfo*	          g_pModelInfo;
 		static IEngineSound*		  g_pSound;
 		static IVModelRender*		  g_pModelRender;
-		static NetworkStringTableContainer* g_pNetworkSTC;
 		static IViewRender*		      g_pRenderView;
 		static IMaterialSystem*		  g_pMaterialSystem;
 		static ISurface*			  g_pSurface;
