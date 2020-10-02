@@ -1,3 +1,3 @@
 #CSGO Hack
-Screeshots:
+Screenshots:
 https://imgur.com/a/ygEYfFW
